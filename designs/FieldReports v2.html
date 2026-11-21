@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>گزارش‌های فیلد (v2) — پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --p1:#E5EBF3;--p3:#8AA2C2;--p5:#2C4A73;--p7:#1A3354;--p9:#0E1E38;
+  --a1:#FCEAD9;--a5:#E07A2C;--a7:#B45813;
+  --s50:#ECFDF3;--s5:#16A34A;--s7:#15803D;
+  --w50:#FFF8EB;--w5:#D97706;--w7:#B45309;
+  --e50:#FEF2F2;--e5:#DC2626;--e7:#B91C1C;
+  --i50:#EFF6FF;--i5:#2563EB;--i7:#1D4ED8;
+  --g0:#fff;--g50:#FAFAFA;--g1:#F4F4F5;--g2:#E4E4E7;--g3:#D4D4D8;
+  --g4:#A1A1AA;--g5:#71717A;--g6:#52525B;--g7:#3F3F46;--g9:#18181B;
+  --r4:4px;--r8:8px;--r12:12px;--r16:16px;
+  --sh-sm:0 1px 2px rgba(24,24,27,.04);
+  --sh-md:0 4px 8px -2px rgba(24,24,27,.06),0 2px 4px -2px rgba(24,24,27,.04);
+  --sh-lg:0 10px 20px -5px rgba(24,24,27,.08),0 4px 8px -4px rgba(24,24,27,.04);
+  --sidebar:220px; --topbar:52px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden}
+body{font-family:'Vazirmatn',system-ui,sans-serif;color:var(--g9);background:var(--g50);-webkit-font-smoothing:antialiased;font-feature-settings:'ss01';font-size:13.5px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;direction:ltr;unicode-bidi:isolate}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--g3);border-radius:6px;border:2px solid transparent;background-clip:content-box}
+/* AppShell */
+.shell{display:grid;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr;height:100vh;overflow:hidden}
+.sidebar{grid-row:1/3;background:white;border-left:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden}
+.topbar{grid-row:1;grid-column:2;background:white;border-bottom:1px solid var(--g2);display:flex;align-items:center;gap:10px;padding:0 20px;z-index:20}
+.content{grid-row:2;grid-column:2;overflow:hidden;display:flex;flex-direction:column}
+/* Sidebar */
+.sb-brand{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--g1)}
+.sb-mark{width:32px;height:32px;border-radius:var(--r8);background:var(--p7);color:white;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.sb-mark::after{content:'';position:absolute;right:5px;bottom:5px;width:7px;height:7px;background:var(--a5);border-radius:2px}
+.sb-name strong{font-size:13.5px;font-weight:700;display:block;line-height:1.2}
+.sb-name small{font-size:10.5px;color:var(--g5)}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.sb-section{font-size:10px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;padding:10px 8px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r8);color:var(--g6);font-size:13px;font-weight:500;width:100%;text-align:right;border:0;background:transparent;cursor:pointer;transition:all .1s}
+.sb-item:hover{background:var(--g1);color:var(--g9)}
+.sb-item.active{background:var(--p1);color:var(--p7)}
+.sb-item .ic{width:16px;height:16px;flex-shrink:0}
+.sb-item .badge{margin-right:auto;background:var(--e5);color:white;font-size:10px;font-weight:600;padding:1px 6px;border-radius:999px}
+.sb-item.active .badge{background:var(--p7)}
+.sb-footer{padding:10px 8px;border-top:1px solid var(--g1)}
+.sb-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r8)}
+.sb-user .av{width:30px;height:30px;border-radius:999px;background:var(--p1);color:var(--p7);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.sb-user .info .n{font-size:12.5px;font-weight:600}
+.sb-user .info .r{font-size:10.5px;color:var(--g5)}
+/* Topbar */
+.tb-title{font-size:14px;font-weight:600;margin-left:16px}
+.tb-search{flex:1;max-width:300px;margin:0 auto;display:flex;align-items:center;gap:8px;height:32px;background:var(--g1);border:1px solid var(--g2);border-radius:var(--r8);padding:0 12px;cursor:pointer}
+.tb-search span{font-size:12.5px;color:var(--g4);flex:1}
+.tb-search kbd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g5);background:var(--g0);border:1px solid var(--g3);border-radius:4px;padding:1px 5px}
+.tb-btn{width:34px;height:34px;border-radius:var(--r8);background:transparent;border:0;display:inline-flex;align-items:center;justify-content:center;color:var(--g5);cursor:pointer;position:relative}
+.tb-btn:hover{background:var(--g1);color:var(--g9)}
+.tb-btn .nd{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:999px;background:var(--e5);border:2px solid white}
+.tb-av{width:30px;height:30px;border-radius:999px;background:var(--p1);color:var(--p7);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:var(--r8);font-size:13px;font-weight:500;border:1px solid transparent;transition:all .12s;white-space:nowrap;cursor:pointer}
+.btn-primary{background:var(--p7);color:white}.btn-primary:hover{background:var(--p9)}
+.btn-success{background:var(--s5);color:white}.btn-success:hover{background:var(--s7)}
+.btn-outline{background:white;color:var(--g8,#1c1c1e);border-color:var(--g3)}.btn-outline:hover{background:var(--g50);border-color:var(--g4)}
+.btn-danger-ol{background:white;color:var(--e7);border-color:rgba(220,38,38,.35)}.btn-danger-ol:hover{background:var(--e50)}
+.btn-warn-ol{background:white;color:var(--w7);border-color:rgba(217,119,6,.35)}.btn-warn-ol:hover{background:var(--w50)}
+.btn-ghost{background:transparent;color:var(--g7)}.btn-ghost:hover{background:var(--g1);color:var(--g9)}
+.btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:6px}
+.btn-xs{height:24px;padding:0 8px;font-size:11px;border-radius:5px}
+/* Page header */
+.page-head{padding:16px 24px 0;flex-shrink:0}
+.breadcrumb{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--g5);margin-bottom:6px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ph-row h1{font-size:22px;font-weight:700;margin:0 0 3px;letter-spacing:-.01em}
+.ph-row .sub{font-size:12.5px;color:var(--g5)}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-top:4px}
+/* Stat cards */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px 24px 0;flex-shrink:0}
+.stat-card{background:white;border:1px solid var(--g2);border-radius:var(--r12);padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.stat-card .sic{width:36px;height:36px;border-radius:var(--r8);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-card .sv{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.01em}
+.stat-card .sl{font-size:11px;color:var(--g5);margin-top:3px;line-height:1.4}
+/* Tabs */
+.tab-row{display:flex;align-items:center;padding:10px 24px 0;border-bottom:1px solid var(--g2);flex-shrink:0;gap:0;margin-top:2px}
+.tab-btn{padding:8px 0;font-size:13px;color:var(--g5);border-bottom:2px solid transparent;transition:all .12s;margin-left:20px;background:transparent;border-left:0;border-right:0;border-top:0;white-space:nowrap;cursor:pointer}
+.tab-btn:hover{color:var(--g9)}
+.tab-btn.active{color:var(--p7);border-bottom-color:var(--p7);font-weight:600}
+.tab-btn .tc{display:inline-flex;align-items:center;justify-content:center;height:18px;min-width:18px;padding:0 5px;border-radius:999px;font-size:10.5px;font-weight:600;margin-right:5px}
+/* Filter bar */
+.filter-bar{display:flex;align-items:center;gap:8px;padding:8px 24px;border-bottom:1px solid var(--g1);background:white;flex-shrink:0;flex-wrap:wrap}
+.filter-select{height:30px;padding:0 26px 0 10px;border:1px solid var(--g2);border-radius:var(--r8);font-size:12px;color:var(--g7);background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat left 7px center;appearance:none;cursor:pointer}
+/* Split layout */
+.split{display:grid;grid-template-columns:1fr 1.5fr;flex:1;overflow:hidden}
+/* Report list */
+.rlist{border-left:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden;background:white}
+.rlist-head{padding:9px 14px;border-bottom:1px solid var(--g1);display:flex;align-items:center;gap:10px;flex-shrink:0;background:white}
+.rlist-body{flex:1;overflow-y:auto}
+.rlist-footer{padding:9px 14px;border-top:1px solid var(--g1);font-size:11.5px;color:var(--g5);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+/* Bulk bar */
+.bulk-bar{background:var(--p7);color:white;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;flex-shrink:0}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.bulk-bar{animation:slideDown .18s ease}
+.bbc{background:rgba(255,255,255,.2);padding:2px 7px;border-radius:999px;font-size:11px;font-weight:600;margin-left:4px}
+/* Report card */
+.rcard{padding:12px 14px;border-bottom:1px solid var(--g1);cursor:pointer;transition:background .1s;position:relative}
+.rcard:hover{background:var(--g50)}
+.rcard.active{background:var(--p1);border-right:3px solid var(--p7)}
+.rcard.unread::before{content:'';position:absolute;right:6px;top:16px;width:6px;height:6px;border-radius:999px;background:var(--i5)}
+@keyframes fadeOut{to{opacity:0;height:0;padding:0;border:0;overflow:hidden}}
+.rcard.fading{animation:fadeOut .3s ease forwards}
+.rc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.rc-cb{width:16px;height:16px;border:1.5px solid var(--g3);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;background:white;cursor:pointer;transition:all .1s}
+.rc-cb.checked{background:var(--p7);border-color:var(--p7)}
+.rc-av{width:30px;height:30px;border-radius:999px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.rc-main{flex:1;min-width:0}
+.rc-name{font-size:13px;font-weight:600;margin-bottom:1px}
+.rc-proj{font-size:11px;color:var(--g5);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.rc-summary{font-size:12px;color:var(--g7);margin-bottom:6px;line-height:1.55}
+.rc-summary .sum-bold{font-weight:600;color:var(--g9)}
+.rc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc-time{font-size:11px;color:var(--g4);margin-right:auto}
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 7px;border-radius:var(--r4);font-size:11px;font-weight:500;line-height:1}
+.b-pending{background:var(--i50);color:var(--i7)}
+.b-approved{background:var(--s50);color:var(--s7)}
+.b-rejected{background:var(--e50);color:var(--e7)}
+.b-edit{background:var(--w50);color:var(--w7)}
+.b-overdue{background:var(--e50);color:var(--e7)}
+/* Expand toggle */
+.rc-expand-toggle{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--p7);background:transparent;border:0;padding:2px 0;cursor:pointer;margin-top:6px}
+.rc-expand-toggle:hover{text-decoration:underline}
+/* Inline items list in card */
+.rc-items-list{border-top:1px solid var(--g1);margin:8px 0 0;padding-top:8px}
+.rci-row{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px}
+.rci-row:hover{background:var(--g1)}
+.rci-stat{flex-shrink:0;width:14px;height:14px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
+.rci-stat.pending{background:var(--i50);color:var(--i7)}
+.rci-stat.approved{background:var(--s50);color:var(--s7)}
+.rci-stat.rejected{background:var(--e50);color:var(--e7)}
+.rci-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--g8,#1c1c1e)}
+.rci-delta{font-size:11px;color:var(--g5);flex-shrink:0}
+.rci-photos{font-size:10.5px;color:var(--g4);flex-shrink:0}
+/* Detail panel */
+.detail{display:flex;flex-direction:column;overflow:hidden;background:var(--g50)}
+.detail-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--g4);text-align:center;padding:40px}
+.detail-empty .de-ic{width:72px;height:72px;border-radius:var(--r16);background:white;border:1px solid var(--g2);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:var(--sh-sm)}
+.detail-empty h3{font-size:16px;color:var(--g6);font-weight:600;margin:0 0 6px}
+.detail-empty p{font-size:12.5px;color:var(--g4);margin:0;line-height:1.7}
+.detail-scroll{flex:1;overflow-y:auto;padding:0 0 200px}
+/* Detail header */
+.detail-head{padding:14px 20px 12px;background:white;border-bottom:1px solid var(--g2);position:sticky;top:0;z-index:10;flex-shrink:0}
+.dh-title{font-size:17px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em}
+.dh-meta{font-size:12px;color:var(--g6);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+/* Detail cards */
+.dc{background:white;border:1px solid var(--g2);border-radius:var(--r12);margin:10px 16px;overflow:hidden}
+.dc-head{padding:11px 16px;border-bottom:1px solid var(--g1);display:flex;align-items:center;justify-content:space-between}
+.dc-head h3{font-size:13px;font-weight:600;margin:0;display:flex;align-items:center;gap:7px}
+.dc-body{padding:14px 16px}
+/* Summary stats card */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:12.5px}
+.sg-row{display:flex;align-items:center;gap:7px;color:var(--g7);padding:3px 0}
+.sg-row strong{color:var(--g9);font-weight:600}
+/* Photo gallery */
+.photo-filters{display:flex;gap:4px;padding:10px 16px;flex-wrap:wrap;border-bottom:1px solid var(--g1)}
+.pf-btn{height:24px;padding:0 10px;border-radius:999px;font-size:11.5px;border:1px solid var(--g2);background:white;color:var(--g6);cursor:pointer;transition:all .1s}
+.pf-btn.on{background:var(--p7);border-color:var(--p7);color:white}
+.pf-btn:hover:not(.on){background:var(--g1)}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 16px}
+.pg-item{aspect-ratio:1;border-radius:var(--r8);overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--g2);background:var(--g2)}
+.pg-item .stripe{position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,#C7CED8 0 10px,#D4DBE5 10px 20px);display:flex;align-items:center;justify-content:center;color:var(--g5)}
+.pg-item .ph-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);color:white;font-size:9.5px;padding:3px 6px;text-align:center;line-height:1.3}
+.pg-item .zoom-ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);color:white;opacity:0;transition:all .15s}
+.pg-item:hover .zoom-ic{opacity:1;background:rgba(0,0,0,.25)}
+/* Item controls */
+.items-controls{padding:10px 16px;border-bottom:1px solid var(--g1);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill-toggle{display:inline-flex;background:var(--g1);border:1px solid var(--g2);border-radius:6px;padding:2px}
+.pt-btn{height:22px;padding:0 8px;border-radius:4px;border:0;background:transparent;font-size:11.5px;color:var(--g6);font-family:inherit;cursor:pointer;transition:all .1s}
+.pt-btn.on{background:white;color:var(--g9);font-weight:600;box-shadow:var(--sh-sm)}
+/* Item tabs */
+.item-tabs{display:flex;gap:0;padding:0 16px;border-bottom:1px solid var(--g1);background:var(--g50);flex-shrink:0}
+.it-btn{padding:7px 0;font-size:12px;color:var(--g5);border-bottom:2px solid transparent;margin-left:14px;background:transparent;border-left:0;border-right:0;border-top:0;cursor:pointer;white-space:nowrap}
+.it-btn.active{color:var(--p7);border-bottom-color:var(--p7);font-weight:600}
+/* Progress item card */
+.pi-card{background:white;border:1px solid var(--g2);border-radius:var(--r12);margin:8px 16px;overflow:hidden;transition:box-shadow .12s}
+.pi-card:hover{box-shadow:var(--sh-md)}
+.pi-card.pi-approved{border-color:rgba(22,163,74,.25);background:#FDFFFE}
+.pi-card.pi-rejected{border-color:rgba(220,38,38,.2);background:#FFFAFA}
+.pi-card.pi-focused{border-color:var(--p5);box-shadow:0 0 0 3px rgba(44,74,115,.08)}
+.pi-head{padding:11px 14px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--g1)}
+.pi-title{font-size:13.5px;font-weight:600;margin-bottom:2px}
+.pi-path{font-size:11px;color:var(--g5)}
+.pi-body{padding:12px 14px}
+/* Progress change visual */
+.pc-bar{position:relative;height:10px;background:var(--g1);border-radius:999px;margin:10px 0 6px;overflow:visible}
+.pc-prev{height:100%;background:var(--g3);border-radius:999px;position:absolute;transition:width .4s}
+.pc-new{height:100%;border-radius:999px;position:absolute;transition:width .4s}
+.pc-nums{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700}
+.pc-from{color:var(--g4);text-decoration:line-through;font-size:13px}
+.pc-arrow{color:var(--g4)}
+.pc-to{letter-spacing:-.01em}
+.pc-delta{font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:999px}
+/* Item history snippet */
+.pi-history{font-size:11.5px;color:var(--g5);padding:8px 14px;border-top:1px solid var(--g1);display:flex;align-items:center;gap:6px}
+.pi-history a{color:var(--p7);font-weight:500}
+/* Item actions */
+.pi-actions{padding:10px 14px;border-top:1px solid var(--g1);display:flex;gap:6px;align-items:center}
+/* Compact item row */
+.ci-row{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--g1);font-size:12.5px}
+.ci-row:hover{background:var(--g50)}
+.ci-row .ci-st{flex-shrink:0;width:18px;height:18px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
+.ci-row .ci-t{flex:1;min-width:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci-row .ci-delta{font-size:11.5px;color:var(--g6);flex-shrink:0;min-width:80px;text-align:left}
+.ci-row .ci-ph{font-size:10.5px;color:var(--g4);flex-shrink:0}
+.ci-row .ci-acts{display:flex;gap:2px;flex-shrink:0}
+.ci-act-btn{width:24px;height:24px;border-radius:4px;border:1px solid var(--g2);background:white;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .1s}
+.ci-act-btn.approve:hover{background:var(--s50);border-color:var(--s5);color:var(--s7)}
+.ci-act-btn.reject:hover{background:var(--e50);border-color:var(--e5);color:var(--e7)}
+.ci-act-btn.edit:hover{background:var(--w50);border-color:var(--w5);color:var(--w7)}
+/* Group header */
+.pi-group-head{display:flex;align-items:center;gap:8px;padding:10px 16px 6px;font-size:11.5px;font-weight:600;color:var(--g6)}
+.pi-group-head .gh-ic{width:20px;height:20px;border-radius:4px;background:var(--p1);color:var(--p7);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.pi-group-approve{font-size:11px;font-weight:500;color:var(--s7);background:var(--s50);border:1px solid rgba(22,163,74,.2);padding:2px 8px;border-radius:999px;cursor:pointer;margin-right:auto;transition:all .1s}
+.pi-group-approve:hover{background:var(--s5);color:white}
+/* Expandable reject area */
+.expand-area{background:var(--g50);border:1px solid var(--g2);border-radius:var(--r8);padding:12px 14px;margin:0 14px 10px;animation:expandIn .18s ease}
+@keyframes expandIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.expand-area .ea-title{font-size:12.5px;font-weight:600;color:var(--g8,#1c1c1e);margin-bottom:8px}
+.expand-area textarea{width:100%;min-height:64px;padding:8px 10px;border:1px solid var(--g3);border-radius:var(--r8);font-size:12.5px;line-height:1.6;resize:vertical;outline:none;transition:border-color .12s,box-shadow .12s}
+.expand-area textarea:focus{border-color:var(--p5);box-shadow:0 0 0 3px rgba(44,74,115,.08)}
+.expand-area .ea-opts{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:8px}
+.ea-cb-row{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--g7)}
+.ea-cb{width:15px;height:15px;border:1.5px solid var(--g3);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:white;transition:all .1s}
+.ea-cb.on{background:var(--p7);border-color:var(--p7)}
+/* GPS map */
+.gps-map{width:100%;height:130px;border-radius:var(--r8);overflow:hidden;border:1px solid var(--g2)}
+.gps-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:12px}
+/* Workflow stepper */
+.wf-steps{display:flex;align-items:flex-start;gap:0;padding:6px 0 2px}
+.wf-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.wf-step:not(:last-child)::after{content:'';position:absolute;top:15px;left:0;width:50%;height:2px;background:var(--g2)}
+.wf-step:not(:first-child)::before{content:'';position:absolute;top:15px;right:0;width:50%;height:2px;background:var(--g2)}
+.wf-step.done::after,.wf-step.done::before,.wf-step.cur::before{background:var(--s5)}
+.wf-dot{width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;border:2px solid var(--g3);background:white;color:var(--g5);margin-bottom:5px;position:relative;z-index:1}
+.wf-step.done .wf-dot{background:var(--s5);border-color:var(--s5);color:white}
+.wf-step.cur .wf-dot{background:var(--i5);border-color:var(--i5);color:white;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.wf-label{font-size:11px;color:var(--g6);line-height:1.4}
+.wf-step.cur .wf-label{color:var(--i7);font-weight:600}
+.wf-sub{font-size:10px;color:var(--g4);margin-top:1px}
+/* Sticky footer */
+.action-footer{position:sticky;bottom:0;background:white;border-top:1px solid var(--g2);padding:12px 20px;z-index:20;flex-shrink:0}
+.af-state{font-size:12px;color:var(--g6);display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.af-state .af-badge{font-size:11px;font-weight:600}
+.af-progress{height:4px;background:var(--g1);border-radius:999px;overflow:hidden;margin-bottom:10px}
+.af-progress .fill{height:100%;background:var(--s5);border-radius:999px;transition:width .4s ease}
+.af-btns{display:flex;gap:6px}
+/* All-done state */
+.all-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;color:var(--g5)}
+.all-done .check-big{width:80px;height:80px;border-radius:999px;background:var(--s50);color:var(--s5);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 0 12px rgba(22,163,74,.06)}
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:200;padding:40px}
+.lb.open{display:flex}
+.lb-img{max-width:75%;width:100%;aspect-ratio:4/3;border-radius:var(--r12);background-image:repeating-linear-gradient(135deg,#C7CED8 0 14px,#D4DBE5 14px 28px);display:flex;align-items:center;justify-content:center;color:var(--g5)}
+.lb-close{position:absolute;top:24px;left:24px;width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,.15);color:white;border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+/* Toast */
+@keyframes tin{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes tout{to{opacity:0;transform:translate(-50%,10px)}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--g9);color:white;padding:10px 18px;border-radius:var(--r8);box-shadow:var(--sh-lg);display:flex;align-items:center;gap:10px;font-size:13px;z-index:300;pointer-events:none;animation:tin .22s ease}
+.toast.hide{animation:tout .18s ease forwards}
+.toast .tic{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+/* Shortcuts overlay */
+.shortcuts-overlay{position:fixed;inset:0;background:rgba(24,24,27,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:400}
+.shortcuts-overlay.open{display:flex}
+.sk-box{background:white;border-radius:var(--r16);box-shadow:var(--sh-lg);padding:22px 26px;width:100%;max-width:400px}
+.sk-box h3{font-size:15px;font-weight:700;margin:0 0 14px;display:flex;align-items:center;justify-content:space-between}
+.sk-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--g1)}
+.sk-row:last-child{border-bottom:0}
+.sk-row span{font-size:13px;color:var(--g6)}
+.sk-row kbd{font-family:'JetBrains Mono',monospace;background:var(--g1);border:1px solid var(--g3);border-radius:5px;padding:2px 7px;font-size:11px;color:var(--g8,#1c1c1e)}
+/* Demo state bar */
+.demo-bar{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:3px;background:white;border:1px solid var(--g2);border-radius:var(--r12);box-shadow:var(--sh-lg);padding:4px;z-index:100}
+.db-btn{padding:5px 9px;border-radius:8px;background:transparent;border:0;color:var(--g6);font-size:11.5px;font-weight:500;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .1s}
+.db-btn:hover{background:var(--g1);color:var(--g9)}
+.db-btn.on{background:var(--p7);color:white}
+/* Helpers */
+.av-blue{background:var(--p1);color:var(--p7)}
+.av-orange{background:var(--a1);color:var(--a7)}
+.av-green{background:var(--s50);color:var(--s7)}
+.av-gray{background:var(--g1);color:var(--g7)}
+</style>
+</head>
+<body>
+
+<!-- Demo state bar -->
+<div class="demo-bar" id="demo-bar"></div>
+
+<!-- Shortcuts overlay -->
+<div class="shortcuts-overlay" id="sk-overlay" onclick="this.classList.remove('open')">
+  <div class="sk-box" onclick="event.stopPropagation()">
+    <h3>میانبرهای کیبورد <button class="tb-btn" style="width:28px;height:28px" onclick="document.getElementById('sk-overlay').classList.remove('open')"><i data-lucide="x" style="width:14px;height:14px"></i></button></h3>
+    <div class="sk-row"><span>حرکت بین گزارش‌ها</span><div style="display:flex;gap:4px"><kbd>J</kbd><kbd>K</kbd></div></div>
+    <div class="sk-row"><span>حرکت بین آیتم‌ها</span><div style="display:flex;gap:4px"><kbd>↑</kbd><kbd>↓</kbd></div></div>
+    <div class="sk-row"><span>تأیید آیتم فعلی</span><kbd>A</kbd></div>
+    <div class="sk-row"><span>رد آیتم فعلی</span><kbd>R</kbd></div>
+    <div class="sk-row"><span>درخواست اصلاح</span><kbd>E</kbd></div>
+    <div class="sk-row"><span>تأیید کل گزارش</span><kbd>Shift+A</kbd></div>
+    <div class="sk-row"><span>انتخاب گزارش</span><kbd>Space</kbd></div>
+    <div class="sk-row"><span>نمایش این راهنما</span><kbd>?</kbd></div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="sb-name"><strong>پروژه‌یار</strong><small>کنترل پروژه</small></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">منو اصلی</div>
+      <button class="sb-item"><i data-lucide="layout-dashboard" class="ic"></i>داشبورد</button>
+      <button class="sb-item"><i data-lucide="folder-open" class="ic"></i>پروژه‌ها</button>
+      <button class="sb-item active"><i data-lucide="clipboard-list" class="ic"></i>گزارش‌های فیلد<span class="badge">۸۷</span></button>
+      <button class="sb-item"><i data-lucide="users" class="ic"></i>کاربران</button>
+      <div class="sb-section">تحلیل</div>
+      <button class="sb-item"><i data-lucide="bar-chart-3" class="ic"></i>نمودارها</button>
+      <div class="sb-section">سیستم</div>
+      <button class="sb-item"><i data-lucide="settings" class="ic"></i>تنظیمات</button>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="av av-blue">م.ا</div>
+        <div class="info"><div class="n">مهندس احمدی</div><div class="r">ناظر</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <span class="tb-title">گزارش‌های فیلد</span>
+    <div class="tb-search">
+      <i data-lucide="search" style="width:13px;height:13px;color:var(--g4)"></i>
+      <span>جستجوی سراسری…</span><kbd>Ctrl+K</kbd>
+    </div>
+    <div style="margin-right:auto;display:flex;gap:4px">
+      <button class="tb-btn"><i data-lucide="bell" style="width:16px;height:16px"></i><span class="nd"></span></button>
+      <button class="tb-btn" onclick="document.getElementById('sk-overlay').classList.add('open')"><i data-lucide="keyboard" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="tb-av">م.ا</div>
+  </header>
+
+  <!-- Content -->
+  <main class="content">
+    <div class="page-head">
+      <div class="breadcrumb"><a href="#">خانه</a><span>›</span><span>گزارش‌های فیلد</span></div>
+      <div class="ph-row">
+        <div><h1>گزارش‌های فیلد</h1><div class="sub" id="ph-sub">۲۴ گزارش در انتظار از ۳ پروژه شامل <strong>۸۷ آیتم پیشرفت</strong></div></div>
+        <div class="ph-actions">
+          <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی Excel</button>
+          <button class="btn btn-outline btn-sm"><i data-lucide="bell" style="width:13px;height:13px"></i>اعلان‌ها</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="sic" style="background:var(--i50)"><i data-lucide="layers" style="width:18px;height:18px;color:var(--i7)"></i></div>
+        <div><div class="sv" style="color:var(--i7)">۸۷</div><div class="sl">آیتم در انتظار تأیید<br><span style="color:var(--g4)">در ۲۴ گزارش</span></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--e50)"><i data-lucide="alert-octagon" style="width:18px;height:18px;color:var(--e7)"></i></div>
+        <div><div class="sv" style="color:var(--e7)">۱۲</div><div class="sl">آیتم بیش از ۲۴ساعت<br><span style="color:var(--g4)">بدون پاسخ</span></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--s50)"><i data-lucide="check-circle-2" style="width:18px;height:18px;color:var(--s7)"></i></div>
+        <div><div class="sv" style="color:var(--s7)">۲۳</div><div class="sl">تأییدشده توسط شما<br><span style="color:var(--g4)">امروز</span></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--w50)"><i data-lucide="rotate-ccw" style="width:18px;height:18px;color:var(--w7)"></i></div>
+        <div><div class="sv" style="color:var(--w7)">۵</div><div class="sl">رد شده / نیاز اصلاح<br><span style="color:var(--g4)">در ۳ گزارش</span></div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="setTab(this)"><span class="tc" style="background:var(--i50);color:var(--i7)">۲۴</span>در انتظار</button>
+      <button class="tab-btn" onclick="setTab(this)"><span class="tc" style="background:var(--s50);color:var(--s7)">۱۲۸</span>تأییدشده</button>
+      <button class="tab-btn" onclick="setTab(this)"><span class="tc" style="background:var(--e50);color:var(--e7)">۸</span>رد شده</button>
+      <button class="tab-btn" onclick="setTab(this)"><span class="tc" style="background:var(--w50);color:var(--w7)">۳</span>نیاز اصلاح</button>
+      <button class="tab-btn" onclick="setTab(this)"><span class="tc" style="background:var(--g1);color:var(--g6)">۱۶۳</span>همه</button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <select class="filter-select"><option>همه پروژه‌ها</option><option>مجتمع نگین شهر</option><option>پل شهید سلیمانی</option></select>
+      <select class="filter-select"><option>همه سرپرست‌ها</option><option>علی محمدی</option><option>حسن کریمی</option><option>محمد رضایی</option></select>
+      <select class="filter-select"><option>همه آیتم‌های WBS</option></select>
+      <select class="filter-select"><option>وضعیت آیتم‌ها</option><option>حداقل یه آیتم در انتظار</option><option>نیمه‌بررسی‌شده</option><option>کاملاً تأییدشده</option></select>
+      <select class="filter-select"><option>بازه تاریخ</option><option>امروز</option><option>۷ روز اخیر</option></select>
+      <div style="margin-right:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g5)">
+        <i data-lucide="arrow-up-down" style="width:12px;height:12px"></i>
+        <select class="filter-select" style="height:28px;font-size:12px"><option>جدیدترین</option><option>بیشترین آیتم</option><option>در ریسک بیشتر</option></select>
+      </div>
+    </div>
+
+    <!-- Split -->
+    <div class="split" id="main-split">
+      <!-- LEFT: Detail panel -->
+      <div class="detail" id="detail-col">
+        <div id="detail-empty" class="detail-empty">
+          <div class="de-ic"><i data-lucide="file-text" style="width:32px;height:32px"></i></div>
+          <h3>یک گزارش انتخاب کنید</h3>
+          <p>از لیست، یک گزارش روزانه انتخاب کنید.<br>هر گزارش شامل چندین آیتم پیشرفت است.</p>
+          <div style="margin-top:12px;font-size:12px;background:var(--g1);border-radius:var(--r8);padding:6px 12px;display:inline-flex;align-items:center;gap:6px;color:var(--g5)">
+            <kbd style="font-family:'JetBrains Mono',monospace;background:white;border:1px solid var(--g3);border-radius:4px;padding:1px 6px;font-size:10.5px">J</kbd><kbd style="font-family:'JetBrains Mono',monospace;background:white;border:1px solid var(--g3);border-radius:4px;padding:1px 6px;font-size:10.5px">K</kbd> حرکت · <kbd style="font-family:'JetBrains Mono',monospace;background:white;border:1px solid var(--g3);border-radius:4px;padding:1px 6px;font-size:10.5px">?</kbd> راهنما
+          </div>
+        </div>
+        <div id="detail-content" style="display:none;flex-direction:column;height:100%"></div>
+      </div>
+      <!-- RIGHT: Report list -->
+      <div class="rlist" id="rlist">
+        <div class="bulk-bar" id="bulk-bar" style="display:none">
+          <i data-lucide="check-square" style="width:14px;height:14px"></i>
+          <span><span class="bbc" id="bulk-cnt">۰</span> گزارش انتخاب شد</span>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:white;border:0;margin-right:8px" onclick="bulkApproveAll()"><i data-lucide="check" style="width:12px;height:12px"></i>تأیید همه آیتم‌ها</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:0" onclick="clearSel()"><i data-lucide="x" style="width:12px;height:12px"></i>انصراف</button>
+          <button class="btn btn-sm" style="background:transparent;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);margin-right:auto" onclick="clearSel()"><i data-lucide="download" style="width:12px;height:12px"></i>خروجی</button>
+        </div>
+        <div class="rlist-head">
+          <label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer">
+            <span class="rc-cb" id="sel-all-cb" onclick="toggleSelAll()"></span>
+            <span style="font-size:12.5px;color:var(--g6)">۲۴ گزارش</span>
+          </label>
+          <span style="font-size:11px;color:var(--g4);margin-right:auto">آیتم‌های در انتظار</span>
+        </div>
+        <div class="rlist-body" id="rlist-body"></div>
+        <div class="rlist-footer">
+          <span>نمایش <strong>۶ از ۲۴</strong></span>
+          <div style="display:flex;align-items:center;gap:4px">
+            <button class="btn btn-ghost btn-xs" disabled style="width:26px;padding:0;border-radius:5px"><i data-lucide="chevron-right" style="width:12px;height:12px"></i></button>
+            <span style="background:var(--p7);color:white;width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">۱</span>
+            <button class="btn btn-ghost btn-xs" style="width:26px;padding:0;border-radius:5px"><i data-lucide="chevron-left" style="width:12px;height:12px"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- All-done state -->
+      <div class="all-done" id="all-done" style="display:none;grid-column:1/3">
+        <div class="check-big"><i data-lucide="party-popper" style="width:38px;height:38px"></i></div>
+        <h3>همه گزارش‌ها بررسی شدند! 🎉</h3>
+        <p>در حال حاضر هیچ گزارش در انتظار تأییدی ندارید.</p>
+        <button class="btn btn-outline btn-sm" style="margin-top:16px">مشاهده تأییدشده‌ها</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="this.classList.remove('open')">
+  <button class="lb-close" onclick="event.stopPropagation();document.getElementById('lb').classList.remove('open')"><i data-lucide="x" style="width:15px;height:15px"></i></button>
+  <div class="lb-img"><i data-lucide="image" style="width:48px;height:48px"></i></div>
+</div>
+
+<script>
+const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+// ── Data ──
+const REPORTS = [
+  { id:1, date:'۱۴۰۴/۰۳/۰۱', reporter:{name:'علی محمدی',initials:'ع.م',role:'سرپرست کارگاه',phone:'۰۹۱۳۱۱۱۱۱۱۱',avClass:'av-blue'},
+    project:'مجتمع نگین شهر', time:'۲ ساعت پیش', unread:true, overdue:false,
+    note:'امروز ۸ نفر کارگر داشتیم. هوا گرم بود ولی مشکلی نداشتیم. تأمین کاشی از انبار به‌موقع انجام شد.',
+    gps:{lat:'35.7219', lng:'51.3347', ok:true, dist:'۱۲ متر'},
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۸:۳۴', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۸:۳۶', syncDelay:'۲ دقیقه', conn:'آنلاین',
+    items:[
+      {id:'i1', code:'1.4.1.1', title:'گچ‌کاری', sub:'طبقه ۱', group:'نازک‌کاری', from:80, to:90, photos:2, status:'pending', desc:'گچ‌کاری دیوار شمالی تموم شد. فردا دیوار جنوبی رو شروع می‌کنیم.'},
+      {id:'i2', code:'1.4.1.2', title:'گچ‌کاری', sub:'طبقه ۲', group:'نازک‌کاری', from:60, to:70, photos:2, status:'pending', desc:'گچ‌کاری ادامه دارد، قاب‌ها نصب شدن.'},
+      {id:'i3', code:'1.4.1.3', title:'گچ‌کاری', sub:'طبقه ۳', group:'نازک‌کاری', from:30, to:40, photos:2, status:'pending', desc:'شروع کار در طبقه ۳.'},
+      {id:'i4', code:'1.4.2.1', title:'کاشی‌کاری', sub:'طبقه ۱', group:'نازک‌کاری', from:40, to:55, photos:1, status:'pending', desc:'کاشی سرویس‌های بهداشتی طبقه ۱ تکمیل شد.'},
+      {id:'i5', code:'1.4.2.2', title:'کاشی‌کاری', sub:'طبقه ۲', group:'نازک‌کاری', from:20, to:30, photos:1, status:'approved', approvedBy:'شما', approvedTime:'۳۰ دقیقه پیش', desc:'کاشی کف طبقه ۲ تکمیل شد.'},
+    ]},
+  { id:2, date:'۱۴۰۴/۰۳/۰۱', reporter:{name:'حسن کریمی',initials:'ح.ک',role:'سرپرست کارگاه',phone:'۰۹۱۳۲۲۲۲۲۲۲',avClass:'av-orange'},
+    project:'مجتمع نگین شهر', time:'۳۰ دقیقه پیش', unread:true, overdue:false,
+    note:'کار سفت‌کاری طبقات ۴ و ۵ ادامه پیدا کرد.',
+    gps:{lat:'35.7220', lng:'51.3350', ok:true, dist:'۸ متر'},
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۱۰:۰۵', serverTime:'۱۴۰۴/۰۳/۰۱ — ۱۰:۰۷', syncDelay:'۲ دقیقه', conn:'آنلاین',
+    items:[
+      {id:'i6', code:'1.2.2.1', title:'آرماتوربندی ستون', sub:'طبقه ۴', group:'سفت‌کاری', from:70, to:85, photos:3, status:'pending', desc:'آرماتوربندی محور A و B تموم شد.'},
+      {id:'i7', code:'1.2.2.1', title:'آرماتوربندی ستون', sub:'طبقه ۵', group:'سفت‌کاری', from:50, to:65, photos:2, status:'pending', desc:'آرماتوربندی محور A انجام شد.'},
+      {id:'i8', code:'1.2.2.2', title:'قالب‌بندی ستون', sub:'طبقه ۴', group:'سفت‌کاری', from:60, to:75, photos:2, status:'pending', desc:'قالب‌بندی کامل شد.'},
+      {id:'i9', code:'1.2.3.1', title:'بتن‌ریزی سقف', sub:'طبقه ۳', group:'سفت‌کاری', from:0, to:100, photos:4, status:'pending', desc:'بتن‌ریزی سقف طبقه ۳ امروز انجام شد.'},
+    ]},
+  { id:3, date:'۱۴۰۴/۰۳/۰۱', reporter:{name:'علی محمدی',initials:'ع.م',role:'سرپرست کارگاه',phone:'۰۹۱۳۱۱۱۱۱۱۱',avClass:'av-blue'},
+    project:'مجتمع نگین شهر', time:'۳ ساعت پیش', unread:false, overdue:true,
+    note:'گروه دوم نازک‌کاری در طبقات ۴، ۵، ۶ کار کردند.',
+    gps:{lat:'35.7215', lng:'51.3345', ok:false, dist:'۱.۲ کیلومتر'},
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۷:۱۸', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۹:۳۰', syncDelay:'۲ ساعت ۱۲ دقیقه', conn:'آفلاین (sync تأخیری)',
+    items:[
+      {id:'i10', code:'1.4.1.4', title:'گچ‌کاری', sub:'طبقه ۴', group:'نازک‌کاری', from:10, to:22, photos:2, status:'pending', desc:'شروع گچ‌کاری طبقه ۴.'},
+      {id:'i11', code:'1.4.1.5', title:'گچ‌کاری', sub:'طبقه ۵', group:'نازک‌کاری', from:0, to:10, photos:1, status:'pending', desc:'شروع اولیه.'},
+      {id:'i12', code:'1.4.1.6', title:'گچ‌کاری', sub:'طبقه ۶', group:'نازک‌کاری', from:0, to:8, photos:1, status:'pending', desc:'آغاز کار.'},
+      {id:'i13', code:'1.4.3.1', title:'نقاشی', sub:'طبقه ۴', group:'نازک‌کاری', from:0, to:5, photos:1, status:'rejected', rejectedBy:'شما', rejectedTime:'۱ ساعت پیش', rejectReason:'عکس‌ها نشان‌دهنده اتمام نیست، لطفاً عکس دقیق‌تر ارسال کنید.'},
+      {id:'i14', code:'1.4.3.2', title:'نقاشی', sub:'طبقه ۵', group:'نازک‌کاری', from:0, to:5, photos:1, status:'pending', desc:'اولین لایه آستری.'},
+      {id:'i15', code:'1.4.3.3', title:'نقاشی', sub:'طبقه ۶', group:'نازک‌کاری', from:0, to:5, photos:1, status:'pending', desc:'اولین لایه آستری.'},
+      {id:'i16', code:'1.4.4.1', title:'سفیدکاری', sub:'طبقه ۴', group:'نازک‌کاری', from:20, to:28, photos:1, status:'edit', editedBy:'شما', editReason:'لطفاً مقدار واقعی متر مربع را ذکر کنید.'},
+      {id:'i17', code:'1.4.4.2', title:'سفیدکاری', sub:'طبقه ۵', group:'نازک‌کاری', from:15, to:20, photos:1, status:'pending', desc:''}
+    ]},
+  { id:4, date:'۱۴۰۴/۰۳/۰۱', reporter:{name:'محمد رضایی',initials:'م.ر',role:'سرپرست کارگاه',phone:'۰۹۱۳۳۳۳۳۳۳۳',avClass:'av-green'},
+    project:'مجتمع نگین شهر', time:'۵ ساعت پیش', unread:false, overdue:false,
+    note:'کار تأسیسات در طبقات ۱ و ۲ انجام شد.',
+    gps:{lat:'35.7218', lng:'51.3348', ok:true, dist:'۱۵ متر'},
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۵:۴۵', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۵:۴۷', syncDelay:'۲ دقیقه', conn:'آنلاین',
+    items:[
+      {id:'i18', code:'1.3.1.1', title:'لوله‌کشی برق', sub:'طبقه ۱', group:'تأسیسات', from:60, to:75, photos:2, status:'pending', desc:''},
+      {id:'i19', code:'1.3.1.2', title:'لوله‌کشی برق', sub:'طبقه ۲', group:'تأسیسات', from:40, to:55, photos:2, status:'pending', desc:''},
+      {id:'i20', code:'1.3.2.1', title:'لوله‌کشی آب', sub:'طبقه ۱', group:'تأسیسات', from:80, to:90, photos:1, status:'approved', approvedBy:'شما', approvedTime:'۴ ساعت پیش', desc:''},
+    ]},
+  { id:5, date:'۱۴۰۳/۱۲/۳۰', reporter:{name:'حسن کریمی',initials:'ح.ک',role:'سرپرست کارگاه',phone:'۰۹۱۳۲۲۲۲۲۲۲',avClass:'av-orange'},
+    project:'پل شهید سلیمانی', time:'دیروز', unread:false, overdue:true,
+    note:'',
+    gps:{lat:'35.7200', lng:'51.3300', ok:false, dist:'۳.۱ کیلومتر'},
+    localTime:'۱۴۰۳/۱۲/۳۰ — ۱۴:۲۲', serverTime:'۱۴۰۳/۱۲/۳۰ — ۱۶:۵۰', syncDelay:'۲ ساعت ۲۸ دقیقه', conn:'آفلاین (sync تأخیری)',
+    items:[
+      {id:'i21', code:'2.1.1.1', title:'آرماتوربندی پایه', sub:'پایه ۱', group:'سازه', from:85, to:100, photos:3, status:'pending', desc:''},
+      {id:'i22', code:'2.1.1.2', title:'آرماتوربندی پایه', sub:'پایه ۲', group:'سازه', from:70, to:85, photos:2, status:'pending', desc:''},
+      {id:'i23', code:'2.1.2.1', title:'قالب‌بندی پایه', sub:'پایه ۱', group:'سازه', from:0, to:60, photos:3, status:'pending', desc:''},
+    ]},
+  { id:6, date:'۱۴۰۳/۱۲/۲۹', reporter:{name:'محمد رضایی',initials:'م.ر',role:'سرپرست کارگاه',phone:'۰۹۱۳۳۳۳۳۳۳۳',avClass:'av-green'},
+    project:'مجتمع نگین شهر', time:'۲ روز پیش', unread:false, overdue:true,
+    note:'',
+    gps:{lat:'35.7225', lng:'51.3355', ok:true, dist:'۲۲ متر'},
+    localTime:'۱۴۰۳/۱۲/۲۹ — ۱۶:۳۰', serverTime:'۱۴۰۳/۱۲/۲۹ — ۱۶:۳۲', syncDelay:'۲ دقیقه', conn:'آنلاین',
+    items:[
+      {id:'i24', code:'1.3.2.2', title:'لوله‌کشی فاضلاب', sub:'طبقه ۲', group:'تأسیسات', from:45, to:60, photos:2, status:'pending', desc:''},
+      {id:'i25', code:'1.3.2.3', title:'لوله‌کشی فاضلاب', sub:'طبقه ۳', group:'تأسیسات', from:30, to:42, photos:2, status:'pending', desc:''},
+    ]},
+];
+
+// ── App state ──
+let selReportId = 1;
+let selItemId = 'i1';
+let expandedReports = new Set();
+let selectedIds = new Set();
+let viewMode = 'card'; // card | compact
+let groupBy = 'none';  // none | group | floor
+let itemTab = 'all';   // all | pending | approved
+let expandAction = null; // null | {type, itemId}
+let photoFilter = 'all';
+let uiState = 'full';
+
+function getReport(id) { return REPORTS.find(r => r.id === id); }
+function pendingItems(r) { return r.items.filter(i => i.status==='pending'); }
+function progressColor(from, to) {
+  const d = to - from;
+  if (d > 20) return 'var(--a5)';
+  if (d >= 0) return 'var(--p7)';
+  return 'var(--e5)';
+}
+function statusIcon(st) {
+  if (st==='approved') return `<i data-lucide="check-circle-2" style="width:12px;height:12px;color:var(--s5)"></i>`;
+  if (st==='rejected') return `<i data-lucide="x-circle" style="width:12px;height:12px;color:var(--e5)"></i>`;
+  if (st==='edit') return `<i data-lucide="rotate-ccw" style="width:12px;height:12px;color:var(--w5)"></i>`;
+  return `<i data-lucide="clock" style="width:12px;height:12px;color:var(--i5)"></i>`;
+}
+function statusBadge(st) {
+  if (st==='approved') return `<span class="badge b-approved">تأیید</span>`;
+  if (st==='rejected') return `<span class="badge b-rejected">رد</span>`;
+  if (st==='edit') return `<span class="badge b-edit">اصلاح</span>`;
+  return `<span class="badge b-pending">در انتظار</span>`;
+}
+function smartSummary(r) {
+  const groups = {};
+  r.items.forEach(i => { groups[i.group] = (groups[i.group]||0)+1; });
+  const parts = Object.entries(groups).map(([g,n]) => `<span class="sum-bold">${fa(n)} آیتم</span> در ${g}`);
+  return parts.join(' · ');
+}
+function itemStatusCounts(r) {
+  const pending = r.items.filter(i=>i.status==='pending').length;
+  const approved = r.items.filter(i=>i.status==='approved').length;
+  const rejected = r.items.filter(i=>i.status==='rejected').length;
+  const edit = r.items.filter(i=>i.status==='edit').length;
+  let b = '';
+  if (pending) b += `<span class="badge b-pending" style="font-size:10.5px;height:18px"><i data-lucide="clock" style="width:9px;height:9px"></i>${fa(pending)}</span>`;
+  if (approved) b += `<span class="badge b-approved" style="font-size:10.5px;height:18px"><i data-lucide="check" style="width:9px;height:9px"></i>${fa(approved)}</span>`;
+  if (rejected) b += `<span class="badge b-rejected" style="font-size:10.5px;height:18px"><i data-lucide="x" style="width:9px;height:9px"></i>${fa(rejected)}</span>`;
+  if (edit) b += `<span class="badge b-edit" style="font-size:10.5px;height:18px">${fa(edit)}</span>`;
+  return b;
+}
+
+// ── Render list ──
+function renderList() {
+  const body = document.getElementById('rlist-body');
+  body.innerHTML = REPORTS.map(r => {
+    const checked = selectedIds.has(r.id);
+    const active = r.id === selReportId;
+    const expanded = expandedReports.has(r.id);
+    const totalPhotos = r.items.reduce((s,i)=>s+i.photos,0);
+    const avgDelta = Math.round(r.items.reduce((s,i)=>s+(i.to-i.from),0)/r.items.length);
+    const itemsHTML = expanded ? `
+      <div class="rc-items-list">
+        ${r.items.map(i => `
+          <div class="rci-row" onclick="event.stopPropagation();focusItem('${i.id}')">
+            <span class="rci-stat ${i.status}">${statusIcon(i.status)}</span>
+            <span class="rci-title">${i.title} · ${i.sub}</span>
+            <span class="rci-delta">${fa(i.from)}→${fa(i.to)}٪ <span style="color:${progressColor(i.from,i.to)};font-weight:600">+${fa(i.to-i.from)}٪</span></span>
+            <span class="rci-photos"><i data-lucide="camera" style="width:10px;height:10px"></i>${fa(i.photos)}</span>
+          </div>`).join('')}
+      </div>` : '';
+    return `<div class="rcard${active?' active':''}${r.unread?' unread':''}${r.overdue?' overdue':''}" data-id="${r.id}" onclick="selectReport(${r.id},event)">
+      <div class="rc-top">
+        <span class="rc-cb${checked?' checked':''}" onclick="event.stopPropagation();toggleSel(${r.id})">
+          ${checked?`<i data-lucide="check" style="width:9px;height:9px;color:white"></i>`:''}
+        </span>
+        <div class="rc-av ${r.reporter.avClass}">${r.reporter.initials}</div>
+        <div class="rc-main">
+          <div class="rc-name">${r.reporter.name}</div>
+          <div class="rc-proj"><i data-lucide="building-2" style="width:10px;height:10px;color:var(--g4)"></i>${r.project}</div>
+          <div class="rc-summary">${smartSummary(r)}</div>
+          <div class="rc-meta">
+            ${itemStatusCounts(r)}
+            <span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--g5)"><i data-lucide="camera" style="width:10px;height:10px"></i>${fa(totalPhotos)}</span>
+            <span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--p7)">ø +${fa(avgDelta)}٪</span>
+            ${r.overdue?`<span class="badge b-overdue" style="font-size:10px;height:17px"><i data-lucide="alert-triangle" style="width:9px;height:9px"></i>تأخیر</span>`:''}
+            <span class="rc-time">${r.time}</span>
+          </div>
+        </div>
+      </div>
+      <button class="rc-expand-toggle" onclick="event.stopPropagation();toggleExpand(${r.id})">
+        <i data-lucide="${expanded?'chevron-up':'chevron-down'}" style="width:12px;height:12px"></i>
+        ${expanded?'پنهان کردن آیتم‌ها':'نمایش '+fa(r.items.length)+' آیتم'}
+      </button>
+      ${itemsHTML}
+    </div>`;
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+}
+
+// ── Select report ──
+function selectReport(id, e) {
+  if (e && e.target.closest('.rc-cb')) return;
+  selReportId = id;
+  selItemId = getReport(id).items[0]?.id || null;
+  expandAction = null;
+  renderList();
+  renderDetail();
+}
+function toggleExpand(id, e) {
+  if (expandedReports.has(id)) expandedReports.delete(id); else expandedReports.add(id);
+  renderList();
+}
+function focusItem(iid) {
+  selItemId = iid;
+  const r = getReport(selReportId);
+  if (!r || !r.items.find(i=>i.id===iid)) {
+    const rr = REPORTS.find(r=>r.items.find(i=>i.id===iid));
+    if (rr) { selReportId=rr.id; }
+  }
+  renderDetail();
+  setTimeout(()=>{
+    const el = document.getElementById('pi-'+iid);
+    if (el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }, 100);
+}
+
+// ── Render detail ──
+function renderDetail() {
+  const r = getReport(selReportId);
+  if (!r) return;
+  document.getElementById('detail-empty').style.display = 'none';
+  const dc = document.getElementById('detail-content');
+  dc.style.display = 'flex';
+
+  const pending = pendingItems(r);
+  const approved = r.items.filter(i=>i.status==='approved');
+  const rejected = r.items.filter(i=>i.status==='rejected'||i.status==='edit');
+  const decided = approved.length + rejected.length;
+  const total = r.items.length;
+
+  // Filter items
+  let visItems = r.items;
+  if (itemTab==='pending') visItems = r.items.filter(i=>i.status==='pending');
+  else if (itemTab==='approved') visItems = r.items.filter(i=>i.status==='approved');
+
+  // Grouped items
+  let itemsHTML = '';
+  if (groupBy !== 'none') {
+    const groups = {};
+    visItems.forEach(i => {
+      const key = groupBy==='group' ? i.group : i.sub;
+      if (!groups[key]) groups[key]=[];
+      groups[key].push(i);
+    });
+    Object.entries(groups).forEach(([g, items]) => {
+      const pend = items.filter(i=>i.status==='pending').length;
+      itemsHTML += `<div class="pi-group-head">
+        <span class="gh-ic"><i data-lucide="folder" style="width:11px;height:11px"></i></span>
+        ${g} <span style="color:var(--g4);font-weight:400">(${fa(items.length)} آیتم)</span>
+        ${pend>0?`<button class="pi-group-approve" onclick="approveGroup('${g}')"><i data-lucide="check" style="width:10px;height:10px"></i>تأیید همه ${fa(pend)}</button>`:''}
+      </div>`;
+      items.forEach(i => { itemsHTML += viewMode==='compact' ? renderCompactItem(i) : renderItemCard(i); });
+    });
+  } else {
+    visItems.forEach(i => { itemsHTML += viewMode==='compact' ? renderCompactItem(i) : renderItemCard(i); });
+  }
+
+  // Expand action area
+  let expandHTML = '';
+  if (expandAction) {
+    const iname = expandAction.itemId ? (r.items.find(i=>i.id===expandAction.itemId)?.title+' · '+r.items.find(i=>i.id===expandAction.itemId)?.sub) : 'کل گزارش';
+    const label = expandAction.type==='reject' ? 'رد' : 'درخواست اصلاح';
+    const color = expandAction.type==='reject' ? 'var(--e7)' : 'var(--w7)';
+    expandHTML = `<div class="expand-area" id="expand-area">
+      <div class="ea-title">${label === 'رد' ? '✗' : '↻'} ${label} برای: <span style="color:${color}">${iname}</span></div>
+      <textarea id="ea-reason" placeholder="دلیل را توضیح دهید (حداقل ۲۰ کاراکتر)…" oninput="checkEaSend()"></textarea>
+      <div class="ea-opts">
+        <div style="display:flex;gap:10px">
+          <label class="ea-cb-row" onclick="this.querySelector('.ea-cb').classList.toggle('on')">
+            <span class="ea-cb on"><i data-lucide="check" style="width:9px;height:9px;color:white"></i></span>ارسال SMS
+          </label>
+          <label class="ea-cb-row" onclick="this.querySelector('.ea-cb').classList.toggle('on')">
+            <span class="ea-cb"></span>کپی به مدیر
+          </label>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="closeExpand()">انصراف</button>
+          <button class="btn btn-sm" id="ea-send-btn" disabled style="background:${color};color:white;opacity:.4" onclick="doExpandSend()">ارسال</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Smart footer
+  let footerHTML = '';
+  const remainPending = pending.length;
+  if (decided === total) {
+    footerHTML = `<div class="action-footer">
+      <div class="af-state" style="color:var(--s7)"><i data-lucide="check-circle-2" style="width:14px;height:14px"></i>همه ${fa(total)} آیتم تعیین تکلیف شدند</div>
+      <div class="af-btns">
+        <button class="btn btn-success" style="flex:1" onclick="finalizeReport()"><i data-lucide="check-check" style="width:14px;height:14px"></i>نهایی‌سازی و ارسال به مرحله بعد</button>
+        <button class="btn btn-outline" onclick="showToast('بازنگری','info')"><i data-lucide="rotate-ccw" style="width:14px;height:14px"></i>بازنگری</button>
+      </div>
+    </div>`;
+  } else if (decided > 0) {
+    footerHTML = `<div class="action-footer">
+      <div class="af-state"><i data-lucide="clock" style="width:13px;height:13px;color:var(--i5)"></i><span><strong style="color:var(--g9)">${fa(remainPending)} آیتم</strong> باقی‌مانده</span><span style="color:var(--g4);font-size:11px">${fa(decided)} از ${fa(total)} تعیین تکلیف</span></div>
+      <div class="af-progress"><div class="fill" style="width:${Math.round(decided/total*100)}%"></div></div>
+      <div class="af-btns">
+        <button class="btn btn-success btn-sm" style="flex:1" onclick="approveRemaining()"><i data-lucide="check" style="width:13px;height:13px"></i>تأیید بقیه (${fa(remainPending)})</button>
+        <button class="btn btn-danger-ol btn-sm" onclick="openExpandAll('reject')"><i data-lucide="x" style="width:13px;height:13px"></i>رد بقیه</button>
+        <button class="btn btn-warn-ol btn-sm" onclick="openExpandAll('edit')"><i data-lucide="rotate-ccw" style="width:13px;height:13px"></i>اصلاح</button>
+      </div>
+    </div>`;
+  } else {
+    footerHTML = `<div class="action-footer">
+      <div class="af-state"><i data-lucide="clock" style="width:13px;height:13px;color:var(--i5)"></i><span class="af-badge b-pending badge">${fa(pending.length)} آیتم در انتظار تصمیم شما</span></div>
+      <div class="af-btns">
+        <button class="btn btn-success" style="flex:2" onclick="approveAll()"><i data-lucide="check" style="width:14px;height:14px"></i>تأیید همه (${fa(pending.length)} آیتم)</button>
+        <button class="btn btn-danger-ol" onclick="openExpandAll('reject')"><i data-lucide="x" style="width:14px;height:14px"></i>رد کل</button>
+        <button class="btn btn-warn-ol" onclick="openExpandAll('edit')"><i data-lucide="rotate-ccw" style="width:14px;height:14px"></i>اصلاح کل</button>
+      </div>
+    </div>`;
+  }
+
+  dc.innerHTML = `
+    <!-- Header -->
+    <div class="detail-head">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+        <div>
+          <div class="dh-title">📋 گزارش روزانه — ${r.date}</div>
+          <div class="dh-meta">
+            <span class="rc-av ${r.reporter.avClass}" style="width:24px;height:24px;font-size:9.5px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-weight:700">${r.reporter.initials}</span>
+            <strong>${r.reporter.name}</strong>
+            <span style="color:var(--g4)">·</span>
+            <span>${r.reporter.role}</span>
+            <span style="color:var(--g4)">·</span>
+            <i data-lucide="building-2" style="width:12px;height:12px;color:var(--g5)"></i>
+            <span>${r.project}</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+          ${pending.length>0?`<span class="badge b-pending">${fa(pending.length)} در انتظار</span>`:`<span class="badge b-approved">تعیین‌شده</span>`}
+          <button class="tb-btn" title="چاپ"><i data-lucide="printer" style="width:13px;height:13px"></i></button>
+          <button class="tb-btn" title="لینک"><i data-lucide="link-2" style="width:13px;height:13px"></i></button>
+          <button class="tb-btn"><i data-lucide="more-vertical" style="width:13px;height:13px"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding-bottom:180px" id="detail-scroll-inner">
+      <!-- Summary stats card -->
+      <div class="dc">
+        <div class="dc-head"><h3><i data-lucide="bar-chart-2" style="width:14px;height:14px;color:var(--g5)"></i>خلاصه این گزارش</h3></div>
+        <div class="dc-body">
+          <div class="summary-grid">
+            <div class="sg-row"><i data-lucide="layers" style="width:13px;height:13px;color:var(--g4)"></i><span><strong>${fa(r.items.length)}</strong> آیتم پیشرفت</span></div>
+            <div class="sg-row"><i data-lucide="camera" style="width:13px;height:13px;color:var(--g4)"></i><span><strong>${fa(r.items.reduce((s,i)=>s+i.photos,0))}</strong> عکس پیوست</span></div>
+            <div class="sg-row"><i data-lucide="folder" style="width:13px;height:13px;color:var(--g4)"></i><span>${smartSummary(r)}</span></div>
+            <div class="sg-row"><i data-lucide="trending-up" style="width:13px;height:13px;color:var(--g4)"></i><span>میانگین تغییر: <strong>+${fa(Math.round(r.items.reduce((s,i)=>s+(i.to-i.from),0)/r.items.length))}٪</strong></span></div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+            ${itemStatusCounts(r)}
+            ${r.overdue?`<span class="badge b-overdue"><i data-lucide="alert-triangle" style="width:10px;height:10px"></i>بیش از ۲۴ ساعت در انتظار</span>`:''}
+          </div>
+        </div>
+      </div>
+
+      <!-- Reporter info card -->
+      <div class="dc">
+        <div class="dc-head"><h3><i data-lucide="user" style="width:14px;height:14px;color:var(--g5)"></i>اطلاعات ثبت و sync</h3></div>
+        <div class="dc-body">
+          <div class="summary-grid">
+            <div class="sg-row"><i data-lucide="smartphone" style="width:12px;height:12px;color:var(--g4)"></i><span style="font-size:12px">ثبت محلی: <strong>${r.localTime}</strong></span></div>
+            <div class="sg-row"><i data-lucide="server" style="width:12px;height:12px;color:var(--g4)"></i><span style="font-size:12px">سرور: <strong>${r.serverTime}</strong></span></div>
+            <div class="sg-row"><i data-lucide="wifi${r.conn.includes('آفلاین')?'-off':''}" style="width:12px;height:12px;color:${r.conn.includes('آفلاین')?'var(--w5)':'var(--s5)'}"></i>
+              <span style="font-size:12px;color:${r.conn.includes('آفلاین')?'var(--w7)':'var(--s7)'}">${r.conn}</span>
+            </div>
+            <div class="sg-row"><i data-lucide="clock" style="width:12px;height:12px;color:var(--g4)"></i><span style="font-size:12px">تأخیر sync: <strong${r.syncDelay.includes('ساعت')?` style="color:var(--w7)"`:''}>${r.syncDelay}</strong></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GPS card -->
+      <div class="dc">
+        <div class="dc-head">
+          <h3><i data-lucide="map-pin" style="width:14px;height:14px;color:var(--g5)"></i>موقعیت GPS</h3>
+          <span style="font-size:11.5px;font-weight:500;color:${r.gps.ok?'var(--s7)':'var(--w7)'}">${r.gps.ok?'✓ داخل محدوده':'⚠ خارج از محدوده'}</span>
+        </div>
+        <div class="dc-body">
+          <div class="gps-map">${buildGPS(r.gps.ok)}</div>
+          <div class="gps-meta">
+            <div><div style="font-size:11px;color:var(--g5);margin-bottom:2px">مختصات</div><div class="mono" style="font-size:12px">${r.gps.lat}°N, ${r.gps.lng}°E</div></div>
+            <div><div style="font-size:11px;color:var(--g5);margin-bottom:2px">فاصله از پروژه</div><div style="font-size:12.5px;font-weight:500;color:${r.gps.ok?'var(--s7)':'var(--w7)'}">${r.gps.dist}</div></div>
+          </div>
+        </div>
+      </div>
+
+      ${r.note ? `
+      <!-- Daily note -->
+      <div class="dc">
+        <div class="dc-head"><h3><i data-lucide="notebook" style="width:14px;height:14px;color:var(--g5)"></i>یادداشت کلی روز</h3></div>
+        <div class="dc-body"><p style="font-size:13px;color:var(--g7);line-height:1.8;margin:0">${r.note}</p></div>
+      </div>` : ''}
+
+      <!-- Unified photo gallery -->
+      <div class="dc">
+        <div class="dc-head"><h3><i data-lucide="camera" style="width:14px;height:14px;color:var(--g5)"></i>همه عکس‌های این گزارش <span style="color:var(--g4);font-weight:400">(${fa(r.items.reduce((s,i)=>s+i.photos,0))})</span></h3></div>
+        <div class="photo-filters" id="photo-filters">
+          <button class="pf-btn on" onclick="filterPhotos('all',this)">همه</button>
+          ${[...new Set(r.items.map(i=>i.title+' · '+i.sub))].slice(0,5).map(t=>`<button class="pf-btn" onclick="filterPhotos('${t}',this)">${t}</button>`).join('')}
+        </div>
+        <div class="photo-grid" id="photo-grid">
+          ${r.items.flatMap(i=>Array.from({length:i.photos},()=>({item:i}))).map(({item:i})=>`
+            <div class="pg-item" onclick="document.getElementById('lb').classList.add('open')">
+              <div class="stripe"><i data-lucide="image" style="width:18px;height:18px"></i></div>
+              <div class="zoom-ic"><i data-lucide="maximize-2" style="width:16px;height:16px"></i></div>
+              <div class="ph-tag">${i.title} · ${i.sub}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Progress items section -->
+      <div style="background:var(--g50);margin:8px 16px 0;border-radius:var(--r12) var(--r12) 0 0;overflow:hidden;border:1px solid var(--g2)">
+        <div style="padding:11px 16px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;gap:8px;background:white">
+          <h3 style="font-size:13px;font-weight:600;margin:0;display:flex;align-items:center;gap:7px"><i data-lucide="list-checks" style="width:14px;height:14px;color:var(--g5)"></i>آیتم‌های پیشرفت <span style="background:var(--p1);color:var(--p7);font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:999px">${fa(r.items.length)}</span></h3>
+          <div style="display:flex;gap:6px;align-items:center">
+            <div class="pill-toggle">
+              <button class="pt-btn ${viewMode==='card'?'on':''}" onclick="setViewMode('card')"><i data-lucide="layout-grid" style="width:11px;height:11px"></i></button>
+              <button class="pt-btn ${viewMode==='compact'?'on':''}" onclick="setViewMode('compact')"><i data-lucide="layout-list" style="width:11px;height:11px"></i></button>
+            </div>
+            <select class="filter-select" style="height:28px;font-size:12px" onchange="setGroupBy(this.value)">
+              <option value="none">بدون گروه‌بندی</option>
+              <option value="group" ${groupBy==='group'?'selected':''}>بر اساس summary</option>
+            </select>
+          </div>
+        </div>
+        <div class="item-tabs">
+          <button class="it-btn ${itemTab==='all'?'active':''}" onclick="setItemTab('all','${selReportId}')">همه (${fa(r.items.length)})</button>
+          <button class="it-btn ${itemTab==='pending'?'active':''}" onclick="setItemTab('pending','${selReportId}')">در انتظار (${fa(pending.length)})</button>
+          <button class="it-btn ${itemTab==='approved'?'active':''}" onclick="setItemTab('approved','${selReportId}')">تأیید‌شده (${fa(approved.length)})</button>
+        </div>
+        <div id="items-list">${itemsHTML}</div>
+      </div>
+
+      ${expandHTML}
+
+      <!-- Workflow stepper -->
+      <div class="dc" style="margin:8px 16px">
+        <div class="dc-head"><h3><i data-lucide="git-branch" style="width:14px;height:14px;color:var(--g5)"></i>گردش‌کار تأیید</h3></div>
+        <div class="dc-body">
+          <div class="wf-steps">
+            <div class="wf-step done"><div class="wf-dot"><i data-lucide="check" style="width:13px;height:13px"></i></div><div class="wf-label">ثبت سرپرست</div><div class="wf-sub">${r.reporter.name}<br>${r.time}</div></div>
+            <div class="wf-step cur"><div class="wf-dot">۲</div><div class="wf-label">تأیید ناظر</div><div class="wf-sub">در انتظار شما</div></div>
+            <div class="wf-step"><div class="wf-dot">۳</div><div class="wf-label">تأیید مدیر</div><div class="wf-sub">مهندس احمدی</div></div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--g6)">
+            وضعیت: <strong style="color:var(--g9)">${fa(decided)} از ${fa(total)}</strong> آیتم تعیین تکلیف شده
+          </div>
+          <div style="margin-top:6px;height:5px;background:var(--g1);border-radius:999px;overflow:hidden">
+            <div style="height:100%;background:var(--s5);border-radius:999px;width:${Math.round(decided/total*100)}%;transition:width .4s"></div>
+          </div>
+          <div style="margin-top:8px;font-size:11.5px;color:var(--g5);line-height:1.7">
+            <div>○ تعیین تکلیف همه آیتم‌ها برای رفتن به مرحله بعد الزامی است.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${footerHTML}
+  `;
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderItemCard(i) {
+  const delta = i.to - i.from;
+  const pColor = progressColor(i.from, i.to);
+  const focused = i.id === selItemId;
+
+  if (i.status === 'approved') {
+    return `<div class="pi-card pi-approved${focused?' pi-focused':''}" id="pi-${i.id}">
+      <div class="pi-head" style="border-bottom:0">
+        <div><div class="pi-title">${i.title}</div><div class="pi-path">${i.sub} · <span class="mono" style="font-size:10.5px">${i.code}</span></div></div>
+        <div style="margin-right:auto;display:flex;gap:4px;align-items:center"><span class="badge b-approved">تأیید شده</span></div>
+      </div>
+      <div class="pi-body" style="padding-top:0">
+        <div style="font-size:13px;display:flex;align-items:center;gap:8px;color:var(--g6)">
+          <span style="text-decoration:line-through;color:var(--g4)">${fa(i.from)}٪</span>→<span style="color:var(--s7);font-weight:600">${fa(i.to)}٪</span><span class="badge b-approved" style="font-size:10.5px">+${fa(delta)}٪</span>
+        </div>
+        <div style="font-size:11.5px;color:var(--s7);margin-top:6px"><i data-lucide="check-circle-2" style="width:12px;height:12px;display:inline;vertical-align:-1px"></i> تأیید توسط ${i.approvedBy} — ${i.approvedTime}</div>
+      </div>
+      <div class="pi-actions" style="gap:8px;justify-content:flex-end">
+        <button class="btn btn-ghost btn-xs" onclick="revertItem('${i.id}')"><i data-lucide="undo-2" style="width:11px;height:11px"></i>بازگشت تأیید</button>
+        <button class="btn btn-ghost btn-xs"><i data-lucide="external-link" style="width:11px;height:11px"></i>جزئیات</button>
+      </div>
+    </div>`;
+  }
+  if (i.status === 'rejected') {
+    return `<div class="pi-card pi-rejected${focused?' pi-focused':''}" id="pi-${i.id}">
+      <div class="pi-head" style="border-bottom:0">
+        <div><div class="pi-title">${i.title}</div><div class="pi-path">${i.sub} · <span class="mono" style="font-size:10.5px">${i.code}</span></div></div>
+        <span class="badge b-rejected">رد شده</span>
+      </div>
+      <div class="pi-body" style="padding-top:4px">
+        <div style="font-size:12px;color:var(--e7);background:var(--e50);border-radius:var(--r8);padding:8px 10px;line-height:1.6">
+          <strong>دلیل:</strong> «${i.rejectReason}»
+        </div>
+      </div>
+    </div>`;
+  }
+  if (i.status === 'edit') {
+    return `<div class="pi-card pi-rejected${focused?' pi-focused':''}" id="pi-${i.id}" style="border-color:rgba(217,119,6,.25)">
+      <div class="pi-head" style="border-bottom:0">
+        <div><div class="pi-title">${i.title}</div><div class="pi-path">${i.sub}</div></div>
+        <span class="badge b-edit">نیاز اصلاح</span>
+      </div>
+      <div class="pi-body" style="padding-top:4px">
+        <div style="font-size:12px;color:var(--w7);background:var(--w50);border-radius:var(--r8);padding:8px 10px;line-height:1.6">«${i.editReason}»</div>
+      </div>
+    </div>`;
+  }
+  // Pending
+  return `<div class="pi-card${focused?' pi-focused':''}" id="pi-${i.id}" onclick="selItemId='${i.id}';renderDetail()">
+    <div class="pi-head">
+      <div style="flex:1;min-width:0"><div class="pi-title">${i.title}</div><div class="pi-path">${i.sub} · <span class="mono" style="font-size:10.5px">${i.code}</span></div></div>
+      <span class="badge b-pending">در انتظار</span>
+    </div>
+    <div class="pi-body">
+      <div class="pc-nums"><span class="pc-from">${fa(i.from)}٪</span><span class="pc-arrow"><i data-lucide="arrow-left" style="width:13px;height:13px"></i></span><span class="pc-to" style="color:${pColor}">${fa(i.to)}٪</span><span class="pc-delta" style="background:${delta>=0?'var(--s50)':'var(--e50)'};color:${delta>=0?'var(--s7)':'var(--e7)'}">+${fa(delta)}٪</span></div>
+      <div class="pc-bar" style="margin:8px 0 6px"><div class="pc-prev" style="width:${i.from}%"></div><div class="pc-new" style="right:${i.from}%;width:${delta}%;background:${pColor}"></div></div>
+      ${i.desc?`<p style="font-size:12.5px;color:var(--g7);line-height:1.7;margin:8px 0 0">💬 ${i.desc}</p>`:''}
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--g5)">
+        <i data-lucide="camera" style="width:12px;height:12px"></i>
+        <span>${fa(i.photos)} عکس پیوست</span>
+        <button class="btn btn-ghost" style="height:22px;padding:0 8px;font-size:11px;margin-right:auto" onclick="document.getElementById('lb').classList.add('open')">مشاهده</button>
+      </div>
+    </div>
+    <div class="pi-history"><i data-lucide="history" style="width:12px;height:12px"></i>۳ گزارش قبلی — آخرین: ${fa(i.from)}٪ &nbsp;<a href="#">مشاهده timeline</a></div>
+    <div class="pi-actions">
+      <button class="btn btn-success btn-sm" onclick="approveItem('${i.id}')"><i data-lucide="check" style="width:12px;height:12px"></i>تأیید <kbd style="font-family:'JetBrains Mono',monospace;font-size:9.5px;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.3);border-radius:3px;padding:0 4px">A</kbd></button>
+      <button class="btn btn-warn-ol btn-sm" onclick="openExpandItem('${i.id}','edit')"><i data-lucide="rotate-ccw" style="width:12px;height:12px"></i>اصلاح <kbd style="font-family:'JetBrains Mono',monospace;font-size:9.5px;opacity:.6;border:1px solid rgba(217,119,6,.3);border-radius:3px;padding:0 4px">E</kbd></button>
+      <button class="btn btn-danger-ol btn-sm" onclick="openExpandItem('${i.id}','reject')"><i data-lucide="x" style="width:12px;height:12px"></i>رد <kbd style="font-family:'JetBrains Mono',monospace;font-size:9.5px;opacity:.6;border:1px solid rgba(220,38,38,.3);border-radius:3px;padding:0 4px">R</kbd></button>
+    </div>
+  </div>`;
+}
+
+function renderCompactItem(i) {
+  const delta = i.to - i.from;
+  return `<div class="ci-row${i.id===selItemId?' pi-focused':''}" id="pi-${i.id}" onclick="selItemId='${i.id}';renderDetail()">
+    <span class="ci-st ${i.status}">${statusIcon(i.status)}</span>
+    <span class="ci-t">${i.title} · ${i.sub}</span>
+    <span class="ci-delta">${fa(i.from)}→${fa(i.to)}٪ <span style="color:${progressColor(i.from,i.to)};font-weight:600">+${fa(delta)}٪</span></span>
+    <span class="ci-ph"><i data-lucide="camera" style="width:10px;height:10px"></i>${fa(i.photos)}</span>
+    ${i.status==='pending'?`<div class="ci-acts">
+      <button class="ci-act-btn approve" title="تأیید" onclick="event.stopPropagation();approveItem('${i.id}')"><i data-lucide="check" style="width:10px;height:10px"></i></button>
+      <button class="ci-act-btn edit" title="اصلاح" onclick="event.stopPropagation();openExpandItem('${i.id}','edit')"><i data-lucide="rotate-ccw" style="width:10px;height:10px"></i></button>
+      <button class="ci-act-btn reject" title="رد" onclick="event.stopPropagation();openExpandItem('${i.id}','reject')"><i data-lucide="x" style="width:10px;height:10px"></i></button>
+    </div>`:statusBadge(i.status)}
+  </div>`;
+}
+
+function buildGPS(ok) {
+  const c = ok?'#16A34A':'#DC2626';
+  return `<svg viewBox="0 0 100 80" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="100" height="80" fill="#E8EDF5"/>
+    <line x1="0" y1="20" x2="100" y2="20" stroke="#D0D8E8" stroke-width=".7"/><line x1="0" y1="40" x2="100" y2="40" stroke="#D0D8E8" stroke-width=".7"/><line x1="0" y1="60" x2="100" y2="60" stroke="#D0D8E8" stroke-width=".7"/>
+    <line x1="25" y1="0" x2="25" y2="80" stroke="#D0D8E8" stroke-width=".7"/><line x1="50" y1="0" x2="50" y2="80" stroke="#D0D8E8" stroke-width=".7"/><line x1="75" y1="0" x2="75" y2="80" stroke="#D0D8E8" stroke-width=".7"/>
+    <rect x="12" y="16" width="32" height="7" rx="1.2" fill="#CBD5E8"/><rect x="55" y="32" width="28" height="5" rx="1.2" fill="#CBD5E8"/>
+    <rect x="16" y="28" width="16" height="11" rx="1.5" fill="#B8C6DC"/><rect x="58" y="20" width="18" height="14" rx="1.5" fill="#B8C6DC"/><rect x="38" y="55" width="20" height="10" rx="1.5" fill="#B8C6DC"/>
+    <circle cx="50" cy="40" r="10" fill="none" stroke="${c}" stroke-width="1.2" stroke-dasharray="3 2" opacity=".5"/>
+    <circle cx="50" cy="40" r="4" fill="${c}" opacity=".9"/>
+    <circle cx="50" cy="40" r="2" fill="white"/>
+  </svg>`;
+}
+
+// ── Actions ──
+function approveItem(iid) {
+  const r = getReport(selReportId); if (!r) return;
+  const item = r.items.find(i=>i.id===iid); if (!item) return;
+  item.status = 'approved'; item.approvedBy = 'شما'; item.approvedTime = 'همین الان';
+  expandAction = null;
+  renderDetail(); renderList();
+  showToast('آیتم تأیید شد');
+}
+function revertItem(iid) {
+  const r = getReport(selReportId); if (!r) return;
+  const item = r.items.find(i=>i.id===iid); if (!item) return;
+  item.status = 'pending';
+  renderDetail(); renderList();
+  showToast('تأیید لغو شد', 'warn');
+}
+function approveAll() {
+  const r = getReport(selReportId); if (!r) return;
+  r.items.filter(i=>i.status==='pending').forEach(i=>{ i.status='approved'; i.approvedBy='شما'; i.approvedTime='همین الان'; });
+  expandAction = null; renderDetail(); renderList();
+  showToast('همه آیتم‌ها تأیید شدند');
+}
+function approveRemaining() { approveAll(); }
+function approveGroup(g) {
+  const r = getReport(selReportId); if (!r) return;
+  r.items.filter(i=>i.group===g&&i.status==='pending').forEach(i=>{ i.status='approved'; i.approvedBy='شما'; i.approvedTime='همین الان'; });
+  renderDetail(); renderList();
+  showToast('آیتم‌های '+g+' تأیید شدند');
+}
+function finalizeReport() { showToast('گزارش نهایی شد و به مرحله مدیر ارسال شد'); }
+function openExpandItem(iid, type) { expandAction = {type, itemId:iid}; selItemId=iid; renderDetail(); setTimeout(()=>{ const e=document.getElementById('expand-area'); if(e) e.scrollIntoView({behavior:'smooth',block:'nearest'}); },100); }
+function openExpandAll(type) { expandAction = {type, itemId:null}; renderDetail(); }
+function closeExpand() { expandAction = null; renderDetail(); }
+function checkEaSend() { const v = (document.getElementById('ea-reason')||{}).value||''; const btn = document.getElementById('ea-send-btn'); if(btn){btn.disabled=v.trim().length<20;btn.style.opacity=v.trim().length>=20?'1':'.4';} }
+function doExpandSend() {
+  const reason = (document.getElementById('ea-reason')||{}).value||'';
+  if (!expandAction) return;
+  const r = getReport(selReportId); if (!r) return;
+  if (expandAction.itemId) {
+    const item = r.items.find(i=>i.id===expandAction.itemId);
+    if (item) { item.status=expandAction.type==='reject'?'rejected':'edit'; if(expandAction.type==='reject'){item.rejectReason=reason;item.rejectedBy='شما';item.rejectedTime='همین الان';}else{item.editReason=reason;item.editedBy='شما';} }
+  } else {
+    r.items.filter(i=>i.status==='pending').forEach(i=>{ i.status=expandAction.type==='reject'?'rejected':'edit'; if(expandAction.type==='reject'){i.rejectReason=reason;i.rejectedBy='شما';i.rejectedTime='همین الان';}else{i.editReason=reason;i.editedBy='شما';} });
+  }
+  expandAction=null; renderDetail(); renderList();
+  showToast(expandAction?.type==='reject'?'رد شد':'درخواست اصلاح ارسال شد', expandAction?.type==='reject'?'error':'warn');
+}
+
+// ── Controls ──
+function setViewMode(m) { viewMode=m; renderDetail(); }
+function setGroupBy(v) { groupBy=v; renderDetail(); }
+function setItemTab(t) { itemTab=t; renderDetail(); }
+function filterPhotos(f, btn) {
+  photoFilter=f;
+  document.querySelectorAll('.pf-btn').forEach(b=>b.classList.toggle('on',b===btn));
+}
+function setTab(btn) { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+
+// ── Selection / Bulk ──
+function toggleSel(id) { if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id); updateBulk(); renderList(); }
+function toggleSelAll() { if(selectedIds.size===REPORTS.length)selectedIds.clear();else REPORTS.forEach(r=>selectedIds.add(r.id)); updateBulk(); renderList(); }
+function clearSel() { selectedIds.clear(); updateBulk(); renderList(); }
+function updateBulk() { const bar=document.getElementById('bulk-bar'); const n=selectedIds.size; if(n>0){bar.style.display='flex';document.getElementById('bulk-cnt').textContent=fa(n);}else bar.style.display='none'; }
+function bulkApproveAll() { selectedIds.forEach(id=>{const r=getReport(id);if(r)r.items.filter(i=>i.status==='pending').forEach(i=>{i.status='approved';i.approvedBy='شما';i.approvedTime='همین الان';});}); clearSel(); renderList(); renderDetail(); showToast('همه آیتم‌های گزارش‌های انتخابی تأیید شدند'); }
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const reports = REPORTS; const ridx = reports.findIndex(r=>r.id===selReportId);
+  if (e.key==='j'||e.key==='J') { const n=Math.min(ridx+1,reports.length-1); selectReport(reports[n].id,null); }
+  else if (e.key==='k'||e.key==='K') { const n=Math.max(ridx-1,0); selectReport(reports[n].id,null); }
+  else if (e.key==='?') document.getElementById('sk-overlay').classList.toggle('open');
+  else if (e.key==='Escape') { document.getElementById('sk-overlay').classList.remove('open'); document.getElementById('lb').classList.remove('open'); closeExpand(); }
+  const r = getReport(selReportId); if (!r) return;
+  const items = r.items; const iidx = items.findIndex(i=>i.id===selItemId);
+  if (e.key==='ArrowDown') { if(iidx<items.length-1){selItemId=items[iidx+1].id;renderDetail();} }
+  else if (e.key==='ArrowUp') { if(iidx>0){selItemId=items[iidx-1].id;renderDetail();} }
+  else if (e.key==='a'||e.key==='A') { if(!e.shiftKey&&selItemId){approveItem(selItemId);}else if(e.shiftKey){approveAll();} }
+  else if ((e.key==='r'||e.key==='R')&&selItemId) { openExpandItem(selItemId,'reject'); }
+  else if ((e.key==='e'||e.key==='E')&&selItemId) { openExpandItem(selItemId,'edit'); }
+  else if (e.key===' ') { e.preventDefault(); toggleSel(selReportId); }
+});
+
+// ── Toast ──
+let toastTimer;
+window.showToast = function(text, kind='ok') {
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='toast';
+  const cols={ok:'var(--s5)',warn:'var(--w5)',error:'var(--e5)',info:'var(--i5)'};
+  const ics={ok:'check',warn:'alert-triangle',error:'x',info:'info'};
+  t.innerHTML=`<span class="tic" style="background:${cols[kind]||cols.ok}"><i data-lucide="${ics[kind]||'check'}" style="width:11px;height:11px"></i></span>${text}`;
+  document.body.appendChild(t);if(window.lucide)lucide.createIcons();
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),200);},2200);
+};
+
+// ── Demo state bar ──
+const DS=[
+  {id:'full',l:'۱ · پر'},
+  {id:'grouped',l:'۲ · گروه‌بندی'},
+  {id:'compact',l:'۳ · فشرده'},
+  {id:'expand',l:'۴ · رد آیتم'},
+  {id:'bulk',l:'۵ · دسته‌جمعی'},
+  {id:'empty',l:'۶ · خالی'},
+  {id:'final',l:'۷ · نهایی‌شده'},
+];
+const demoEl = document.getElementById('demo-bar');
+demoEl.innerHTML = DS.map((s,i)=>`<button class="db-btn${i===0?' on':''}" data-ds="${s.id}" onclick="applyDemo('${s.id}',this)">${s.l}</button>`).join('');
+
+window.applyDemo = function(state, btn) {
+  document.querySelectorAll('.db-btn').forEach(b=>b.classList.toggle('on',b===btn));
+  // Reset
+  REPORTS.forEach(r=>r.items.forEach(i=>{ if(i._origStatus){i.status=i._origStatus;delete i._origStatus;} }));
+  expandAction=null; viewMode='card'; groupBy='none'; itemTab='all'; selectedIds.clear(); updateBulk();
+  document.getElementById('main-split').style.display='grid';
+  document.getElementById('all-done').style.display='none';
+  document.getElementById('rlist').style.display='flex';
+  document.getElementById('detail-col').style.display='flex';
+
+  if (state==='full') { selReportId=1; selItemId='i1'; renderList(); renderDetail(); }
+  else if (state==='grouped') { selReportId=3; groupBy='group'; renderList(); renderDetail(); showToast('آیتم‌ها بر اساس summary گروه‌بندی شدند'); }
+  else if (state==='compact') { selReportId=3; viewMode='compact'; renderList(); renderDetail(); showToast('نمایش فشرده — مناسب برای گزارش‌های با تعداد زیاد آیتم'); }
+  else if (state==='expand') { selReportId=1; selItemId='i2'; renderList(); renderDetail(); setTimeout(()=>openExpandItem('i2','reject'),200); }
+  else if (state==='bulk') { [1,2,3].forEach(id=>selectedIds.add(id)); updateBulk(); renderList(); renderDetail(); showToast('۳ گزارش انتخاب شدند — نوار دسته‌جمعی فعال است'); }
+  else if (state==='empty') {
+    document.getElementById('main-split').style.display='none';
+    document.getElementById('all-done').style.display='flex';
+  }
+  else if (state==='final') {
+    selReportId=1;
+    const r=getReport(1);
+    r.items.forEach(i=>{i._origStatus=i.status;i.status='approved';i.approvedBy='شما';i.approvedTime='همین الان';});
+    renderList(); renderDetail(); showToast('همه آیتم‌ها تعیین تکلیف شدند — گزارش آماده نهایی‌سازی');
+  }
+  uiState=state;
+};
+
+// Init
+renderList();
+renderDetail();
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

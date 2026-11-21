@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>ورود به پروژه‌یار</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj" dir="rtl" lang="fa" style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FFFFFF">
+  <section style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; padding: 32px 48px; background: #FFFFFF">
+    <div class="row between wrap g16">
+      <div class="row g10">
+        <span class="mark lg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg><i></i></span>
+        <div class="brand-t"><strong style="font-size: 15px">پروژه‌یار</strong><small>مدیریت پیشرفت پروژه‌های عمرانی</small></div>
+      </div>
+      <span class="row g8 t-12 tx6"><span class="dot" style="color: #16A34A"></span>سرور تهران · نسخهٔ <span class="mono">1.0.0</span></span>
+    </div>
+    <div style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 40px 0">
+      <form style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 16px">
+        <div class="col g8" style="margin-bottom: 12px">
+          <span class="eyebrow">پنل وب · پروژه‌یار</span>
+          <h1 class="h-display">ورود به سیستم</h1>
+          <p class="t-14 tx6 lh">حساب کاربری خود را وارد کنید تا به پروژه‌هایتان دسترسی داشته باشید.</p>
+        </div>
+        <div class="fg">
+          <label class="lbl" for="w01-user">نام کاربری یا شماره موبایل</label>
+          <input id="w01-user" class="fld lg" type="text" placeholder="مثلاً a.karimi یا ۰۹۱۲۳۴۵۶۷۸۹" autocomplete="username">
+        </div>
+        <div class="fg">
+          <label class="lbl" for="w01-pass">رمز عبور</label>
+          <div class="fld lg"><input id="w01-pass" type="password" placeholder="••••••••••" autocomplete="current-password"><button class="ibtn sm" type="button" aria-label="نمایش رمز عبور"><dc-import name="Icon" i="eye" sz="16" hint-size="16px,16px"></dc-import></button></div>
+        </div>
+        <div class="row between">
+          <label class="row g8 t-ui tx7"><input type="checkbox" checked="checked" aria-label="مرا به خاطر بسپار" style="position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none"><span class="cb on" aria-hidden="true"><dc-import name="Icon" i="check" sz="11" sw="3.5" hint-size="11px,11px"></dc-import></span>مرا به خاطر بسپار</label>
+          <a class="link" href="W04-ResetPassword.dc.html" style="font-size: 13px">فراموشی رمز عبور؟</a>
+        </div>
+        <a class="btn btn-p btn-lg btn-blk" href="W03-Otp.dc.html" style="margin-top: 4px">ورود به سیستم<dc-import name="Icon" i="arrow-left" sz="16" hint-size="16px,16px"></dc-import></a>
+        <div class="row g12 t-12 tx5"><span class="hr grow"></span>یا<span class="hr grow"></span></div>
+        <a class="btn btn-o btn-lg btn-blk" href="W05-Dashboard.dc.html" style="font-weight: 500"><dc-import name="Icon" i="lock-keyhole" sz="16" hint-size="16px,16px"></dc-import>ورود با شناسهٔ سازمانی (SSO)</a>
+      </form>
+    </div>
+    <footer class="col g8" style="align-items: center; font-size: 12px; color: #71717A">
+      <span>©۱۴۰۴ پروژه‌یار. تمامی حقوق محفوظ است.</span>
+      <span class="row g16"><a href="#" class="tx6">قوانین استفاده</a><a href="#" class="tx6">حریم خصوصی</a><a href="W33-Help.dc.html" class="tx6">پشتیبانی</a></span>
+    </footer>
+  </section>
+  <div style="flex: 1.05 1 560px; min-width: 0; display: flex; background: #0E1E38">
+    <dc-import name="LoginBrand" hint-size="100%,900px"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>صندوق گزارش‌های کارگاه</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="reports" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" title="گزارش‌های فیلد" ic="clipboard-check" search="{{yes}}" hint-size="100%,52px"></dc-import>
+    <div class="content" style="padding-bottom: 20px">
+      <div class="page-head" style="margin-bottom: 14px">
+        <div><h1 class="h-display">گزارش‌های فیلد</h1><p class="sub" style="font-size: 13px">۲۴ گزارش در انتظار از ۳ پروژه، شامل <strong class="tx9">۸۷ آیتم پیشرفت</strong></p></div>
+        <div class="row g8"><button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="file-spreadsheet" sz="13" hint-size="13px,13px"></dc-import>خروجی Excel</button><button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="keyboard" sz="13" hint-size="13px,13px"></dc-import>میانبرها<span class="kbd">?</span></button></div>
+      </div>
+      <div class="grid c4" style="gap: 12px; margin-bottom: 14px">
+        <div class="kpi row g12" style="flex-direction: row; align-items: center; padding: 12px 14px"><span class="icb lg inf"><dc-import name="Icon" i="layers" sz="18" hint-size="18px,18px"></dc-import></span><span class="col"><span class="stat-v tx-inf">۸۷</span><span class="t-sm tx6">آیتم در انتظار · در ۲۴ گزارش</span></span></div>
+        <div class="kpi row g12" style="flex-direction: row; align-items: center; padding: 12px 14px"><span class="icb lg err"><dc-import name="Icon" i="alert-octagon" sz="18" hint-size="18px,18px"></dc-import></span><span class="col"><span class="stat-v tx-err">۱۲</span><span class="t-sm tx6">آیتم بیش از ۲۴ ساعت بی‌پاسخ</span></span></div>
+        <div class="kpi row g12" style="flex-direction: row; align-items: center; padding: 12px 14px"><span class="icb lg ok"><dc-import name="Icon" i="check-circle-2" sz="18" hint-size="18px,18px"></dc-import></span><span class="col"><span class="stat-v tx-ok">۲۳</span><span class="t-sm tx6">تأییدشده توسط شما امروز</span></span></div>
+        <div class="kpi row g12" style="flex-direction: row; align-items: center; padding: 12px 14px"><span class="icb lg wrn"><dc-import name="Icon" i="rotate-ccw" sz="18" hint-size="18px,18px"></dc-import></span><span class="col"><span class="stat-v tx-wrn">۵</span><span class="t-sm tx6">رد یا نیاز اصلاح · در ۳ گزارش</span></span></div>
+      </div>
+      <nav class="tabs" aria-label="وضعیت گزارش‌ها" style="padding: 0; border-bottom: 1px solid #E4E4E7; margin-bottom: 12px">
+        <a class="tab on" href="#">در انتظار<span class="n" style="background: #EFF6FF; color: #1D4ED8">۲۴</span></a>
+        <a class="tab" href="#">تأییدشده<span class="n" style="background: #ECFDF3; color: #15803D">۱۲۸</span></a>
+        <a class="tab" href="#">نیاز اصلاح<span class="n w">۳</span></a>
+        <a class="tab" href="#">رد شده<span class="n e">۸</span></a>
+        <a class="tab" href="#">همه<span class="n">۱۶۳</span></a>
+      </nav>
+      <div class="row wrap g8" style="margin-bottom: 12px">
+        <button class="fld sm sel" type="button" style="width: 150px">همهٔ پروژه‌ها<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm sel" type="button" style="width: 150px">همهٔ سرپرستان<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm sel" type="button" style="width: 160px">همهٔ فعالیت‌های WBS<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm sel" type="button" style="width: 130px">۷ روز اخیر<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="chip" type="button"><dc-import name="Icon" i="alert-triangle" sz="12" hint-size="12px,12px"></dc-import>فقط مشکوک (۴)</button>
+        <button class="fld sm sel ms-auto" type="button" style="width: 150px"><span class="row g6"><dc-import name="Icon" i="arrow-up-down" sz="12" hint-size="12px,12px"></dc-import>جدیدترین</span><dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+      </div>
+      <div class="card" style="display: flex; flex-wrap: wrap; height: 700px; align-items: stretch">
+        <section style="flex: 1 1 380px; max-width: 40%; min-width: 0; border-inline-end: 1px solid #E4E4E7; display: flex; flex-direction: column">
+          <div class="row g8" style="padding: 10px 14px; border-bottom: 1px solid #E4E4E7; background: #FAFAFA"><input type="checkbox" aria-label="انتخاب همه" style="accent-color: #1A3354; margin: 0"><span class="t-13 tx6">۲۴ گزارش</span><span class="t-sm tx5 ms-auto">مرتب‌شده بر اساس زمان دریافت</span></div>
+          <div class="col" style="overflow: hidden">
+            <sc-for list="{{list}}" as="r" hint-placeholder-count="6">
+              <a class="row g10 ai-s {{r.cls}}" href="#" style="padding: 12px 14px; border-bottom: 1px solid #F4F4F5">
+                <input type="checkbox" aria-label="انتخاب گزارش {{r.n}}" style="accent-color: #1A3354; margin: 4px 0 0">
+                <span class="av m {{r.av}}">{{r.i}}</span>
+                <span class="col g4 grow">
+                  <span class="row between"><span class="t-13 fw6 tx9">{{r.n}}</span><span class="t-sm tx5">{{r.w}}</span></span>
+                  <span class="t-12 tx6 trunc">{{r.p}} · {{r.items}} آیتم پیشرفت</span>
+                  <span class="row wrap g4"><span class="bdg sm inf">{{r.pend}} در انتظار</span><sc-if value="{{r.hasFlag}}" hint-placeholder-val="{{false}}"><span class="bdg sm wrn"><dc-import name="Icon" i="alert-triangle" sz="10" hint-size="10px,10px"></dc-import>{{r.flag}}</span></sc-if><span class="bdg sm neu"><dc-import name="Icon" i="camera" sz="10" hint-size="10px,10px"></dc-import>{{r.ph}}</span><sc-if value="{{r.off}}" hint-placeholder-val="{{false}}"><span class="bdg sm neu"><dc-import name="Icon" i="cloud-off" sz="10" hint-size="10px,10px"></dc-import>ثبت آفلاین</span></sc-if></span>
+                </span>
+              </a>
+            </sc-for>
+          </div>
+          <div class="row between t-sm tx6" style="padding: 8px 14px; border-top: 1px solid #E4E4E7; margin-top: auto; background: #FAFAFA"><span>نمایش <strong class="tx9">۶ از ۲۴</strong></span><span class="row g4"><span class="kbd">J</span><span class="kbd">K</span>حرکت بین گزارش‌ها</span></div>
+        </section>
+        <section style="flex: 1.5 1 520px; min-width: 0; display: flex; flex-direction: column">
+          <div class="col g6" style="padding: 14px 18px; border-bottom: 1px solid #F4F4F5">
+            <nav class="row g4 t-sm tx5"><span>پل شهید سلیمانی</span><dc-import name="Icon" i="chevron-left" sz="11" hint-size="11px,11px"></dc-import><span>گزارش روزانه</span></nav>
+            <div class="row between"><h2 class="h-t3">گزارش روزانهٔ علی محمدی — ۱ خرداد ۱۴۰۴</h2><span class="row g2"><button class="ibtn sm" type="button" aria-label="چاپ"><dc-import name="Icon" i="printer" sz="14" hint-size="14px,14px"></dc-import></button><button class="ibtn sm" type="button" aria-label="کپی لینک"><dc-import name="Icon" i="link-2" sz="14" hint-size="14px,14px"></dc-import></button><a class="ibtn sm" href="W45-ContextMenus.dc.html" aria-label="بیشتر"><dc-import name="Icon" i="more-vertical" sz="14" hint-size="14px,14px"></dc-import></a></span></div>
+            <div class="row wrap g6"><span class="bdg neu mono">FR-1404-0312</span><span class="bdg inf"><span class="dot"></span>۳ از ۴ آیتم در انتظار</span><span class="bdg ok"><dc-import name="Icon" i="map-pin" sz="11" hint-size="11px,11px"></dc-import>داخل محدودهٔ پروژه</span></div>
+          </div>
+          <div class="col g12" style="padding: 12px 18px; overflow: hidden; flex: 1 1 auto">
+            <div class="box grid c4" style="gap: 10px; background: #FFFFFF">
+              <div class="kv"><span class="k">ثبت در گوشی</span><span class="v row g4 t-12"><dc-import name="Icon" i="smartphone" sz="12" hint-size="12px,12px"></dc-import>۰۹:۱۴</span></div>
+              <div class="kv"><span class="k">دریافت در سرور</span><span class="v row g4 t-12"><dc-import name="Icon" i="server" sz="12" hint-size="12px,12px"></dc-import>۰۹:۲۲ · ۸ دقیقه تأخیر</span></div>
+              <div class="kv"><span class="k">هوا و نیرو</span><span class="v row g4 t-12"><dc-import name="Icon" i="cloud-sun" sz="12" hint-size="12px,12px"></dc-import>آفتابی ۲۸° · ۱۴ نفر</span></div>
+              <div class="kv"><span class="k">فاصلهٔ GPS</span><span class="v row g4 t-12"><dc-import name="Icon" i="locate-fixed" sz="12" hint-size="12px,12px"></dc-import>۱۲۰ متر از مرکز</span></div>
+            </div>
+            <sc-for list="{{items}}" as="it" hint-placeholder-count="3">
+              <div class="card" style="border-color: {{it.bc}}">
+                <div class="row g10 ai-s" style="padding: 12px 14px">
+                  <span class="col g6 grow">
+                    <span class="row wrap g6"><span class="mono t-sm tx5">{{it.code}}</span><span class="t-13 fw6 tx9">{{it.t}}</span><sc-if value="{{it.done}}" hint-placeholder-val="{{false}}"><span class="bdg sm ok"><dc-import name="Icon" i="check" sz="10" hint-size="10px,10px"></dc-import>تأیید شد</span></sc-if></span>
+                    <span class="row wrap g10 t-12 tx7"><span class="row g6"><span class="tx5">{{it.from}}٪</span><dc-import name="Icon" i="arrow-left" sz="12" hint-size="12px,12px"></dc-import><strong class="num-i" style="color: {{it.col}}">{{it.to}}٪</strong><span class="bdg sm {{it.dt}}">{{it.d}}</span></span><span>{{it.q}}</span></span>
+                    <sc-if value="{{it.hasWarn}}" hint-placeholder-val="{{false}}"><span class="row g6 t-12 tx-wrn"><dc-import name="Icon" i="alert-triangle" sz="12" hint-size="12px,12px"></dc-import>{{it.warn}}</span></sc-if>
+                    <span class="t-12 tx6 lh">{{it.note}}</span>
+                  </span>
+                  <span class="row g6" style="flex: 0 0 auto"><span class="photo" style="width: 64px"><dc-import name="Icon" i="image" sz="16" hint-size="16px,16px"></dc-import></span><span class="photo" style="width: 64px"><span class="tag">+{{it.more}}</span><dc-import name="Icon" i="image" sz="16" hint-size="16px,16px"></dc-import></span></span>
+                </div>
+                <sc-if value="{{it.pending}}" hint-placeholder-val="{{true}}">
+                  <div class="row g6" style="padding: 8px 14px; border-top: 1px solid #F4F4F5; background: #FAFAFA">
+                    <button class="btn btn-s btn-xs" type="button"><dc-import name="Icon" i="check" sz="12" hint-size="12px,12px"></dc-import>تأیید<span class="kbd" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.4)">A</span></button>
+                    <button class="btn btn-o btn-xs tx-wrn" type="button"><dc-import name="Icon" i="pencil" sz="12" hint-size="12px,12px"></dc-import>درخواست اصلاح<span class="kbd">E</span></button>
+                    <button class="btn btn-do btn-xs" type="button"><dc-import name="Icon" i="x" sz="12" hint-size="12px,12px"></dc-import>رد<span class="kbd">R</span></button>
+                    <a class="btn btn-g btn-xs ms-auto" href="W11-Wbs.dc.html">مشاهده در WBS</a>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div class="row g8" style="padding: 12px 18px; border-top: 1px solid #E4E4E7; background: #FFFFFF">
+            <button class="btn btn-s" type="button"><dc-import name="Icon" i="check-check" sz="14" hint-size="14px,14px"></dc-import>تأیید همه (۳ آیتم)<span class="kbd" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.4)">Shift+A</span></button>
+            <button class="btn btn-o" type="button">درخواست اصلاح گزارش</button>
+            <span class="t-sm tx5 ms-auto">بعد از تأیید، پیشرفت WBS و S-Curve به‌روز می‌شود</span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const L = [
+      ['علی محمدی', 'ع.م', 'a5', 'پل شهید سلیمانی', '۳۰ دقیقه پیش', '۴', '۳', 'جهش +۳۵٪', '۸ عکس', 0, 'sel-card'],
+      ['حسن کریمی', 'ح.ک', 'a6', 'مجتمع نگین شهر', '۱ ساعت پیش', '۶', '۶', '', '۱۱ عکس', 0],
+      ['رضا اکبری', 'ر.ا', 'a1', 'پل شهید سلیمانی', '۲ ساعت پیش', '۳', '۳', '', '۵ عکس', 1],
+      ['مهدی نوری', 'م.ن', 'a2', 'تونل البرز', '۳ ساعت پیش', '۲', '۲', 'خارج از محدوده', '۲ عکس', 0],
+      ['سعید قاسمی', 'س.ق', 'a7', 'مجتمع نگین شهر', 'دیروز ۱۷:۴۰', '۵', '۴', '', '۹ عکس', 0],
+      ['امیر صادقی', 'ا.ص', 'a8', 'مجتمع نگین شهر', 'دیروز ۱۵:۱۰', '۲', '۲', 'بدون عکس', '۰ عکس', 1]
+    ];
+    const list = L.map(r => ({ n: r[0], i: r[1], av: r[2], p: r[3], w: r[4], items: r[5], pend: r[6], flag: r[7], hasFlag: !!r[7], ph: r[8], off: !!r[9], cls: r[10] || '' }));
+    const items = [
+      { code: '2.2.1.3', t: 'بتن‌ریزی فونداسیون پایهٔ P3', from: '۵۲', to: '۶۸', d: '+۱۶٪', dt: 'ok', col: '#15803D', q: '۱۳۰ مترمکعب بتن C30', note: 'بتن‌ریزی نیمهٔ شرقی انجام شد. ویبره و عمل‌آوری طبق دستورالعمل.', more: '۱', pending: true, done: false, hasWarn: false, warn: '', bc: '#E4E4E7' },
+      { code: '2.2.1.2', t: 'قالب‌بندی فونداسیون پایهٔ P4', from: '۴۰', to: '۷۵', d: '+۳۵٪', dt: 'wrn', col: '#B45309', q: '۶۳۰ مترمربع', note: 'قالب‌بندی دو محور کامل شد؛ نیروی کمکی از پایهٔ P3 آمد.', more: '۲', pending: true, done: false, hasWarn: true, warn: 'جهش غیرعادی: +۳۵٪ در یک روز؛ میانگین روزانهٔ این فعالیت ۶٪ است.', bc: '#F4B17C' },
+      { code: '2.1.3', t: 'تسطیح محوطهٔ شمالی', from: '۹۰', to: '۱۰۰', d: '+۱۰٪', dt: 'ok', col: '#15803D', q: '۴۶۰ مترمربع', note: 'تسطیح نهایی و کوبیدگی تمام شد.', more: '۰', pending: false, done: true, hasWarn: false, warn: '', bc: '#E4E4E7' }
+    ];
+    return { yes: true, list, items };
+  }
+}
+</script>
+</body>
+</html>

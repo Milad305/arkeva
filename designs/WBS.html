@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WBS — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* ───── Tokens ───── */
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+    color: var(--gray-900); background: var(--gray-50);
+    -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01';
+    font-size: 13.5px;
+  }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select, textarea { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 8px; border: 2px solid white; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+  /* ───── AppShell ───── */
+  .app { display: grid; grid-template-columns: 224px 1fr; height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  /* ───── Main ───── */
+  main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
+  .topbar { height: 52px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 20px; flex-shrink: 0; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; }
+  .ic-btn { width: 32px; height: 32px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 6px; left: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  /* Project mini-header */
+  .proj-mini { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .proj-mini .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .proj-mini .thumb { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+  .proj-mini .thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-mini .thumb svg { position: relative; z-index: 1; }
+  .proj-mini h1 { font-size: 16px; font-weight: 600; margin: 0; color: var(--gray-900); line-height: 1.2; }
+  .proj-mini .meta-line { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .proj-mini .meta-line .mono { color: var(--gray-700); }
+  .proj-mini .actions { display: flex; align-items: center; gap: 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: var(--r-md); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+  .btn-sm { height: 26px; padding: 0 8px; font-size: 11.5px; border-radius: 6px; }
+  .btn-block { width: 100%; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; padding: 0 20px; background: white; border-bottom: 1px solid var(--gray-200); flex-shrink: 0; overflow-x: auto; }
+  .tab { position: relative; padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 10.5px; padding: 1px 5px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* ───── WBS 3-col layout ───── */
+  .wbs-layout { flex: 1; display: grid; grid-template-columns: 280px minmax(0, 1fr) 380px; overflow: hidden; }
+
+  /* RIGHT column: toolbar */
+  .tb-panel { background: white; border-left: 1px solid var(--gray-200); overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .tb-section { display: flex; flex-direction: column; gap: 8px; }
+  .tb-title { font-size: 10.5px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between; }
+  .tb-title .count-pill { background: var(--gray-100); color: var(--gray-600); padding: 1px 6px; border-radius: var(--r-sm); font-size: 10px; }
+  .field { height: 32px; padding: 0 10px; border: 1px solid var(--gray-200); background: white; border-radius: var(--r-md); font-size: 12.5px; color: var(--gray-900); outline: none; transition: border-color .12s, box-shadow .12s; width: 100%; }
+  .field:hover { border-color: var(--gray-300); }
+  .field:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  .search-wrap { position: relative; }
+  .search-wrap .ico { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
+  .search-wrap input { padding-right: 32px; }
+  .select {
+    appearance: none; padding-left: 28px;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat left 10px center;
+  }
+  .form-row { display: flex; flex-direction: column; gap: 5px; }
+  .form-row > label { font-size: 11.5px; color: var(--gray-600); font-weight: 500; }
+  .summary-card { padding: 12px 12px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; flex-direction: column; gap: 8px; }
+  .summary-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--gray-700); }
+  .summary-row strong { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+  .summary-row.alert strong { color: var(--error-700); }
+  .summary-row .lbl { display: flex; align-items: center; gap: 5px; }
+  .summary-row .lbl svg { color: var(--gray-400); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--primary-700); color: white; border-radius: var(--r-md); }
+  .toggle-row.off { background: var(--gray-50); color: var(--gray-700); border: 1px solid var(--gray-200); }
+  .toggle-row .lbl { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; }
+  .toggle-row .lbl small { font-size: 10.5px; opacity: 0.8; display: block; font-weight: 400; }
+  .switch { width: 32px; height: 18px; background: rgba(255,255,255,0.2); border-radius: 999px; position: relative; cursor: pointer; flex-shrink: 0; transition: background .12s; }
+  .switch::after { content: ''; position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: white; border-radius: 999px; transition: transform .12s; }
+  .switch.on::after { transform: translateX(-14px); }
+  .toggle-row.off .switch { background: var(--gray-300); }
+
+  /* Tree (middle) */
+  .tree-panel { background: var(--gray-50); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+  .tree-toolbar { padding: 8px 14px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+  .tree-toolbar .crumb { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .tree-toolbar .crumb svg { color: var(--gray-300); }
+  .tree-toolbar .crumb .leaf { color: var(--gray-900); font-weight: 500; }
+  .tree-toolbar .divider { width: 1px; height: 18px; background: var(--gray-200); }
+
+  .tree-scroll { flex: 1; overflow: auto; }
+  table.tree { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 1080px; }
+  table.tree thead { position: sticky; top: 0; z-index: 4; background: var(--gray-50); }
+  table.tree th { text-align: right; font-size: 10.5px; font-weight: 600; color: var(--gray-500); padding: 8px 10px; border-bottom: 1px solid var(--gray-200); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; background: var(--gray-50); }
+  table.tree th button { background: transparent; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+  table.tree th button:hover { color: var(--gray-900); }
+  table.tree td { padding: 0; border-bottom: 1px solid var(--gray-100); vertical-align: middle; background: white; }
+  table.tree tbody tr { transition: background .1s; cursor: pointer; }
+  table.tree tbody tr:hover td { background: var(--primary-100); background: #F5F8FC; }
+  table.tree tbody tr.selected td { background: var(--primary-100); }
+  table.tree tbody tr.late td { background: linear-gradient(to left, rgba(220,38,38,0.04), rgba(220,38,38,0.06)); }
+  table.tree tbody tr.late.selected td { background: rgba(220,38,38,0.10); }
+  table.tree td > .cell { padding: 8px 10px; }
+  /* Status side-stripe */
+  table.tree td:first-child > .cell {
+    position: relative; padding-right: 14px;
+  }
+  table.tree tr > td:first-child::after {
+    content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 3px;
+  }
+  table.tree tr.status-done > td:first-child::after { background: var(--success-500); }
+  table.tree tr.status-progress > td:first-child::after { background: var(--info-500); }
+  table.tree tr.status-warn > td:first-child::after { background: var(--warning-500); }
+  table.tree tr.status-late > td:first-child::after { background: var(--error-500); }
+  table.tree tr.status-pending > td:first-child::after { background: var(--gray-300); }
+
+  /* Tree title cell */
+  .title-cell { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .twisty { width: 18px; height: 18px; border-radius: 4px; color: var(--gray-400); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: transparent; border: 0; }
+  .twisty:hover { background: var(--gray-100); color: var(--gray-900); }
+  .twisty.empty { cursor: default; }
+  .twisty.empty:hover { background: transparent; color: var(--gray-400); }
+  .drag-handle { width: 14px; color: var(--gray-300); cursor: grab; opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+  tr:hover .drag-handle, .edit-on .drag-handle { opacity: 1; }
+  .edit-on .drag-handle { color: var(--gray-400); }
+  .node-ic { width: 18px; height: 18px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+  .node-ic.folder { color: var(--gray-500); }
+  .node-ic.leaf { color: var(--primary-500); }
+  .node-title { font-size: 13px; color: var(--gray-800); min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+  .node-title.parent { font-weight: 600; color: var(--gray-900); }
+  .weight-bad { display: inline-flex; align-items: center; gap: 3px; padding: 1px 5px; border-radius: 4px; background: var(--error-50); color: var(--error-700); font-size: 10.5px; font-weight: 600; margin-right: 4px; flex-shrink: 0; }
+  .row-actions { display: inline-flex; align-items: center; gap: 2px; opacity: 0; transition: opacity .12s; }
+  tr:hover .row-actions { opacity: 1; }
+
+  /* Numeric cells */
+  .num-cell { font-feature-settings: 'tnum'; }
+  .weight-val { color: var(--gray-800); font-weight: 500; }
+  .qty-cell { color: var(--gray-700); }
+  .qty-cell .unit { color: var(--gray-500); font-size: 10.5px; margin-right: 2px; }
+  .date-cell { font-size: 11.5px; color: var(--gray-700); }
+  .progress-cell { display: flex; align-items: center; gap: 6px; min-width: 110px; }
+  .progress-cell .num { font-size: 11.5px; font-weight: 500; width: 32px; text-align: left; }
+  .pbar { flex: 1; height: 4px; background: var(--gray-100); border-radius: 999px; overflow: hidden; min-width: 50px; }
+  .pbar > div { height: 100%; border-radius: 999px; }
+  .owner-cell { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+  .owner-cell .av { width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+  .owner-cell .nm { font-size: 12px; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ic-row-btn { width: 24px; height: 24px; border-radius: 4px; background: transparent; border: 0; color: var(--gray-500); display: inline-flex; align-items: center; justify-content: center; }
+  .ic-row-btn:hover { background: var(--gray-200); color: var(--gray-900); }
+
+  /* Editable cells in edit mode */
+  .edit-on .weight-val { background: var(--warning-50); padding: 2px 6px; border-radius: 4px; cursor: text; }
+
+  /* Tree footer (status bar) */
+  .tree-foot { background: white; border-top: 1px solid var(--gray-200); padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--gray-600); flex-shrink: 0; }
+  .tree-foot .left { display: flex; align-items: center; gap: 12px; }
+  .tree-foot .legend { display: inline-flex; align-items: center; gap: 4px; }
+  .tree-foot .legend .sw { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* LEFT column: detail panel */
+  .detail-panel { background: white; border-right: 1px solid var(--gray-200); overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
+  .detail-empty { padding: 80px 24px; text-align: center; color: var(--gray-500); }
+  .detail-empty .icw { width: 56px; height: 56px; border-radius: var(--r-lg); background: var(--gray-100); display: inline-flex; align-items: center; justify-content: center; color: var(--gray-400); margin-bottom: 12px; }
+  .detail-empty h4 { font-size: 14px; color: var(--gray-700); font-weight: 600; margin: 0 0 4px; }
+  .detail-empty p { font-size: 12px; color: var(--gray-500); margin: 0; line-height: 1.7; }
+
+  .detail-head { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); }
+  .detail-head .code-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .detail-head .code-row .code {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--gray-100); color: var(--gray-700);
+    padding: 2px 8px; border-radius: var(--r-sm);
+    font-size: 11.5px; cursor: pointer;
+  }
+  .detail-head .code-row .code:hover { background: var(--gray-200); }
+  .detail-head h3 { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.4; color: var(--gray-900); }
+  .detail-head .h3-edit { display: flex; align-items: center; gap: 4px; }
+  .detail-head .h3-edit .editp { color: var(--gray-400); padding: 2px; border-radius: 4px; background: transparent; border: 0; }
+  .detail-head .h3-edit .editp:hover { background: var(--gray-100); color: var(--primary-700); }
+  .detail-head .desc { font-size: 12px; color: var(--gray-600); line-height: 1.7; margin: 8px 0 0; }
+  .detail-head .status-row { margin-top: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  /* Detail accordion */
+  .acc { border-bottom: 1px solid var(--gray-100); }
+  .acc-head { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+  .acc-head .lh { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--gray-800); }
+  .acc-head .lh svg { color: var(--gray-500); }
+  .acc-head .rh { display: flex; align-items: center; gap: 6px; }
+  .acc-body { padding: 0 16px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .acc.collapsed .acc-body { display: none; }
+  .acc-head .chev { color: var(--gray-400); transition: transform .15s; }
+  .acc.collapsed .acc-head .chev { transform: rotate(-90deg); }
+
+  .kv { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .kv .k { font-size: 10.5px; color: var(--gray-500); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .kv .v { font-size: 13px; color: var(--gray-900); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kv .v small { color: var(--gray-500); font-weight: 400; font-size: 11px; margin-right: 2px; }
+  .kv.full { grid-column: 1 / -1; }
+  .kv-edit-field { height: 30px; padding: 0 8px; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 12.5px; width: 100%; background: white; outline: none; }
+
+  /* Big progress block */
+  .big-prog { padding: 0 16px 14px; }
+  .big-prog .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 11.5px; color: var(--gray-600); }
+  .big-prog .row strong { font-size: 14px; color: var(--gray-900); font-weight: 600; }
+  .big-prog .pbar { height: 6px; }
+
+  /* CBS table inside detail */
+  .cbs-mini { display: flex; flex-direction: column; gap: 6px; padding: 0 16px 14px; }
+  .cbs-mini .row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--gray-50); border: 1px solid var(--gray-100); border-radius: 6px; gap: 8px; }
+  .cbs-mini .row .left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .cbs-mini .row .code { font-size: 10.5px; color: var(--gray-500); }
+  .cbs-mini .row .title { font-size: 12px; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cbs-mini .row .amt { font-size: 11.5px; color: var(--gray-700); white-space: nowrap; }
+  .cbs-mini .row .amt strong { color: var(--gray-900); font-weight: 600; }
+  .cbs-mini .total { padding: 10px 12px; border-radius: 6px; border: 1px dashed var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+  .cbs-mini .total strong { color: var(--gray-900); font-weight: 700; font-size: 13px; }
+
+  /* Reports link */
+  .reports-link { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; background: var(--primary-100); margin: 0 16px 14px; border-radius: var(--r-md); }
+  .reports-link .lh { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--primary-700); font-weight: 500; }
+  .reports-link .count { background: var(--primary-700); color: white; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+
+  /* Detail footer actions */
+  .detail-actions { padding: 14px 16px; border-top: 1px solid var(--gray-100); background: white; display: flex; flex-direction: column; gap: 6px; position: sticky; bottom: 0; }
+  .detail-actions .row { display: flex; gap: 6px; }
+  .detail-actions .row > .btn { flex: 1; }
+  .btn-danger { background: white; color: var(--error-700); border-color: var(--gray-200); }
+  .btn-danger:hover { background: var(--error-50); border-color: var(--error-500); }
+
+  /* ───── Empty state ───── */
+  .empty-state { display: flex; align-items: center; justify-content: center; height: 100%; padding: 32px; background: var(--gray-50); }
+  .empty-state .drop {
+    width: 100%; max-width: 560px; background: white;
+    border: 2px dashed var(--gray-300); border-radius: var(--r-xl);
+    padding: 48px 32px; text-align: center;
+    transition: border-color .12s, background .12s;
+  }
+  .empty-state .drop:hover { border-color: var(--primary-500); background: var(--primary-100); background: #F8FAFD; }
+  .empty-state .ic { width: 64px; height: 64px; border-radius: var(--r-lg); background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin: 0 0 6px; }
+  .empty-state p { font-size: 13px; color: var(--gray-600); margin: 0 0 18px; line-height: 1.7; }
+  .empty-state .file-types { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 24px; }
+  .empty-state .ft { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--gray-500); }
+  .empty-state .ft .fic { width: 38px; height: 46px; border: 1px solid var(--gray-200); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; color: var(--gray-500); position: relative; background: var(--gray-50); }
+  .empty-state .ft .fic .tag { position: absolute; bottom: 4px; left: 4px; right: 4px; font-size: 8px; font-weight: 700; color: white; background: var(--gray-500); padding: 1px 0; text-align: center; border-radius: 2px; }
+  .empty-state .or { font-size: 11px; color: var(--gray-400); margin: 20px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .empty-state .or::before, .empty-state .or::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+  .empty-state .alt-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+  /* Mode switcher (top of WBS area) */
+  .mode-row { padding: 6px 14px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--gray-500); }
+  .mode-row .pill-toggle { display: inline-flex; background: white; border: 1px solid var(--gray-200); border-radius: 6px; padding: 2px; }
+  .mode-row .pill-toggle button { height: 22px; padding: 0 8px; border: 0; background: transparent; border-radius: 4px; font-size: 11px; color: var(--gray-600); }
+  .mode-row .pill-toggle button.on { background: var(--primary-700); color: white; }
+
+  /* When mode = empty, hide tree contents and show empty state */
+  [data-mode="empty"] .tree-scroll, [data-mode="empty"] .tree-foot, [data-mode="empty"] .tree-toolbar { display: none; }
+  [data-mode="populated"] .empty-state { display: none; }
+
+  /* Tooltips */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%); background: var(--gray-900); color: white;
+    padding: 5px 9px; font-size: 11px; border-radius: 6px; white-space: nowrap;
+    pointer-events: none; z-index: 50;
+  }
+
+  /* Edit-mode banner */
+  .edit-banner { background: var(--warning-50); border-bottom: 1px solid rgba(217,119,6,0.25); padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-size: 12px; color: var(--warning-700); }
+  .edit-banner.hidden { display: none; }
+  .edit-banner .actions { margin-right: auto; display: flex; gap: 4px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+      </div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="#"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Project.html">مجتمع مسکونی نگین شهر</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">WBS</span>
+      </nav>
+      <button class="ic-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+      <button class="ic-btn"><i data-lucide="bell" style="width:15px;height:15px"></i><span class="ping"></span></button>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 2px"></div>
+      <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12px;color:var(--gray-800)">
+        <div class="avatar">م.ا</div>
+        <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i>
+      </button>
+    </header>
+
+    <!-- Project mini-header -->
+    <section class="proj-mini">
+      <div class="left">
+        <div class="thumb"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>
+        <div>
+          <h1>مجتمع مسکونی نگین شهر</h1>
+          <div class="meta-line">
+            <span>کد: <span class="mono">PRJ-1404-021</span></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>مدیر: <strong>مهندس رضایی</strong></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>پیشرفت: <strong style="color:var(--gray-900)">۶۵٪</strong> از <strong>۷۰٪</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="badge" style="background:var(--success-50);color:var(--success-700)"><span class="dot" style="background:var(--success-500)"></span>فعال</span>
+        <button class="btn btn-outline btn-sm"><i data-lucide="share-2" style="width:13px;height:13px"></i>اشتراک‌گذاری</button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="edit-3" style="width:13px;height:13px"></i>ویرایش پروژه</button>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab" data-tab="overview"><i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>نمای کلی</button>
+      <button class="tab active"><i data-lucide="git-branch" style="width:13px;height:13px"></i>WBS</button>
+      <button class="tab"><i data-lucide="banknote" style="width:13px;height:13px"></i>CBS</button>
+      <button class="tab"><i data-lucide="link" style="width:13px;height:13px"></i>اتصالات</button>
+      <button class="tab has-warn"><i data-lucide="clipboard-check" style="width:13px;height:13px"></i>گزارش‌ها<span class="num">۸</span></button>
+      <button class="tab"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا<span class="num">۱۸</span></button>
+      <button class="tab"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i>نمودارها</button>
+      <button class="tab"><i data-lucide="settings" style="width:13px;height:13px"></i>تنظیمات</button>
+    </nav>
+
+    <!-- Mode switcher -->
+    <div class="mode-row">
+      <i data-lucide="eye" style="width:13px;height:13px;color:var(--gray-400)"></i>
+      <span>نمایش:</span>
+      <div class="pill-toggle" id="mode-toggle">
+        <button class="on" data-mode="populated">با داده</button>
+        <button data-mode="empty">حالت خالی</button>
+      </div>
+      <span style="color:var(--gray-300);margin:0 4px">·</span>
+      <span>این انتخاب فقط برای پیش‌نمایش طراحی است.</span>
+    </div>
+
+    <!-- Edit mode banner -->
+    <div class="edit-banner hidden" id="edit-banner">
+      <i data-lucide="alert-circle" style="width:14px;height:14px"></i>
+      <span><strong>حالت ویرایش فعال است.</strong> می‌توانید آیتم‌ها را با کشیدن جابه‌جا کنید، وزن‌ها را تغییر دهید یا فرزند جدید اضافه کنید.</span>
+      <div class="actions">
+        <button class="btn btn-ghost btn-sm" id="cancel-edit">انصراف</button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="check" style="width:13px;height:13px"></i>ذخیره تغییرات</button>
+      </div>
+    </div>
+
+    <!-- ───── 3-column layout ───── -->
+    <div class="wbs-layout" data-mode="populated" id="wbs-layout">
+
+      <!-- RIGHT: toolbar -->
+      <aside class="tb-panel">
+        <!-- Search -->
+        <div class="tb-section">
+          <div class="tb-title">جستجو</div>
+          <div class="search-wrap">
+            <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+            <input class="field" type="text" placeholder="جستجو در درخت WBS…" />
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="tb-section">
+          <div class="tb-title">فیلترها <span class="count-pill">۲ فعال</span></div>
+          <div class="form-row">
+            <label>وضعیت</label>
+            <select class="field select">
+              <option>همه وضعیت‌ها</option>
+              <option>در حال انجام</option>
+              <option selected>تأخیردار</option>
+              <option>تمام‌شده</option>
+              <option>شروع‌نشده</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>سرپرست</label>
+            <select class="field select">
+              <option>همه سرپرست‌ها</option>
+              <option>علی محمدی</option>
+              <option>حسن کریمی</option>
+              <option>مهندس رضایی</option>
+              <option>ع. هاشمی</option>
+              <option>م. نوری</option>
+              <option>ر. جمالی</option>
+              <option>ف. مرادی</option>
+              <option>س. کریمی</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>نوع</label>
+            <select class="field select">
+              <option selected>همه آیتم‌ها</option>
+              <option>فقط برگ‌ها</option>
+              <option>فقط والدها</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Edit mode toggle -->
+        <div class="toggle-row off" id="edit-toggle">
+          <div class="lbl">
+            <i data-lucide="edit-3" style="width:14px;height:14px"></i>
+            <span>حالت ویرایش
+              <small>کشیدن، ویرایش وزن، حذف</small>
+            </span>
+          </div>
+          <span class="switch"></span>
+        </div>
+
+        <!-- Management -->
+        <div class="tb-section">
+          <div class="tb-title">مدیریت</div>
+          <button class="btn btn-outline btn-block" style="justify-content:flex-start"><i data-lucide="upload" style="width:13px;height:13px"></i>ورود از MSP (XML / Excel)</button>
+          <button class="btn btn-ghost btn-block" style="justify-content:flex-start"><i data-lucide="file-down" style="width:13px;height:13px"></i>دانلود قالب Excel</button>
+          <button class="btn btn-ghost btn-block" style="justify-content:flex-start"><i data-lucide="file-code" style="width:13px;height:13px"></i>خروجی به MSP (XML)</button>
+          <button class="btn btn-ghost btn-block" style="justify-content:flex-start"><i data-lucide="file-spreadsheet" style="width:13px;height:13px"></i>خروجی به Excel</button>
+        </div>
+
+        <!-- Summary -->
+        <div class="tb-section">
+          <div class="tb-title">خلاصه ساختار</div>
+          <div class="summary-card">
+            <div class="summary-row">
+              <span class="lbl"><i data-lucide="layers" style="width:13px;height:13px"></i>کل آیتم‌ها</span>
+              <strong id="sum-total">۲۲</strong>
+            </div>
+            <div class="summary-row">
+              <span class="lbl"><i data-lucide="file-text" style="width:13px;height:13px"></i>آیتم‌های برگ</span>
+              <strong id="sum-leaf">۱۶</strong>
+            </div>
+            <div class="summary-row">
+              <span class="lbl"><i data-lucide="folder" style="width:13px;height:13px"></i>آیتم‌های والد</span>
+              <strong id="sum-parent">۶</strong>
+            </div>
+            <div style="height:1px;background:var(--gray-200);margin:2px 0"></div>
+            <div class="summary-row">
+              <span class="lbl"><i data-lucide="percent" style="width:13px;height:13px"></i>مجموع وزن ریشه</span>
+              <strong style="color:var(--success-700)">۱۰۰٪ ✓</strong>
+            </div>
+            <div class="summary-row alert">
+              <span class="lbl"><i data-lucide="alert-triangle" style="width:13px;height:13px;color:var(--error-500)"></i>وزن‌های نامتعادل</span>
+              <strong>۱ مورد</strong>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MIDDLE: tree -->
+      <section class="tree-panel" id="tree-panel">
+        <div class="tree-toolbar">
+          <div class="crumb">
+            <span>مسیر:</span>
+            <a href="#">۱.</a>
+            <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+            <a href="#">۱.۲</a>
+            <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+            <a href="#">۱.۲.۳</a>
+            <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+            <span class="leaf" id="crumb-selected">قالب‌بندی سقف طبقهٔ دوم</span>
+          </div>
+          <div class="divider"></div>
+          <button class="btn btn-ghost btn-sm" data-tip="گسترش همه"><i data-lucide="chevrons-up-down" style="width:13px;height:13px"></i>گسترش همه</button>
+          <button class="btn btn-ghost btn-sm" data-tip="جمع‌کردن همه"><i data-lucide="chevrons-down-up" style="width:13px;height:13px"></i>جمع‌کردن</button>
+          <div class="divider"></div>
+          <button class="btn btn-ghost btn-sm"><i data-lucide="sliders-horizontal" style="width:13px;height:13px"></i>ستون‌ها</button>
+          <button class="btn btn-ghost btn-sm" data-tip="رفرش"><i data-lucide="refresh-cw" style="width:13px;height:13px"></i></button>
+        </div>
+
+        <div class="tree-scroll" id="tree-scroll">
+          <table class="tree" id="tree-table">
+            <thead>
+              <tr>
+                <th style="width:40%;min-width:300px">عنوان</th>
+                <th style="width:90px"><button>کد <i data-lucide="arrow-up-down" style="width:10px;height:10px"></i></button></th>
+                <th style="width:64px">وزن</th>
+                <th style="width:110px">مقدار / واحد</th>
+                <th style="width:90px">شروع</th>
+                <th style="width:90px">پایان</th>
+                <th style="width:130px">پیشرفت برنامه‌ای</th>
+                <th style="width:130px"><button style="color:var(--gray-700);font-weight:600">پیشرفت واقعی <i data-lucide="arrow-down" style="width:10px;height:10px"></i></button></th>
+                <th style="width:140px">سرپرست</th>
+                <th style="width:32px"></th>
+              </tr>
+            </thead>
+            <tbody id="tree-body"></tbody>
+          </table>
+        </div>
+
+        <div class="tree-foot">
+          <div class="left">
+            <span><strong style="color:var(--gray-900)" id="visible-count">۲۲</strong> آیتم نمایش داده می‌شود</span>
+            <span style="color:var(--gray-300)">·</span>
+            <span class="legend"><span class="sw" style="background:var(--success-500)"></span>تکمیل</span>
+            <span class="legend"><span class="sw" style="background:var(--info-500)"></span>در حال انجام</span>
+            <span class="legend"><span class="sw" style="background:var(--warning-500)"></span>تأخیر هشدار</span>
+            <span class="legend"><span class="sw" style="background:var(--error-500)"></span>تأخیر بحرانی</span>
+            <span class="legend"><span class="sw" style="background:var(--gray-300)"></span>شروع‌نشده</span>
+          </div>
+          <div>
+            <span><i data-lucide="mouse-pointer-click" style="width:11px;height:11px;display:inline;vertical-align:-1px"></i> برای نمایش جزئیات روی ردیف کلیک کنید</span>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-state">
+          <div class="drop">
+            <div class="ic"><i data-lucide="upload-cloud" style="width:30px;height:30px"></i></div>
+            <h3>هنوز ساختار WBS این پروژه ساخته نشده است</h3>
+            <p>فایل XML خروجی از Microsoft Project یا فایل Excel ساختار را اینجا<br/>رها کنید — یا یکی از گزینه‌های زیر را انتخاب کنید.</p>
+            <div class="alt-row">
+              <button class="btn btn-primary"><i data-lucide="upload" style="width:14px;height:14px"></i>انتخاب فایل…</button>
+              <button class="btn btn-outline"><i data-lucide="file-down" style="width:14px;height:14px"></i>دانلود قالب Excel</button>
+              <button class="btn btn-ghost"><i data-lucide="plus" style="width:14px;height:14px"></i>ساخت دستی WBS</button>
+            </div>
+            <div class="file-types">
+              <div class="ft"><div class="fic"><i data-lucide="file-code" style="width:18px;height:18px"></i><span class="tag" style="background:#1A3354">XML</span></div>MSP Export</div>
+              <div class="ft"><div class="fic"><i data-lucide="file-spreadsheet" style="width:18px;height:18px"></i><span class="tag" style="background:#15803D">XLSX</span></div>Excel</div>
+              <div class="ft"><div class="fic"><i data-lucide="file" style="width:18px;height:18px"></i><span class="tag" style="background:#B45813">MPP</span></div>MS Project</div>
+            </div>
+            <div class="or">یا</div>
+            <p style="font-size:11.5px;color:var(--gray-500)">فقط فایل‌های با حداکثر حجم <strong>۲۰ مگابایت</strong> پشتیبانی می‌شوند. برای فایل‌های بزرگتر با پشتیبانی تماس بگیرید.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEFT: detail panel -->
+      <aside class="detail-panel" id="detail-panel"></aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  const owners = {
+    'علی محمدی':    { initials: 'ع.م', bg: '#EFF6FF', fg: '#1D4ED8' },
+    'حسن کریمی':    { initials: 'ح.ک', bg: '#FCEAD9', fg: '#B45813' },
+    'مهندس رضایی':  { initials: 'م.ر', bg: '#E5EBF3', fg: '#1A3354' },
+    'ع. هاشمی':     { initials: 'ع.ه', bg: '#ECFDF3', fg: '#15803D' },
+    'م. نوری':      { initials: 'م.ن', bg: '#EFF6FF', fg: '#1D4ED8' },
+    'ر. جمالی':     { initials: 'ر.ج', bg: '#FFF8EB', fg: '#B45309' },
+    'ف. مرادی':     { initials: 'ف.م', bg: '#F4F4F5', fg: '#3F3F46' },
+    'س. کریمی':     { initials: 'س.ک', bg: '#E5EBF3', fg: '#1A3354' },
+  };
+
+  // ───── WBS data ─────
+  // Each node: code, title, weight, planned, actual, isLeaf, owner, startDate, endDate, unit, quantity, done, children?
+  const wbsTree = [
+    {
+      code: '1.1', title: 'عملیات خاکی', weight: 15, planned: 100, actual: 100, isLeaf: false, expanded: true,
+      startDate: '۱۴۰۳/۰۵/۱۰', endDate: '۱۴۰۳/۰۷/۲۰',
+      children: [
+        { code: '1.1.1', title: 'خاکبرداری',  weight: 40, planned: 100, actual: 100, isLeaf: true, owner: 'علی محمدی', unit: 'متر مکعب', quantity: 8400, done: 8400, startDate: '۱۴۰۳/۰۵/۱۰', endDate: '۱۴۰۳/۰۶/۰۵' },
+        { code: '1.1.2', title: 'خاکریزی',    weight: 30, planned: 100, actual: 100, isLeaf: true, owner: 'علی محمدی', unit: 'متر مکعب', quantity: 3200, done: 3200, startDate: '۱۴۰۳/۰۶/۰۸', endDate: '۱۴۰۳/۰۶/۲۸' },
+        { code: '1.1.3', title: 'تسطیح',      weight: 30, planned: 100, actual: 100, isLeaf: true, owner: 'علی محمدی', unit: 'متر مربع',  quantity: 4600, done: 4600, startDate: '۱۴۰۳/۰۷/۰۱', endDate: '۱۴۰۳/۰۷/۲۰' },
+      ]
+    },
+    {
+      code: '1.2', title: 'سازه', weight: 45, planned: 80, actual: 72, isLeaf: false, expanded: true,
+      startDate: '۱۴۰۳/۰۷/۲۵', endDate: '۱۴۰۴/۰۵/۳۰',
+      children: [
+        {
+          code: '1.2.1', title: 'فونداسیون', weight: 30, planned: 100, actual: 100, isLeaf: false, expanded: false,
+          startDate: '۱۴۰۳/۰۷/۲۵', endDate: '۱۴۰۳/۱۰/۱۵',
+          children: [
+            { code: '1.2.1.1', title: 'آرماتوربندی فونداسیون', weight: 40, planned: 100, actual: 100, isLeaf: true, owner: 'حسن کریمی', unit: 'تن',        quantity: 220, done: 220, startDate: '۱۴۰۳/۰۷/۲۵', endDate: '۱۴۰۳/۰۹/۰۵' },
+            { code: '1.2.1.2', title: 'قالب‌بندی فونداسیون',  weight: 30, planned: 100, actual: 100, isLeaf: true, owner: 'حسن کریمی', unit: 'متر مربع', quantity: 1800, done: 1800, startDate: '۱۴۰۳/۰۹/۰۸', endDate: '۱۴۰۳/۰۹/۲۵' },
+            { code: '1.2.1.3', title: 'بتن‌ریزی فونداسیون',   weight: 30, planned: 100, actual: 100, isLeaf: true, owner: 'حسن کریمی', unit: 'متر مکعب', quantity: 720,  done: 720,  startDate: '۱۴۰۳/۰۹/۲۸', endDate: '۱۴۰۳/۱۰/۱۵' },
+          ]
+        },
+        {
+          code: '1.2.2', title: 'سازه طبقات', weight: 50, planned: 78, actual: 75, isLeaf: false, expanded: true,
+          startDate: '۱۴۰۳/۱۰/۲۰', endDate: '۱۴۰۴/۰۴/۲۵',
+          children: [
+            { code: '1.2.2.1', title: 'آرماتوربندی ستون‌ها', weight: 35, planned: 90, actual: 88, isLeaf: true, owner: 'مهندس رضایی', unit: 'تن',        quantity: 380, done: 334, startDate: '۱۴۰۳/۱۰/۲۰', endDate: '۱۴۰۴/۰۲/۲۰' },
+            { code: '1.2.2.2', title: 'قالب‌بندی ستون‌ها',   weight: 25, planned: 80, actual: 75, isLeaf: true, owner: 'مهندس رضایی', unit: 'متر مربع', quantity: 2400, done: 1800, startDate: '۱۴۰۳/۱۱/۰۵', endDate: '۱۴۰۴/۰۳/۱۰' },
+            { code: '1.2.2.3', title: 'بتن‌ریزی ستون‌ها',    weight: 40, planned: 70, actual: 65, isLeaf: true, owner: 'مهندس رضایی', unit: 'متر مکعب', quantity: 980,  done: 637,  startDate: '۱۴۰۳/۱۱/۱۸', endDate: '۱۴۰۴/۰۴/۲۵' },
+          ]
+        },
+        {
+          code: '1.2.3', title: 'سقف', weight: 20, planned: 55, actual: 22, isLeaf: false, expanded: true,
+          startDate: '۱۴۰۴/۰۱/۱۰', endDate: '۱۴۰۴/۰۵/۳۰',
+          children: [
+            { code: '1.2.3.1', title: 'قالب‌بندی سقف طبقهٔ دوم', weight: 50, planned: 55, actual: 22, isLeaf: true, owner: 'ع. هاشمی', unit: 'متر مربع', quantity: 1450, done: 320, startDate: '۱۴۰۴/۰۱/۱۰', endDate: '۱۴۰۴/۰۳/۰۵', critical: true, notes: 'تأخیر اصلی به دلیل تأخیر در تحویل ورق فولادی است. هماهنگی با تأمین‌کننده در دست انجام.', cbs: [
+              { code: 'CBS-007', title: 'قالب فلزی مدولار',    budget: 18.5, used: 8.2 },
+              { code: 'CBS-023', title: 'نیروی انسانی ماهر',  budget: 12.4, used: 5.1 },
+              { code: 'CBS-031', title: 'حمل و باربری',        budget: 3.8,  used: 1.2 },
+            ]},
+            { code: '1.2.3.2', title: 'آرماتوربندی سقف',          weight: 50, planned: 55, actual: 22, isLeaf: true, owner: 'ع. هاشمی', unit: 'تن',        quantity: 145,  done: 32,  startDate: '۱۴۰۴/۰۱/۲۲', endDate: '۱۴۰۴/۰۴/۱۰' },
+          ]
+        },
+      ]
+    },
+    {
+      code: '1.3', title: 'تأسیسات', weight: 25, planned: 45, actual: 32, isLeaf: false, expanded: true,
+      startDate: '۱۴۰۴/۰۲/۰۱', endDate: '۱۴۰۴/۰۷/۲۰',
+      children: [
+        {
+          code: '1.3.1', title: 'برقی', weight: 50, planned: 50, actual: 38, isLeaf: false, expanded: false,
+          children: [
+            { code: '1.3.1.1', title: 'لوله‌گذاری برق', weight: 50, planned: 60, actual: 55, isLeaf: true, owner: 'م. نوری', unit: 'متر',  quantity: 2400, done: 1320 },
+            { code: '1.3.1.2', title: 'کابل‌کشی برق',  weight: 50, planned: 40, actual: 22, isLeaf: true, owner: 'م. نوری', unit: 'متر',  quantity: 4800, done: 1056 },
+          ]
+        },
+        {
+          code: '1.3.2', title: 'مکانیکی', weight: 50, planned: 40, actual: 26, isLeaf: false, expanded: false,
+          children: [
+            { code: '1.3.2.1', title: 'لوله‌کشی آب',     weight: 40, planned: 50, actual: 35, isLeaf: true, owner: 'ر. جمالی', unit: 'متر', quantity: 1800, done: 630 },
+            { code: '1.3.2.2', title: 'لوله‌کشی فاضلاب', weight: 30, planned: 40, actual: 25, isLeaf: true, owner: 'ر. جمالی', unit: 'متر', quantity: 1200, done: 300 },
+            { code: '1.3.2.3', title: 'کانال‌کشی تهویه', weight: 30, planned: 30, actual: 15, isLeaf: true, owner: 'ر. جمالی', unit: 'متر', quantity: 950,  done: 142 },
+          ]
+        },
+      ]
+    },
+    {
+      code: '1.4', title: 'نازک‌کاری', weight: 15, planned: 15, actual: 8, isLeaf: false, expanded: false,
+      children: [
+        {
+          // Intentional weight mismatch demo: 60+35=95
+          code: '1.4.1', title: 'گچ و رنگ', weight: 50, planned: 20, actual: 12, isLeaf: false, expanded: false, weightSumMismatch: 95,
+          children: [
+            { code: '1.4.1.1', title: 'گچ‌کاری دیوارها', weight: 60, planned: 25, actual: 15, isLeaf: true, owner: 'ف. مرادی', unit: 'متر مربع', quantity: 7800, done: 1170 },
+            { code: '1.4.1.2', title: 'رنگ‌آمیزی',        weight: 35, planned: 10, actual: 5,  isLeaf: true, owner: 'ف. مرادی', unit: 'متر مربع', quantity: 7800, done: 390 },
+          ]
+        },
+        {
+          code: '1.4.2', title: 'کاشی و سرامیک', weight: 50, planned: 10, actual: 5, isLeaf: false, expanded: false,
+          children: [
+            { code: '1.4.2.1', title: 'کاشی‌کاری سرویس‌ها', weight: 50, planned: 12, actual: 6, isLeaf: true, owner: 'س. کریمی', unit: 'متر مربع', quantity: 850, done: 51 },
+            { code: '1.4.2.2', title: 'سرامیک کف',          weight: 50, planned: 8,  actual: 4, isLeaf: true, owner: 'س. کریمی', unit: 'متر مربع', quantity: 2200, done: 88 },
+          ]
+        },
+      ]
+    },
+  ];
+
+  // ───── State ─────
+  let selectedCode = '1.2.3.1';
+  let editMode = false;
+
+  // ───── Helpers ─────
+  function statusOf(n) {
+    if (n.actual >= 100) return 'done';
+    if (n.actual === 0)  return 'pending';
+    const diff = n.actual - n.planned;
+    if (diff >= -5)      return 'progress';
+    if (diff >= -15)     return 'warn';
+    return 'late';
+  }
+  function progressColor(n) {
+    const s = statusOf(n);
+    return ({ done: '#15803D', progress: '#2563EB', warn: '#D97706', late: '#DC2626', pending: '#D4D4D8' })[s];
+  }
+  function findNode(code, nodes = wbsTree) {
+    for (const n of nodes) {
+      if (n.code === code) return n;
+      if (n.children) { const f = findNode(code, n.children); if (f) return f; }
+    }
+    return null;
+  }
+  function flatten(nodes, depth = 1, visibleParent = true) {
+    const out = [];
+    for (const n of nodes) {
+      const visible = visibleParent;
+      out.push({ ...n, depth, visible });
+      if (n.children?.length) out.push(...flatten(n.children, depth + 1, visible && n.expanded));
+    }
+    return out;
+  }
+
+  // ───── Render tree ─────
+  function renderTree() {
+    const flat = flatten(wbsTree);
+    const tbody = document.getElementById('tree-body');
+    let count = 0;
+
+    tbody.innerHTML = flat.filter(n => n.visible).map(n => {
+      count++;
+      const isLeaf = n.isLeaf;
+      const hasKids = n.children && n.children.length > 0;
+      const status = statusOf(n);
+      const isSel = n.code === selectedCode;
+      const indent = (n.depth - 1) * 22;
+      const pColor = progressColor(n);
+
+      const twisty = hasKids
+        ? `<button class="twisty" data-toggle="${n.code}" aria-label="${n.expanded ? 'جمع‌کردن' : 'گسترش'}"><i data-lucide="${n.expanded ? 'chevron-down' : 'chevron-left'}" style="width:13px;height:13px"></i></button>`
+        : `<span class="twisty empty"></span>`;
+      const icon = isLeaf
+        ? `<span class="node-ic leaf"><i data-lucide="file-text" style="width:14px;height:14px"></i></span>`
+        : `<span class="node-ic folder"><i data-lucide="${n.expanded ? 'folder-open' : 'folder'}" style="width:14px;height:14px"></i></span>`;
+      const weightBad = n.weightSumMismatch
+        ? `<span class="weight-bad" data-tip="مجموع وزن فرزندان: ${fa(n.weightSumMismatch)}٪ — باید ۱۰۰٪ باشد"><i data-lucide="alert-triangle" style="width:10px;height:10px"></i>Σ ${fa(n.weightSumMismatch)}٪</span>`
+        : '';
+
+      const ownerCell = isLeaf && n.owner
+        ? `<div class="owner-cell"><span class="av" style="background:${owners[n.owner].bg};color:${owners[n.owner].fg}">${owners[n.owner].initials}</span><span class="nm">${n.owner.replace('مهندس ', '')}</span></div>`
+        : `<span style="color:var(--gray-400);font-size:11.5px">—</span>`;
+
+      const qtyCell = isLeaf && n.quantity != null
+        ? `<span>${fa(n.quantity.toLocaleString('fa-IR'))}<span class="unit"> ${n.unit || ''}</span></span>`
+        : `<span style="color:var(--gray-400)">—</span>`;
+
+      return `
+        <tr class="status-${status} ${isSel ? 'selected' : ''} ${status === 'late' ? 'late' : ''}" data-code="${n.code}">
+          <td>
+            <div class="cell">
+              <div class="title-cell" style="padding-right:${indent}px">
+                <i data-lucide="grip-vertical" class="drag-handle" style="width:13px;height:13px"></i>
+                ${twisty}
+                ${icon}
+                <span class="node-title ${isLeaf ? '' : 'parent'}">${n.title}</span>
+                ${weightBad}
+              </div>
+            </div>
+          </td>
+          <td><div class="cell"><span class="mono" style="font-size:11px;color:var(--gray-500)">${fa(n.code)}</span></div></td>
+          <td><div class="cell num-cell"><span class="weight-val">${fa(n.weight)}٪</span></div></td>
+          <td><div class="cell num-cell qty-cell">${qtyCell}</div></td>
+          <td><div class="cell date-cell mono">${n.startDate ? n.startDate : '—'}</div></td>
+          <td><div class="cell date-cell mono">${n.endDate ? n.endDate : '—'}</div></td>
+          <td><div class="cell"><div class="progress-cell"><span class="num">${fa(n.planned)}٪</span><div class="pbar"><div style="width:${n.planned}%;background:var(--gray-400)"></div></div></div></div></td>
+          <td><div class="cell"><div class="progress-cell"><span class="num" style="color:${pColor};font-weight:600">${fa(n.actual)}٪</span><div class="pbar"><div style="width:${n.actual}%;background:${pColor}"></div></div></div></div></td>
+          <td><div class="cell">${ownerCell}</div></td>
+          <td><div class="cell" style="padding:0 4px"><button class="ic-row-btn" aria-label="بیشتر"><i data-lucide="more-vertical" style="width:13px;height:13px"></i></button></div></td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('visible-count').textContent = fa(count);
+
+    // Total counts
+    const all = flatten(wbsTree, 1, true).map(n => ({ ...n, visible: true }));
+    document.getElementById('sum-total').textContent = fa(all.length);
+    document.getElementById('sum-leaf').textContent  = fa(all.filter(n => n.isLeaf).length);
+    document.getElementById('sum-parent').textContent = fa(all.filter(n => !n.isLeaf).length);
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ───── Render detail panel ─────
+  function renderDetail() {
+    const panel = document.getElementById('detail-panel');
+    const n = selectedCode ? findNode(selectedCode) : null;
+
+    if (!n) {
+      panel.innerHTML = `
+        <div class="detail-empty">
+          <div class="icw"><i data-lucide="file-search" style="width:28px;height:28px"></i></div>
+          <h4>چیزی انتخاب نشده است</h4>
+          <p>برای مشاهده جزئیات هر آیتم، روی آن در درخت کلیک کنید.<br>می‌توانید عنوان، وزن، تاریخ‌ها و سرپرست را در همین پنل ویرایش کنید.</p>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    const status = statusOf(n);
+    const statusMap = {
+      done:     { bg: 'var(--success-50)', fg: 'var(--success-700)', dot: 'var(--success-500)', label: 'تکمیل شده' },
+      progress: { bg: 'var(--info-50)',    fg: 'var(--info-700)',    dot: 'var(--info-500)',    label: 'در حال انجام' },
+      warn:     { bg: 'var(--warning-50)', fg: 'var(--warning-700)', dot: 'var(--warning-500)', label: 'تأخیر هشدار' },
+      late:     { bg: 'var(--error-50)',   fg: 'var(--error-700)',   dot: 'var(--error-500)',   label: 'تأخیر بحرانی' },
+      pending:  { bg: 'var(--gray-100)',   fg: 'var(--gray-700)',    dot: 'var(--gray-400)',    label: 'شروع نشده' },
+    };
+    const s = statusMap[status];
+    const diff = n.actual - n.planned;
+    const variance = diff >= 0
+      ? `<span class="badge" style="background:var(--success-50);color:var(--success-700)"><i data-lucide="trending-up" style="width:11px;height:11px"></i>+${fa(diff)}٪ جلو</span>`
+      : `<span class="badge" style="background:${s.bg};color:${s.fg}"><i data-lucide="trending-down" style="width:11px;height:11px"></i>${fa(diff)}٪ از برنامه</span>`;
+
+    const reportsCount = n.isLeaf ? (n.code === '1.2.3.1' ? 12 : Math.floor(Math.random() * 8) + 1) : 0;
+    const seedReports = n.code === '1.2.3.1' ? 12 : 4;
+
+    // CBS data for leaves (with totals)
+    const cbs = n.cbs || (n.isLeaf ? [
+      { code: 'CBS-014', title: 'آرماتور AIII',        budget: 8.4, used: (8.4 * n.actual / 100).toFixed(1) },
+      { code: 'CBS-023', title: 'نیروی انسانی ماهر',   budget: 4.2, used: (4.2 * n.actual / 100).toFixed(1) },
+    ] : []);
+
+    const totalBudget = cbs.reduce((s, c) => s + +c.budget, 0).toFixed(1);
+    const totalUsed   = cbs.reduce((s, c) => s + +c.used, 0).toFixed(1);
+
+    panel.innerHTML = `
+      <div class="detail-head">
+        <div class="code-row">
+          <span class="code mono" data-tip="کلیک کنید تا کپی شود"><i data-lucide="hash" style="width:11px;height:11px"></i>${fa(n.code)}<i data-lucide="copy" style="width:11px;height:11px;color:var(--gray-400)"></i></span>
+          <span class="badge" style="background:${s.bg};color:${s.fg}"><span class="dot" style="background:${s.dot}"></span>${s.label}</span>
+        </div>
+        <div class="h3-edit">
+          <h3>${n.title}</h3>
+          <button class="editp" data-tip="ویرایش عنوان"><i data-lucide="edit-2" style="width:13px;height:13px"></i></button>
+        </div>
+        ${n.notes ? `<p class="desc"><i data-lucide="message-square" style="width:11px;height:11px;display:inline;vertical-align:-1px;color:var(--gray-400)"></i> ${n.notes}</p>` : ''}
+        <div class="status-row">
+          <span class="badge" style="background:var(--gray-100);color:var(--gray-700)">
+            <i data-lucide="${n.isLeaf ? 'file-text' : 'folder'}" style="width:11px;height:11px"></i>${n.isLeaf ? 'برگ — قابل گزارش‌گیری' : 'والد — مجموع فرزندان'}
+          </span>
+          <span class="badge" style="background:var(--gray-100);color:var(--gray-700)"><i data-lucide="layers" style="width:11px;height:11px"></i>سطح ${fa(n.code.split('.').length)}</span>
+          ${variance}
+        </div>
+      </div>
+
+      <!-- Big progress -->
+      <div class="big-prog" style="padding-top:14px">
+        <div class="row"><span>پیشرفت واقعی</span><strong style="color:${progressColor(n)}">${fa(n.actual)}٪</strong></div>
+        <div class="pbar"><div style="width:${n.actual}%;background:${progressColor(n)}"></div></div>
+        <div class="row" style="margin-top:8px"><span>پیشرفت برنامه‌ای امروز</span><strong>${fa(n.planned)}٪</strong></div>
+        <div class="pbar"><div style="width:${n.planned}%;background:var(--gray-400)"></div></div>
+      </div>
+
+      <!-- Accordion: General -->
+      <div class="acc">
+        <div class="acc-head" onclick="this.parentElement.classList.toggle('collapsed')">
+          <div class="lh"><i data-lucide="info" style="width:14px;height:14px"></i>اطلاعات کلی</div>
+          <i data-lucide="chevron-down" class="chev" style="width:14px;height:14px"></i>
+        </div>
+        <div class="acc-body">
+          <div class="kv"><span class="k">کد</span><span class="v mono">${fa(n.code)}</span></div>
+          <div class="kv"><span class="k">وزن نسبی</span><span class="v">${fa(n.weight)}٪</span></div>
+          <div class="kv full"><span class="k">عنوان</span><span class="v">${n.title}</span></div>
+          <div class="kv"><span class="k">سطح</span><span class="v">${fa(n.code.split('.').length)}</span></div>
+          <div class="kv"><span class="k">نوع</span><span class="v">${n.isLeaf ? 'برگ' : 'والد'}</span></div>
+        </div>
+      </div>
+
+      <!-- Accordion: Schedule -->
+      <div class="acc">
+        <div class="acc-head" onclick="this.parentElement.classList.toggle('collapsed')">
+          <div class="lh"><i data-lucide="calendar" style="width:14px;height:14px"></i>زمان‌بندی</div>
+          <i data-lucide="chevron-down" class="chev" style="width:14px;height:14px"></i>
+        </div>
+        <div class="acc-body">
+          <div class="kv"><span class="k">تاریخ شروع</span><span class="v mono">${n.startDate || '—'}</span></div>
+          <div class="kv"><span class="k">تاریخ پایان</span><span class="v mono">${n.endDate || '—'}</span></div>
+          <div class="kv"><span class="k">مدت برنامه‌ای</span><span class="v">${fa(daysBetween(n.startDate, n.endDate))} <small>روز</small></span></div>
+          <div class="kv"><span class="k">سپری‌شده تا امروز</span><span class="v">${fa(Math.round(n.planned))}٪</span></div>
+        </div>
+      </div>
+
+      ${n.isLeaf ? `
+      <!-- Accordion: Progress detail -->
+      <div class="acc">
+        <div class="acc-head" onclick="this.parentElement.classList.toggle('collapsed')">
+          <div class="lh"><i data-lucide="activity" style="width:14px;height:14px"></i>پیشرفت تفصیلی</div>
+          <i data-lucide="chevron-down" class="chev" style="width:14px;height:14px"></i>
+        </div>
+        <div class="acc-body">
+          <div class="kv"><span class="k">مقدار کل</span><span class="v">${fa(n.quantity.toLocaleString('fa-IR'))} <small>${n.unit}</small></span></div>
+          <div class="kv"><span class="k">انجام شده</span><span class="v" style="color:${progressColor(n)}">${fa(n.done.toLocaleString('fa-IR'))} <small>${n.unit}</small></span></div>
+          <div class="kv full"><span class="k">سرپرست مسئول</span>
+            <span class="v" style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+              <span style="display:inline-flex;align-items:center;gap:6px">
+                <span class="av" style="background:${owners[n.owner].bg};color:${owners[n.owner].fg};width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600">${owners[n.owner].initials}</span>
+                <span>${n.owner}</span>
+              </span>
+              <button class="btn btn-ghost btn-sm" style="padding:0 6px"><i data-lucide="user-plus" style="width:12px;height:12px"></i>تغییر</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports link -->
+      <div class="reports-link">
+        <div class="lh"><i data-lucide="clipboard-check" style="width:14px;height:14px"></i>گزارش‌های این آیتم</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="count">${fa(seedReports)} گزارش</span>
+          <i data-lucide="arrow-left" style="width:14px;height:14px;color:var(--primary-700)"></i>
+        </div>
+      </div>
+
+      <!-- Accordion: CBS links -->
+      <div class="acc">
+        <div class="acc-head" onclick="this.parentElement.classList.toggle('collapsed')">
+          <div class="lh"><i data-lucide="banknote" style="width:14px;height:14px"></i>CBSهای متصل <span class="badge" style="background:var(--gray-100);color:var(--gray-600);height:18px;font-size:10px">${fa(cbs.length)}</span></div>
+          <i data-lucide="chevron-down" class="chev" style="width:14px;height:14px"></i>
+        </div>
+      </div>
+      <div class="cbs-mini">
+        ${cbs.map(c => `
+          <div class="row">
+            <div class="left">
+              <span class="code mono">${c.code}</span>
+              <span class="title">${c.title}</span>
+            </div>
+            <span class="amt"><strong>${fa(c.used)}</strong> / ${fa(c.budget)} میلیارد</span>
+          </div>`).join('')}
+        <div class="total">
+          <span style="font-size:11.5px;color:var(--gray-600)"><i data-lucide="sigma" style="width:12px;height:12px;display:inline;vertical-align:-1px"></i> جمع بودجه</span>
+          <span><strong>${fa(totalUsed)}</strong> <span style="color:var(--gray-500)">از</span> <strong>${fa(totalBudget)}</strong> میلیارد ریال</span>
+        </div>
+      </div>
+      ` : `
+      <div class="acc">
+        <div class="acc-head">
+          <div class="lh"><i data-lucide="git-fork" style="width:14px;height:14px"></i>فرزندان <span class="badge" style="background:var(--gray-100);color:var(--gray-600);height:18px;font-size:10px">${fa(n.children.length)}</span></div>
+          <i data-lucide="chevron-down" class="chev" style="width:14px;height:14px"></i>
+        </div>
+        <div class="acc-body" style="grid-template-columns:1fr;gap:6px">
+          ${n.children.map(c => `
+            <div class="kv full" style="background:var(--gray-50);padding:8px 10px;border-radius:6px;cursor:pointer" onclick="selectNode('${c.code}')">
+              <span class="k mono">${fa(c.code)} · وزن ${fa(c.weight)}٪</span>
+              <span class="v">${c.title} <span style="color:${progressColor(c)};font-size:11.5px;font-weight:600;margin-right:6px">${fa(c.actual)}٪</span></span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      `}
+
+      <!-- Actions footer -->
+      <div class="detail-actions">
+        <div class="row">
+          <button class="btn btn-primary"><i data-lucide="edit-3" style="width:13px;height:13px"></i>ویرایش جزئیات</button>
+          <button class="btn btn-outline"><i data-lucide="plus" style="width:13px;height:13px"></i>افزودن فرزند</button>
+        </div>
+        <button class="btn btn-danger btn-block"><i data-lucide="trash-2" style="width:13px;height:13px"></i>حذف آیتم</button>
+      </div>
+    `;
+
+    // Update crumb
+    const parts = n.code.split('.');
+    const crumb = parts.map((_, i) => parts.slice(0, i + 1).join('.')).map(c => findNode(c)?.title || c);
+    document.getElementById('crumb-selected').textContent = n.title;
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function daysBetween(s, e) {
+    if (!s || !e) return 0;
+    // Quick fake: convert "۱۴۰۳/۰۵/۱۰" to numbers, approximate days
+    const toNum = str => {
+      const en = str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      const [y, m, dd] = en.split('/').map(Number);
+      return y * 365 + m * 30 + dd;
+    };
+    return Math.max(1, toNum(e) - toNum(s));
+  }
+
+  // ───── Interactions ─────
+  document.getElementById('tree-body').addEventListener('click', e => {
+    const tw = e.target.closest('[data-toggle]');
+    if (tw) {
+      e.stopPropagation();
+      const node = findNode(tw.dataset.toggle);
+      if (node) { node.expanded = !node.expanded; renderTree(); }
+      return;
+    }
+    const tr = e.target.closest('tr[data-code]');
+    if (tr) { selectedCode = tr.dataset.code; renderTree(); renderDetail(); }
+  });
+
+  window.selectNode = code => { selectedCode = code; renderTree(); renderDetail(); };
+
+  // Mode toggle
+  document.querySelectorAll('#mode-toggle button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#mode-toggle button').forEach(x => x.classList.toggle('on', x === b));
+      document.getElementById('wbs-layout').dataset.mode = b.dataset.mode;
+    });
+  });
+
+  // Edit mode toggle
+  const editToggle = document.getElementById('edit-toggle');
+  const editBanner = document.getElementById('edit-banner');
+  editToggle.addEventListener('click', () => {
+    editMode = !editMode;
+    editToggle.classList.toggle('off', !editMode);
+    editToggle.querySelector('.switch').classList.toggle('on', editMode);
+    document.body.classList.toggle('edit-on', editMode);
+    document.getElementById('tree-table').classList.toggle('edit-on', editMode);
+    editBanner.classList.toggle('hidden', !editMode);
+  });
+  document.getElementById('cancel-edit').addEventListener('click', () => editToggle.click());
+
+  renderTree();
+  renderDetail();
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

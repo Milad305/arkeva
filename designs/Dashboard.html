@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>داشبورد — پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { font-family: 'Vazirmatn', system-ui, sans-serif; color: var(--gray-900); background: var(--gray-50); -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01'; font-size: 13.5px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 8px; border: 2px solid var(--gray-50); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+  .app { display: grid; grid-template-columns: 224px 1fr; min-height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  main { min-width: 0; }
+  .topbar { height: 56px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 24px; position: sticky; top: 0; z-index: 30; }
+  .topbar .search { flex: 1; max-width: 460px; margin: 0 auto; position: relative; }
+  .topbar .search input { width: 100%; height: 34px; padding: 0 38px 0 60px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); font-size: 13px; outline: none; transition: border-color .12s, box-shadow .12s, background .12s; }
+  .topbar .search input:focus { border-color: var(--primary-500); background: white; box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  .topbar .search .ico { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-500); pointer-events: none; }
+  .topbar .search .kbd { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gray-500); background: white; padding: 2px 5px; border-radius: 4px; border: 1px solid var(--gray-200); }
+  .ic-btn { width: 34px; height: 34px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 7px; left: 8px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 30px; height: 30px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .content { padding: 22px 28px 40px; max-width: 1520px; }
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--gray-500); margin-bottom: 6px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+  .page-head h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 2px 0 4px; }
+  .page-head h1 .wave { color: var(--accent-500); }
+  .page-head .sub { font-size: 13px; color: var(--gray-500); }
+  .page-head .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: 6px; }
+
+  .section-link { font-size: 12.5px; color: var(--primary-700); font-weight: 500; display: inline-flex; align-items: center; gap: 3px; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* KPI cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+  .kpi { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); padding: 16px 18px; position: relative; overflow: hidden; }
+  .kpi .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .kpi .top .label { font-size: 12.5px; color: var(--gray-600); font-weight: 500; }
+  .kpi .top .ic { width: 30px; height: 30px; border-radius: var(--r-md); display: inline-flex; align-items: center; justify-content: center; }
+  .kpi .main { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; }
+  .kpi .big { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .kpi .delta { display: inline-flex; align-items: center; gap: 2px; font-size: 11.5px; font-weight: 600; padding: 2px 6px; border-radius: var(--r-sm); }
+  .kpi .foot { font-size: 11.5px; color: var(--gray-500); margin-top: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .spark { width: 92px; height: 32px; }
+  .circ-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+  .circ-wrap .lbl { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+
+  /* Generic card */
+  .card { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); overflow: hidden; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--gray-100); gap: 10px; }
+  .card-head h3 { font-size: 14px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .card-head h3 svg { color: var(--gray-500); }
+  .card-head .num-badge { background: var(--gray-100); color: var(--gray-700); font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }
+  .card-head .num-badge.warn { background: var(--warning-50); color: var(--warning-700); }
+  .card-head .num-badge.err { background: var(--error-50); color: var(--error-700); }
+
+  /* Row 2 */
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+
+  /* compact projects table */
+  table.mini { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.mini th { text-align: right; font-size: 10.5px; font-weight: 600; color: var(--gray-500); padding: 8px 14px; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); text-transform: uppercase; letter-spacing: 0.04em; }
+  table.mini td { padding: 9px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  table.mini tbody tr { cursor: pointer; }
+  table.mini tbody tr:hover { background: var(--gray-50); }
+  table.mini tbody tr:last-child td { border-bottom: 0; }
+  .proj-cell { display: flex; align-items: center; gap: 9px; }
+  .proj-thumb { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden; }
+  .proj-thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 5px, rgba(255,255,255,0.08) 5px 6px); }
+  .proj-thumb svg { position: relative; z-index: 1; }
+  .proj-cell .nm { font-weight: 600; color: var(--gray-900); font-size: 12.5px; }
+  .proj-cell .cl { font-size: 10.5px; color: var(--gray-500); }
+  .dual-bar { width: 100%; max-width: 150px; }
+  .dual-bar .track { position: relative; height: 14px; }
+  .dual-bar .planned { position: absolute; right: 0; top: 1px; height: 5px; background: var(--gray-300); border-radius: 999px; }
+  .dual-bar .actual { position: absolute; right: 0; bottom: 1px; height: 5px; border-radius: 999px; }
+  .dual-bar .nums { display: flex; align-items: center; gap: 6px; font-size: 10.5px; margin-top: 2px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 21px; padding: 0 7px; border-radius: var(--r-sm); font-size: 11px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  /* horizontal bar comparison */
+  .hcompare { padding: 14px 16px; display: flex; flex-direction: column; gap: 13px; }
+  .hbar-row .hb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+  .hbar-row .hb-name { font-size: 12px; color: var(--gray-800); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .hbar-row .hb-dev { font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; }
+  .hbar-row .hb-track { position: relative; height: 18px; }
+  .hbar-row .hb-planned { position: absolute; right: 0; top: 0; height: 7px; background: var(--primary-300); border-radius: 999px; }
+  .hbar-row .hb-actual { position: absolute; right: 0; bottom: 0; height: 7px; background: var(--primary-700); border-radius: 999px; }
+  .hcompare .legend { display: flex; gap: 16px; padding-top: 6px; border-top: 1px solid var(--gray-100); margin-top: 2px; font-size: 11px; color: var(--gray-600); }
+  .hcompare .legend .it { display: inline-flex; align-items: center; gap: 6px; }
+  .hcompare .legend .sw { width: 14px; height: 4px; border-radius: 2px; }
+
+  /* Row 3 */
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+
+  /* approvals list */
+  .approval { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--gray-100); }
+  .approval:last-child { border-bottom: 0; }
+  .approval .av { width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex-shrink: 0; }
+  .approval .info { flex: 1; min-width: 0; }
+  .approval .info .t { font-size: 12px; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .approval .info .t strong { font-weight: 600; }
+  .approval .info .m { font-size: 10.5px; color: var(--gray-500); margin-top: 1px; display: flex; align-items: center; gap: 5px; }
+  .approval .pct { font-size: 12px; font-weight: 700; color: var(--success-700); flex-shrink: 0; }
+  .approval .rev-btn { flex-shrink: 0; }
+
+  /* timeline */
+  .feed { position: relative; padding: 8px 16px 8px 8px; }
+  .feed::before { content: ''; position: absolute; top: 14px; bottom: 14px; right: 27px; width: 2px; background: var(--gray-100); }
+  .feed-item { position: relative; padding: 9px 28px 9px 0; display: flex; }
+  .feed-dot { position: absolute; right: 18px; top: 12px; width: 20px; height: 20px; border-radius: 999px; background: white; border: 2px solid var(--gray-200); display: inline-flex; align-items: center; justify-content: center; z-index: 1; }
+  .feed-dot.success { border-color: var(--success-500); background: var(--success-50); color: var(--success-700); }
+  .feed-dot.info { border-color: var(--info-500); background: var(--info-50); color: var(--info-700); }
+  .feed-dot.primary { border-color: var(--primary-500); background: var(--primary-100); color: var(--primary-700); }
+  .feed-dot.accent { border-color: var(--accent-500); background: var(--accent-100); color: var(--accent-700); }
+  .feed-content { flex: 1; padding-right: 24px; }
+  .feed-title { font-size: 12px; color: var(--gray-800); line-height: 1.6; }
+  .feed-title strong { font-weight: 600; color: var(--gray-900); }
+  .feed-title .proj { color: var(--primary-700); font-weight: 500; }
+  .feed-time { font-size: 10.5px; color: var(--gray-500); margin-top: 2px; }
+
+  /* alerts */
+  .alert-item { display: flex; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--gray-100); }
+  .alert-item:last-child { border-bottom: 0; }
+  .alert-item .bar { width: 3px; border-radius: 2px; flex-shrink: 0; }
+  .alert-item .ic { width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .alert-item .info { flex: 1; min-width: 0; }
+  .alert-item .info .t { font-size: 12px; color: var(--gray-800); line-height: 1.55; }
+  .alert-item .info .t strong { font-weight: 600; color: var(--gray-900); }
+  .alert-item .info .m { font-size: 10.5px; color: var(--gray-500); margin-top: 3px; display: inline-flex; align-items: center; gap: 4px; }
+  .pri-red { background: var(--error-500); } .pri-orange { background: var(--accent-500); } .pri-yellow { background: var(--warning-500); }
+
+  /* Row 4 — big curve */
+  .curve-card .card-body { padding: 8px 8px 14px; position: relative; }
+  .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--gray-700); }
+  .legend-dot { width: 14px; height: 3px; border-radius: 2px; display: inline-block; margin-left: 6px; vertical-align: middle; }
+  .legend-dot.dash { background-image: repeating-linear-gradient(90deg, var(--gray-400) 0 3px, transparent 3px 6px); height: 2px; }
+  .chart-svg { width: 100%; height: 280px; display: block; }
+  .chart-svg .grid line { stroke: var(--gray-100); stroke-width: 1; }
+  .chart-svg .axis text { font-family: 'Vazirmatn', sans-serif; font-size: 10.5px; fill: var(--gray-500); }
+  .chart-tooltip { position: absolute; background: var(--gray-900); color: white; border-radius: 8px; padding: 8px 12px; font-size: 11.5px; pointer-events: none; box-shadow: var(--shadow-lg); opacity: 0; transition: opacity .15s; transform: translate(-50%, -100%); z-index: 5; white-space: nowrap; }
+  .chart-tooltip strong { display: block; margin-bottom: 4px; }
+  .chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); }
+  .chart-tooltip .tt-row .sw { width: 8px; height: 8px; border-radius: 2px; }
+
+  @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .row-2, .row-3 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link active" href="#"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۳</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <button class="ic-btn" style="width:auto;padding:0 8px;gap:6px;font-size:13px;font-weight:600;color:var(--gray-900)"><i data-lucide="layout-dashboard" style="width:16px;height:16px;color:var(--primary-500)"></i>داشبورد</button>
+      <div class="search">
+        <i class="ico" data-lucide="search" style="width:14px;height:14px"></i>
+        <input type="text" placeholder="جستجوی سراسری در پروژه‌ها، گزارش‌ها و کاربران…" />
+        <span class="kbd">Ctrl+K</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button class="ic-btn"><i data-lucide="plus" style="width:16px;height:16px"></i></button>
+        <button class="ic-btn"><i data-lucide="bell" style="width:16px;height:16px"></i><span class="ping"></span></button>
+        <button class="ic-btn"><i data-lucide="help-circle" style="width:16px;height:16px"></i></button>
+        <div style="width:1px;height:20px;background:var(--gray-200);margin:0 4px"></div>
+        <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12.5px;color:var(--gray-800)"><div class="avatar">م.ا</div><i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <nav class="breadcrumb">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+      </nav>
+      <div class="page-head">
+        <div>
+          <h1>خوش آمدید، مهندس احمدی <span class="wave">👋</span></h1>
+          <div class="sub">خلاصه‌ای از پروژه‌های شما — شنبه، <span class="mono">۱۴۰۴/۰۳/۰۱</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-outline"><i data-lucide="calendar" style="width:14px;height:14px"></i>این ماه</button>
+          <button class="btn btn-primary"><i data-lucide="plus" style="width:15px;height:15px"></i>پروژه جدید</button>
+        </div>
+      </div>
+
+      <!-- ROW 1: KPIs -->
+      <div class="kpi-grid">
+        <!-- 1 active projects -->
+        <div class="kpi">
+          <div class="top">
+            <span class="label">پروژه‌های فعال</span>
+            <span class="ic" style="background:var(--primary-100);color:var(--primary-700)"><i data-lucide="folder-kanban" style="width:15px;height:15px"></i></span>
+          </div>
+          <div class="main">
+            <div>
+              <span class="big">۸</span>
+              <span class="delta" style="background:var(--success-50);color:var(--success-700);margin-right:6px"><i data-lucide="arrow-up" style="width:11px;height:11px"></i>۱</span>
+            </div>
+            <svg class="spark" viewBox="0 0 92 32"><polyline fill="none" stroke="#2C4A73" stroke-width="1.5" points="0,24 13,22 26,23 39,18 52,19 65,14 78,15 92,10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="foot"><span>نسبت به هفتهٔ گذشته</span><span style="color:var(--gray-700)">۱۲ کل</span></div>
+        </div>
+        <!-- 2 pending approvals -->
+        <div class="kpi">
+          <div class="top">
+            <span class="label">گزارش‌های در انتظار تأیید</span>
+            <span class="ic" style="background:var(--warning-50);color:var(--warning-700)"><i data-lucide="clock" style="width:15px;height:15px"></i></span>
+          </div>
+          <div class="main">
+            <span class="big">۲۳</span>
+          </div>
+          <div class="foot"><span>نیاز به بررسی شما</span><a href="#" class="section-link">مشاهده همه <i data-lucide="arrow-left" style="width:12px;height:12px"></i></a></div>
+        </div>
+        <!-- 3 at risk -->
+        <div class="kpi">
+          <div class="top">
+            <span class="label">پروژه‌های در ریسک</span>
+            <span class="ic" style="background:var(--error-50);color:var(--error-700)"><i data-lucide="alert-triangle" style="width:15px;height:15px"></i></span>
+          </div>
+          <div class="main">
+            <div>
+              <span class="big" style="color:var(--error-700)">۳</span>
+              <span class="delta" style="background:var(--error-50);color:var(--error-700);margin-right:6px"><i data-lucide="arrow-up" style="width:11px;height:11px"></i>۱</span>
+            </div>
+          </div>
+          <div class="foot"><span>بیش از ۱۵٪ تأخیر از برنامه</span></div>
+        </div>
+        <!-- 4 avg progress -->
+        <div class="kpi">
+          <div class="top">
+            <span class="label">میانگین پیشرفت</span>
+            <span class="ic" style="background:var(--success-50);color:var(--success-700)"><i data-lucide="trending-up" style="width:15px;height:15px"></i></span>
+          </div>
+          <div class="main">
+            <div>
+              <span class="big">۶۲<span style="font-size:18px;color:var(--gray-500)">٪</span></span>
+              <div class="foot" style="margin-top:6px">در مقابل <strong style="color:var(--gray-700)">۶۸٪</strong> برنامه‌ای</div>
+            </div>
+            <div class="circ-wrap">
+              <svg viewBox="0 0 52 52" style="transform:scaleX(-1)">
+                <circle cx="26" cy="26" r="22" stroke="#E4E4E7" stroke-width="5" fill="none"/>
+                <circle cx="26" cy="26" r="22" stroke="#D97706" stroke-width="5" fill="none" stroke-dasharray="138.23" stroke-dashoffset="52.5" stroke-linecap="round" transform="rotate(-90 26 26)"/>
+              </svg>
+              <div class="lbl">۶۲٪</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: table + comparison -->
+      <div class="row-2">
+        <div class="card">
+          <div class="card-head">
+            <h3><i data-lucide="folder-kanban" style="width:16px;height:16px"></i>پروژه‌های فعال</h3>
+            <a href="Projects.html" class="section-link">مشاهده همه <i data-lucide="arrow-left" style="width:12px;height:12px"></i></a>
+          </div>
+          <table class="mini">
+            <thead><tr><th>پروژه</th><th>پیشرفت (برنامه‌ای / واقعی)</th><th>وضعیت</th></tr></thead>
+            <tbody id="active-projects"></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3><i data-lucide="bar-chart-horizontal" style="width:16px;height:16px"></i>مقایسهٔ پیشرفت پروژه‌ها</h3>
+            <span style="font-size:11.5px;color:var(--gray-500)">مرتب بر اساس انحراف</span>
+          </div>
+          <div class="hcompare" id="hcompare"></div>
+        </div>
+      </div>
+
+      <!-- ROW 3: approvals + activity + alerts -->
+      <div class="row-3">
+        <!-- approvals -->
+        <div class="card">
+          <div class="card-head">
+            <h3><i data-lucide="clipboard-check" style="width:16px;height:16px"></i>در انتظار تأیید من <span class="num-badge warn">۲۳</span></h3>
+          </div>
+          <div id="approvals"></div>
+          <div style="padding:10px 14px;border-top:1px solid var(--gray-100);text-align:center">
+            <a href="#" class="section-link">مشاهدهٔ همه (۲۳) <i data-lucide="arrow-left" style="width:12px;height:12px"></i></a>
+          </div>
+        </div>
+
+        <!-- activity -->
+        <div class="card">
+          <div class="card-head">
+            <h3><i data-lucide="history" style="width:16px;height:16px"></i>فعالیت‌های اخیر</h3>
+            <a href="#" class="section-link">همه</a>
+          </div>
+          <div class="feed" id="feed"></div>
+        </div>
+
+        <!-- alerts -->
+        <div class="card">
+          <div class="card-head">
+            <h3><i data-lucide="alert-triangle" style="width:16px;height:16px;color:var(--warning-500)"></i>نیاز به توجه <span class="num-badge err">۵</span></h3>
+          </div>
+          <div id="alerts"></div>
+        </div>
+      </div>
+
+      <!-- ROW 4: big curve -->
+      <div class="card curve-card">
+        <div class="card-head">
+          <h3><i data-lucide="line-chart" style="width:16px;height:16px;color:var(--primary-500)"></i>روند کلی پیشرفت — همهٔ پروژه‌ها</h3>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="legend">
+              <span><span class="legend-dot" style="background:#8AA2C2"></span>برنامه‌ای</span>
+              <span><span class="legend-dot" style="background:var(--primary-700)"></span>واقعی</span>
+              <span><span class="legend-dot dash"></span>پیش‌بینی</span>
+            </div>
+            <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="tooltip" class="chart-tooltip"></div>
+          <svg viewBox="0 0 1280 280" class="chart-svg" preserveAspectRatio="none" id="chart">
+            <defs>
+              <linearGradient id="pFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8AA2C2" stop-opacity="0.16"/><stop offset="100%" stop-color="#8AA2C2" stop-opacity="0"/></linearGradient>
+              <linearGradient id="aFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A3354" stop-opacity="0.20"/><stop offset="100%" stop-color="#1A3354" stop-opacity="0"/></linearGradient>
+            </defs>
+            <g class="grid">
+              <line x1="56" y1="30" x2="1264" y2="30"/>
+              <line x1="56" y1="80" x2="1264" y2="80"/>
+              <line x1="56" y1="130" x2="1264" y2="130"/>
+              <line x1="56" y1="180" x2="1264" y2="180"/>
+              <line x1="56" y1="230" x2="1264" y2="230"/>
+            </g>
+            <g class="axis" text-anchor="start">
+              <text x="16" y="34">۱۰۰٪</text><text x="16" y="84">۷۵٪</text><text x="16" y="134">۵۰٪</text><text x="16" y="184">۲۵٪</text><text x="16" y="234">۰٪</text>
+            </g>
+            <path id="p-area" fill="url(#pFill)"></path>
+            <path id="p-line" stroke="#8AA2C2" stroke-width="2" fill="none" stroke-dasharray="5 5" stroke-linecap="round"></path>
+            <path id="a-area" fill="url(#aFill)"></path>
+            <path id="a-line" stroke="#1A3354" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+            <path id="f-line" stroke="#A1A1AA" stroke-width="2" fill="none" stroke-dasharray="4 5" stroke-linecap="round"></path>
+            <g id="points"></g>
+            <line id="today-line" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 4"></line>
+            <rect id="today-rect" width="56" height="22" rx="4" fill="#DC2626"></rect>
+            <text id="today-text" text-anchor="middle" font-size="11" fill="white" font-family="Vazirmatn" font-weight="600">امروز</text>
+            <g class="axis" id="x-axis" text-anchor="middle"></g>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  const statusMap = {
+    active:    { label: 'فعال',     bg: '#ECFDF3', fg: '#15803D', dot: '#16A34A' },
+    critical:  { label: 'در خطر',   bg: '#FEF2F2', fg: '#B91C1C', dot: '#DC2626' },
+    warn:      { label: 'تأخیر',    bg: '#FFF8EB', fg: '#B45309', dot: '#D97706' },
+    ahead:     { label: 'جلوتر',    bg: '#ECFDF3', fg: '#15803D', dot: '#16A34A' },
+  };
+  function projColor(dev) { return dev <= -15 ? '#DC2626' : dev < -5 ? '#D97706' : dev > 0 ? '#16A34A' : '#2C4A73'; }
+
+  // active projects
+  const projects = [
+    { name: 'نیروگاه خورشیدی یزد', client: 'ساتبا',          tint: '#D97706', icon: 'sun',        planned: 35, actual: 15, status: 'critical' },
+    { name: 'پل شهید سلیمانی',     client: 'وزارت راه',      tint: '#15803D', icon: 'milestone',  planned: 50, actual: 42, status: 'warn' },
+    { name: 'مجتمع نگین شهر',       client: 'شهرداری تهران',  tint: '#1A3354', icon: 'building-2', planned: 70, actual: 65, status: 'warn' },
+    { name: 'مجتمع تجاری زیتون',    client: 'گ. ایرانیان',   tint: '#1D4ED8', icon: 'store',      planned: 58, actual: 55, status: 'active' },
+    { name: 'بیمارستان امام رضا',  client: 'علوم پزشکی',     tint: '#B45813', icon: 'cross',      planned: 90, actual: 88, status: 'active' },
+    { name: 'تونل البرز',          client: 'ساخت و توسعه',   tint: '#3F3F46', icon: 'mountain',   planned: 25, actual: 30, status: 'ahead' },
+    { name: 'مرکز داده تهران',      client: 'شرکت مخابرات',   tint: '#0E7490', icon: 'server',     planned: 42, actual: 38, status: 'active' },
+    { name: 'دانشکدهٔ فنی کرج',    client: 'دانشگاه تهران',  tint: '#6D28D9', icon: 'graduation-cap', planned: 60, actual: 58, status: 'active' },
+  ];
+
+  document.getElementById('active-projects').innerHTML = projects.map(p => {
+    const s = statusMap[p.status];
+    const col = projColor(p.actual - p.planned);
+    return `
+      <tr>
+        <td>
+          <div class="proj-cell">
+            <span class="proj-thumb" style="background:${p.tint}"><i data-lucide="${p.icon}" style="width:14px;height:14px"></i></span>
+            <div><div class="nm">${p.name}</div><div class="cl">${p.client}</div></div>
+          </div>
+        </td>
+        <td>
+          <div class="dual-bar">
+            <div class="track">
+              <div class="planned" style="width:${p.planned}%"></div>
+              <div class="actual" style="width:${p.actual}%;background:${col}"></div>
+            </div>
+            <div class="nums"><span style="color:var(--gray-500)">برنامه‌ای ${fa(p.planned)}٪</span><span style="color:${col};font-weight:600">واقعی ${fa(p.actual)}٪</span></div>
+          </div>
+        </td>
+        <td><span class="badge" style="background:${s.bg};color:${s.fg}"><span class="dot" style="background:${s.dot}"></span>${s.label}</span></td>
+      </tr>`;
+  }).join('');
+
+  // horizontal comparison (sorted by deviation, worst first)
+  const sorted = [...projects].sort((a, b) => (a.actual - a.planned) - (b.actual - b.planned));
+  document.getElementById('hcompare').innerHTML = sorted.map(p => {
+    const dev = p.actual - p.planned;
+    const devCol = dev <= -15 ? ['var(--error-50)','var(--error-700)'] : dev < -5 ? ['var(--warning-50)','var(--warning-700)'] : dev > 0 ? ['var(--success-50)','var(--success-700)'] : ['var(--gray-100)','var(--gray-600)'];
+    return `
+      <div class="hbar-row">
+        <div class="hb-top">
+          <span class="hb-name">${p.name}</span>
+          <span class="hb-dev" style="background:${devCol[0]};color:${devCol[1]}">${dev > 0 ? '+' : ''}${fa(dev)}٪</span>
+        </div>
+        <div class="hb-track">
+          <div class="hb-planned" style="width:${p.planned}%"></div>
+          <div class="hb-actual" style="width:${p.actual}%"></div>
+        </div>
+      </div>`;
+  }).join('') + `
+    <div class="legend">
+      <span class="it"><span class="sw" style="background:var(--primary-300)"></span>برنامه‌ای</span>
+      <span class="it"><span class="sw" style="background:var(--primary-700)"></span>واقعی</span>
+    </div>`;
+
+  // approvals
+  const approvals = [
+    { sup: 'علی محمدی', initials: 'ع.م', av: ['#EFF6FF','#1D4ED8'], activity: 'بتن‌ریزی فونداسیون بلوک A', project: 'مجتمع نگین شهر', pct: 68, time: '۳۰ دقیقه پیش' },
+    { sup: 'حسن کریمی', initials: 'ح.ک', av: ['#FCEAD9','#B45813'], activity: 'آرماتوربندی ستون‌ها', project: 'مجتمع نگین شهر', pct: 88, time: '۱ ساعت پیش' },
+    { sup: 'رضا اکبری', initials: 'ر.ا', av: ['#ECFDF3','#15803D'], activity: 'کابل‌کشی برق طبقهٔ سوم', project: 'پل سلیمانی', pct: 45, time: '۲ ساعت پیش' },
+    { sup: 'مهدی نوری', initials: 'م.ن', av: ['#F3EEFE','#6D28D9'], activity: 'لوله‌کشی آب', project: 'تونل البرز', pct: 35, time: '۳ ساعت پیش' },
+    { sup: 'سعید قاسمی', initials: 'س.ق', av: ['#FFF8EB','#B45309'], activity: 'قالب‌بندی سقف', project: 'بیمارستان امام رضا', pct: 52, time: '۴ ساعت پیش' },
+  ];
+  document.getElementById('approvals').innerHTML = approvals.map(a => `
+    <div class="approval">
+      <span class="av" style="background:${a.av[0]};color:${a.av[1]}">${a.initials}</span>
+      <div class="info">
+        <div class="t"><strong>${a.sup}</strong> · ${a.activity}</div>
+        <div class="m"><i data-lucide="folder" style="width:11px;height:11px"></i>${a.project}<span style="color:var(--gray-300)">·</span>${a.time}</div>
+      </div>
+      <span class="pct">${fa(a.pct)}٪</span>
+      <button class="btn btn-outline btn-sm rev-btn">بررسی</button>
+    </div>`).join('');
+
+  // feed
+  const feed = [
+    { dot: 'info', ic: 'clipboard', title: '<strong>علی محمدی</strong> گزارشی ثبت کرد در <span class="proj">مجتمع نگین شهر</span>', time: '۳۰ دقیقه پیش' },
+    { dot: 'success', ic: 'play', title: 'پروژهٔ <span class="proj">پل سلیمانی</span> به وضعیت فعال تغییر کرد', time: '۱ ساعت پیش' },
+    { dot: 'primary', ic: 'user-plus', title: '<strong>مهندس حسینی</strong> به پروژهٔ <span class="proj">تونل البرز</span> اضافه شد', time: '۲ ساعت پیش' },
+    { dot: 'accent', ic: 'upload', title: 'فایل WBS جدید آپلود شد در <span class="proj">مجتمع نگین شهر</span>', time: '۴ ساعت پیش' },
+    { dot: 'success', ic: 'check', title: 'گزارش <strong>حسن کریمی</strong> توسط مهندس رضایی تأیید شد', time: 'دیروز · ۱۶:۴۰' },
+    { dot: 'info', ic: 'banknote', title: 'بودجهٔ CBS در <span class="proj">بیمارستان امام رضا</span> به‌روزرسانی شد', time: 'دیروز · ۱۰:۱۲' },
+  ];
+  document.getElementById('feed').innerHTML = feed.map(f => `
+    <div class="feed-item">
+      <span class="feed-dot ${f.dot}"><i data-lucide="${f.ic}" style="width:11px;height:11px"></i></span>
+      <div class="feed-content"><div class="feed-title">${f.title}</div><div class="feed-time">${f.time}</div></div>
+    </div>`).join('');
+
+  // alerts
+  const alerts = [
+    { pri: 'red', ic: 'trending-down', icBg: 'var(--error-50)', icFg: 'var(--error-700)', t: 'پروژهٔ <strong>نیروگاه خورشیدی یزد</strong> ۲۰٪ از برنامه عقب است', m: 'تأخیر بحرانی' },
+    { pri: 'red', ic: 'alert-octagon', icBg: 'var(--error-50)', icFg: 'var(--error-700)', t: '<strong>۳ آیتم WBS</strong> در مجتمع نگین شهر در تأخیر بحرانی هستند', m: 'نیاز به اقدام فوری' },
+    { pri: 'orange', ic: 'wallet', icBg: 'var(--accent-100)', icFg: 'var(--accent-700)', t: 'بودجهٔ <strong>بیمارستان امام رضا</strong> ۸۸٪ مصرف شده با ۱۰٪ کار باقی‌مانده', m: 'ریسک تجاوز از بودجه' },
+    { pri: 'yellow', ic: 'clock', icBg: 'var(--warning-50)', icFg: 'var(--warning-700)', t: '<strong>۵ گزارش</strong> بیش از ۴۸ ساعت در انتظار تأیید شماست', m: 'گزارش‌های معوق' },
+    { pri: 'yellow', ic: 'user-x', icBg: 'var(--warning-50)', icFg: 'var(--warning-700)', t: 'پیمانکار برق <strong>پارکینگ فردوسی</strong> ۱۰ روز است گزارشی ثبت نکرده', m: 'عدم فعالیت' },
+  ];
+  document.getElementById('alerts').innerHTML = alerts.map(a => `
+    <div class="alert-item">
+      <span class="bar pri-${a.pri}"></span>
+      <span class="ic" style="background:${a.icBg};color:${a.icFg}"><i data-lucide="${a.ic}" style="width:13px;height:13px"></i></span>
+      <div class="info"><div class="t">${a.t}</div><div class="m"><i data-lucide="dot" style="width:12px;height:12px"></i>${a.m}</div></div>
+    </div>`).join('');
+
+  // ───── Big curve ─────
+  const X0 = 56, X1 = 1264, Y0 = 230, Y1 = 30;
+  const months = [
+    { m: 'آذر ۰۳', planned: 30, actual: 26 },
+    { m: 'دی ۰۳', planned: 38, actual: 33 },
+    { m: 'بهمن ۰۳', planned: 46, actual: 41 },
+    { m: 'اسفند ۰۳', planned: 54, actual: 49 },
+    { m: 'فروردین ۰۴', planned: 61, actual: 56 },
+    { m: 'اردیبهشت ۰۴', planned: 68, actual: 62, today: true },
+    { m: 'خرداد ۰۴', planned: 76, forecast: 70 },
+    { m: 'تیر ۰۴', planned: 85, forecast: 80 },
+    { m: 'مرداد ۰۴', planned: 94, forecast: 91 },
+  ];
+  const n = months.length;
+  const xFor = i => X0 + (X1 - X0) * (i / (n - 1));
+  const yFor = pct => Y0 - (pct / 100) * (Y0 - Y1);
+  function smoothPath(pts) {
+    if (pts.length < 2) return '';
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x0, y0] = pts[i], [x1, y1] = pts[i+1];
+      const cx = (x0 + x1) / 2;
+      d += ` C${cx},${y0} ${cx},${y1} ${x1},${y1}`;
+    }
+    return d;
+  }
+  const todayIdx = months.findIndex(m => m.today);
+  const plannedPts = months.map((m, i) => [xFor(i), yFor(m.planned)]);
+  const actualPts = months.slice(0, todayIdx + 1).map((m, i) => [xFor(i), yFor(m.actual)]);
+  const forecastPts = [[xFor(todayIdx), yFor(months[todayIdx].actual)], ...months.slice(todayIdx + 1).map((m, i) => [xFor(todayIdx + 1 + i), yFor(m.forecast)])];
+
+  const pPath = smoothPath(plannedPts);
+  document.getElementById('p-line').setAttribute('d', pPath);
+  document.getElementById('p-area').setAttribute('d', pPath + ` L${X1},${Y0} L${X0},${Y0} Z`);
+  const aPath = smoothPath(actualPts);
+  document.getElementById('a-line').setAttribute('d', aPath);
+  document.getElementById('a-area').setAttribute('d', aPath + ` L${xFor(todayIdx)},${Y0} L${X0},${Y0} Z`);
+  document.getElementById('f-line').setAttribute('d', smoothPath(forecastPts));
+
+  const tx = xFor(todayIdx);
+  document.getElementById('today-line').setAttribute('x1', tx);
+  document.getElementById('today-line').setAttribute('x2', tx);
+  document.getElementById('today-line').setAttribute('y1', 18);
+  document.getElementById('today-line').setAttribute('y2', Y0);
+  document.getElementById('today-rect').setAttribute('x', tx - 28);
+  document.getElementById('today-rect').setAttribute('y', 4);
+  document.getElementById('today-text').setAttribute('x', tx);
+  document.getElementById('today-text').setAttribute('y', 19);
+
+  // points + x-axis
+  const ptsG = document.getElementById('points');
+  const xAxis = document.getElementById('x-axis');
+  months.forEach((m, i) => {
+    const x = xFor(i);
+    if (m.actual != null && i <= todayIdx) ptsG.insertAdjacentHTML('beforeend', `<circle cx="${x}" cy="${yFor(m.actual)}" r="4" fill="#1A3354" stroke="white" stroke-width="2"/>`);
+    else if (m.forecast != null) ptsG.insertAdjacentHTML('beforeend', `<circle cx="${x}" cy="${yFor(m.forecast)}" r="3.5" fill="white" stroke="#A1A1AA" stroke-width="2"/>`);
+    ptsG.insertAdjacentHTML('beforeend', `<circle cx="${x}" cy="${yFor(m.actual ?? m.forecast ?? m.planned)}" r="16" fill="transparent" class="hit" data-i="${i}"/>`);
+    xAxis.insertAdjacentHTML('beforeend', `<text x="${x}" y="252" ${m.today ? 'fill="#DC2626" font-weight="600"' : ''}>${m.m}</text>`);
+  });
+
+  const chart = document.getElementById('chart');
+  const tt = document.getElementById('tooltip');
+  document.querySelectorAll('.hit').forEach(el => {
+    el.addEventListener('mousemove', () => {
+      const i = +el.dataset.i, m = months[i];
+      const r = chart.getBoundingClientRect();
+      const sx = r.width / 1280, sy = r.height / 280;
+      const y = yFor(m.actual ?? m.forecast ?? m.planned);
+      tt.style.left = (xFor(i) * sx) + 'px';
+      tt.style.top = (y * sy - 6) + 'px';
+      tt.innerHTML = `<strong>${m.m}</strong>
+        <div class="tt-row"><span class="sw" style="background:#8AA2C2"></span>برنامه‌ای: ${fa(m.planned)}٪</div>
+        ${m.actual != null ? `<div class="tt-row"><span class="sw" style="background:#1A3354"></span>واقعی: ${fa(m.actual)}٪</div>` : ''}
+        ${m.forecast != null ? `<div class="tt-row"><span class="sw" style="background:#A1A1AA"></span>پیش‌بینی: ${fa(m.forecast)}٪</div>` : ''}`;
+      tt.style.opacity = '1';
+    });
+    el.addEventListener('mouseleave', () => tt.style.opacity = '0');
+  });
+
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

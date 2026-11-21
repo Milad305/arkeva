@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBS — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --primary-100:#E5EBF3; --primary-300:#8AA2C2; --primary-500:#2C4A73; --primary-700:#1A3354; --primary-900:#0E1E38;
+      --accent-100:#FCEAD9; --accent-300:#F4B17C; --accent-500:#E07A2C; --accent-700:#B45813;
+      --success-50:#ECFDF3; --success-500:#16A34A; --success-700:#15803D;
+      --warning-50:#FFF8EB; --warning-500:#D97706; --warning-700:#B45309;
+      --error-50:#FEF2F2; --error-500:#DC2626; --error-700:#B91C1C;
+      --info-50:#EFF6FF; --info-500:#2563EB; --info-700:#1D4ED8;
+      --gray-0:#FFFFFF; --gray-50:#FAFAFA; --gray-100:#F4F4F5; --gray-200:#E4E4E7; --gray-300:#D4D4D8; --gray-400:#A1A1AA; --gray-500:#71717A; --gray-600:#52525B; --gray-700:#3F3F46; --gray-800:#27272A; --gray-900:#18181B;
+      --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px;
+      --shadow-sm:0 1px 2px 0 rgb(24 24 27 / 0.04);
+      --shadow-md:0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+      --shadow-lg:0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+      font-family:'Vazirmatn', system-ui, sans-serif;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; padding:0; height:100%; }
+    body {
+      background:var(--gray-50); color:var(--gray-900); font-family:'Vazirmatn', system-ui, sans-serif;
+      -webkit-font-smoothing:antialiased; font-feature-settings:'ss01'; font-size:13.5px;
+    }
+    a { color:inherit; text-decoration:none; }
+    button, input, select { font:inherit; }
+    button { cursor:pointer; }
+    .mono { font-family:'JetBrains Mono', ui-monospace, monospace; direction:ltr; unicode-bidi:isolate; }
+    .app { display:grid; grid-template-columns:224px 1fr; height:100vh; }
+    .sidebar { background:white; border-left:1px solid var(--gray-200); display:flex; flex-direction:column; height:100vh; }
+    .sb-brand { display:flex; align-items:center; gap:10px; padding:18px 18px 16px; border-bottom:1px solid var(--gray-100); }
+    .sb-brand .mark { width:32px; height:32px; border-radius:var(--r-md); background:var(--primary-700); color:white; display:inline-flex; align-items:center; justify-content:center; }
+    .sb-brand .name strong { display:block; font-size:14px; font-weight:700; }
+    .sb-brand .name small { font-size:10.5px; color:var(--gray-500); }
+    .sb-org { margin:14px 12px 4px; padding:8px 10px; border:1px solid var(--gray-200); border-radius:var(--r-md); background:var(--gray-50); display:flex; align-items:center; gap:8px; }
+    .sb-org .org-mark { width:26px; height:26px; border-radius:var(--r-sm); background:var(--accent-100); color:var(--accent-700); display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+    .sb-section { margin:18px 14px 6px; font-size:10px; font-weight:600; color:var(--gray-400); text-transform:uppercase; letter-spacing:0.08em; }
+    .sb-nav { padding:0 8px; display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
+    .sb-link { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--r-md); color:var(--gray-600); font-size:13.5px; font-weight:500; transition:background .12s, color .12s; }
+    .sb-link:hover { background:var(--gray-100); color:var(--gray-900); }
+    .sb-link.active { background:var(--primary-700); color:white; }
+    .sb-link.active svg { color:white; }
+    .sb-user { margin:10px 10px 12px; padding:10px; border:1px solid var(--gray-200); border-radius:var(--r-md); display:flex; align-items:center; gap:10px; background:white; }
+    .sb-user .avatar { width:32px; height:32px; border-radius:999px; background:var(--primary-100); color:var(--primary-700); display:inline-flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:700; }
+    main { display:flex; flex-direction:column; height:100vh; overflow:hidden; min-width:0; }
+    .topbar { height:52px; background:white; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; gap:12px; padding:0 20px; }
+    .crumb-strip { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--gray-500); flex:1; min-width:0; }
+    .crumb-strip .leaf { color:var(--gray-900); font-weight:500; }
+    .icon-btn { width:32px; height:32px; border-radius:var(--r-md); border:0; background:transparent; color:var(--gray-600); display:inline-flex; align-items:center; justify-content:center; }
+    .icon-btn:hover { background:var(--gray-100); color:var(--gray-900); }
+    .proj-mini { background:white; border-bottom:1px solid var(--gray-200); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .proj-mini .left { display:flex; align-items:center; gap:12px; min-width:0; }
+    .proj-mini .thumb { width:36px; height:36px; border-radius:var(--r-md); background:var(--primary-700); color:white; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .proj-mini h1 { font-size:16px; font-weight:600; margin:0; }
+    .proj-mini .meta-line { font-size:11.5px; color:var(--gray-500); margin-top:2px; }
+    .badge { display:inline-flex; align-items:center; gap:4px; height:22px; padding:0 8px; border-radius:var(--r-sm); font-size:11.5px; font-weight:500; }
+    .badge.ok { background:var(--success-50); color:var(--success-700); }
+    .badge.warn { background:var(--warning-50); color:var(--warning-700); }
+    .badge.danger { background:var(--error-50); color:var(--error-700); }
+    .tabs { display:flex; gap:0; padding:0 20px; background:white; border-bottom:1px solid var(--gray-200); overflow-x:auto; }
+    .tab { position:relative; padding:10px 12px; font-size:12.5px; font-weight:500; color:var(--gray-600); background:transparent; border:0; border-bottom:2px solid transparent; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+    .tab.active { color:var(--primary-700); border-bottom-color:var(--primary-700); font-weight:600; }
+    .page { flex:1; display:grid; grid-template-columns:320px minmax(0,1fr) 340px; overflow:hidden; }
+    .detail-panel, .insights-panel { background:white; border-left:1px solid var(--gray-200); overflow-y:auto; }
+    .detail-panel { border-left:0; border-right:1px solid var(--gray-200); }
+    .detail-head { padding:14px 16px; border-bottom:1px solid var(--gray-100); }
+    .detail-head .code { display:inline-flex; align-items:center; gap:4px; background:var(--gray-100); color:var(--gray-700); padding:2px 8px; border-radius:var(--r-sm); font-size:11.5px; }
+    .detail-head h3 { font-size:16px; font-weight:600; margin:8px 0 6px; }
+    .detail-head .desc { font-size:12px; color:var(--gray-600); line-height:1.7; }
+    .kv { display:flex; flex-direction:column; gap:3px; }
+    .kv .k { font-size:10.5px; color:var(--gray-500); font-weight:500; text-transform:uppercase; letter-spacing:.04em; }
+    .kv .v { font-size:13px; color:var(--gray-900); font-weight:500; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--gray-100); }
+    .card { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--r-md); padding:12px; }
+    .progress { height:6px; background:var(--gray-100); border-radius:999px; overflow:hidden; margin:8px 0 6px; }
+    .progress > div { height:100%; border-radius:999px; background:linear-gradient(90deg, var(--accent-500), var(--primary-700)); }
+    .list { display:flex; flex-direction:column; gap:8px; padding:0 16px 14px; }
+    .list .row { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; background:var(--gray-50); border:1px solid var(--gray-100); border-radius:6px; }
+    .acc { border-bottom:1px solid var(--gray-100); }
+    .acc-head { padding:12px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+    .acc-head .lh { display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--gray-800); }
+    .acc-body { padding:0 16px 14px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .acc.collapsed .acc-body { display:none; }
+    .tree-panel { background:var(--gray-50); overflow:hidden; display:flex; flex-direction:column; min-width:0; }
+    .tree-toolbar { padding:8px 14px; background:white; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .field { height:32px; padding:0 10px; border:1px solid var(--gray-200); background:white; border-radius:var(--r-md); font-size:12.5px; color:var(--gray-900); outline:none; width:100%; }
+    .field:focus { border-color:var(--primary-500); box-shadow:0 0 0 3px rgba(44,74,115,.10); }
+    .search-wrap { position:relative; flex:1; min-width:180px; }
+    .search-wrap .ico { position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray-400); pointer-events:none; }
+    .search-wrap input { padding-right:32px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:5px; height:30px; padding:0 11px; border-radius:var(--r-md); font-size:12.5px; font-weight:500; border:1px solid transparent; white-space:nowrap; }
+    .btn-primary { background:var(--primary-700); color:white; }
+    .btn-outline { background:white; color:var(--gray-800); border-color:var(--gray-300); }
+    .btn-sm { height:26px; padding:0 8px; font-size:11.5px; border-radius:6px; }
+    .tree-scroll { flex:1; overflow:auto; }
+    table.tree { width:100%; border-collapse:collapse; min-width:1040px; }
+    table.tree th { text-align:right; font-size:10.5px; font-weight:600; color:var(--gray-500); padding:8px 10px; border-bottom:1px solid var(--gray-200); white-space:nowrap; text-transform:uppercase; letter-spacing:.04em; background:var(--gray-50); }
+    table.tree td { padding:0; border-bottom:1px solid var(--gray-100); vertical-align:middle; background:white; }
+    table.tree tbody tr { transition:background .1s; cursor:pointer; }
+    table.tree tbody tr:hover td { background:#F5F8FC; }
+    table.tree tbody tr.selected td { background:var(--primary-100); }
+    table.tree td > .cell { padding:8px 10px; }
+    .title-cell { display:flex; align-items:center; gap:6px; min-width:0; }
+    .level0 .title-cell { font-weight:600; color:var(--gray-900); }
+    .level1 .title-cell { padding-right:18px; }
+    .level2 .title-cell { padding-right:36px; }
+    .node-icon { width:18px; height:18px; border-radius:4px; display:inline-flex; align-items:center; justify-content:center; color:var(--gray-500); flex-shrink:0; }
+    .node-title { font-size:13px; color:var(--gray-800); min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pill-inline { display:inline-flex; align-items:center; gap:4px; padding:1px 6px; border-radius:999px; font-size:10.5px; font-weight:600; }
+    .pill-inline.ok { background:var(--success-50); color:var(--success-700); }
+    .pill-inline.warn { background:var(--warning-50); color:var(--warning-700); }
+    .pill-inline.danger { background:var(--error-50); color:var(--error-700); }
+    .num-cell { font-feature-settings:'tnum'; }
+    .bar { height:5px; background:var(--gray-100); border-radius:999px; overflow:hidden; min-width:70px; }
+    .bar > div { height:100%; border-radius:999px; background:var(--primary-700); }
+    .insights-panel { padding:14px; display:flex; flex-direction:column; gap:12px; }
+    .insight-card { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--r-md); padding:12px; }
+    .insight-card h4 { margin:0 0 8px; font-size:13px; font-weight:600; }
+    .summary-row { display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--gray-700); margin-top:7px; }
+    .summary-row strong { font-size:14px; color:var(--gray-900); }
+    .chip-list { display:flex; flex-wrap:wrap; gap:6px; }
+    .chip { padding:4px 8px; border-radius:999px; font-size:11px; background:white; border:1px solid var(--gray-200); }
+    .chip.warn { background:var(--warning-50); color:var(--warning-700); border-color:rgba(217,119,6,.2); }
+    .chip.danger { background:var(--error-50); color:var(--error-700); border-color:rgba(220,38,38,.2); }
+    .muted { color:var(--gray-500); font-size:12px; }
+    @media (max-width: 1200px) { .page { grid-template-columns:1fr; } .detail-panel, .insights-panel { border-left:0; border-right:0; border-top:1px solid var(--gray-200); } .app { grid-template-columns:1fr; } .sidebar { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="mark"><i data-lucide="layout-grid" style="width:16px;height:16px"></i></div>
+        <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+      </div>
+      <div class="sb-org">
+        <div class="org-mark">ا.آ</div>
+        <div style="flex:1;min-width:0;line-height:1.2;"><strong style="display:block;font-size:12.5px;">شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+        <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+      </div>
+      <div class="sb-section">منو اصلی</div>
+      <nav class="sb-nav">
+        <a class="sb-link" href="Dashboard.html"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+        <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span></a>
+        <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+        <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span></a>
+        <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+        <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      </nav>
+      <div class="sb-user">
+        <div class="avatar">م.ا</div>
+        <div style="flex:1;min-width:0;line-height:1.2;"><strong style="display:block;font-size:12.5px;">مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+        <button class="icon-btn"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <nav class="crumb-strip">
+          <a href="#">خانه</a><i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+          <a href="Projects.html">پروژه‌ها</a><i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+          <a href="Project.html">مجتمع مسکونی نگین شهر</a><i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+          <span class="leaf">CBS</span>
+        </nav>
+        <button class="icon-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+        <button class="icon-btn"><i data-lucide="bell" style="width:15px;height:15px"></i></button>
+        <button class="btn btn-outline btn-sm">خروجی Excel</button>
+      </header>
+
+      <section class="proj-mini">
+        <div class="left">
+          <div class="thumb"><i data-lucide="banknote" style="width:18px;height:18px"></i></div>
+          <div>
+            <h1>مجتمع مسکونی نگین شهر</h1>
+            <div class="meta-line">کد پروژه: PRJ-1404-021 · بودجه کل: ۸۵۰ میلیارد ریال · روش برنامه‌ریزی: CBS / WBS</div>
+          </div>
+        </div>
+        <div class="badge ok"><span class="dot" style="width:5px;height:5px;border-radius:999px;background:currentColor"></span>در حال اجرا</div>
+      </section>
+
+      <div class="tabs">
+        <button class="tab">نمای کلی</button>
+        <button class="tab">WBS</button>
+        <button class="tab active">CBS</button>
+        <button class="tab">اتصالات</button>
+        <button class="tab">گزارش‌ها</button>
+      </div>
+
+      <div class="page">
+        <aside class="detail-panel">
+          <div class="detail-head">
+            <div class="code"><i data-lucide="file-stack" style="width:13px;height:13px"></i> C.1.2.1</div>
+            <h3 id="detail-title">آرماتور AIII</h3>
+            <div class="desc" id="detail-desc">آیتم اصلی مصالح با نرخ واحد و سطح پیشرفت قابل ردیابی، مرتبط با WBS فونداسیون و بخش بتن‌ریزی.</div>
+            <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
+              <span class="badge ok">پیشرفت ۷۲٪</span>
+              <span class="badge warn">انحراف +۵٪</span>
+            </div>
+          </div>
+          <div class="detail-grid">
+            <div class="kv">
+              <div class="k">نوع هزینه</div>
+              <div class="v" id="detail-type">مصالح</div>
+            </div>
+            <div class="kv">
+              <div class="k">واحد</div>
+              <div class="v" id="detail-unit">تن</div>
+            </div>
+            <div class="kv">
+              <div class="k">نرخ واحد</div>
+              <div class="v" id="detail-rate">۹۵,۰۰۰,۰۰۰ ریال</div>
+            </div>
+            <div class="kv">
+              <div class="k">تعداد</div>
+              <div class="v" id="detail-qty">۳۴۰ تن</div>
+            </div>
+          </div>
+          <div class="card" style="margin:12px 16px 8px;">
+            <div class="kv"><div class="k">پیشرفت و بودجه</div></div>
+            <div class="progress"><div id="detail-progress-bar" style="width:72%"></div></div>
+            <div class="summary-row"><span>بودجه برنامه‌ای</span><strong id="detail-budget">۳۲.۳B</strong></div>
+            <div class="summary-row"><span>مصرف فعلی</span><strong id="detail-actual">۲۳.۴B</strong></div>
+            <div class="summary-row"><span>مانده</span><strong id="detail-remaining">۸.۹B</strong></div>
+          </div>
+          <div class="acc">
+            <div class="acc-head">
+              <div class="lh"><i data-lucide="link-2" style="width:14px;height:14px"></i>اتصال با WBS</div>
+              <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+            </div>
+            <div class="acc-body">
+              <div class="kv"><div class="k">WBS مادر</div><div class="v">فونداسیون</div></div>
+              <div class="kv"><div class="k">تأمین‌کننده</div><div class="v">شرکت فولاد پارس</div></div>
+              <div class="kv full"><div class="k">توضیح پیوند</div><div class="v">هزینه مصالح آرماتور، در بلوک فونداسیون و طبقه زیرین</div></div>
+            </div>
+          </div>
+          <div class="acc collapsed">
+            <div class="acc-head">
+              <div class="lh"><i data-lucide="history" style="width:14px;height:14px"></i>سابقه هزینه</div>
+              <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+            </div>
+            <div class="acc-body">
+              <div class="kv"><div class="k">تغییرات</div><div class="v">۲ تغییر فرم</div></div>
+              <div class="kv"><div class="k">آخرین ثبت</div><div class="v">۱۴۰۴/۰۴/۰۲</div></div>
+              <div class="kv full"><div class="k">یادداشت</div><div class="v">افزایش نرخ مواد اولیه در هفته گذشته</div></div>
+            </div>
+          </div>
+          <div class="list">
+            <div class="row"><span>تأیید ناظر</span><span class="badge ok">تأیید شده</span></div>
+            <div class="row"><span>درخواست بازنگری</span><span class="badge warn">۱ درخواست</span></div>
+            <div class="row"><span>تأمین‌کننده</span><span class="badge">شرکت فولاد پارس</span></div>
+          </div>
+        </aside>
+
+        <section class="tree-panel">
+          <div class="tree-toolbar">
+            <div class="search-wrap">
+              <i data-lucide="search" class="ico" style="width:14px;height:14px"></i>
+              <input class="field" placeholder="جستجو در CBS" />
+            </div>
+            <button class="btn btn-outline">فیلتر</button>
+            <button class="btn btn-primary">+ آیتم جدید</button>
+          </div>
+          <div class="tree-scroll">
+            <table class="tree">
+              <thead>
+                <tr>
+                  <th>کد و عنوان</th>
+                  <th>نوع</th>
+                  <th>مقدار</th>
+                  <th>نرخ</th>
+                  <th>بودجه</th>
+                  <th>مصرف</th>
+                  <th>انحراف</th>
+                  <th>پیشرفت</th>
+                  <th>وضعیت</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="level0 selected tree-row" data-title="هزینه‌های مستقیم" data-desc="بسته اصلی هزینه‌های مستقیم پروژه با دسته‌بندی بر اساس نوع هزینه" data-type="هزینه مستقیم" data-unit="-" data-rate="-" data-qty="-" data-budget="۳۸۵B" data-actual="۳۲۲B" data-remaining="۶۳B" data-progress="۸۴">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="folder" style="width:15px;height:15px"></i></span><span class="node-title">هزینه‌های مستقیم</span></div></div></td>
+                  <td><div class="cell"><span class="muted">سطح ۰</span></div></td>
+                  <td><div class="cell"><span class="muted">-</span></div></td>
+                  <td><div class="cell"><span class="muted">-</span></div></td>
+                  <td><div class="cell num-cell">۳۸۵B</div></td>
+                  <td><div class="cell num-cell">۳۲۲B</div></td>
+                  <td><div class="cell"><span class="pill-inline ok">-۱۶٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:84%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline ok">به‌موقع</span></div></td>
+                </tr>
+                <tr class="level1 tree-row" data-title="مصالح" data-desc="دسته اصلی مصالح شامل بتن، آرماتور، قالب‌بندی، شیشه و متریال‌های ساختمانی" data-type="مصالح" data-unit="-" data-rate="-" data-qty="-" data-budget="۳۸۵B" data-actual="۳۲۲B" data-remaining="۶۳B" data-progress="۸۴">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="layers" style="width:15px;height:15px"></i></span><span class="node-title">مصالح</span></div></div></td>
+                  <td><div class="cell">مصالح</div></td>
+                  <td><div class="cell">-</div></td>
+                  <td><div class="cell">-</div></td>
+                  <td><div class="cell num-cell">۳۸۵B</div></td>
+                  <td><div class="cell num-cell">۳۲۲B</div></td>
+                  <td><div class="cell"><span class="pill-inline ok">-۱۶٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:84%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline ok">به‌موقع</span></div></td>
+                </tr>
+                <tr class="level2 tree-row" data-title="بتن و فونداسیون" data-desc="مصالح بتن آماده و بتن مگر، مرتبط با بخش فونداسیون و زیرساز" data-type="مصالح" data-unit="متر مکعب" data-rate="۳۴۰,۰۰۰ ریال" data-qty="۲,۴۵۰ m³" data-budget="۸۳.۵B" data-actual="۷۶.۱B" data-remaining="۷.۴B" data-progress="۹۱">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="box" style="width:15px;height:15px"></i></span><span class="node-title">بتن و فونداسیون</span></div></div></td>
+                  <td><div class="cell">مصالح</div></td>
+                  <td><div class="cell">۲,۴۵۰ m³</div></td>
+                  <td><div class="cell">۳۴۰,۰۰۰ ریال</div></td>
+                  <td><div class="cell num-cell">۸۳.۵B</div></td>
+                  <td><div class="cell num-cell">۷۶.۱B</div></td>
+                  <td><div class="cell"><span class="pill-inline ok">-۹٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:91%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline ok">عادی</span></div></td>
+                </tr>
+                <tr class="level2 tree-row" data-title="آرماتور AIII" data-desc="آیتم اصلی مصالح با نرخ واحد و سطح پیشرفت قابل ردیابی، مرتبط با WBS فونداسیون و بخش بتن‌ریزی." data-type="مصالح" data-unit="تن" data-rate="۹۵,۰۰۰,۰۰۰ ریال" data-qty="۳۴۰ تن" data-budget="۳۲.۳B" data-actual="۲۳.۴B" data-remaining="۸.۹B" data-progress="۷۲">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="cpu" style="width:15px;height:15px"></i></span><span class="node-title">آرماتور AIII</span></div></div></td>
+                  <td><div class="cell">مصالح</div></td>
+                  <td><div class="cell">۳۴۰ تن</div></td>
+                  <td><div class="cell">۹۵,۰۰۰,۰۰۰</div></td>
+                  <td><div class="cell num-cell">۳۲.۳B</div></td>
+                  <td><div class="cell num-cell">۲۳.۴B</div></td>
+                  <td><div class="cell"><span class="pill-inline warn">+۵٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:72%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline warn">در هشدار</span></div></td>
+                </tr>
+                <tr class="level2 tree-row" data-title="قالب‌بندی" data-desc="قالب‌های مدولار و فلزی برای بخش ستون و دال، با نیاز به تأمین مداوم" data-type="مصالح" data-unit="متر مربع" data-rate="۸۵۰,۰۰۰ ریال" data-qty="۱,۸۲۰ m²" data-budget="۱۵.۵B" data-actual="۱۳.۷B" data-remaining="۱.۸B" data-progress="۸۸">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="panel-top-open" style="width:15px;height:15px"></i></span><span class="node-title">قالب‌بندی</span></div></div></td>
+                  <td><div class="cell">مصالح</div></td>
+                  <td><div class="cell">۱,۸۲۰ m²</div></td>
+                  <td><div class="cell">۸۵۰,۰۰۰ ریال</div></td>
+                  <td><div class="cell num-cell">۱۵.۵B</div></td>
+                  <td><div class="cell num-cell">۱۳.۷B</div></td>
+                  <td><div class="cell"><span class="pill-inline ok">-۱۲٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:88%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline ok">عادی</span></div></td>
+                </tr>
+                <tr class="level1 tree-row" data-title="نیروی انسانی" data-desc="هزینه نیروی انسانی شامل کارگر، ناظر و سرپرست‌های فنی" data-type="نیروی انسانی" data-unit="-" data-rate="-" data-qty="-" data-budget="۲۵۵B" data-actual="۲۶۸B" data-remaining="-۱۳B" data-progress="۷۵">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="users" style="width:15px;height:15px"></i></span><span class="node-title">نیروی انسانی</span></div></div></td>
+                  <td><div class="cell">نیروی انسانی</div></td>
+                  <td><div class="cell">-</div></td>
+                  <td><div class="cell">-</div></td>
+                  <td><div class="cell num-cell">۲۵۵B</div></td>
+                  <td><div class="cell num-cell">۲۶۸B</div></td>
+                  <td><div class="cell"><span class="pill-inline danger">+۵٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:75%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline warn">هشدار</span></div></td>
+                </tr>
+                <tr class="level2 tree-row" data-title="کارگر فنی" data-desc="هزینه کارگر فنی ماهر در عملیات اجرایی" data-type="نیروی انسانی" data-unit="ساعت" data-rate="۱,۲۵۰,۰۰۰ ریال" data-qty="۱۱,۴۸۰ ساعت" data-budget="۱۴.۳B" data-actual="۱۵.۴B" data-remaining="-۱.۱B" data-progress="۷۸">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="hammer" style="width:15px;height:15px"></i></span><span class="node-title">کارگر فنی</span></div></div></td>
+                  <td><div class="cell">نیروی انسانی</div></td>
+                  <td><div class="cell">۱۱,۴۸۰ ساعت</div></td>
+                  <td><div class="cell">۱,۲۵۰,۰۰۰</div></td>
+                  <td><div class="cell num-cell">۱۴.۳B</div></td>
+                  <td><div class="cell num-cell">۱۵.۴B</div></td>
+                  <td><div class="cell"><span class="pill-inline danger">+۷٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:78%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline warn">هشدار</span></div></td>
+                </tr>
+                <tr class="level2 tree-row" data-title="ناظر و سرپرست" data-desc="هزینه نظارت و کنترل کیفیت بر پروژه" data-type="نیروی انسانی" data-unit="ساعت" data-rate="۲,۴۰۰,۰۰۰ ریال" data-qty="۵,۳۲۰ ساعت" data-budget="۱۲.۸B" data-actual="۱۲.۱B" data-remaining="۰.۷B" data-progress="۸۲">
+                  <td><div class="cell"><div class="title-cell"><span class="node-icon"><i data-lucide="badge-check" style="width:15px;height:15px"></i></span><span class="node-title">ناظر و سرپرست</span></div></div></td>
+                  <td><div class="cell">نیروی انسانی</div></td>
+                  <td><div class="cell">۵,۳۲۰ ساعت</div></td>
+                  <td><div class="cell">۲,۴۰۰,۰۰۰</div></td>
+                  <td><div class="cell num-cell">۱۲.۸B</div></td>
+                  <td><div class="cell num-cell">۱۲.۱B</div></td>
+                  <td><div class="cell"><span class="pill-inline ok">-۵٪</span></div></td>
+                  <td><div class="cell"><div class="bar"><div style="width:82%"></div></div></div></td>
+                  <td><div class="cell"><span class="pill-inline ok">عادی</span></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="insights-panel">
+          <div class="insight-card">
+            <h4>خلاصه CBS</h4>
+            <div class="summary-row"><span>بودجه برنامه‌ای</span><strong>۸۵۰B</strong></div>
+            <div class="summary-row"><span>مصرف فعلی</span><strong>۵۲۰B</strong></div>
+            <div class="summary-row"><span>انحراف</span><strong style="color:var(--warning-700)">+۶.۳٪</strong></div>
+            <div class="summary-row"><span>CPI</span><strong>۰.۹۷</strong></div>
+          </div>
+          <div class="insight-card">
+            <h4>فیلترهای سریع</h4>
+            <div class="chip-list">
+              <span class="chip">همه آیتم‌ها</span>
+              <span class="chip warn">در هشدار</span>
+              <span class="chip danger">بیش از بودجه</span>
+              <span class="chip">مرتبط با WBS</span>
+            </div>
+          </div>
+          <div class="insight-card">
+            <h4>هشدارهای فوری</h4>
+            <div class="list" style="padding:0;gap:6px;">
+              <div class="row"><span>آرماتور AIII</span><span class="pill-inline warn">+۵٪</span></div>
+              <div class="row"><span>کارگر فنی</span><span class="pill-inline danger">+۷٪</span></div>
+              <div class="row"><span>تأمین مصالح</span><span class="pill-inline warn">۲ روز تأخیر</span></div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <h4>پیوندهای مهم</h4>
+            <div class="list" style="padding:0;gap:6px;">
+              <div class="row"><span>WBS فونداسیون</span><span class="badge ok">ارسال شده</span></div>
+              <div class="row"><span>گزارش تغییرات</span><span class="badge">۳ مورد</span></div>
+              <div class="row"><span>تأیید ناظر</span><span class="badge ok">تأیید</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <script>
+    lucide.createIcons();
+    document.querySelectorAll('.tree-row').forEach(row => {
+      row.addEventListener('click', () => {
+        document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+        const title = row.dataset.title || '';
+        const desc = row.dataset.desc || '';
+        const type = row.dataset.type || '';
+        const unit = row.dataset.unit || '';
+        const rate = row.dataset.rate || '';
+        const qty = row.dataset.qty || '';
+        const budget = row.dataset.budget || '';
+        const actual = row.dataset.actual || '';
+        const remaining = row.dataset.remaining || '';
+        const progress = row.dataset.progress || '0';
+        document.getElementById('detail-title').textContent = title;
+        document.getElementById('detail-desc').textContent = desc;
+        document.getElementById('detail-type').textContent = type;
+        document.getElementById('detail-unit').textContent = unit;
+        document.getElementById('detail-rate').textContent = rate;
+        document.getElementById('detail-qty').textContent = qty;
+        document.getElementById('detail-budget').textContent = budget;
+        document.getElementById('detail-actual').textContent = actual;
+        document.getElementById('detail-remaining').textContent = remaining;
+        const progressBar = document.getElementById('detail-progress-bar');
+        if (progressBar) progressBar.style.width = progress + '%';
+      });
+    });
+    document.querySelectorAll('.acc-head').forEach(head => {
+      head.addEventListener('click', () => {
+        const parent = head.closest('.acc');
+        parent.classList.toggle('collapsed');
+      });
+    });
+  </script>
+</body>
+</html>

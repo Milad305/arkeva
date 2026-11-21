@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>نمای کلی پروژه</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" crumbs="{{crumbs}}" hint-size="100%,52px"></dc-import>
+    <dc-import name="ProjectHeader" tab="overview" hint-size="100%,150px"></dc-import>
+    <div class="content">
+      <div class="grid c4" style="margin-bottom: 16px">
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l row g6"><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="activity" sz="13" hint-size="13px,13px"></dc-import></span>پیشرفت فیزیکی</span><span class="icb pri"><dc-import name="Icon" i="trending-up" sz="14" hint-size="14px,14px"></dc-import></span></div>
+          <div class="row between">
+            <div class="col g6"><span class="kpi-v">۶۵<span class="t-14 tx5 fw5">٪</span></span><span class="t-12 tx6">۵٪ عقب از برنامهٔ امروز (۷۰٪)</span></div>
+            <svg width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="۶۵ درصد"><circle cx="26" cy="26" r="22" stroke="#E4E4E7" stroke-width="5" fill="none"></circle><circle cx="26" cy="26" r="22" stroke="#1A3354" stroke-width="5" fill="none" stroke-dasharray="138.23" stroke-dashoffset="48.4" stroke-linecap="round" transform="rotate(-90 26 26) translate(52 0) scale(-1 1)"></circle><text x="26" y="30" text-anchor="middle" font-size="12" font-weight="700" fill="#18181B" font-family="Vazirmatn">۶۵٪</text></svg>
+          </div>
+          <span class="pbar"><i style="width: 65%"></i><b style="right: 70%"></b></span>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l row g6"><span class="tx-acc" style="display: inline-flex"><dc-import name="Icon" i="banknote" sz="13" hint-size="13px,13px"></dc-import></span>بودجهٔ مصرف‌شده</span><span class="icb acc"><dc-import name="Icon" i="wallet" sz="14" hint-size="14px,14px"></dc-import></span></div>
+          <div class="row g6 ai-e"><span class="kpi-v">۵۵۰</span><span class="t-13 tx5" style="padding-bottom: 3px">میلیارد ریال</span></div>
+          <span class="t-12 tx6">از کل <strong class="tx9">۸۵۰ میلیارد ریال</strong> · مصرف <strong class="tx9">۶۴٫۷٪</strong></span>
+          <span class="pbar"><i style="width: 64.7%"></i></span>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l row g6"><span class="tx-inf" style="display: inline-flex"><dc-import name="Icon" i="clock" sz="13" hint-size="13px,13px"></dc-import></span>زمان</span><span class="icb inf"><dc-import name="Icon" i="calendar" sz="14" hint-size="14px,14px"></dc-import></span></div>
+          <div class="grid c2" style="gap: 10px"><div class="col"><span class="stat-v">۲۸۵ <span class="t-13 tx5 fw5">روز</span></span><span class="t-12 tx6">سپری‌شده</span></div><div class="col"><span class="stat-v">۱۵۰ <span class="t-13 tx5 fw5">روز</span></span><span class="t-12 tx6">باقی‌مانده</span></div></div>
+          <span class="pbar"><i style="width: 65.5%; background: #2563EB"></i></span>
+          <span class="t-sm tx5">کل ۴۳۵ روز · پیش‌بینی پایان ۱۴۰۴/۰۹/۱۰ (۲۶ روز تأخیر)</span>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l row g6"><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="gauge" sz="13" hint-size="13px,13px"></dc-import></span>شاخص‌های ارزش کسب‌شده</span><span class="icb neu"><dc-import name="Icon" i="bar-chart-2" sz="14" hint-size="14px,14px"></dc-import></span></div>
+          <div class="grid c2" style="gap: 8px">
+            <div class="wrn" style="border-radius: 8px; padding: 8px 10px; border: 1px solid rgba(217,119,6,0.25)"><div class="t-sm fw6">CPI · هزینه</div><div class="mono" style="font-size: 18px; font-weight: 700">0.97</div></div>
+            <div class="err" style="border-radius: 8px; padding: 8px 10px; border: 1px solid rgba(220,38,38,0.25)"><div class="t-sm fw6">SPI · زمان</div><div class="mono" style="font-size: 18px; font-weight: 700">0.93</div></div>
+          </div>
+          <span class="t-12 tx6 lh">هزینه نزدیک برنامه است، اما پروژه از نظر زمان <strong class="tx-err">۷٪ عقب</strong> است.</span>
+        </div>
+      </div>
+
+      <section class="card" style="margin-bottom: 16px">
+        <div class="card-h">
+          <div><h3><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="line-chart" sz="16" hint-size="16px,16px"></dc-import></span>منحنی پیشرفت (S-Curve)</h3><p class="sub">پیشرفت برنامه‌ای، واقعی و پیش‌بینی تا پایان پروژه</p></div>
+          <div class="row g12"><span class="lg" style="color: #8AA2C2"><i class="dash"></i><span class="tx6">برنامه‌ای</span></span><span class="lg"><i style="background: #1A3354; height: 4px"></i>واقعی</span><span class="lg" style="color: #A1A1AA"><i class="dash"></i><span class="tx6">پیش‌بینی</span></span><span class="vsep"></span><a class="btn btn-g btn-sm" href="W21-ChartsProgress.dc.html"><dc-import name="Icon" i="maximize-2" sz="13" hint-size="13px,13px"></dc-import>همهٔ نمودارها</a></div>
+        </div>
+        <div class="chart" style="padding: 12px 12px 8px">
+          <svg viewBox="0 0 1000 250" width="100%" role="img" aria-label="منحنی S؛ امروز ۶۵٪ واقعی در برابر ۷۰٪ برنامه‌ای" style="display: block">
+            <path d="M50 20H980M50 70H980M50 120H980M50 170H980M50 220H980" stroke="#F4F4F5" stroke-width="1"></path>
+            <text class="ax" x="8" y="24">۱۰۰٪</text><text class="ax" x="14" y="74">۷۵٪</text><text class="ax" x="14" y="124">۵۰٪</text><text class="ax" x="14" y="174">۲۵٪</text><text class="ax" x="22" y="224">۰٪</text>
+            <path d="{{c.dev}}" fill="rgba(220,38,38,0.08)"></path>
+            <path d="{{c.p}}" stroke="#8AA2C2" stroke-width="2" fill="none" stroke-dasharray="5 5" stroke-linecap="round"></path>
+            <path d="{{c.f}}" stroke="#A1A1AA" stroke-width="2" fill="none" stroke-dasharray="4 5" stroke-linecap="round"></path>
+            <path d="{{c.a}}" stroke="#1A3354" stroke-width="3" fill="none" stroke-linecap="round"></path>
+            <path d="{{c.dots}}" fill="#1A3354" stroke="#FFFFFF" stroke-width="2"></path>
+            <path d="M{{c.tx}} 26V220" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 4"></path>
+            <rect x="{{c.trx}}" y="2" width="56" height="20" rx="4" fill="#DC2626"></rect>
+            <text x="{{c.tx}}" y="16" text-anchor="middle" font-size="11" fill="#FFFFFF" font-family="Vazirmatn" font-weight="600">امروز</text>
+          </svg>
+          <div class="row between t-xs tx5" style="padding: 0 1% 0 4%; direction: ltr"><sc-for list="{{c.labels}}" as="l" hint-placeholder-count="9"><span style="color: {{l.c}}; font-weight: {{l.w}}">{{l.t}}</span></sc-for></div>
+        </div>
+        <div class="row wrap g24" style="padding: 10px 18px; background: #FAFAFA; border-top: 1px solid #F4F4F5">
+          <span class="col"><span class="t-xs tx5">پیشرفت واقعی</span><span class="num-i">۶۵٪</span></span>
+          <span class="col"><span class="t-xs tx5">برنامه‌ای امروز</span><span class="num-i">۷۰٪</span></span>
+          <span class="col"><span class="t-xs tx5">انحراف</span><span class="num-i tx-pri">−۵٪</span></span>
+          <span class="col"><span class="t-xs tx5">پیش‌بینی اتمام</span><span class="num-i">۱۴۰۴/۰۹/۱۰</span></span>
+          <span class="col"><span class="t-xs tx5">تأخیر تخمینی</span><span class="num-i tx-wrn">۲۶ روز</span></span>
+        </div>
+      </section>
+
+      <div class="grid c2" style="margin-bottom: 16px">
+        <section class="card">
+          <div class="card-h"><div><h3><span class="tx-err" style="display: inline-flex"><dc-import name="Icon" i="alert-triangle" sz="16" hint-size="16px,16px"></dc-import></span>فعالیت‌های بحرانی WBS</h3><p class="sub">۵ فعالیت با بیشترین عقب‌ماندگی</p></div><a class="link" href="W11-Wbs.dc.html">مشاهدهٔ همه<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+          <table class="tbl">
+            <thead><tr><th>کد</th><th>فعالیت</th><th>برنامه‌ای</th><th>واقعی</th><th>انحراف</th><th>سرپرست</th></tr></thead>
+            <tbody><sc-for list="{{crit}}" as="r" hint-placeholder-count="5"><tr>
+              <td class="mono t-sm tx5">{{r.code}}</td>
+              <td class="fw5 tx9">{{r.t}}</td>
+              <td><span class="row g6"><span class="t-12 tx7">{{r.plf}}٪</span><span class="pbar thin" style="width: 56px; flex: 0 0 auto"><i style="width: {{r.pl}}%; background: #A1A1AA"></i></span></span></td>
+              <td><span class="row g6"><span class="t-12 fw6">{{r.acf}}٪</span><span class="pbar thin" style="width: 56px; flex: 0 0 auto"><i style="width: {{r.ac}}%; background: {{r.col}}"></i></span></span></td>
+              <td><span class="bdg {{r.dt}}">{{r.df}}٪</span></td>
+              <td><span class="row g6 nowrap"><span class="av s {{r.av}}">{{r.oi}}</span>{{r.o}}</span></td>
+            </tr></sc-for></tbody>
+          </table>
+        </section>
+        <section class="card">
+          <div class="card-h"><div><h3><span class="tx-acc" style="display: inline-flex"><dc-import name="Icon" i="wallet" sz="16" hint-size="16px,16px"></dc-import></span>بیشترین مصرف بودجهٔ CBS</h3><p class="sub">۵ قلم هزینه با بالاترین درصد مصرف</p></div><a class="link" href="W14-Cbs.dc.html">مشاهدهٔ همه<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+          <table class="tbl">
+            <thead><tr><th>کد</th><th>عنوان</th><th>بودجه</th><th>مصرف‌شده</th><th>درصد مصرف</th></tr></thead>
+            <tbody><sc-for list="{{cbs}}" as="r" hint-placeholder-count="5"><tr>
+              <td class="mono t-sm tx5">{{r.code}}</td>
+              <td class="fw5 tx9">{{r.t}}</td>
+              <td class="t-12 tx7 nowrap">{{r.bf}} میلیارد</td>
+              <td class="t-12 fw6 nowrap">{{r.uf}} میلیارد</td>
+              <td><span class="row g8"><span class="t-13 fw7" style="color: {{r.col}}; width: 44px">{{r.pf}}٪</span><span class="pbar thin" style="width: 70px; flex: 0 0 auto"><i style="width: {{r.p}}%; background: {{r.col}}"></i></span></span></td>
+            </tr></sc-for></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div class="grid c3" style="margin-bottom: 16px">
+        <section class="card">
+          <div class="card-h"><h3><span class="tx-acc" style="display: inline-flex"><dc-import name="Icon" i="flag-triangle-right" sz="16" hint-size="16px,16px"></dc-import></span>نقاط عطف پیش رو</h3><a class="link" href="W21-ChartsProgress.dc.html">گانت</a></div>
+          <div class="col">
+            <sc-for list="{{ms}}" as="m" hint-placeholder-count="4">
+              <div class="row g10 ai-s" style="padding: 11px 16px; border-bottom: 1px solid #F4F4F5">
+                <span class="icb sm acc"><dc-import name="Icon" i="milestone" sz="13" hint-size="13px,13px"></dc-import></span>
+                <span class="col g2 grow"><span class="t-13 fw5 tx9">{{m.t}}</span><span class="t-sm tx5">برنامه: {{m.d}} · {{m.n}}</span></span>
+                <span class="bdg {{m.tone}}">{{m.s}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx-err" style="display: inline-flex"><dc-import name="Icon" i="shield-alert" sz="16" hint-size="16px,16px"></dc-import></span>ریسک‌های باز پروژه</h3><a class="link" href="W18-Risks.dc.html">ثبت ریسک‌ها (۶)</a></div>
+          <div class="col">
+            <sc-for list="{{risks}}" as="r" hint-placeholder-count="4">
+              <a class="row g10" href="W19-RiskDetail.dc.html" style="padding: 11px 16px; border-bottom: 1px solid #F4F4F5">
+                <span class="icb sm {{r.tone}}" style="font-weight: 700; font-size: 12px">{{r.sc}}</span>
+                <span class="col g2 grow"><span class="t-13 fw5 tx9 trunc">{{r.t}}</span><span class="t-sm tx5">{{r.c}} · {{r.o}}</span></span>
+                <span class="bdg sm {{r.stt}}">{{r.st}}</span>
+              </a>
+            </sc-for>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx-ok" style="display: inline-flex"><dc-import name="Icon" i="hard-hat" sz="16" hint-size="16px,16px"></dc-import></span>تیم کارگاه امروز</h3><span class="t-sm tx5">۶ از ۸ سرپرست گزارش داده‌اند</span></div>
+          <div class="col">
+            <sc-for list="{{team}}" as="s" hint-placeholder-count="5">
+              <div class="row g10" style="padding: 10px 16px; border-bottom: 1px solid #F4F4F5">
+                <span class="av m {{s.av}}">{{s.i}}</span>
+                <span class="col g2 grow"><span class="t-13 fw5 tx9">{{s.n}}</span><span class="t-sm tx5">{{s.a}}</span></span>
+                <span class="bdg sm {{s.tone}}"><span class="dot"></span>{{s.st}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="card-h"><div><h3><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="history" sz="16" hint-size="16px,16px"></dc-import></span>فعالیت‌های اخیر</h3><p class="sub">رویدادهای پروژه، به‌روز با هر گزارش و تأیید</p></div><div class="row g6"><button class="btn btn-g btn-sm" type="button"><dc-import name="Icon" i="filter" sz="13" hint-size="13px,13px"></dc-import>همهٔ رویدادها</button><button class="btn btn-g btn-sm tx-pri" type="button">تاریخچهٔ کامل</button></div></div>
+        <div class="feed">
+          <div class="fi"><span class="fd inf"><dc-import name="Icon" i="clipboard" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>علی محمدی</strong> گزارش پیشرفت <span class="bdg sm neu">تسطیح محوطهٔ شمالی</span> را ثبت کرد</p><p class="fm">۳ عکس · ۱۳۰ مترمکعب · داخل محدودهٔ GPS پروژه · ۳۰ دقیقه پیش</p></div></div>
+          <div class="fi"><span class="fd ok"><dc-import name="Icon" i="check" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>مهندس رضایی</strong> گزارش <span class="bdg sm neu">آرماتوربندی ستون‌ها</span> را تأیید کرد</p><p class="fm">یادداشت: «طبق نقشهٔ شمارهٔ ۱۲ تأیید می‌شود.» · ۲ ساعت پیش</p></div></div>
+          <div class="fi"><span class="fd wrn"><dc-import name="Icon" i="alert-triangle" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">سامانه تشخیص داد <span class="bdg sm neu">قالب‌بندی سقف طبقهٔ دوم</span> ۳۳٪ از برنامه عقب است</p><p class="fm">هشدار خودکار بر اساس آستانهٔ انحراف بحرانی · ۴ ساعت پیش</p></div></div>
+          <div class="fi"><span class="fd pri"><dc-import name="Icon" i="user-plus" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>حسن کریمی</strong> با نقش سرپرست کارگاه به پروژه اضافه شد</p><p class="fm">بلوک شمالی · دیروز ۱۰:۲۲</p></div></div>
+          <div class="fi"><span class="fd acc"><dc-import name="Icon" i="refresh-cw" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>مهندس احمدی</strong> نسخهٔ ۳ برنامهٔ MSP را همگام کرد</p><p class="fm"><span class="mono">Negin-WBS-v3.xml</span> · ۲۳۴ فعالیت · ۴ تغییر · ۲ روز پیش</p></div></div>
+          <div class="fi"><span class="fd err"><dc-import name="Icon" i="x-circle" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">۳ آیتم گزارش به دلیل ناهمخوانی با عکس‌های پیوست رد شد</p><p class="fm">بازبینی مهندس رضایی · ۳ روز پیش</p></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]).replace('.', '٫');
+    const devCol = d => d <= -15 ? '#DC2626' : d < -5 ? '#D97706' : d > 0 ? '#16A34A' : '#2C4A73';
+    const devTone = d => d <= -15 ? 'err' : d < -5 ? 'wrn' : d > 0 ? 'ok' : 'pri';
+    const crit = [
+      ['1.2.3.1', 'قالب‌بندی سقف طبقهٔ دوم', 55, 22, 'ا. صادقی', 'ا.ص', 'a8'],
+      ['1.3.1.2', 'کابل‌کشی برق', 40, 22, 'ر. اکبری', 'ر.ا', 'a1'],
+      ['1.3.2.3', 'کانال‌کشی تهویه', 30, 15, 'م. نوری', 'م.ن', 'a2'],
+      ['1.4.1.1', 'گچ‌کاری دیوارها', 20, 12, 'م. رضایی', 'م.ر', 'a3'],
+      ['1.2.2.3', 'بتن‌ریزی ستون‌ها', 70, 65, 'س. قاسمی', 'س.ق', 'a7']
+    ].map(r => { const d = r[3] - r[2]; return { code: r[0], t: r[1], pl: r[2], ac: r[3], plf: fa(r[2]), acf: fa(r[3]), o: r[4], oi: r[5], av: r[6], col: devCol(d), dt: devTone(d), df: '−' + fa(-d) }; });
+    const cbs = [['C.1.1.2', 'آرماتور AIII', 145, 132], ['C.2.1', 'کارگر ماهر', 98, 82], ['C.1.1.1', 'سیمان تیپ ۲', 28.8, 24.1], ['C.1.1.4', 'بتن آماده C30', 65, 54], ['C.3.1', 'اجارهٔ جرثقیل برجی', 45, 32]]
+      .map(r => { const p = +(r[3] / r[2] * 100).toFixed(1); return { code: r[0], t: r[1], bf: fa(r[2]), uf: fa(r[3]), p, pf: fa(p), col: p >= 90 ? '#DC2626' : p >= 75 ? '#D97706' : '#1A3354' }; });
+    const ms = [
+      { t: 'اتمام فونداسیون همهٔ بلوک‌ها', d: '۱۴۰۳/۱۰/۱۵', n: 'انجام شد ۱۴۰۳/۱۰/۱۲', s: 'تمام‌شده', tone: 'ok' },
+      { t: 'اتمام اسکلت بتنی بلوک A', d: '۱۴۰۴/۰۴/۲۵', n: 'پیش‌بینی ۱۴۰۴/۰۵/۰۲', s: 'در مسیر', tone: 'inf' },
+      { t: 'شروع نازک‌کاری بلوک A', d: '۱۴۰۴/۰۵/۱۰', n: '۱۸ روز تأخیر پیش‌بینی', s: 'در خطر', tone: 'err' },
+      { t: 'تحویل موقت فاز ۱', d: '۱۴۰۴/۰۸/۱۵', n: '۲۶ روز تأخیر تخمینی', s: 'هشدار', tone: 'wrn' }
+    ];
+    const risks = [
+      { sc: '۲۰', tone: 'err', t: 'تأخیر تحویل ورق فولادی سقف', c: 'تأمین', o: 'مهندس رضایی', st: 'در اقدام', stt: 'inf' },
+      { sc: '۱۲', tone: 'wrn', t: 'افزایش نرخ آرماتور بیش از ۱۵٪', c: 'مالی', o: 'مهندس احمدی', st: 'پایش', stt: 'neu' },
+      { sc: '۱۲', tone: 'wrn', t: 'بارندگی و توقف بتن‌ریزی در آبان', c: 'محیطی', o: 'ح. کریمی', st: 'در اقدام', stt: 'inf' },
+      { sc: '۶', tone: 'pri', t: 'تأخیر تأیید نقشه‌های تأسیسات', c: 'طراحی', o: 'مهندس حسینی', st: 'پایش', stt: 'neu' }
+    ];
+    const team = [
+      { n: 'علی محمدی', i: 'ع.م', av: 'a5', a: '۲ گزارش · آخرین ۳۰ دقیقه پیش', st: 'فعال', tone: 'ok' },
+      { n: 'حسن کریمی', i: 'ح.ک', av: 'a6', a: '۱ گزارش · آخرین ۱ ساعت پیش', st: 'فعال', tone: 'ok' },
+      { n: 'رضا اکبری', i: 'ر.ا', av: 'a1', a: '۳ گزارش در صف آفلاین', st: 'آفلاین', tone: 'neu' },
+      { n: 'امیر صادقی', i: 'ا.ص', av: 'a8', a: 'بدون گزارش از دیروز', st: 'بدون گزارش', tone: 'wrn' },
+      { n: 'بهرام جمالی', i: 'ب.ج', av: 'a4', a: 'بدون گزارش در ۳ روز اخیر', st: 'غیرفعال', tone: 'err' }
+    ];
+    const months = ['مرداد ۰۳', 'مهر ۰۳', 'آذر ۰۳', 'بهمن ۰۳', 'فروردین ۰۴', 'اردیبهشت ۰۴', 'تیر ۰۴', 'شهریور ۰۴', 'آبان ۰۴'];
+    const plan = [2, 6, 14, 32, 56, 70, 86, 94, 100], act = [1, 5, 12, 26, 50, 65], fc = [65, 80, 92, 99];
+    const X = i => 50 + i * (930 / 8), Y = v => 220 - v * 2, T = 5;
+    const sm = pts => { let d = 'M' + pts[0][0] + ',' + pts[0][1]; for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], cx = (x0 + x1) / 2; d += ' C' + cx + ',' + y0 + ' ' + cx + ',' + y1 + ' ' + x1 + ',' + y1; } return d; };
+    const pp = plan.map((v, i) => [X(i), Y(v)]), ap = act.map((v, i) => [X(i), Y(v)]), fp = fc.map((v, i) => [X(T + i), Y(v)]);
+    const dev = sm(pp.slice(0, T + 1)) + ' L' + ap.slice().reverse().map(p => p[0] + ',' + p[1]).join(' L') + ' Z';
+    const c = {
+      p: sm(pp), a: sm(ap), f: sm(fp), dev, tx: X(T), trx: X(T) - 28,
+      dots: ap.map(([x, y]) => 'M' + (x - 4.5) + ' ' + y + 'a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0 -9 0').join(''),
+      labels: months.map((m, i) => ({ t: m, c: i === T ? '#DC2626' : '#71717A', w: i === T ? 600 : 400 }))
+    };
+    return {
+      crumbs: [{ t: 'خانه', f: 'W05-Dashboard.dc.html' }, { t: 'پروژه‌ها', f: 'W07-Projects.dc.html' }, { t: 'مجتمع مسکونی نگین شهر' }],
+      crit, cbs, ms, risks, team, c
+    };
+  }
+}
+</script>
+</body>
+</html>

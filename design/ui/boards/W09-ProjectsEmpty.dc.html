@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>پروژه‌ها — شروع کار</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" title="پروژه‌ها" ic="folder-kanban" search="{{yes}}" hint-size="100%,52px"></dc-import>
+    <div class="content" style="display: flex; flex-direction: column; align-items: center">
+      <section class="empty" style="padding-top: 56px; max-width: 640px">
+        <span class="eic"><dc-import name="Icon" i="folder-plus" sz="30" hint-size="30px,30px"></dc-import></span>
+        <h1 class="h-t2">هنوز پروژه‌ای در این سازمان نیست</h1>
+        <p>اولین پروژه را بسازید یا برنامهٔ زمان‌بندی خود را از Microsoft Project وارد کنید تا درخت WBS به‌طور خودکار ساخته شود.</p>
+        <div class="row wrap jc g8" style="margin-top: 10px">
+          <a class="btn btn-p btn-lg" href="W37-NewProjectStep1.dc.html"><dc-import name="Icon" i="plus" sz="16" hint-size="16px,16px"></dc-import>پروژهٔ جدید</a>
+          <a class="btn btn-o btn-lg" href="W34-ImportUpload.dc.html" style="font-weight: 500"><dc-import name="Icon" i="upload" sz="16" hint-size="16px,16px"></dc-import>ورود از MSP</a>
+          <button class="btn btn-g btn-lg" type="button" style="font-weight: 500"><dc-import name="Icon" i="file-down" sz="16" hint-size="16px,16px"></dc-import>دانلود قالب Excel</button>
+        </div>
+      </section>
+      <section class="card" style="width: 100%; max-width: 980px; margin-top: 16px">
+        <div class="card-h"><h3><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="list-checks" sz="16" hint-size="16px,16px"></dc-import></span>راه‌اندازی پروژه‌یار در چهار گام</h3><span class="row g8 t-12 tx6">۰ از ۴ گام<span class="pbar thin" style="width: 120px; flex: 0 0 auto"><i style="width: 4%"></i></span></span></div>
+        <div class="grid c4" style="padding: 16px; gap: 12px">
+          <a class="box col g8" href="W37-NewProjectStep1.dc.html" style="background: #FFFFFF"><span class="icb pri"><dc-import name="Icon" i="folder-plus" sz="15" hint-size="15px,15px"></dc-import></span><span class="t-13 fw6">۱. ساخت پروژه</span><span class="t-12 tx6 lh">نام، کارفرما، تاریخ‌ها و بودجه را ثبت کنید.</span></a>
+          <a class="box col g8" href="W34-ImportUpload.dc.html" style="background: #FFFFFF"><span class="icb inf"><dc-import name="Icon" i="git-branch" sz="15" hint-size="15px,15px"></dc-import></span><span class="t-13 fw6">۲. ورود ساختار WBS</span><span class="t-12 tx6 lh">فایل XML از MSP یا Excel را بارگذاری کنید یا از قالب آماده شروع کنید.</span></a>
+          <a class="box col g8" href="W42-AddMember.dc.html" style="background: #FFFFFF"><span class="icb ok"><dc-import name="Icon" i="user-plus" sz="15" hint-size="15px,15px"></dc-import></span><span class="t-13 fw6">۳. دعوت سرپرستان</span><span class="t-12 tx6 lh">با شمارهٔ موبایل دعوت کنید؛ لینک نصب اپ اندروید پیامک می‌شود.</span></a>
+          <a class="box col g8" href="W17-Assignment.dc.html" style="background: #FFFFFF"><span class="icb acc"><dc-import name="Icon" i="list-checks" sz="15" hint-size="15px,15px"></dc-import></span><span class="t-13 fw6">۴. تخصیص فعالیت‌ها</span><span class="t-12 tx6 lh">هر بخش WBS را به سرپرست مسئولش بسپارید تا گزارش‌ها برسد.</span></a>
+        </div>
+        <div class="card-f"><span class="row g8 t-12 tx6"><dc-import name="Icon" i="video" sz="14" hint-size="14px,14px"></dc-import>ویدئوی آموزشی ۶ دقیقه‌ای راه‌اندازی</span><a class="link" href="W33-Help.dc.html">مرکز راهنما<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return { yes: true }; }
+}
+</script>
+</body>
+</html>

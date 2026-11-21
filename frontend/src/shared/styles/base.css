@@ -1,0 +1,6 @@
+/* لایه‌های Tailwind — اول بارگذاری می‌شود تا kit.css بتواند بر preflight غلبه کند.
+   ترتیب بارگذاری در src/main.tsx تعریف شده است:
+     base.css  →  tokens.css  →  kit.css  →  app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

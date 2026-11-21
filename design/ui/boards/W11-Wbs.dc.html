@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>WBS — درخت و جزئیات</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" crumbs="{{crumbs}}" hint-size="100%,52px"></dc-import>
+    <dc-import name="ProjectHeader" tab="wbs" mini="{{yes}}" hint-size="100%,102px"></dc-import>
+    <div style="display: flex; flex-wrap: wrap; height: 766px; align-items: stretch">
+      <aside class="pane" style="flex: 0 0 272px; border-inline-end: 1px solid #E4E4E7; padding: 14px; gap: 16px; overflow: hidden">
+        <div class="col g8"><span class="sect-t">جستجو</span><label class="fld sm"><dc-import name="Icon" i="search" sz="13" hint-size="13px,13px"></dc-import><input type="search" placeholder="جستجو در درخت WBS…" aria-label="جستجو در WBS"></label></div>
+        <div class="col g8">
+          <div class="row between"><span class="sect-t">فیلترها</span><span class="bdg sm neu">۲ فعال</span></div>
+          <div class="fg"><span class="t-sm tx6 fw5">وضعیت</span><button class="fld sm sel" type="button">تأخیردار<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button></div>
+          <div class="fg"><span class="t-sm tx6 fw5">سرپرست</span><button class="fld sm sel" type="button">همهٔ سرپرستان<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button></div>
+          <div class="fg"><span class="t-sm tx6 fw5">نوع آیتم</span><div class="seg" style="width: 100%"><span class="on" style="flex: 1 1 0; justify-content: center">همه</span><span style="flex: 1 1 0; justify-content: center">برگ‌ها</span><span style="flex: 1 1 0; justify-content: center">والدها</span></div></div>
+        </div>
+        <a class="box row between" href="W12-WbsEdit.dc.html" style="background: #FFFFFF">
+          <span class="row g8"><span class="tx6" style="display: inline-flex"><dc-import name="Icon" i="pencil" sz="14" hint-size="14px,14px"></dc-import></span><span class="col"><span class="t-13 fw5">حالت ویرایش</span><span class="t-xs tx5">جابه‌جایی، ویرایش وزن، حذف</span></span></span>
+          <span class="sw" aria-hidden="true"></span>
+        </a>
+        <div class="col g4">
+          <span class="sect-t" style="margin-bottom: 4px">مدیریت ساختار</span>
+          <a class="btn btn-o btn-sm btn-blk" href="W34-ImportUpload.dc.html" style="justify-content: flex-start"><dc-import name="Icon" i="upload" sz="13" hint-size="13px,13px"></dc-import>ورود از MSP (XML / Excel)</a>
+          <a class="btn btn-g btn-sm btn-blk" href="W36-MspSync.dc.html" style="justify-content: flex-start"><dc-import name="Icon" i="refresh-cw" sz="13" hint-size="13px,13px"></dc-import>همگام‌سازی با MSP<span class="bdg sm wrn ms-auto">۴ تغییر</span></a>
+          <button class="btn btn-g btn-sm btn-blk" type="button" style="justify-content: flex-start"><dc-import name="Icon" i="file-code-2" sz="13" hint-size="13px,13px"></dc-import>خروجی به MSP (XML)</button>
+          <button class="btn btn-g btn-sm btn-blk" type="button" style="justify-content: flex-start"><dc-import name="Icon" i="file-spreadsheet" sz="13" hint-size="13px,13px"></dc-import>خروجی Excel</button>
+          <button class="btn btn-g btn-sm btn-blk" type="button" style="justify-content: flex-start"><dc-import name="Icon" i="file-down" sz="13" hint-size="13px,13px"></dc-import>دانلود قالب Excel</button>
+        </div>
+        <div class="col g8">
+          <span class="sect-t">خلاصهٔ ساختار</span>
+          <div class="box col g8">
+            <div class="row between t-12 tx7"><span class="row g6"><dc-import name="Icon" i="layers" sz="13" hint-size="13px,13px"></dc-import>کل آیتم‌ها</span><strong class="num-i tx9">۲۲</strong></div>
+            <div class="row between t-12 tx7"><span class="row g6"><dc-import name="Icon" i="file-text" sz="13" hint-size="13px,13px"></dc-import>آیتم‌های برگ</span><strong class="num-i tx9">۱۶</strong></div>
+            <div class="row between t-12 tx7"><span class="row g6"><dc-import name="Icon" i="folder" sz="13" hint-size="13px,13px"></dc-import>آیتم‌های والد</span><strong class="num-i tx9">۶</strong></div>
+            <span class="hr"></span>
+            <div class="row between t-12 tx7"><span class="row g6"><dc-import name="Icon" i="percent" sz="13" hint-size="13px,13px"></dc-import>مجموع وزن ریشه</span><strong class="num-i tx-ok row g4">۱۰۰٪<dc-import name="Icon" i="check" sz="13" hint-size="13px,13px"></dc-import></strong></div>
+            <div class="row between t-12 tx7"><span class="row g6 tx-err"><dc-import name="Icon" i="alert-triangle" sz="13" hint-size="13px,13px"></dc-import>وزن‌های نامتعادل</span><strong class="num-i tx-err">۱ مورد</strong></div>
+          </div>
+        </div>
+      </aside>
+
+      <section style="flex: 999 1 480px; min-width: 0; display: flex; flex-direction: column; background: #FAFAFA">
+        <div class="row wrap g8" style="padding: 8px 14px; background: #FFFFFF; border-bottom: 1px solid #E4E4E7">
+          <nav class="row g4 t-sm tx5 grow" aria-label="مسیر آیتم"><span>مسیر:</span><span class="mono">1</span><dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import><span class="mono">1.2</span><dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import><span class="mono">1.2.3</span><dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import><span class="tx9 fw5">قالب‌بندی سقف طبقهٔ دوم</span></nav>
+          <button class="btn btn-g btn-sm" type="button"><dc-import name="Icon" i="chevrons-up-down" sz="13" hint-size="13px,13px"></dc-import>گسترش همه</button>
+          <button class="btn btn-g btn-sm" type="button"><dc-import name="Icon" i="chevrons-down-up" sz="13" hint-size="13px,13px"></dc-import>جمع کردن</button>
+          <span class="vsep"></span>
+          <button class="btn btn-g btn-sm" type="button"><dc-import name="Icon" i="sliders-horizontal" sz="13" hint-size="13px,13px"></dc-import>ستون‌ها</button>
+          <a class="btn btn-p btn-sm" href="W12-WbsEdit.dc.html"><dc-import name="Icon" i="plus" sz="13" hint-size="13px,13px"></dc-import>آیتم جدید</a>
+        </div>
+        <div style="flex: 1 1 auto; overflow: auto">
+          <table class="tree" style="min-width: 1000px">
+            <thead><tr><th style="min-width: 290px">عنوان</th><th>کد</th><th>وزن</th><th>مقدار / واحد</th><th>شروع</th><th>پایان</th><th>پیشرفت برنامه‌ای</th><th style="color: #3F3F46">پیشرفت واقعی</th><th>سرپرست</th><th style="width: 32px"></th></tr></thead>
+            <tbody>
+              <sc-for list="{{rows}}" as="r" hint-placeholder-count="22">
+                <tr class="{{r.cls}}">
+                  <td class="st"><div class="ti {{r.lv}}">
+                    <span class="tw"><sc-if value="{{r.parent}}" hint-placeholder-val="{{false}}"><dc-import name="Icon" i="{{r.tw}}" sz="13" hint-size="13px,13px"></dc-import></sc-if></span>
+                    <sc-if value="{{r.parent}}" hint-placeholder-val="{{false}}"><span class="ic-f"><dc-import name="Icon" i="{{r.fi}}" sz="15" hint-size="15px,15px"></dc-import></span><span class="par trunc">{{r.t}}</span></sc-if>
+                    <sc-if value="{{r.leaf}}" hint-placeholder-val="{{true}}"><span class="ic-l"><dc-import name="Icon" i="file-text" sz="15" hint-size="15px,15px"></dc-import></span><span class="trunc tx8" style="font-size: 13px">{{r.t}}</span></sc-if>
+                    <sc-if value="{{r.bad}}" hint-placeholder-val="{{false}}"><span class="bdg sm err" title="مجموع وزن فرزندان ۹۵٪ است"><dc-import name="Icon" i="alert-triangle" sz="10" hint-size="10px,10px"></dc-import>Σ ۹۵٪</span></sc-if>
+                  </div></td>
+                  <td class="mono t-sm tx6">{{r.code}}</td>
+                  <td class="t-12 fw5 tx8">{{r.wf}}٪</td>
+                  <td class="t-12 tx7">{{r.q}}</td>
+                  <td class="t-sm tx7">{{r.s}}</td>
+                  <td class="t-sm tx7">{{r.e}}</td>
+                  <td><span class="row g6" style="min-width: 110px"><span class="t-sm tx7" style="width: 30px">{{r.plf}}٪</span><span class="pbar thin"><i style="width: {{r.pl}}%; background: #A1A1AA"></i></span></span></td>
+                  <td><span class="row g6" style="min-width: 110px"><span class="t-sm fw6" style="width: 30px; color: {{r.col}}">{{r.acf}}٪</span><span class="pbar thin"><i style="width: {{r.ac}}%; background: {{r.col}}"></i></span></span></td>
+                  <td><sc-if value="{{r.hasO}}" hint-placeholder-val="{{true}}"><span class="row g6 t-12"><span class="av s {{r.av}}">{{r.oi}}</span>{{r.o}}</span></sc-if><sc-if value="{{r.noO}}" hint-placeholder-val="{{false}}"><span class="tx5">—</span></sc-if></td>
+                  <td><a class="ibtn sm" href="W45-ContextMenus.dc.html" aria-label="منوی {{r.t}}"><dc-import name="Icon" i="more-vertical" sz="14" hint-size="14px,14px"></dc-import></a></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        <div class="row wrap between g8 t-sm tx6" style="padding: 7px 14px; background: #FFFFFF; border-top: 1px solid #E4E4E7">
+          <span class="row wrap g12"><span><strong class="tx9">۲۲</strong> آیتم</span><span class="lg"><i class="sq" style="background: #16A34A"></i>تکمیل</span><span class="lg"><i class="sq" style="background: #2563EB"></i>در حال انجام</span><span class="lg"><i class="sq" style="background: #D97706"></i>عقب‌تر از برنامه</span><span class="lg"><i class="sq" style="background: #DC2626"></i>تأخیر بحرانی</span><span class="lg"><i class="sq" style="background: #D4D4D8"></i>شروع‌نشده</span></span>
+          <span class="row g4"><dc-import name="Icon" i="mouse-pointer-click" sz="12" hint-size="12px,12px"></dc-import>برای جزئیات روی ردیف کلیک کنید</span>
+        </div>
+      </section>
+
+      <aside class="pane" style="flex: 0 0 372px; border-inline-start: 1px solid #E4E4E7; overflow: hidden">
+        <div style="padding: 14px 16px; border-bottom: 1px solid #F4F4F5" class="col g8">
+          <div class="row between"><span class="bdg neu mono" style="font-size: 11.5px"><dc-import name="Icon" i="file-text" sz="12" hint-size="12px,12px"></dc-import>1.2.3.1</span><span class="row g4"><button class="ibtn sm" type="button" aria-label="کپی لینک"><dc-import name="Icon" i="link-2" sz="14" hint-size="14px,14px"></dc-import></button><a class="ibtn sm" href="W45-ContextMenus.dc.html" aria-label="اقدامات بیشتر"><dc-import name="Icon" i="more-vertical" sz="14" hint-size="14px,14px"></dc-import></a></span></div>
+          <h2 class="h-t3 row g6">قالب‌بندی سقف طبقهٔ دوم<button class="ibtn sm" type="button" aria-label="ویرایش عنوان"><dc-import name="Icon" i="pencil" sz="13" hint-size="13px,13px"></dc-import></button></h2>
+          <div class="row wrap g6"><span class="bdg err"><span class="dot"></span>تأخیر بحرانی</span><span class="bdg err">−۳۳٪ از برنامه</span><span class="bdg acc"><dc-import name="Icon" i="shield-alert" sz="11" hint-size="11px,11px"></dc-import>۱ ریسک باز</span></div>
+          <p class="t-12 tx6 lh">تأخیر اصلی به دلیل دیر رسیدن ورق فولادی قالب است. هماهنگی با تأمین‌کننده در جریان است.</p>
+        </div>
+        <div class="grid c2" style="padding: 12px 16px; gap: 12px; border-bottom: 1px solid #F4F4F5">
+          <div class="kv"><span class="k">وزن در والد</span><span class="v">۵۰٪</span></div>
+          <div class="kv"><span class="k">مقدار کل</span><span class="v">۱٬۴۵۰ مترمربع</span></div>
+          <div class="kv"><span class="k">انجام‌شده</span><span class="v">۳۲۰ مترمربع</span></div>
+          <div class="kv"><span class="k">سرپرست</span><span class="v row g6"><span class="av s a8">ا.ص</span>امیر صادقی</span></div>
+          <div class="kv"><span class="k">شروع برنامه‌ای</span><span class="v">۱۴۰۴/۰۱/۱۰</span></div>
+          <div class="kv"><span class="k">پایان برنامه‌ای</span><span class="v">۱۴۰۴/۰۳/۰۵</span></div>
+        </div>
+        <div class="col g8" style="padding: 12px 16px; border-bottom: 1px solid #F4F4F5">
+          <div class="row between t-sm tx6"><span>برنامه‌ای امروز</span><strong class="num-i tx9">۵۵٪</strong></div>
+          <span class="pbar"><i style="width: 55%; background: #A1A1AA"></i></span>
+          <div class="row between t-sm tx6"><span>واقعی (آخرین گزارش تأییدشده)</span><strong class="num-i tx-err">۲۲٪</strong></div>
+          <span class="pbar"><i style="width: 22%; background: #DC2626"></i></span>
+        </div>
+        <div class="col g6" style="padding: 12px 16px; border-bottom: 1px solid #F4F4F5">
+          <div class="row between"><span class="t-13 fw6 row g6"><dc-import name="Icon" i="link-2" sz="14" hint-size="14px,14px"></dc-import>اقلام CBS متصل</span><a class="link" href="W15-Links.dc.html" style="font-size: 12px">مدیریت</a></div>
+          <div class="row between box" style="padding: 8px 10px"><span class="row g8 trunc"><span class="ct mat"><i></i>مصالح</span><span class="t-12 tx8 trunc">قالب فلزی مدولار</span></span><span class="t-sm tx7 nowrap"><strong class="tx9">۸٫۲</strong> / ۱۸٫۵ میلیارد</span></div>
+          <div class="row between box" style="padding: 8px 10px"><span class="row g8 trunc"><span class="ct lab"><i></i>نیروی انسانی</span><span class="t-12 tx8 trunc">کارگر ماهر</span></span><span class="t-sm tx7 nowrap"><strong class="tx9">۵٫۱</strong> / ۱۲٫۴ میلیارد</span></div>
+          <div class="row between box" style="padding: 8px 10px"><span class="row g8 trunc"><span class="ct tr"><i></i>حمل و نقل</span><span class="t-12 tx8 trunc">حمل و باربری</span></span><span class="t-sm tx7 nowrap"><strong class="tx9">۱٫۲</strong> / ۳٫۸ میلیارد</span></div>
+        </div>
+        <div class="col g6" style="padding: 12px 16px">
+          <div class="row between"><span class="t-13 fw6 row g6"><dc-import name="Icon" i="clipboard-check" sz="14" hint-size="14px,14px"></dc-import>گزارش‌های کارگاه</span><a class="link" href="W20-FieldReports.dc.html" style="font-size: 12px">همه (۴)</a></div>
+          <div class="row g8 t-12"><span class="bdg sm inf">در انتظار</span><span class="grow tx8">۲۲٪ ← ۳۰٪ · امیر صادقی</span><span class="tx5 t-sm">امروز</span></div>
+          <div class="row g8 t-12"><span class="bdg sm ok">تأییدشده</span><span class="grow tx8">۱۵٪ ← ۲۲٪ · امیر صادقی</span><span class="tx5 t-sm">۱۴۰۴/۰۲/۲۸</span></div>
+          <div class="row g8 t-12"><span class="bdg sm wrn">نیاز اصلاح</span><span class="grow tx8">عکس‌ها ناخوانا بود</span><span class="tx5 t-sm">۱۴۰۴/۰۲/۲۲</span></div>
+        </div>
+        <div class="col g6" style="padding: 12px 16px; border-top: 1px solid #F4F4F5; margin-top: auto; background: #FFFFFF">
+          <div class="row g6"><a class="btn btn-p btn-sm grow" href="W40-QuickApprove.dc.html"><dc-import name="Icon" i="file-pen-line" sz="13" hint-size="13px,13px"></dc-import>ثبت گزارش دستی</a><a class="btn btn-o btn-sm grow" href="W17-Assignment.dc.html"><dc-import name="Icon" i="user-plus" sz="13" hint-size="13px,13px"></dc-import>تغییر سرپرست</a></div>
+          <div class="row g6"><a class="btn btn-o btn-sm grow" href="W44-AddRisk.dc.html"><dc-import name="Icon" i="shield-alert" sz="13" hint-size="13px,13px"></dc-import>ثبت ریسک</a><button class="btn btn-o btn-sm grow dis" type="button" disabled title="این آیتم ۴ گزارش دارد؛ ابتدا گزارش‌ها را بایگانی کنید"><dc-import name="Icon" i="trash-2" sz="13" hint-size="13px,13px"></dc-import>حذف</button></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":920}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    const devCol = d => d <= -15 ? '#DC2626' : d < -5 ? '#D97706' : d > 0 ? '#16A34A' : '#2C4A73';
+    const P = { 'علی محمدی': ['ع.م', 'a5'], 'سعید قاسمی': ['س.ق', 'a7'], 'امیر صادقی': ['ا.ص', 'a8'], 'رضا اکبری': ['ر.ا', 'a1'], 'محمد رضایی': ['م.ر', 'a3'] };
+    const R = [
+      [0, '1.1', 'عملیات خاکی', 0, 15, '—', '۱۴۰۳/۰۵/۱۰', '۱۴۰۳/۰۷/۲۰', 100, 100, '', 1],
+      [1, '1.1.1', 'خاکبرداری', 1, 40, '۸٬۴۰۰ مترمکعب', '۱۴۰۳/۰۵/۱۰', '۱۴۰۳/۰۶/۰۵', 100, 100, 'علی محمدی'],
+      [1, '1.1.2', 'خاکریزی', 1, 30, '۳٬۲۰۰ مترمکعب', '۱۴۰۳/۰۶/۰۸', '۱۴۰۳/۰۶/۲۸', 100, 100, 'علی محمدی'],
+      [1, '1.1.3', 'تسطیح', 1, 30, '۴٬۶۰۰ مترمربع', '۱۴۰۳/۰۷/۰۱', '۱۴۰۳/۰۷/۲۰', 100, 100, 'علی محمدی'],
+      [0, '1.2', 'سازه', 0, 45, '—', '۱۴۰۳/۰۷/۲۵', '۱۴۰۴/۰۵/۳۰', 80, 72, '', 1],
+      [1, '1.2.1', 'فونداسیون', 0, 30, '—', '۱۴۰۳/۰۷/۲۵', '۱۴۰۳/۱۰/۱۵', 100, 100, '', 0],
+      [1, '1.2.2', 'سازهٔ طبقات', 0, 50, '—', '۱۴۰۳/۱۰/۲۰', '۱۴۰۴/۰۴/۲۵', 78, 75, '', 1],
+      [2, '1.2.2.1', 'آرماتوربندی ستون‌ها', 1, 35, '۳۸۰ تن', '۱۴۰۳/۱۰/۲۰', '۱۴۰۴/۰۲/۲۰', 90, 88, 'سعید قاسمی'],
+      [2, '1.2.2.2', 'قالب‌بندی ستون‌ها', 1, 25, '۲٬۴۰۰ مترمربع', '۱۴۰۳/۱۱/۰۵', '۱۴۰۴/۰۳/۱۰', 80, 75, 'سعید قاسمی'],
+      [2, '1.2.2.3', 'بتن‌ریزی ستون‌ها', 1, 40, '۹۸۰ مترمکعب', '۱۴۰۳/۱۱/۱۸', '۱۴۰۴/۰۴/۲۵', 70, 65, 'سعید قاسمی'],
+      [1, '1.2.3', 'سقف', 0, 20, '—', '۱۴۰۴/۰۱/۱۰', '۱۴۰۴/۰۵/۳۰', 55, 22, '', 1, 'bad'],
+      [2, '1.2.3.1', 'قالب‌بندی سقف طبقهٔ دوم', 1, 50, '۱٬۴۵۰ مترمربع', '۱۴۰۴/۰۱/۱۰', '۱۴۰۴/۰۳/۰۵', 55, 22, 'امیر صادقی', 0, 'sel'],
+      [2, '1.2.3.2', 'آرماتوربندی سقف', 1, 45, '۱۴۵ تن', '۱۴۰۴/۰۱/۲۲', '۱۴۰۴/۰۴/۱۰', 55, 22, 'امیر صادقی'],
+      [0, '1.3', 'تأسیسات', 0, 25, '—', '۱۴۰۴/۰۲/۰۱', '۱۴۰۴/۰۷/۲۰', 45, 32, '', 1],
+      [1, '1.3.1', 'برقی', 0, 50, '—', '۱۴۰۴/۰۲/۰۱', '۱۴۰۴/۰۶/۱۵', 50, 38, '', 1],
+      [2, '1.3.1.1', 'لوله‌گذاری برق', 1, 50, '۲٬۴۰۰ متر', '۱۴۰۴/۰۲/۰۱', '۱۴۰۴/۰۴/۱۰', 60, 55, 'رضا اکبری'],
+      [2, '1.3.1.2', 'کابل‌کشی برق', 1, 50, '۴٬۸۰۰ متر', '۱۴۰۴/۰۳/۰۱', '۱۴۰۴/۰۶/۱۵', 40, 22, 'رضا اکبری'],
+      [1, '1.3.2', 'مکانیکی', 0, 50, '—', '۱۴۰۴/۰۲/۱۰', '۱۴۰۴/۰۷/۲۰', 40, 26, '', 0],
+      [0, '1.4', 'نازک‌کاری', 0, 15, '—', '۱۴۰۴/۰۳/۰۱', '۱۴۰۴/۰۸/۱۰', 20, 12, '', 1],
+      [1, '1.4.1', 'گچ و رنگ', 0, 60, '—', '۱۴۰۴/۰۳/۰۱', '۱۴۰۴/۰۷/۳۰', 20, 12, '', 1],
+      [2, '1.4.1.1', 'گچ‌کاری دیوارها', 1, 60, '۷٬۸۰۰ مترمربع', '۱۴۰۴/۰۳/۰۱', '۱۴۰۴/۰۶/۱۵', 20, 12, 'محمد رضایی'],
+      [2, '1.4.1.2', 'رنگ‌آمیزی', 1, 40, '۷٬۸۰۰ مترمربع', '۱۴۰۴/۰۶/۱۰', '۱۴۰۴/۰۷/۳۰', 0, 0, 'محمد رضایی']
+    ];
+    const rows = R.map(r => {
+      const d = r[9] - r[8];
+      const st = r[9] === 100 ? 's-done' : (r[8] === 0 && r[9] === 0) ? 's-none' : d <= -15 ? 's-late' : d < -5 ? 's-warn' : 's-prog';
+      const sel = r[12] === 'sel';
+      const o = r[10] ? P[r[10]] : null;
+      return {
+        lv: 'l' + r[0], code: r[1], t: r[2], leaf: !!r[3], parent: !r[3], tw: r[11] ? 'chevron-down' : 'chevron-left', fi: r[11] ? 'folder-open' : 'folder',
+        wf: fa(r[4]), q: r[5], s: r[6], e: r[7], pl: r[8], ac: r[9], plf: fa(r[8]), acf: fa(r[9]),
+        col: r[9] === 100 ? '#16A34A' : (r[8] === 0 && r[9] === 0) ? '#D4D4D8' : devCol(d),
+        hasO: !!o, noO: !o, o: r[10], oi: o ? o[0] : '', av: o ? o[1] : '',
+        bad: r[12] === 'bad', cls: st + (sel ? ' sel' : (st === 's-late' ? ' late' : ''))
+      };
+    });
+    return {
+      yes: true, rows,
+      crumbs: [{ t: 'خانه', f: 'W05-Dashboard.dc.html' }, { t: 'پروژه‌ها', f: 'W07-Projects.dc.html' }, { t: 'مجتمع مسکونی نگین شهر', f: 'W10-ProjectOverview.dc.html' }, { t: 'WBS' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

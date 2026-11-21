@@ -1,0 +1,174 @@
+// کاتالوگ کدهای خطا (docs/backend/06-api-swagger.md ۶).
+//
+// فرانت روی `code` تصمیم می‌گیرد، نه روی متن پیام. متن فارسی هر کد در بک‌اند
+// (`platform/http/messages.fa.ts`) است تا پیام‌ها یک جا و یکدست بمانند.
+// کد تازه اینجا اضافه می‌شود و پیامش همان‌جا؛ تست بک‌اند نبود پیام را می‌گیرد.
+
+export const ERROR_CODES = [
+  // عمومی
+  'VALIDATION_FAILED',
+  'NOT_FOUND',
+  'INTERNAL',
+  'DEPENDENCY_UNAVAILABLE',
+  'MAINTENANCE',
+  'RATE_LIMITED',
+  // هم‌روندی و قرارداد HTTP (05 ۹، 06 ۷)
+  'VERSION_CONFLICT',
+  'PRECONDITION_REQUIRED',
+  'IDEMPOTENCY_KEY_REUSED',
+  'LOCK_TIMEOUT',
+  // احراز هویت (F01 ۵.۱)
+  'AUTH_REQUIRED',
+  'SESSION_EXPIRED',
+  'INVALID_CREDENTIALS',
+  'ACCOUNT_LOCKED',
+  'ACCOUNT_DISABLED',
+  'OTP_INVALID',
+  'OTP_EXPIRED',
+  'OTP_TOO_MANY_ATTEMPTS',
+  'OTP_RESEND_TOO_SOON',
+  'LOGIN_IDENTIFIER_AMBIGUOUS',
+  // اپ کارگاه: نسخهٔ کمتر از حداقل (field-app.md ۵.۳)
+  'APP_VERSION_UNSUPPORTED',
+  // ورود اپ با کد دعوت (OD-20)
+  'INVITE_CODE_INVALID',
+  // دسترسی (D11)
+  'PERMISSION_DENIED',
+  'CLIENT_HEADER_REQUIRED',
+  // تأیید دوباره برای عمل حساس (F02 ۸.۴؛ تصمیم کاربر 1405/08/22: کد پیامکی)
+  'STEP_UP_REQUIRED',
+  // گردش کار (docs/backend/08 ۶)
+  'TRANSITION_NOT_ALLOWED',
+  'REASON_REQUIRED',
+  // پروژه
+  'PROJECT_NOT_FOUND',
+  'PROJECT_DELETE_NOT_ALLOWED',
+  'PROJECT_DELETE_NAME_MISMATCH',
+  'PROJECT_NOT_PENDING_DELETION',
+  'PROJECT_MANAGER_TARGET_INVALID',
+  'PROJECT_READ_ONLY',
+  'PROJECT_ACTIVATION_BLOCKED',
+  'PROJECT_DATES_FROM_MSP',
+  // ویزارد ساخت پروژه (F02 ۵)
+  'WIZARD_DRAFT_NOT_FOUND',
+  'PROJECT_WIZARD_BLOCKED',
+  'PROJECT_CODE_TAKEN',
+  // کاربران، دعوت، نقش‌ها و حساب من (F01)
+  'MEMBER_ALREADY_ACTIVE',
+  'MEMBER_NOT_FOUND',
+  'USER_NOT_FOUND',
+  'INVITATION_NOT_FOUND',
+  'IDENTITY_TAKEN',
+  'SEATS_FULL',
+  'LAST_ORG_ADMIN',
+  'SELF_ACTION_NOT_ALLOWED',
+  'USER_STATE_CONFLICT',
+  'MEMBER_REMOVAL_BLOCKED',
+  // تیم، تخصیص و حوزه‌ها (F07)
+  'MEMBER_INVALID',
+  'MEMBER_ROLE_BLOCKED',
+  'ASSIGNMENT_INVALID',
+  'APPROVAL_ROUTES_INVALID',
+  // اعلان‌ها (F13)
+  'NOTIFICATION_NOT_FOUND',
+  // نسخه‌های برنامه و WBS (F04، F03)
+  'PLAN_DRAFT_NOT_FOUND',
+  'PLAN_DRAFT_STALE',
+  'PLAN_DRAFT_INVALID',
+  'PLAN_DRAFT_EMPTY',
+  'PLAN_NOTE_REQUIRED',
+  'PLAN_APPLY_NOT_ALLOWED',
+  'PLAN_BASELINE_NOT_DISCARDABLE',
+  'WBS_ITEM_NOT_FOUND',
+  'WBS_OP_REJECTED',
+  'WBS_IMPORT_INVALID',
+  'WBS_IMPORT_NOT_ALLOWED',
+  'PLAN_DRAFT_OPEN',
+  // CBS، اتصال‌ها و بازنگری بودجه (F05)
+  'CBS_ITEM_NOT_FOUND',
+  'CBS_OP_REJECTED',
+  'CBS_IMPORT_INVALID',
+  'CBS_IMPORT_NOT_ALLOWED',
+  'BUDGET_REVISION_NOT_FOUND',
+  'BUDGET_REVISION_DECIDED',
+  'BUDGET_REVISION_INVALID',
+  'BUDGET_REVISION_NOT_ALLOWED',
+  // دفتر هزینه (F06)
+  'COST_ENTRY_NOT_FOUND',
+  'COST_ENTRY_INVALID',
+  'COST_NOT_ALLOWED',
+  'COST_IMPORT_NOT_FOUND',
+  'COST_IMPORT_INVALID',
+  // گزارش کارگاه و تأیید (F08، F09)
+  'FIELD_REPORT_NOT_FOUND',
+  'FIELD_ITEM_NOT_FOUND',
+  'FIELD_ENTRY_INVALID',
+  'FIELD_ENTRY_NOT_ALLOWED',
+  'FIELD_DECISION_INVALID',
+  'FIELD_DECISION_CONFLICT',
+  // محاسبات و دوره‌های گزارش (F10)
+  'PERIOD_NOT_FOUND',
+  'PERIOD_NOT_CLOSABLE',
+  'METRIC_NOT_AVAILABLE',
+  // ذخیره‌سازی فایل (F20 ۷)
+  'UPLOAD_NOT_FOUND',
+  'UPLOAD_INVALID',
+  'UPLOAD_INCOMPLETE',
+  'UPLOAD_HASH_MISMATCH',
+  'FILE_NOT_FOUND',
+  'FILE_LINK_INVALID',
+  // هشدار (F12)
+  'ALERT_NOT_FOUND',
+  'ALERT_NOT_DISMISSIBLE',
+  'ALERT_RULE_INVALID',
+  'NOTIFICATION_SETTING_INVALID',
+  'RISK_NOT_FOUND',
+  'RISK_INVALID',
+  'RISK_STATE_CONFLICT',
+  'RISK_ACTION_NOT_FOUND',
+  'CONTINGENCY_EXCEEDED',
+  'CHARTS_NOT_AVAILABLE',
+  // گزارش مدیریتی (F18)
+  'REPORT_TEMPLATE_NOT_FOUND',
+  'REPORT_TEMPLATE_NAME_TAKEN',
+  'REPORT_NOT_FOUND',
+  'REPORT_INVALID',
+  // MSP (F15)
+  'MSP_SESSION_NOT_FOUND',
+  'MSP_FILE_INVALID',
+  'MSP_IMPORT_INVALID',
+  'MSP_IMPORT_CONFLICT',
+  // پشتیبان و خروجی کامل (F20 ۱۲)
+  'BACKUP_NOT_FOUND',
+  'BACKUP_INVALID',
+  // قالب (F16)
+  'TEMPLATE_NOT_FOUND',
+  'TEMPLATE_INVALID',
+  'TEMPLATE_NAME_TAKEN',
+  'TEMPLATE_STATE_CONFLICT',
+  'ROLE_NOT_FOUND',
+  'ROLE_LOCKED',
+  'ROLE_IN_USE',
+  'ROLE_NAME_TAKEN',
+  'PASSWORD_POLICY',
+  'PASSWORD_REUSED',
+  'PASSWORD_INCORRECT',
+  'PASSWORD_EXPIRED',
+  'RESET_TOKEN_INVALID',
+  'INVITATION_EXPIRED',
+  'WEB_ACCESS_APP_ONLY',
+  'TWO_FACTOR_REQUIRED_BY_ORG',
+  'TWO_FACTOR_OFF',
+  'SESSION_IS_CURRENT',
+] as const;
+
+export type ErrorCode = (typeof ERROR_CODES)[number];
+
+/** بدنهٔ خطای استاندارد — همان `ApiErrorResponse` فرانت. */
+export interface ApiErrorBody {
+  code: ErrorCode;
+  message: string;
+  details?: Record<string, unknown>;
+  traceId: string;
+  retryable: boolean;
+}

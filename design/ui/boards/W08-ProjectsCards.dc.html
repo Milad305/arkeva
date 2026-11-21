@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>پروژه‌ها — کارت</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" title="پروژه‌ها" ic="folder-kanban" search="{{yes}}" hint-size="100%,52px"></dc-import>
+    <div class="content">
+      <div class="page-head">
+        <div><h1 class="h-display">پروژه‌ها</h1><p class="sub" style="font-size: 13px">۸ پروژه از ۱۲ با فیلترهای فعلی</p></div>
+        <div class="row g8">
+          <a class="btn btn-o" href="W34-ImportUpload.dc.html"><dc-import name="Icon" i="upload" sz="14" hint-size="14px,14px"></dc-import>ورود از MSP</a>
+          <a class="btn btn-p" href="W37-NewProjectStep1.dc.html"><dc-import name="Icon" i="plus" sz="15" hint-size="15px,15px"></dc-import>پروژهٔ جدید</a>
+        </div>
+      </div>
+      <div class="card row wrap g8" style="padding: 10px 12px; margin-bottom: 16px">
+        <label class="fld sm" style="width: 260px"><dc-import name="Icon" i="search" sz="14" hint-size="14px,14px"></dc-import><input type="search" placeholder="جستجوی نام یا کد پروژه…" aria-label="جستجوی پروژه"></label>
+        <button class="chip on" type="button">همه (۱۲)</button><button class="chip" type="button">فعال (۸)</button><button class="chip" type="button">در خطر (۲)</button><button class="chip" type="button">متوقف (۲)</button><button class="chip" type="button">پیش‌نویس (۱)</button><button class="chip" type="button">تمام‌شده (۱)</button>
+        <button class="fld sm sel" type="button" style="width: 190px">مرتب‌سازی: بیشترین انحراف<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <div class="seg ms-auto" aria-label="نمای فهرست"><a href="W07-Projects.dc.html"><dc-import name="Icon" i="list" sz="13" hint-size="13px,13px"></dc-import>جدول</a><span class="on"><dc-import name="Icon" i="layout-grid" sz="13" hint-size="13px,13px"></dc-import>کارت</span></div>
+      </div>
+      <div class="grid c3" style="gap: 14px">
+        <sc-for list="{{cards}}" as="p" hint-placeholder-count="8">
+          <article class="card" style="display: flex; flex-direction: column">
+            <a href="W10-ProjectOverview.dc.html" class="thumb" style="width: 100%; height: 96px; border-radius: 0; background: {{p.tint}}; align-items: flex-start; justify-content: space-between; padding: 12px">
+              <span class="icb" style="width: 36px; height: 36px; background: rgba(255,255,255,0.18); color: #FFFFFF"><dc-import name="Icon" i="{{p.ic}}" sz="18" hint-size="18px,18px"></dc-import></span>
+              <span class="bdg {{p.st}}"><span class="dot"></span>{{p.stl}}</span>
+            </a>
+            <div class="col g10" style="padding: 14px; flex: 1 1 auto">
+              <div class="col g2"><h3 class="t-14 fw6" style="font-size: 15px">{{p.n}}</h3><span class="t-12 tx5">{{p.c}} · <span class="mono">{{p.code}}</span></span></div>
+              <div class="box col g8">
+                <div class="row between ai-e"><span class="stat-v">{{p.acf}}<span class="t-14 tx5 fw5">٪</span></span><span class="t-sm tx5">پیشرفت واقعی · هدف {{p.plf}}٪</span></div>
+                <span class="pbar" style="height: 6px; overflow: visible"><i style="width: {{p.ac}}%; background: {{p.col}}"></i><b style="right: {{p.pl}}%; top: -3px; bottom: -3px"></b></span>
+                <div class="row between t-sm tx6"><span class="row g4"><span style="width: 8px; height: 2px; background: #3F3F46; display: inline-block"></span>هدف امروز {{p.plf}}٪</span><span class="bdg sm {{p.dt}}">{{p.dl}}</span></div>
+              </div>
+              <div class="row between t-12 tx6">
+                <span class="row g6"><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="banknote" sz="13" hint-size="13px,13px"></dc-import></span>{{p.b}} میلیارد ریال</span>
+                <span class="row g6"><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="wallet" sz="13" hint-size="13px,13px"></dc-import></span>{{p.uf}}٪ مصرف</span>
+              </div>
+            </div>
+            <div class="row between" style="padding: 10px 14px; border-top: 1px solid #F4F4F5">
+              <span class="avs"><span class="av s {{p.av}}">{{p.pi}}</span><span class="av s a7">س.ک</span><span class="av s a3">ع.ه</span><span class="av s a7" style="font-size: 9px">+{{p.more}}</span></span>
+              <span class="row g4 t-sm tx6"><dc-import name="Icon" i="calendar" sz="13" hint-size="13px,13px"></dc-import>{{p.end}}</span>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    const S = { active: ['ok', 'فعال'], risk: ['err', 'در خطر'], done: ['pri', 'تمام‌شده'], draft: ['neu', 'پیش‌نویس'], paused: ['wrn', 'متوقف'] };
+    const raw = [
+      ['PRJ-1404-017', 'نیروگاه خورشیدی یزد', 'ساتبا', '#D97706', 'sun', 'ر.ج', 'a6', 35, 15, '۱٬۵۰۰', 20, '۱۴۰۴/۱۰/۱۰', 'risk', 11],
+      ['PRJ-1402-008', 'پل شهید سلیمانی', 'وزارت راه و شهرسازی', '#15803D', 'milestone', 'س.ک', 'a1', 50, 42, '۲٬۴۰۰', 45, '۱۴۰۵/۰۳/۲۰', 'active', 23],
+      ['PRJ-1404-021', 'مجتمع مسکونی نگین شهر', 'شهرداری تهران', '#1A3354', 'building-2', 'م.ر', 'a2', 70, 65, '۸۵۰', 58, '۱۴۰۴/۰۸/۱۵', 'active', 9],
+      ['PRJ-1403-015', 'مجتمع تجاری زیتون', 'گروه سرمایه‌گذاری ایرانیان', '#1D4ED8', 'store', 'م.ا', 'a5', 58, 55, '۱٬۸۰۰', 52, '۱۴۰۴/۱۱/۰۵', 'paused', 19],
+      ['PRJ-1403-002', 'بیمارستان امام رضا', 'علوم پزشکی مشهد', '#B45813', 'cross', 'م.ن', 'a4', 90, 88, '۳٬۲۰۰', 82, '۱۴۰۴/۰۴/۲۹', 'active', 28],
+      ['PRJ-1401-012', 'تونل البرز', 'شرکت ساخت و توسعه', '#3F3F46', 'mountain', 'ع.ه', 'a3', 25, 30, '۸٬۶۰۰', 32, '۱۴۰۷/۱۱/۰۱', 'active', 39],
+      ['PRJ-1402-001', 'پارکینگ طبقاتی فردوسی', 'شهرداری مشهد', '#15803D', 'car', 'م.ص', 'a8', 100, 100, '۴۸۰', 98, '۱۴۰۳/۱۲/۰۱', 'done', 6],
+      ['PRJ-1404-024', 'بازسازی بازار سنتی', 'سازمان میراث فرهنگی', '#52525B', 'landmark', 'ف.م', 'a7', 0, 0, '۲۲۰', 0, '۱۴۰۵/۰۸/۲۰', 'draft', 1]
+    ];
+    const cards = raw.map(r => {
+      const d = r[8] - r[7], st = r[12];
+      let dt = 'pri', dl = '−' + fa(-d) + '٪', col = '#2C4A73';
+      if (st === 'done') { dt = 'ok'; dl = 'به‌موقع'; }
+      else if (st === 'draft') { dt = 'neu'; dl = 'شروع نشده'; col = '#D4D4D8'; }
+      else if (d > 0) { dt = 'ok'; dl = '+' + fa(d) + '٪ جلو'; col = '#16A34A'; }
+      else if (d <= -15) { dt = 'err'; dl = '−' + fa(-d) + '٪ بحرانی'; col = '#DC2626'; }
+      else if (d < -5) { dt = 'wrn'; col = '#D97706'; }
+      return { code: r[0], n: r[1], c: r[2], tint: r[3], ic: r[4], pi: r[5], av: r[6], pl: r[7], ac: r[8], plf: fa(r[7]), acf: fa(r[8]), b: r[9], uf: fa(r[10]), end: r[11], st: S[st][0], stl: S[st][1], dt, dl, col, more: fa(r[13]) };
+    });
+    return { yes: true, cards };
+  }
+}
+</script>
+</body>
+</html>

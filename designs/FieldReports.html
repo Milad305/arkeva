@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>گزارش‌های فیلد — پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --p1:#E5EBF3;--p3:#8AA2C2;--p5:#2C4A73;--p7:#1A3354;--p9:#0E1E38;
+  --a1:#FCEAD9;--a3:#F4B17C;--a5:#E07A2C;--a7:#B45813;
+  --s50:#ECFDF3;--s5:#16A34A;--s7:#15803D;
+  --w50:#FFF8EB;--w5:#D97706;--w7:#B45309;
+  --e50:#FEF2F2;--e5:#DC2626;--e7:#B91C1C;
+  --i50:#EFF6FF;--i5:#2563EB;--i7:#1D4ED8;
+  --g0:#fff;--g50:#FAFAFA;--g1:#F4F4F5;--g2:#E4E4E7;--g3:#D4D4D8;
+  --g4:#A1A1AA;--g5:#71717A;--g6:#52525B;--g7:#3F3F46;--g9:#18181B;
+  --r4:4px;--r8:8px;--r12:12px;--r16:16px;
+  --sh-sm:0 1px 2px rgba(24,24,27,.04);
+  --sh-md:0 4px 8px -2px rgba(24,24,27,.06),0 2px 4px -2px rgba(24,24,27,.04);
+  --sh-lg:0 10px 20px -5px rgba(24,24,27,.08),0 4px 8px -4px rgba(24,24,27,.04);
+  --sidebar:220px; --topbar:52px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;overflow:hidden}
+body{font-family:'Vazirmatn',system-ui,sans-serif;color:var(--g9);background:var(--g50);-webkit-font-smoothing:antialiased;font-feature-settings:'ss01';font-size:13.5px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;direction:ltr;unicode-bidi:isolate}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--g3);border-radius:6px;border:2px solid transparent;background-clip:content-box}
+
+/* ── AppShell ── */
+.shell{display:grid;grid-template-columns:var(--sidebar) 1fr;grid-template-rows:var(--topbar) 1fr;height:100vh;overflow:hidden}
+.sidebar{grid-row:1/3;grid-column:1;background:white;border-left:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden}
+.topbar{grid-row:1;grid-column:2;background:white;border-bottom:1px solid var(--g2);display:flex;align-items:center;gap:10px;padding:0 20px;position:relative;z-index:20}
+.content{grid-row:2;grid-column:2;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── Sidebar ── */
+.sb-brand{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--g1)}
+.sb-mark{width:32px;height:32px;border-radius:var(--r8);background:var(--p7);color:white;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.sb-mark::after{content:'';position:absolute;right:5px;bottom:5px;width:7px;height:7px;background:var(--a5);border-radius:2px}
+.sb-name strong{font-size:13.5px;font-weight:700;display:block;line-height:1.2}
+.sb-name small{font-size:10.5px;color:var(--g5)}
+.sb-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.sb-section{font-size:10px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;padding:10px 8px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r8);color:var(--g6);font-size:13px;font-weight:500;width:100%;text-align:right;border:0;background:transparent;transition:all .1s;position:relative}
+.sb-item:hover{background:var(--g1);color:var(--g9)}
+.sb-item.active{background:var(--p1);color:var(--p7)}
+.sb-item .ic{width:16px;height:16px;flex-shrink:0}
+.sb-item .badge{margin-right:auto;background:var(--e5);color:white;font-size:10px;font-weight:600;padding:1px 6px;border-radius:999px;min-width:18px;text-align:center}
+.sb-item.active .badge{background:var(--p7)}
+.sb-footer{padding:10px 8px;border-top:1px solid var(--g1)}
+.sb-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r8)}
+.sb-user .av{width:30px;height:30px;border-radius:999px;background:var(--p1);color:var(--p7);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-user .info{flex:1;min-width:0}
+.sb-user .info .n{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user .info .r{font-size:10.5px;color:var(--g5)}
+
+/* ── Topbar ── */
+.tb-title{font-size:14px;font-weight:600;margin-left:16px}
+.tb-search{flex:1;max-width:320px;margin:0 auto;display:flex;align-items:center;gap:8px;height:32px;background:var(--g1);border:1px solid var(--g2);border-radius:var(--r8);padding:0 12px;cursor:pointer;transition:border-color .12s}
+.tb-search:hover{border-color:var(--g3)}
+.tb-search span{font-size:12.5px;color:var(--g4);flex:1}
+.tb-search kbd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g5);background:var(--g0);border:1px solid var(--g3);border-radius:4px;padding:1px 5px}
+.tb-actions{display:flex;align-items:center;gap:4px;margin-right:auto}
+.tb-btn{width:34px;height:34px;border-radius:var(--r8);background:transparent;border:0;display:inline-flex;align-items:center;justify-content:center;color:var(--g5);transition:all .12s;position:relative}
+.tb-btn:hover{background:var(--g1);color:var(--g9)}
+.tb-btn .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:999px;background:var(--e5);border:2px solid white}
+.tb-avatar{width:30px;height:30px;border-radius:999px;background:var(--p1);color:var(--p7);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:var(--r8);font-size:13px;font-weight:500;border:1px solid transparent;transition:all .12s;white-space:nowrap}
+.btn-primary{background:var(--p7);color:white}
+.btn-primary:hover{background:var(--p9)}
+.btn-success{background:var(--s5);color:white}
+.btn-success:hover{background:var(--s7)}
+.btn-outline{background:white;color:var(--g8,#1c1c1e);border-color:var(--g3)}
+.btn-outline:hover{background:var(--g50);border-color:var(--g4)}
+.btn-danger-ol{background:white;color:var(--e7);border-color:rgba(220,38,38,.35)}
+.btn-danger-ol:hover{background:var(--e50);border-color:var(--e5)}
+.btn-warn-ol{background:white;color:var(--w7);border-color:rgba(217,119,6,.35)}
+.btn-warn-ol:hover{background:var(--w50);border-color:var(--w5)}
+.btn-ghost{background:transparent;color:var(--g7)}
+.btn-ghost:hover{background:var(--g1);color:var(--g9)}
+.btn-ghost-danger{background:transparent;color:var(--e7)}
+.btn-ghost-danger:hover{background:var(--e50)}
+.btn-sm{height:28px;padding:0 10px;font-size:12px}
+.btn-lg{height:42px;padding:0 18px;font-size:14px;border-radius:var(--r12)}
+.btn-xl{height:46px;padding:0 22px;font-size:15px;font-weight:600;border-radius:var(--r12)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+@keyframes spin{to{transform:rotate(-360deg)}}
+.spin{animation:spin .7s linear infinite}
+
+/* ── Page content layout ── */
+.page-head{padding:16px 24px 0;flex-shrink:0}
+.breadcrumb{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--g5);margin-bottom:6px}
+.breadcrumb a{color:var(--g5)}
+.breadcrumb a:hover{color:var(--g9)}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ph-row h1{font-size:22px;font-weight:700;margin:0 0 2px;letter-spacing:-.01em}
+.ph-row .sub{font-size:12.5px;color:var(--g5)}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-top:4px}
+
+/* stat cards */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 24px 0;flex-shrink:0}
+.stat-card{background:white;border:1px solid var(--g2);border-radius:var(--r12);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;transition:box-shadow .12s}
+.stat-card:hover{box-shadow:var(--sh-md)}
+.stat-card .sic{width:36px;height:36px;border-radius:var(--r8);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-card .sv{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.01em}
+.stat-card .sl{font-size:11.5px;color:var(--g5);margin-top:3px}
+
+/* tabs */
+.tab-row{display:flex;align-items:center;gap:0;padding:12px 24px 0;border-bottom:1px solid var(--g2);flex-shrink:0;margin-top:2px}
+.tab-btn{padding:8px 0;font-size:13px;color:var(--g5);border-bottom:2px solid transparent;transition:all .12s;margin-left:22px;background:transparent;border-left:0;border-right:0;border-top:0;white-space:nowrap}
+.tab-btn:hover{color:var(--g9)}
+.tab-btn.active{color:var(--p7);border-bottom-color:var(--p7);font-weight:600}
+.tab-btn .tc{display:inline-flex;align-items:center;justify-content:center;height:18px;min-width:18px;padding:0 5px;border-radius:999px;font-size:10.5px;font-weight:600;margin-right:5px}
+
+/* filter bar */
+.filter-bar{display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:1px solid var(--g1);background:white;flex-shrink:0;flex-wrap:wrap}
+.filter-select{height:32px;padding:0 28px 0 10px;border:1px solid var(--g2);border-radius:var(--r8);font-size:12.5px;color:var(--g7);background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat left 8px center;appearance:none;cursor:pointer}
+.filter-select:focus{outline:none;border-color:var(--p5);box-shadow:0 0 0 2px rgba(44,74,115,.08)}
+.filter-sep{width:1px;height:20px;background:var(--g2);flex-shrink:0}
+.sort-wrap{margin-right:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g5)}
+
+/* ── Split layout ── */
+.split{display:grid;grid-template-columns:1fr 1.5fr;flex:1;overflow:hidden}
+
+/* ── Report list ── */
+.rlist{border-left:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden;background:white}
+.rlist-head{padding:10px 14px;border-bottom:1px solid var(--g1);display:flex;align-items:center;gap:10px;flex-shrink:0;background:white;position:sticky;top:0;z-index:10}
+.rlist-body{flex:1;overflow-y:auto;padding:0}
+.rlist-footer{padding:10px 14px;border-top:1px solid var(--g1);font-size:11.5px;color:var(--g5);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+
+/* bulk bar */
+.bulk-bar{background:var(--p7);color:white;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;animation:slideDown .2s ease;flex-shrink:0}
+@keyframes slideDown{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:none}}
+.bulk-bar .bbc{font-size:11px;font-weight:600;background:rgba(255,255,255,.2);padding:2px 7px;border-radius:999px;margin-left:4px}
+
+/* report card */
+.rcard{display:flex;gap:0;padding:11px 14px;border-bottom:1px solid var(--g1);cursor:pointer;position:relative;transition:background .1s}
+.rcard:hover{background:var(--g50)}
+.rcard.active{background:var(--p1);border-left:3px solid var(--p7)}
+.rcard.unread::before{content:'';position:absolute;right:8px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:999px;background:var(--i5)}
+.rcard.fading{animation:fadeOut .35s ease forwards}
+@keyframes fadeOut{to{opacity:0;height:0;padding:0;border:0;overflow:hidden}}
+.rcard .cb-area{width:32px;display:flex;align-items:flex-start;padding-top:3px;flex-shrink:0}
+.rcard .cb-area .cb{width:16px;height:16px;border:1.5px solid var(--g3);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;transition:all .1s;background:white}
+.rcard .cb-area .cb.checked{background:var(--p7);border-color:var(--p7)}
+.rcard .av{width:32px;height:32px;border-radius:999px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:10px}
+.rcard .main{flex:1;min-width:0}
+.rcard .row1{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:3px}
+.rcard .row1 .name{font-size:13px;font-weight:600;white-space:nowrap}
+.rcard .row1 .time{font-size:11px;color:var(--g4);flex-shrink:0}
+.rcard .wbs-path{font-size:11px;color:var(--g5);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcard .wbs-path strong{color:var(--g7)}
+.rcard .progress-row{display:flex;align-items:center;gap:8px}
+.rcard .pchange{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500}
+.rcard .pchange .from{color:var(--g4);text-decoration:line-through}
+.rcard .pchange .to{color:var(--g9)}
+.rcard .delta-badge{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:999px}
+.rcard .thumbs{display:flex;gap:4px;margin-right:auto}
+.rcard .thumb{width:36px;height:36px;border-radius:var(--r4);background:var(--g2);overflow:hidden;display:inline-flex;align-items:center;justify-content:center;position:relative;border:1px solid var(--g2)}
+.rcard .thumb .stripe-mini{position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,#C7CED8 0 6px,#D4DBE5 6px 12px)}
+.rcard .thumb .more{position:absolute;inset:0;background:rgba(24,24,27,.6);color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.rcard .badges{display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-right:8px;flex-shrink:0}
+.badge{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 7px;border-radius:var(--r4);font-size:11px;font-weight:500;line-height:1;white-space:nowrap}
+.badge-pending{background:var(--i50);color:var(--i7)}
+.badge-approved{background:var(--s50);color:var(--s7)}
+.badge-rejected{background:var(--e50);color:var(--e7)}
+.badge-edit{background:var(--w50);color:var(--w7)}
+.badge-overdue{background:var(--e50);color:var(--e7);font-size:10.5px}
+
+/* ── Detail panel ── */
+.detail{display:flex;flex-direction:column;overflow:hidden;background:var(--g50)}
+.detail-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--g4);text-align:center;padding:40px}
+.detail-empty .de-ic{width:72px;height:72px;border-radius:var(--r16);background:white;border:1px solid var(--g2);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:var(--sh-sm)}
+.detail-empty h3{font-size:16px;color:var(--g6);font-weight:600;margin:0 0 6px}
+.detail-empty p{font-size:12.5px;color:var(--g4);margin:0;line-height:1.7}
+.detail-empty .key-hint{margin-top:8px;font-size:11.5px;background:var(--g1);border-radius:var(--r8);padding:4px 10px;display:inline-flex;align-items:center;gap:5px}
+.detail-empty .key-hint kbd{font-family:'JetBrains Mono',monospace;background:white;border:1px solid var(--g3);border-radius:4px;padding:1px 6px;font-size:10.5px;color:var(--g7)}
+
+.detail-scroll{flex:1;overflow-y:auto;padding:0 0 160px}
+.detail-head{padding:16px 20px 12px;background:white;border-bottom:1px solid var(--g2);position:sticky;top:0;z-index:10;flex-shrink:0}
+.detail-head .dbc{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--g5);margin-bottom:6px}
+.detail-head .dbc span{color:var(--g4)}
+.detail-head h2{font-size:19px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em}
+.detail-head .code-tag{font-size:11.5px;color:var(--g5)}.detail-head .code-tag span{color:var(--g7);font-weight:600}
+.detail-head .actions-row{display:flex;align-items:center;gap:6px;margin-top:8px}
+.detail-head .dh-btn{width:30px;height:30px;border-radius:var(--r8);background:transparent;border:1px solid var(--g2);color:var(--g6);display:inline-flex;align-items:center;justify-content:center}
+.detail-head .dh-btn:hover{background:var(--g1);color:var(--g9)}
+
+.dc{background:white;border:1px solid var(--g2);border-radius:var(--r12);margin:12px 16px;overflow:hidden}
+.dc-head{padding:12px 16px;border-bottom:1px solid var(--g1);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dc-head h3{font-size:13px;font-weight:600;margin:0;display:flex;align-items:center;gap:7px}
+.dc-body{padding:14px 16px}
+
+/* reporter card */
+.reporter-row{display:flex;align-items:center;gap:12px}
+.reporter-row .rav{width:40px;height:40px;border-radius:999px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.reporter-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-top:12px;font-size:12px}
+.rig-item .k{color:var(--g5);margin-bottom:2px}
+.rig-item .v{color:var(--g9);font-weight:500;display:flex;align-items:center;gap:4px}
+
+/* progress card */
+.prog-visual{position:relative;height:12px;background:var(--g1);border-radius:999px;margin:16px 0 10px;overflow:visible}
+.prog-visual .prog-fill{height:100%;border-radius:999px;position:absolute;transition:width .4s ease}
+.prog-visual .prog-marker{width:2px;height:20px;background:var(--g4);position:absolute;top:-4px;transform:translateX(50%)}
+.prog-nums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
+.prog-nums .pn-val{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1}
+.prog-nums .pn-lbl{font-size:11px;color:var(--g5);margin-top:3px}
+
+/* photos */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pg-item{aspect-ratio:4/3;border-radius:var(--r8);overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--g2)}
+.pg-item .stripe{position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,#C7CED8 0 12px,#D4DBE5 12px 24px);display:flex;align-items:center;justify-content:center;color:var(--g5)}
+.pg-item .photo-tag{position:absolute;bottom:5px;right:6px;background:rgba(0,0,0,.55);color:white;font-size:10px;padding:2px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+.pg-item .photo-sz{position:absolute;bottom:5px;left:6px;background:rgba(0,0,0,.45);color:rgba(255,255,255,.8);font-size:9.5px;padding:2px 5px;border-radius:3px}
+.pg-item .zoom-ic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);color:white;opacity:0;transition:all .15s}
+.pg-item:hover .zoom-ic{opacity:1;background:rgba(0,0,0,.25)}
+
+/* GPS placeholder */
+.gps-map{width:100%;height:160px;border-radius:var(--r8);overflow:hidden;position:relative;border:1px solid var(--g2);background:#E8EDF5}
+.gps-info{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-top:12px;font-size:12px}
+
+/* timeline */
+.tl{padding:4px 0}
+.tl-item{display:flex;gap:12px;padding-bottom:16px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;right:11px;top:22px;bottom:-4px;width:1px;background:var(--g2)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:600;border:2px solid var(--g2);background:white;position:relative;z-index:1}
+.tl-item.current .tl-dot{border-color:var(--p5);background:var(--p1);color:var(--p7)}
+.tl-body{flex:1;padding-top:2px}
+.tl-body .tl-t{font-size:12.5px;color:var(--g7)}
+.tl-body .tl-meta{font-size:11px;color:var(--g4);display:flex;align-items:center;gap:8px;margin-top:2px}
+
+/* approval stepper */
+.ap-steps{display:flex;align-items:flex-start;gap:0}
+.ap-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.ap-step:not(:last-child)::after{content:'';position:absolute;top:15px;left:0;width:50%;height:2px;background:var(--g2)}
+.ap-step:not(:first-child)::before{content:'';position:absolute;top:15px;right:0;width:50%;height:2px;background:var(--g2)}
+.ap-step.done::after,.ap-step.done::before,.ap-step.active::before{background:var(--s5)}
+.ap-dot{width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border:2px solid var(--g3);background:white;color:var(--g5);margin-bottom:6px;position:relative;z-index:1}
+.ap-step.done .ap-dot{background:var(--s5);border-color:var(--s5);color:white}
+.ap-step.active .ap-dot{background:var(--i5);border-color:var(--i5);color:white;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
+.ap-step .ap-label{font-size:11px;color:var(--g6);line-height:1.4}
+.ap-step.active .ap-label{color:var(--i7);font-weight:600}
+.ap-step .ap-sub{font-size:10.5px;color:var(--g4);margin-top:2px}
+.ap-step.active .ap-sub{color:var(--i5)}
+
+/* action footer */
+.action-footer{position:absolute;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--g2);padding:14px 20px;z-index:20}
+.af-main{display:flex;gap:8px}
+.af-expand{background:var(--g50);border:1px solid var(--g2);border-radius:var(--r8);padding:14px;margin-top:10px;animation:expandIn .18s ease}
+@keyframes expandIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.af-field{width:100%;min-height:72px;padding:10px 12px;border:1px solid var(--g3);border-radius:var(--r8);font-size:13px;line-height:1.6;resize:vertical;outline:none;transition:border-color .12s,box-shadow .12s}
+.af-field:focus{border-color:var(--p5);box-shadow:0 0 0 3px rgba(44,74,115,.10)}
+.af-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+.af-cb-row{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12.5px;color:var(--g7)}
+.af-cb{width:16px;height:16px;border:1.5px solid var(--g3);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;background:white;flex-shrink:0;transition:all .12s}
+.af-cb.on{background:var(--p7);border-color:var(--p7)}
+
+/* empty state (no pending) */
+.all-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;color:var(--g5)}
+.all-done .check-big{width:80px;height:80px;border-radius:999px;background:var(--s50);color:var(--s5);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 0 0 12px rgba(22,163,74,.06)}
+.all-done h3{font-size:18px;font-weight:600;color:var(--g7);margin:0 0 6px}
+.all-done p{font-size:13px;color:var(--g4);margin:0;line-height:1.7}
+
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:200;padding:40px}
+.lb.open{display:flex}
+.lb-img{max-width:75%;width:100%;aspect-ratio:4/3;border-radius:var(--r12);background-image:repeating-linear-gradient(135deg,#C7CED8 0 16px,#D4DBE5 16px 32px);display:flex;align-items:center;justify-content:center;color:var(--g5);position:relative}
+.lb-close{position:absolute;top:-14px;left:-14px;width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,.15);color:white;border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* toast */
+@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes fadeOutDown{to{opacity:0;transform:translate(-50%,14px)}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--g9);color:white;padding:11px 18px;border-radius:var(--r8);box-shadow:var(--sh-lg);display:flex;align-items:center;gap:10px;font-size:13px;z-index:300;pointer-events:none;animation:fadeInUp .25s ease forwards}
+.toast.hide{animation:fadeOutDown .2s ease forwards}
+.toast .tic{width:22px;height:22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* shortcuts overlay */
+.shortcuts-overlay{position:fixed;inset:0;background:rgba(24,24,27,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:400}
+.shortcuts-overlay.open{display:flex}
+.shortcuts-box{background:white;border-radius:var(--r16);box-shadow:var(--sh-lg);padding:24px 28px;width:100%;max-width:440px}
+.shortcuts-box h3{font-size:16px;font-weight:700;margin:0 0 16px}
+.sk-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--g1)}
+.sk-row:last-child{border-bottom:0}
+.sk-row .k{font-size:13px;color:var(--g6)}
+.sk-row kbd{font-family:'JetBrains Mono',monospace;background:var(--g1);border:1px solid var(--g3);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--g8,#1c1c1e)}
+
+/* shortcuts hint dot */
+.shortcut-fab{position:fixed;bottom:20px;right:252px;width:32px;height:32px;border-radius:999px;background:var(--g2);color:var(--g6);border:0;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;z-index:100;box-shadow:var(--sh-sm)}
+.shortcut-fab:hover{background:var(--g3);color:var(--g9)}
+
+/* state switcher */
+.state-switcher{position:fixed;top:14px;left:270px;z-index:500;background:white;border:1px solid var(--g2);border-radius:var(--r12);box-shadow:var(--sh-lg);padding:5px;display:flex;gap:2px;font-size:11.5px}
+.ssw-btn{padding:5px 10px;border-radius:7px;background:transparent;border:0;color:var(--g6);font-size:12px;font-weight:500;transition:all .12s}
+.ssw-btn:hover{background:var(--g1);color:var(--g9)}
+.ssw-btn.active{background:var(--p7);color:white}
+
+/* avatar colors */
+.av-blue{background:var(--p1);color:var(--p7)}
+.av-orange{background:var(--a1);color:var(--a7)}
+.av-green{background:var(--s50);color:var(--s7)}
+.av-gray{background:var(--g1);color:var(--g7)}
+.av-red{background:var(--e50);color:var(--e7)}
+</style>
+</head>
+<body>
+
+<!-- State switcher (dev toggle) -->
+<div class="state-switcher" id="state-sw">
+  <button class="ssw-btn active" data-s="full">پر</button>
+  <button class="ssw-btn" data-s="empty">خالی</button>
+  <button class="ssw-btn" data-s="bulk">دسته‌جمعی</button>
+</div>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="sb-name"><strong>پروژه‌یار</strong><small>کنترل پروژه</small></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">منو اصلی</div>
+      <button class="sb-item"><i data-lucide="layout-dashboard" class="ic"></i>داشبورد</button>
+      <button class="sb-item"><i data-lucide="folder-open" class="ic"></i>پروژه‌ها</button>
+      <button class="sb-item active"><i data-lucide="clipboard-list" class="ic"></i>گزارش‌های فیلد<span class="badge">۲۴</span></button>
+      <button class="sb-item"><i data-lucide="users" class="ic"></i>کاربران</button>
+      <div class="sb-section">تحلیل</div>
+      <button class="sb-item"><i data-lucide="bar-chart-3" class="ic"></i>نمودارها</button>
+      <button class="sb-item"><i data-lucide="trending-up" class="ic"></i>عملکرد</button>
+      <div class="sb-section">سیستم</div>
+      <button class="sb-item"><i data-lucide="settings" class="ic"></i>تنظیمات</button>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="av av-blue">م.ا</div>
+        <div class="info"><div class="n">مهندس احمدی</div><div class="r">برنامه‌ریز · مدیر</div></div>
+        <button class="tb-btn" style="width:28px;height:28px;flex-shrink:0"><i data-lucide="log-out" style="width:14px;height:14px"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <span class="tb-title">گزارش‌های فیلد</span>
+    <div class="tb-search">
+      <i data-lucide="search" style="width:13px;height:13px;color:var(--g4)"></i>
+      <span>جستجوی سراسری…</span>
+      <kbd>Ctrl+K</kbd>
+    </div>
+    <div class="tb-actions">
+      <button class="tb-btn"><i data-lucide="bell" style="width:16px;height:16px"></i><span class="notif-dot"></span></button>
+      <button class="tb-btn"><i data-lucide="help-circle" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="tb-avatar">م.ا</div>
+  </header>
+
+  <!-- Content -->
+  <main class="content">
+    <!-- Page header -->
+    <div class="page-head" id="page-head">
+      <div class="breadcrumb">
+        <a href="#">خانه</a><span>›</span><span>گزارش‌های فیلد</span>
+      </div>
+      <div class="ph-row">
+        <div><h1>گزارش‌های فیلد</h1><div class="sub" id="ph-sub">۲۴ گزارش در انتظار تأیید از ۸ پروژه</div></div>
+        <div class="ph-actions">
+          <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی Excel</button>
+          <button class="btn btn-outline btn-sm"><i data-lucide="bell" style="width:13px;height:13px"></i>اعلان‌ها</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stat-row" id="stat-row">
+      <div class="stat-card">
+        <div class="sic" style="background:var(--i50)"><i data-lucide="clock" style="width:18px;height:18px;color:var(--i7)"></i></div>
+        <div><div class="sv" style="color:var(--i7)">۲۴</div><div class="sl">در انتظار تأیید</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--e50)"><i data-lucide="alert-octagon" style="width:18px;height:18px;color:var(--e7)"></i></div>
+        <div><div class="sv" style="color:var(--e7)">۵</div><div class="sl">بیش از ۲۴ ساعت بدون پاسخ</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--s50)"><i data-lucide="check-circle-2" style="width:18px;height:18px;color:var(--s7)"></i></div>
+        <div><div class="sv" style="color:var(--s7)">۱۲</div><div class="sl">تأیید شده امروز</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sic" style="background:var(--w50)"><i data-lucide="rotate-ccw" style="width:18px;height:18px;color:var(--w7)"></i></div>
+        <div><div class="sv" style="color:var(--w7)">۳</div><div class="sl">رد شده / نیاز اصلاح</div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="setTab(this,'pending')"><span class="tc" style="background:var(--i50);color:var(--i7)">۲۴</span>در انتظار</button>
+      <button class="tab-btn" onclick="setTab(this,'approved')"><span class="tc" style="background:var(--s50);color:var(--s7)">۱۲۸</span>تأییدشده</button>
+      <button class="tab-btn" onclick="setTab(this,'rejected')"><span class="tc" style="background:var(--e50);color:var(--e7)">۸</span>رد شده</button>
+      <button class="tab-btn" onclick="setTab(this,'edit')"><span class="tc" style="background:var(--w50);color:var(--w7)">۳</span>نیاز اصلاح</button>
+      <button class="tab-btn" onclick="setTab(this,'all')"><span class="tc" style="background:var(--g1);color:var(--g6)">۱۶۳</span>همه</button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <select class="filter-select"><option>همه پروژه‌ها</option><option>مجتمع نگین شهر</option><option>پل شهید سلیمانی</option><option>تونل البرز</option></select>
+      <select class="filter-select"><option>همه سرپرست‌ها</option><option>علی محمدی</option><option>حسن کریمی</option><option>رضا اکبری</option></select>
+      <select class="filter-select"><option>همه آیتم‌های WBS</option></select>
+      <select class="filter-select"><option>بازه تاریخ</option><option>امروز</option><option>۷ روز اخیر</option><option>ماه جاری</option></select>
+      <div class="filter-sep"></div>
+      <button class="btn btn-ghost btn-sm" style="color:var(--g4)"><i data-lucide="x" style="width:12px;height:12px"></i>پاک کردن</button>
+      <div class="sort-wrap">
+        <i data-lucide="arrow-up-down" style="width:13px;height:13px"></i>
+        <select class="filter-select" style="height:28px;font-size:12px">
+          <option>جدیدترین</option><option>قدیمی‌ترین</option><option>بیشترین تغییر</option><option>در ریسک بیشتر</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main split -->
+    <div class="split" id="main-split" style="position:relative">
+
+      <!-- LEFT: detail panel -->
+      <div class="detail" id="detail-panel" style="position:relative">
+        <div class="detail-empty" id="detail-empty">
+          <div class="de-ic"><i data-lucide="file-text" style="width:34px;height:34px"></i></div>
+          <h3>یک گزارش انتخاب کنید</h3>
+          <p>از لیست سمت راست یک گزارش را انتخاب کنید تا جزئیات آن اینجا نمایش داده شود.</p>
+          <div class="key-hint"><kbd>J</kbd><kbd>K</kbd> حرکت در لیست · <kbd>Space</kbd> انتخاب · <kbd>?</kbd> همه میانبرها</div>
+        </div>
+
+        <div id="detail-content" style="display:none;height:100%;display:none;flex-direction:column">
+          <!-- sticky header -->
+          <div class="detail-head" id="dh">
+            <div class="dbc" id="dh-bc"></div>
+            <h2 id="dh-title"></h2>
+            <div class="code-tag">کد: <span id="dh-code"></span></div>
+            <div class="actions-row">
+              <span id="dh-badge"></span>
+              <div style="margin-right:auto;display:flex;gap:4px">
+                <button class="dh-btn" title="چاپ"><i data-lucide="printer" style="width:13px;height:13px"></i></button>
+                <button class="dh-btn" title="کپی لینک"><i data-lucide="link-2" style="width:13px;height:13px"></i></button>
+                <button class="dh-btn" title="بیشتر"><i data-lucide="more-vertical" style="width:13px;height:13px"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- scrollable body -->
+          <div class="detail-scroll" id="detail-scroll">
+            <!-- reporter -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="user" style="width:14px;height:14px;color:var(--g4)"></i>اطلاعات ثبت‌کننده</h3></div>
+              <div class="dc-body">
+                <div class="reporter-row">
+                  <div class="rav av-blue" id="rep-av">م.م</div>
+                  <div><div style="font-size:14px;font-weight:600" id="rep-name">—</div><div style="font-size:12px;color:var(--g5)" id="rep-role">—</div></div>
+                  <div style="margin-right:auto;font-size:12px;color:var(--g5)" id="rep-phone">—</div>
+                </div>
+                <div class="reporter-info-grid">
+                  <div class="rig-item"><div class="k">تاریخ ثبت محلی</div><div class="v"><i data-lucide="smartphone" style="width:12px;height:12px;color:var(--g4)"></i><span id="rep-local-t">—</span></div></div>
+                  <div class="rig-item"><div class="k">دریافت در سرور</div><div class="v"><i data-lucide="server" style="width:12px;height:12px;color:var(--g4)"></i><span id="rep-server-t">—</span></div></div>
+                  <div class="rig-item"><div class="k">تأخیر sync</div><div class="v" id="rep-sync-d">—</div></div>
+                  <div class="rig-item"><div class="k">وضعیت اتصال</div><div class="v" id="rep-conn">—</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- progress -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="trending-up" style="width:14px;height:14px;color:var(--g4)"></i>تغییر پیشرفت</h3><span id="ph-alert" style="font-size:11px;font-weight:500"></span></div>
+              <div class="dc-body">
+                <div class="prog-visual">
+                  <div class="prog-fill" id="pf-fill" style="background:var(--p7)"></div>
+                  <div class="prog-marker" id="pf-marker"></div>
+                </div>
+                <div class="prog-nums">
+                  <div><div class="pn-val" style="color:var(--g4);text-decoration:line-through" id="pn-from">—</div><div class="pn-lbl">قبلی</div></div>
+                  <div><div class="pn-val" style="color:var(--p7)" id="pn-to">—</div><div class="pn-lbl">جدید</div></div>
+                  <div><div class="pn-val" id="pn-delta" style="color:var(--s5)">—</div><div class="pn-lbl">تغییر</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- description -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="align-left" style="width:14px;height:14px;color:var(--g4)"></i>توضیحات سرپرست</h3></div>
+              <div class="dc-body"><p id="rep-desc" style="font-size:13px;color:var(--g7);line-height:1.8;margin:0"></p></div>
+            </div>
+
+            <!-- photos -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="camera" style="width:14px;height:14px;color:var(--g4)"></i>عکس‌های پیوست<span style="font-weight:400;color:var(--g4);margin-right:4px" id="photo-count"></span></h3></div>
+              <div class="dc-body">
+                <div class="photo-grid" id="photo-grid"></div>
+              </div>
+            </div>
+
+            <!-- GPS -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="map-pin" style="width:14px;height:14px;color:var(--g4)"></i>موقعیت GPS</h3><span id="gps-status" style="font-size:11.5px;font-weight:500"></span></div>
+              <div class="dc-body">
+                <div class="gps-map" id="gps-map"></div>
+                <div class="gps-info">
+                  <div><div style="font-size:11px;color:var(--g5);margin-bottom:2px">مختصات</div><div class="mono" style="font-size:12px" id="gps-coords">—</div></div>
+                  <div><div style="font-size:11px;color:var(--g5);margin-bottom:2px">فاصله از پروژه</div><div style="font-size:12.5px;font-weight:500" id="gps-dist">—</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- timeline -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="history" style="width:14px;height:14px;color:var(--g4)"></i>تاریخچه این آیتم</h3><a href="#" style="font-size:11.5px;color:var(--p7)">مشاهده همه (۸)</a></div>
+              <div class="dc-body"><div class="tl" id="tl"></div></div>
+            </div>
+
+            <!-- approval -->
+            <div class="dc">
+              <div class="dc-head"><h3><i data-lucide="git-branch" style="width:14px;height:14px;color:var(--g4)"></i>گردش‌کار تأیید</h3></div>
+              <div class="dc-body">
+                <div class="ap-steps">
+                  <div class="ap-step done"><div class="ap-dot"><i data-lucide="check" style="width:13px;height:13px"></i></div><div class="ap-label">ثبت سرپرست</div><div class="ap-sub">علی محمدی · ۲ ساعت پیش</div></div>
+                  <div class="ap-step active"><div class="ap-dot">۲</div><div class="ap-label">تأیید ناظر</div><div class="ap-sub">در انتظار شما</div></div>
+                  <div class="ap-step"><div class="ap-dot">۳</div><div class="ap-label">تأیید مدیر پروژه</div><div class="ap-sub">مهندس احمدی</div></div>
+                </div>
+              </div>
+            </div>
+            <div style="height:20px"></div>
+          </div>
+
+          <!-- sticky action footer -->
+          <div class="action-footer" id="action-footer">
+            <div class="af-main" id="af-main">
+              <button class="btn btn-success btn-xl" style="flex:1.5" onclick="doApprove()"><i data-lucide="check" style="width:16px;height:16px"></i>تأیید <kbd style="background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;margin-right:4px">A</kbd></button>
+              <button class="btn btn-warn-ol btn-xl" style="flex:1" id="btn-edit" onclick="toggleExpand('edit')"><i data-lucide="edit-3" style="width:15px;height:15px"></i>اصلاح <kbd style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;margin-right:4px;opacity:.7">E</kbd></button>
+              <button class="btn btn-danger-ol btn-xl" style="flex:1" id="btn-rej" onclick="toggleExpand('reject')"><i data-lucide="x" style="width:15px;height:15px"></i>رد <kbd style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;margin-right:4px;opacity:.7">R</kbd></button>
+            </div>
+            <div class="af-expand" id="af-expand" style="display:none">
+              <div style="font-size:12.5px;font-weight:600;color:var(--g8);margin-bottom:8px" id="af-expand-title">دلیل رد</div>
+              <textarea class="af-field" id="af-reason" placeholder="دلیل را توضیح دهید (حداقل ۲۰ کاراکتر)…" rows="3" oninput="checkSendBtn()"></textarea>
+              <div class="af-row">
+                <label class="af-cb-row" onclick="this.querySelector('.af-cb').classList.toggle('on')">
+                  <span class="af-cb on"><i data-lucide="check" style="width:10px;height:10px;color:white"></i></span>
+                  <span>ارسال پیامک به سرپرست</span>
+                </label>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-ghost btn-sm" onclick="closeExpand()">انصراف</button>
+                  <button class="btn btn-sm" id="af-send-btn" disabled style="background:var(--e5);color:white" onclick="doSend()">ارسال</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: report list -->
+      <div class="rlist" id="rlist">
+        <!-- bulk bar (hidden by default) -->
+        <div class="bulk-bar" id="bulk-bar" style="display:none">
+          <i data-lucide="check-square" style="width:14px;height:14px"></i>
+          <span><span class="bbc" id="bulk-count">۰</span> مورد انتخاب شد</span>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:white;border:0;margin-right:8px" onclick="bulkApprove()"><i data-lucide="check" style="width:12px;height:12px"></i>تأیید همه</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:0" onclick="clearSel()"><i data-lucide="x" style="width:12px;height:12px"></i>انصراف</button>
+          <button class="btn btn-sm" style="background:transparent;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);margin-right:auto" onclick="clearSel()"><i data-lucide="download" style="width:12px;height:12px"></i>خروجی</button>
+        </div>
+        <div class="rlist-head">
+          <label class="af-cb-row" id="select-all-wrap">
+            <span class="af-cb" id="select-all-cb" onclick="toggleSelectAll()"></span>
+            <span style="font-size:12.5px;color:var(--g6)">۲۴ مورد</span>
+          </label>
+          <span style="font-size:11px;color:var(--g4);margin-right:auto">گزارش‌های در انتظار</span>
+        </div>
+        <div class="rlist-body" id="rlist-body">
+          <!-- injected by JS -->
+        </div>
+        <div class="rlist-footer">
+          <span>نمایش <strong>۸ از ۲۴</strong> مورد</span>
+          <div style="display:flex;align-items:center;gap:4px">
+            <button class="btn btn-ghost btn-sm" style="width:28px;padding:0;height:28px;border-radius:6px;color:var(--g4)" disabled><i data-lucide="chevron-right" style="width:13px;height:13px"></i></button>
+            <span style="background:var(--p7);color:white;width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">۱</span>
+            <button class="btn btn-ghost btn-sm" style="width:28px;padding:0;height:28px;border-radius:6px"><i data-lucide="chevron-left" style="width:13px;height:13px"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state (no pending) -->
+      <div class="all-done" id="all-done-state" style="display:none;grid-column:1/3">
+        <div class="check-big"><i data-lucide="party-popper" style="width:38px;height:38px"></i></div>
+        <h3>همه گزارش‌ها بررسی شدند! 🎉</h3>
+        <p>در حال حاضر هیچ گزارش در انتظار تأییدی ندارید.<br>گزارش‌های بعدی به‌محض ثبت اینجا نمایش داده می‌شوند.</p>
+        <button class="btn btn-outline btn-sm" style="margin-top:16px">مشاهده همه گزارش‌های تأییدشده</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- lightbox -->
+<div class="lb" id="lb" onclick="closeLb()"><button class="lb-close" onclick="event.stopPropagation();closeLb()"><i data-lucide="x" style="width:16px;height:16px"></i></button><div class="lb-img"><i data-lucide="image" style="width:48px;height:48px"></i></div></div>
+
+<!-- shortcuts overlay -->
+<div class="shortcuts-overlay" id="shortcuts-overlay" onclick="toggleShortcuts()">
+  <div class="shortcuts-box" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="margin:0">میانبرهای کیبورد</h3>
+      <button class="tb-btn" onclick="toggleShortcuts()"><i data-lucide="x" style="width:15px;height:15px"></i></button>
+    </div>
+    <div class="sk-row"><span class="k">حرکت به گزارش بعدی</span><kbd>J</kbd></div>
+    <div class="sk-row"><span class="k">حرکت به گزارش قبلی</span><kbd>K</kbd></div>
+    <div class="sk-row"><span class="k">تأیید گزارش فعلی</span><kbd>A</kbd></div>
+    <div class="sk-row"><span class="k">رد گزارش فعلی</span><kbd>R</kbd></div>
+    <div class="sk-row"><span class="k">درخواست اصلاح</span><kbd>E</kbd></div>
+    <div class="sk-row"><span class="k">انتخاب / عدم انتخاب</span><kbd>Space</kbd></div>
+    <div class="sk-row"><span class="k">نمایش این راهنما</span><kbd>?</kbd></div>
+  </div>
+</div>
+
+<button class="shortcut-fab" onclick="toggleShortcuts()" title="میانبرهای کیبورد">?</button>
+
+<script>
+const fa = s => String(s).replace(/\d/g,'d'=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+
+// ── Sample data ──
+const reports = [
+  { id:1, name:'علی محمدی', initials:'ع.م', avClass:'av-blue', role:'سرپرست کارگاه', phone:'۰۹۱۳۱۱۱۱۱۱۱',
+    time:'۲ ساعت پیش', project:'مجتمع نگین شهر', wbs:'سازه › فونداسیون', title:'بتن‌ریزی فونداسیون بلوک A',
+    code:'۱.۲.۱.۳', from:45, to:60, photos:3, overdue:false, unread:true,
+    desc:'بتن‌ریزی نیمهٔ شرقی فونداسیون بلوک A امروز انجام شد. حدود ۱۳۰ متر مکعب بتن C30 مصرف شد. ویبره و عمل‌آوری طبق دستورالعمل انجام شده است. نمونه‌های بتن آزمایشگاه ارسال شد.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۸:۳۴', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۸:۳۶', syncDelay:'۲ دقیقه',
+    conn:'آنلاین', lat:'35.7219', lng:'51.3347', gpsOk:true },
+  { id:2, name:'حسن کریمی', initials:'ح.ک', avClass:'av-orange', role:'سرپرست کارگاه', phone:'۰۹۱۳۲۲۲۲۲۲۲',
+    time:'۳۰ دقیقه پیش', project:'مجتمع نگین شهر', wbs:'سازه › اسکلت', title:'آرماتوربندی ستون محور B',
+    code:'۱.۲.۲.۱', from:84, to:90, photos:4, overdue:false, unread:true,
+    desc:'آرماتوربندی ستون‌های محور B، طبقه سوم تا نیمه‌ٔ شمالی تکمیل شد. آماده برای بازرسی ناظر و سپس قالب‌بندی است.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۱۰:۰۵', serverTime:'۱۴۰۴/۰۳/۰۱ — ۱۰:۰۷', syncDelay:'۲ دقیقه',
+    conn:'آنلاین', lat:'35.7220', lng:'51.3350', gpsOk:true },
+  { id:3, name:'رضا اکبری', initials:'ر.ا', avClass:'av-green', role:'سرپرست کارگاه', phone:'۰۹۱۳۴۴۴۴۴۴۴',
+    time:'۲ روز پیش', project:'پل شهید سلیمانی', wbs:'سازه › سقف', title:'قالب‌بندی سقف طبقه دوم',
+    code:'۱.۲.۳.۱', from:22, to:35, photos:2, overdue:true, unread:true,
+    desc:'قالب‌بندی بخش مرکزی سقف طبقه دوم بلوک B انجام شد. ۲۵۰ متر مربع تکمیل گردید.',
+    localTime:'۱۴۰۳/۱۲/۲۸ — ۱۴:۲۲', serverTime:'۱۴۰۳/۱۲/۲۸ — ۱۷:۰۰', syncDelay:'۲ ساعت ۳۸ دقیقه',
+    conn:'آفلاین (سینک تأخیری)', lat:'35.7200', lng:'51.3300', gpsOk:false },
+  { id:4, name:'علی محمدی', initials:'ع.م', avClass:'av-blue', role:'سرپرست کارگاه', phone:'۰۹۱۳۱۱۱۱۱۱۱',
+    time:'۵ ساعت پیش', project:'مجتمع نگین شهر', wbs:'عملیات خاکی', title:'خاکبرداری بلوک C',
+    code:'۱.۱.۱', from:65, to:72, photos:5, overdue:false, unread:false,
+    desc:'خاکبرداری بلوک C در تراز -۴.۵ متر تکمیل شد. آماده برای آزمایش خاک.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۵:۱۴', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۵:۱۸', syncDelay:'۴ دقیقه',
+    conn:'آنلاین', lat:'35.7215', lng:'51.3345', gpsOk:true },
+  { id:5, name:'محمد رضایی', initials:'م.ر', avClass:'av-gray', role:'سرپرست کارگاه', phone:'۰۹۱۳۳۳۳۳۳۳۳',
+    time:'۱ ساعت پیش', project:'تونل البرز', wbs:'عملیات خاکی › تسطیح', title:'تسطیح سطح کارگاه',
+    code:'۱.۱.۳', from:90, to:100, photos:1, overdue:true, unread:true,
+    desc:'عملیات تسطیح محوطه کارگاه کاملاً انجام شد. آماده بهره‌برداری.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۹:۴۲', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۹:۴۵', syncDelay:'۳ دقیقه',
+    conn:'آنلاین', lat:'35.7225', lng:'51.3355', gpsOk:true },
+  { id:6, name:'حسن کریمی', initials:'ح.ک', avClass:'av-orange', role:'سرپرست کارگاه', phone:'۰۹۱۳۲۲۲۲۲۲۲',
+    time:'۴ ساعت پیش', project:'مجتمع نگین شهر', wbs:'سازه › فونداسیون', title:'آرماتوربندی فونداسیون بلوک B',
+    code:'۱.۲.۱.۱', from:40, to:55, photos:3, overdue:false, unread:false,
+    desc:'آرماتوربندی فونداسیون بلوک B تا محور ۵ پیش رفت. ۱۲۰ متر مربع تکمیل شد.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۶:۵۰', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۶:۵۵', syncDelay:'۵ دقیقه',
+    conn:'آنلاین', lat:'35.7218', lng:'51.3348', gpsOk:true },
+  { id:7, name:'رضا اکبری', initials:'ر.ا', avClass:'av-green', role:'سرپرست کارگاه', phone:'۰۹۱۳۴۴۴۴۴۴۴',
+    time:'۶ ساعت پیش', project:'پل شهید سلیمانی', wbs:'نازک‌کاری', title:'نصب داربست طبقه سوم',
+    code:'۱.۴.۱', from:10, to:60, photos:2, overdue:false, unread:false, bigJump:true,
+    desc:'داربست طبقه سوم نصب و کامل شد. پیشرفت بالا به‌دلیل اتمام تأمین مصالح است.',
+    localTime:'۱۴۰۴/۰۳/۰۱ — ۰۴:۰۰', serverTime:'۱۴۰۴/۰۳/۰۱ — ۰۴:۰۳', syncDelay:'۳ دقیقه',
+    conn:'آنلاین', lat:'35.7230', lng:'51.3360', gpsOk:false },
+  { id:8, name:'محمد رضایی', initials:'م.ر', avClass:'av-gray', role:'سرپرست کارگاه', phone:'۰۹۱۳۳۳۳۳۳۳۳',
+    time:'دیروز', project:'بیمارستان امام رضا', wbs:'تأسیسات › برقی', title:'کشش سیم‌کشی طبقه ۴',
+    code:'۱.۳.۱.۲', from:55, to:70, photos:3, overdue:true, unread:false,
+    desc:'سیم‌کشی کانال‌های اصلی طبقه چهارم تکمیل و نصب داکت‌ها انجام شد.',
+    localTime:'۱۴۰۳/۱۲/۳۰ — ۱۵:۳۰', serverTime:'۱۴۰۳/۱۲/۳۰ — ۱۵:۳۵', syncDelay:'۵ دقیقه',
+    conn:'آنلاین', lat:'35.7205', lng:'51.3340', gpsOk:false },
+];
+
+let selectedId = null;
+let selectedIds = new Set();
+let expandMode = null;
+let uiState = 'full'; // full | empty | bulk
+
+function renderCards() {
+  const body = document.getElementById('rlist-body');
+  body.innerHTML = reports.map(r => {
+    const checked = selectedIds.has(r.id);
+    const active = r.id === selectedId;
+    const delta = r.to - r.from;
+    const dColor = delta >= 0 ? 'var(--s5)' : 'var(--e5)';
+    const dBg = delta >= 0 ? 'var(--s50)' : 'var(--e50)';
+    const thumbs = Math.min(r.photos, 3);
+    const more = r.photos > 3 ? r.photos - 3 : 0;
+    const thumbHtml = Array.from({length: thumbs}, () =>
+      `<div class="thumb"><div class="stripe-mini"></div></div>`).join('') +
+      (more ? `<div class="thumb"><div class="stripe-mini"></div><div class="more">+${fa(more)}</div></div>` : '');
+    const badges = `
+      <span class="badge badge-pending">در انتظار</span>
+      ${r.overdue ? `<span class="badge badge-overdue"><i data-lucide="alert-triangle" style="width:9px;height:9px"></i>تأخیر</span>` : ''}
+      ${r.bigJump ? `<span class="badge" style="background:var(--a1);color:var(--a7);font-size:10px">پرش غیرعادی</span>` : ''}
+    `;
+    return `<div class="rcard${active?' active':''}${r.unread?' unread':''}${r.fading?' fading':''}" data-id="${r.id}" onclick="selectReport(${r.id},event)">
+      <div class="cb-area" onclick="event.stopPropagation();toggleSel(${r.id})">
+        <span class="cb${checked?' checked':''}">${checked?`<i data-lucide="check" style="width:10px;height:10px;color:white"></i>`:''}</span>
+      </div>
+      <div class="av ${r.avClass}" style="width:32px;height:32px;font-size:11px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;margin-left:10px">${r.initials}</div>
+      <div class="main">
+        <div class="row1"><span class="name">${r.name}</span><span class="time">${r.time}</span></div>
+        <div class="wbs-path">${r.project} › ${r.wbs} › <strong>${r.title}</strong></div>
+        <div class="progress-row">
+          <div class="pchange"><span class="from">${fa(r.from)}٪</span><i data-lucide="arrow-left" style="width:11px;height:11px;color:var(--g4)"></i><span class="to">${fa(r.to)}٪</span></div>
+          <span class="delta-badge" style="background:${dBg};color:${dColor}">${delta>=0?'+':''}${fa(delta)}٪</span>
+          <div class="thumbs">${thumbHtml}</div>
+        </div>
+      </div>
+      <div class="badges">${badges}</div>
+    </div>`;
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+}
+
+function selectReport(id, e) {
+  if (e && e.target.closest('.cb-area')) return;
+  selectedId = id;
+  renderCards();
+  loadDetail(id);
+}
+
+function loadDetail(id) {
+  const r = reports.find(x=>x.id===id);
+  if (!r) return;
+  document.getElementById('detail-empty').style.display = 'none';
+  const dc = document.getElementById('detail-content');
+  dc.style.display = 'flex';
+  // header
+  document.getElementById('dh-bc').innerHTML = `<span>${r.project}</span><span>›</span><span>${r.wbs}</span>`;
+  document.getElementById('dh-title').textContent = r.title;
+  document.getElementById('dh-code').textContent = r.code;
+  document.getElementById('dh-badge').innerHTML = `<span class="badge badge-pending" style="font-size:12px;height:24px"><i data-lucide="clock" style="width:11px;height:11px"></i>در انتظار تأیید</span>`;
+  // reporter
+  document.getElementById('rep-av').textContent = r.initials;
+  document.getElementById('rep-name').textContent = r.name;
+  document.getElementById('rep-role').textContent = r.role;
+  document.getElementById('rep-phone').textContent = r.phone;
+  document.getElementById('rep-local-t').textContent = r.localTime;
+  document.getElementById('rep-server-t').textContent = r.serverTime;
+  document.getElementById('rep-sync-d').textContent = r.syncDelay;
+  const connEl = document.getElementById('rep-conn');
+  connEl.innerHTML = r.conn === 'آنلاین'
+    ? `<span class="badge" style="background:var(--s50);color:var(--s7)"><span style="width:6px;height:6px;border-radius:999px;background:var(--s5);display:inline-block"></span>${r.conn}</span>`
+    : `<span class="badge badge-edit">${r.conn}</span>`;
+  // progress
+  const fill = document.getElementById('pf-fill');
+  const marker = document.getElementById('pf-marker');
+  fill.style.width = r.to + '%';
+  fill.style.background = r.to - r.from >= 0 ? 'var(--p7)' : 'var(--e5)';
+  marker.style.right = (100 - r.from) + '%';
+  document.getElementById('pn-from').textContent = fa(r.from) + '٪';
+  document.getElementById('pn-to').textContent = fa(r.to) + '٪';
+  const delta = r.to - r.from;
+  const dn = document.getElementById('pn-delta');
+  dn.textContent = (delta >= 0 ? '+' : '') + fa(delta) + '٪';
+  dn.style.color = delta >= 0 ? 'var(--s5)' : 'var(--e5)';
+  const phAlert = document.getElementById('ph-alert');
+  if (r.bigJump) { phAlert.innerHTML = `<span class="badge" style="background:var(--a1);color:var(--a7)"><i data-lucide="alert-triangle" style="width:10px;height:10px"></i>پرش غیرمعمول (+${fa(delta)}٪)</span>`; }
+  else if (delta < 0) { phAlert.innerHTML = `<span class="badge badge-edit"><i data-lucide="alert-triangle" style="width:10px;height:10px"></i>کاهشی</span>`; }
+  else phAlert.innerHTML = '';
+  // description
+  document.getElementById('rep-desc').textContent = r.desc;
+  // photos
+  document.getElementById('photo-count').textContent = `(${fa(r.photos)})`;
+  const pg = document.getElementById('photo-grid');
+  const labels = ['نمای کلی','آرماتور','ویبره','نمای چپ','جزئیات'];
+  const sizes = ['۱.۲MB','۰.۸MB','۰.۹MB','۱.۱MB','۰.۷MB'];
+  const times = ['۰۸:۳۴','۰۸:۳۶','۰۸:۴۱','۰۸:۴۵','۰۸:۵۰'];
+  pg.innerHTML = Array.from({length:Math.min(r.photos,6)},(_,i)=>`
+    <div class="pg-item" onclick="document.getElementById('lb').classList.add('open')">
+      <div class="stripe"><i data-lucide="image" style="width:20px;height:20px"></i></div>
+      <div class="zoom-ic"><i data-lucide="maximize-2" style="width:18px;height:18px"></i></div>
+      <span class="photo-tag">${times[i]||times[0]}</span>
+      <span class="photo-sz">${sizes[i]||sizes[0]}</span>
+    </div>`).join('');
+  // GPS
+  const gpsMap = document.getElementById('gps-map');
+  gpsMap.innerHTML = buildGpsMap(r.lat, r.lng, r.gpsOk);
+  document.getElementById('gps-coords').textContent = `${r.lat}°N, ${r.lng}°E`;
+  const gd = document.getElementById('gps-dist');
+  gd.innerHTML = r.gpsOk
+    ? `<span style="color:var(--s7)"><i data-lucide="check-circle-2" style="width:12px;height:12px;margin-left:4px"></i>داخل محدودهٔ پروژه</span>`
+    : `<span style="color:var(--w7)"><i data-lucide="alert-triangle" style="width:12px;height:12px;margin-left:4px"></i>۲.۵km خارج از محدوده</span>`;
+  const gs = document.getElementById('gps-status');
+  gs.innerHTML = r.gpsOk
+    ? `<span class="badge" style="background:var(--s50);color:var(--s7)"><i data-lucide="check" style="width:10px;height:10px"></i>داخل محدوده</span>`
+    : `<span class="badge badge-edit"><i data-lucide="alert-triangle" style="width:10px;height:10px"></i>خارج محدوده</span>`;
+  // timeline
+  const tlItems = [
+    {p:50, name:'حسن کریمی', date:'۱۴۰۴/۰۲/۲۵', st:'approved', cur:false},
+    {p:40, name:'علی محمدی', date:'۱۴۰۴/۰۲/۱۸', st:'approved', cur:false},
+    {p:r.to, name:r.name, date:r.localTime.split(' — ')[0], st:'pending', cur:true},
+  ];
+  document.getElementById('tl').innerHTML = [...tlItems].reverse().map(t=>`
+    <div class="tl-item${t.cur?' current':''}">
+      <div class="tl-dot">${t.cur?'<i data-lucide="clock" style="width:11px;height:11px"></i>':'<i data-lucide="check" style="width:11px;height:11px"></i>'}</div>
+      <div class="tl-body">
+        <div class="tl-t">${t.name} · ${fa(t.p)}٪ ${t.cur?'<span class="badge badge-pending" style="font-size:10px">فعلی</span>':'<span class="badge badge-approved" style="font-size:10px">تأیید</span>'}</div>
+        <div class="tl-meta"><span>${t.date}</span></div>
+      </div>
+    </div>`).join('');
+  closeExpand();
+  if (window.lucide) lucide.createIcons();
+}
+
+function buildGpsMap(lat, lng, ok) {
+  const c = ok ? '#16A34A' : '#DC2626';
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="100" height="100" fill="#E8EDF5"/>
+    <line x1="0" y1="25" x2="100" y2="25" stroke="#D0D8E8" stroke-width=".8"/>
+    <line x1="0" y1="50" x2="100" y2="50" stroke="#D0D8E8" stroke-width=".8"/>
+    <line x1="0" y1="75" x2="100" y2="75" stroke="#D0D8E8" stroke-width=".8"/>
+    <line x1="25" y1="0" x2="25" y2="100" stroke="#D0D8E8" stroke-width=".8"/>
+    <line x1="50" y1="0" x2="50" y2="100" stroke="#D0D8E8" stroke-width=".8"/>
+    <line x1="75" y1="0" x2="75" y2="100" stroke="#D0D8E8" stroke-width=".8"/>
+    <rect x="15" y="20" width="40" height="8" rx="1.5" fill="#CBD5E8"/>
+    <rect x="30" y="40" width="55" height="6" rx="1.5" fill="#CBD5E8"/>
+    <rect x="10" y="62" width="30" height="8" rx="1.5" fill="#CBD5E8"/>
+    <rect x="55" y="58" width="30" height="6" rx="1.5" fill="#CBD5E8"/>
+    <rect x="20" y="35" width="18" height="14" rx="2" fill="#B8C6DC"/>
+    <rect x="60" y="25" width="22" height="18" rx="2" fill="#B8C6DC"/>
+    <rect x="42" y="70" width="24" height="14" rx="2" fill="#B8C6DC"/>
+    <circle cx="50" cy="50" r="12" fill="none" stroke="${c}" stroke-width="1.5" stroke-dasharray="3 2" opacity=".5"/>
+    <circle cx="50" cy="50" r="5" fill="${c}" opacity=".9"/>
+    <circle cx="50" cy="50" r="2.5" fill="white"/>
+  </svg>`;
+}
+
+// ── Select / Bulk ──
+function toggleSel(id) {
+  if (selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
+  updateBulkBar();
+  renderCards();
+}
+function toggleSelectAll() {
+  if (selectedIds.size === reports.length) { selectedIds.clear(); }
+  else { reports.forEach(r => selectedIds.add(r.id)); }
+  updateBulkBar(); renderCards();
+}
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  const n = selectedIds.size;
+  if (n > 0) { bar.style.display = 'flex'; document.getElementById('bulk-count').textContent = fa(n); }
+  else bar.style.display = 'none';
+}
+function clearSel() { selectedIds.clear(); updateBulkBar(); renderCards(); }
+function bulkApprove() {
+  clearSel();
+  showToast('همه گزارش‌های انتخاب‌شده تأیید شدند','success');
+}
+
+// ── Approve / Reject ──
+function doApprove() {
+  if (!selectedId) return;
+  const card = document.querySelector(`.rcard[data-id="${selectedId}"]`);
+  if (card) { card.classList.add('fading'); setTimeout(()=>{ card.remove(); }, 340); }
+  showToast('گزارش با موفقیت تأیید شد','success');
+  document.getElementById('detail-empty').style.display = 'flex';
+  document.getElementById('detail-content').style.display = 'none';
+  selectedId = null;
+}
+
+let expandTarget = null;
+function toggleExpand(mode) {
+  const exp = document.getElementById('af-expand');
+  if (expandMode === mode) { closeExpand(); return; }
+  expandMode = mode;
+  exp.style.display = 'block';
+  const t = document.getElementById('af-expand-title');
+  const sb = document.getElementById('af-send-btn');
+  if (mode === 'reject') { t.textContent = 'دلیل رد'; sb.style.background='var(--e5)'; sb.textContent='رد گزارش'; }
+  else { t.textContent = 'دلیل درخواست اصلاح'; sb.style.background='var(--a5)'; sb.textContent='ارسال درخواست'; }
+  if (window.lucide) lucide.createIcons();
+}
+function closeExpand() { expandMode = null; document.getElementById('af-expand').style.display='none'; document.getElementById('af-reason').value=''; }
+function checkSendBtn() {
+  const v = document.getElementById('af-reason').value.trim();
+  document.getElementById('af-send-btn').disabled = v.length < 20;
+}
+function doSend() {
+  const mode = expandMode;
+  closeExpand();
+  showToast(mode==='reject' ? 'گزارش رد شد و پیامک ارسال گردید' : 'درخواست اصلاح ارسال شد','success');
+}
+
+// ── State switcher ──
+function setUIState(s) {
+  uiState = s;
+  document.querySelectorAll('.ssw-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
+  const split = document.getElementById('main-split');
+  const allDone = document.getElementById('all-done-state');
+  const rlist = document.getElementById('rlist');
+  const detail = document.getElementById('detail-panel');
+  if (s === 'empty') {
+    rlist.style.display = 'none'; detail.style.display = 'none';
+    allDone.style.display = 'flex';
+  } else {
+    allDone.style.display = 'none';
+    rlist.style.display = 'flex'; detail.style.display = 'flex';
+    if (s === 'bulk') {
+      reports.forEach(r => selectedIds.add(r.id));
+      updateBulkBar(); renderCards();
+    } else {
+      selectedIds.clear(); updateBulkBar(); renderCards();
+    }
+  }
+}
+document.querySelectorAll('.ssw-btn').forEach(b => b.addEventListener('click', ()=>setUIState(b.dataset.s)));
+
+// ── Tabs ──
+function setTab(btn, t) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── Keyboard shortcuts ──
+function toggleShortcuts() { document.getElementById('shortcuts-overlay').classList.toggle('open'); }
+function closeLb() { document.getElementById('lb').classList.remove('open'); }
+
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const idx = selectedId ? reports.findIndex(r=>r.id===selectedId) : -1;
+  if (e.key === 'j' || e.key === 'J') { const n = Math.min(idx+1, reports.length-1); selectReport(reports[n].id, null); }
+  else if (e.key === 'k' || e.key === 'K') { const n = Math.max(idx-1, 0); selectReport(reports[Math.max(n,0)].id, null); }
+  else if ((e.key === 'a' || e.key === 'A') && selectedId) doApprove();
+  else if ((e.key === 'r' || e.key === 'R') && selectedId) toggleExpand('reject');
+  else if ((e.key === 'e' || e.key === 'E') && selectedId) toggleExpand('edit');
+  else if (e.key === ' ' && selectedId) { e.preventDefault(); toggleSel(selectedId); }
+  else if (e.key === '?') toggleShortcuts();
+  else if (e.key === 'Escape') { closeLb(); closeExpand(); document.getElementById('shortcuts-overlay').classList.remove('open'); }
+});
+
+// ── Toast ──
+let toastTimer;
+function showToast(text, kind='success') {
+  const old = document.querySelector('.toast'); if(old) old.remove();
+  const t = document.createElement('div'); t.className='toast';
+  const colors = {success:'var(--s5)', error:'var(--e5)', info:'var(--i5)', warn:'var(--a5)'};
+  const icons = {success:'check', error:'x', info:'info', warn:'alert-triangle'};
+  t.innerHTML = `<span class="tic" style="background:${colors[kind]}"><i data-lucide="${icons[kind]}" style="width:12px;height:12px"></i></span>${text}`;
+  document.body.appendChild(t);
+  if(window.lucide) lucide.createIcons();
+  toastTimer = setTimeout(()=>{ t.classList.add('hide'); setTimeout(()=>t.remove(),220); }, 2400);
+}
+
+// ── Init ──
+renderCards();
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

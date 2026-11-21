@@ -1,0 +1,856 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-01T10:07:24Z"
+  },
+  "title": "پروژه‌یار — بوم کامل محصول",
+  "launch": {
+    "view": "canvas",
+    "page": "web"
+  },
+  "pages": [
+    {
+      "id": "web",
+      "name": "پنل وب"
+    },
+    {
+      "id": "mobile",
+      "name": "اپ اندروید سرپرست"
+    },
+    {
+      "id": "kit",
+      "name": "کامپوننت‌ها"
+    }
+  ],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1920,
+      "h": 1180,
+      "title": "نقشهٔ محصول",
+      "page": "web",
+      "is_interactive": true
+    },
+    "W01-Login.dc.html": {
+      "x": 0,
+      "y": 1580,
+      "w": 1440,
+      "h": 900,
+      "title": "ورود — حالت عادی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W02-LoginError.dc.html": {
+      "x": 1520,
+      "y": 1580,
+      "w": 1440,
+      "h": 900,
+      "title": "ورود — خطا و قفل موقت",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W03-Otp.dc.html": {
+      "x": 3040,
+      "y": 1580,
+      "w": 1440,
+      "h": 900,
+      "title": "ورود — کد تأیید دومرحله‌ای",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W04-ResetPassword.dc.html": {
+      "x": 4560,
+      "y": 1580,
+      "w": 1440,
+      "h": 900,
+      "title": "بازیابی رمز عبور",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W05-Dashboard.dc.html": {
+      "x": 0,
+      "y": 2880,
+      "w": 1440,
+      "h": 1560,
+      "title": "داشبورد سازمان",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W06-Notifications.dc.html": {
+      "x": 1520,
+      "y": 2880,
+      "w": 420,
+      "h": 760,
+      "title": "پنل اعلان‌ها",
+      "page": "web",
+      "is_interactive": true
+    },
+    "W07-Projects.dc.html": {
+      "x": 2020,
+      "y": 2880,
+      "w": 1440,
+      "h": 1000,
+      "title": "پروژه‌ها — جدول",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W08-ProjectsCards.dc.html": {
+      "x": 3540,
+      "y": 2880,
+      "w": 1440,
+      "h": 1320,
+      "title": "پروژه‌ها — کارت",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W09-ProjectsEmpty.dc.html": {
+      "x": 5060,
+      "y": 2880,
+      "w": 1440,
+      "h": 900,
+      "title": "پروژه‌ها — شروع کار",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W10-ProjectOverview.dc.html": {
+      "x": 0,
+      "y": 4840,
+      "w": 1440,
+      "h": 1900,
+      "title": "پروژه — نمای کلی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W11-Wbs.dc.html": {
+      "x": 1520,
+      "y": 4840,
+      "w": 1440,
+      "h": 920,
+      "title": "WBS — درخت و جزئیات",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W12-WbsEdit.dc.html": {
+      "x": 3040,
+      "y": 4840,
+      "w": 1440,
+      "h": 920,
+      "title": "WBS — حالت ویرایش و خطای وزن",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W13-WbsEmpty.dc.html": {
+      "x": 4560,
+      "y": 4840,
+      "w": 1440,
+      "h": 920,
+      "title": "WBS — پروژهٔ بدون ساختار",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W14-Cbs.dc.html": {
+      "x": 6080,
+      "y": 4840,
+      "w": 1440,
+      "h": 920,
+      "title": "CBS — ساختار هزینه",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W15-Links.dc.html": {
+      "x": 7600,
+      "y": 4840,
+      "w": 1440,
+      "h": 920,
+      "title": "اتصالات WBS ↔ CBS",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W16-Members.dc.html": {
+      "x": 0,
+      "y": 7140,
+      "w": 1440,
+      "h": 1260,
+      "title": "اعضای پروژه",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W17-Assignment.dc.html": {
+      "x": 1520,
+      "y": 7140,
+      "w": 1440,
+      "h": 920,
+      "title": "تخصیص فعالیت به سرپرستان",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W18-Risks.dc.html": {
+      "x": 3040,
+      "y": 7140,
+      "w": 1440,
+      "h": 1320,
+      "title": "ثبت ریسک‌ها و ماتریس",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W19-RiskDetail.dc.html": {
+      "x": 4560,
+      "y": 7140,
+      "w": 1440,
+      "h": 1260,
+      "title": "جزئیات ریسک و اقدامات",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W20-FieldReports.dc.html": {
+      "x": 6080,
+      "y": 7140,
+      "w": 1440,
+      "h": 1080,
+      "title": "صندوق گزارش‌های کارگاه",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W21-ChartsProgress.dc.html": {
+      "x": 0,
+      "y": 8860,
+      "w": 1440,
+      "h": 1440,
+      "title": "نمودارها — پیشرفت و زمان",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W22-ChartsCost.dc.html": {
+      "x": 1520,
+      "y": 8860,
+      "w": 1440,
+      "h": 1500,
+      "title": "نمودارها — هزینه و بودجه",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W23-ChartsResources.dc.html": {
+      "x": 3040,
+      "y": 8860,
+      "w": 1440,
+      "h": 1780,
+      "title": "نمودارها — منابع و سرپرستان",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W24-ChartsRisk.dc.html": {
+      "x": 4560,
+      "y": 8860,
+      "w": 1440,
+      "h": 1500,
+      "title": "نمودارها — ریسک و انحراف",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W25-ManagementReports.dc.html": {
+      "x": 6080,
+      "y": 8860,
+      "w": 1440,
+      "h": 1160,
+      "title": "گزارش‌های مدیریتی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W26-Users.dc.html": {
+      "x": 0,
+      "y": 11040,
+      "w": 1440,
+      "h": 1120,
+      "title": "کاربران سازمان",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W27-Permissions.dc.html": {
+      "x": 1520,
+      "y": 11040,
+      "w": 1440,
+      "h": 1500,
+      "title": "نقش‌ها و سطح دسترسی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W28-SettingsGeneral.dc.html": {
+      "x": 3040,
+      "y": 11040,
+      "w": 1440,
+      "h": 1720,
+      "title": "تنظیمات پروژه — اطلاعات عمومی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W29-SettingsWorkflow.dc.html": {
+      "x": 4560,
+      "y": 11040,
+      "w": 1440,
+      "h": 2080,
+      "title": "تنظیمات — پیشرفت و گردش‌کار تأیید",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W30-SettingsIntegrations.dc.html": {
+      "x": 6080,
+      "y": 11040,
+      "w": 1440,
+      "h": 2080,
+      "title": "تنظیمات — اعلان‌ها و یکپارچه‌سازی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W31-Templates.dc.html": {
+      "x": 7600,
+      "y": 11040,
+      "w": 1440,
+      "h": 1100,
+      "title": "کتابخانهٔ قالب‌های WBS / CBS",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W32-Profile.dc.html": {
+      "x": 9120,
+      "y": 11040,
+      "w": 1440,
+      "h": 1900,
+      "title": "حساب کاربری و امنیت",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W33-Help.dc.html": {
+      "x": 10640,
+      "y": 11040,
+      "w": 1440,
+      "h": 1240,
+      "title": "راهنما و پشتیبانی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W34-ImportUpload.dc.html": {
+      "x": 0,
+      "y": 13520,
+      "w": 1440,
+      "h": 1080,
+      "title": "ورود از MSP — بارگذاری و اعتبارسنجی",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W35-ImportMapping.dc.html": {
+      "x": 1520,
+      "y": 13520,
+      "w": 1440,
+      "h": 1260,
+      "title": "ورود از MSP — تطبیق فیلدها",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W36-MspSync.dc.html": {
+      "x": 4560,
+      "y": 13520,
+      "w": 1440,
+      "h": 1180,
+      "title": "همگام‌سازی MSP — بازبینی تغییرات",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "W37-NewProjectStep1.dc.html": {
+      "x": 0,
+      "y": 15180,
+      "w": 980,
+      "h": 820,
+      "title": "پروژهٔ جدید — مرحلهٔ ۱",
+      "page": "web"
+    },
+    "W38-NewProjectStep4.dc.html": {
+      "x": 3180,
+      "y": 15180,
+      "w": 980,
+      "h": 760,
+      "title": "پروژهٔ جدید — مرحلهٔ ۴",
+      "page": "web"
+    },
+    "W39-UploadWbs.dc.html": {
+      "x": 4240,
+      "y": 15180,
+      "w": 760,
+      "h": 860,
+      "title": "آپلود فایل WBS",
+      "page": "web"
+    },
+    "W40-QuickApprove.dc.html": {
+      "x": 5080,
+      "y": 15180,
+      "w": 760,
+      "h": 900,
+      "title": "تأیید سریع گزارش",
+      "page": "web"
+    },
+    "W41-Confirm.dc.html": {
+      "x": 5920,
+      "y": 15180,
+      "w": 1460,
+      "h": 440,
+      "title": "تأییدهای عمومی",
+      "page": "web"
+    },
+    "W42-AddMember.dc.html": {
+      "x": 7460,
+      "y": 15180,
+      "w": 640,
+      "h": 820,
+      "title": "افزودن عضو",
+      "page": "web"
+    },
+    "W43-CommandPalette.dc.html": {
+      "x": 8180,
+      "y": 15180,
+      "w": 900,
+      "h": 680,
+      "title": "جستجوی سریع Ctrl+K",
+      "page": "web"
+    },
+    "W44-AddRisk.dc.html": {
+      "x": 9160,
+      "y": 15180,
+      "w": 900,
+      "h": 1000,
+      "title": "ثبت ریسک جدید",
+      "page": "web"
+    },
+    "W45-ContextMenus.dc.html": {
+      "x": 10140,
+      "y": 15180,
+      "w": 1640,
+      "h": 1440,
+      "title": "منوهای سه‌نقطه",
+      "page": "web"
+    },
+    "W46-States.dc.html": {
+      "x": 11860,
+      "y": 15180,
+      "w": 1440,
+      "h": 1300,
+      "title": "حالت‌های سیستم",
+      "page": "web"
+    },
+    "M01-Login.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "ورود با موبایل",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M02-Otp.dc.html": {
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "کد تأیید",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M03-Today.dc.html": {
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "امروز",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M04-Tasks.dc.html": {
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "فعالیت‌های من",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M05-TaskDetail.dc.html": {
+      "x": 1880,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "جزئیات فعالیت",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M06-ReportForm.dc.html": {
+      "x": 2350,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "ثبت پیشرفت",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M07-Camera.dc.html": {
+      "x": 2820,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "عکس با مهر مکان و زمان",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M08-ReviewSubmit.dc.html": {
+      "x": 0,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "بازبینی و ارسال گزارش روزانه",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M09-SyncQueue.dc.html": {
+      "x": 470,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "صف ارسال آفلاین",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M10-MyReports.dc.html": {
+      "x": 940,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "گزارش‌های من",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M11-Revision.dc.html": {
+      "x": 1410,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "درخواست اصلاح",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M12-Notifications.dc.html": {
+      "x": 1880,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "اعلان‌ها",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M13-SiteIssue.dc.html": {
+      "x": 2350,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "گزارش مشکل کارگاه",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "M14-Profile.dc.html": {
+      "x": 2820,
+      "y": 1244,
+      "w": 390,
+      "h": 844,
+      "title": "پروفایل و تنظیمات",
+      "page": "mobile",
+      "is_interactive": true
+    },
+    "Icon.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 40,
+      "h": 40,
+      "title": "آیکن (Lucide)",
+      "page": "kit"
+    },
+    "Sidebar.dc.html": {
+      "x": 120,
+      "y": 0,
+      "w": 224,
+      "h": 860,
+      "title": "نوار کناری",
+      "page": "kit"
+    },
+    "Topbar.dc.html": {
+      "x": 424,
+      "y": 0,
+      "w": 1216,
+      "h": 52,
+      "title": "نوار بالا",
+      "page": "kit"
+    },
+    "ProjectHeader.dc.html": {
+      "x": 424,
+      "y": 132,
+      "w": 1216,
+      "h": 150,
+      "title": "سربرگ پروژه و زبانه‌ها",
+      "page": "kit"
+    },
+    "LoginBrand.dc.html": {
+      "x": 1720,
+      "y": 0,
+      "w": 720,
+      "h": 900,
+      "title": "پنل برند ورود",
+      "page": "kit"
+    },
+    "MBar.dc.html": {
+      "x": 2520,
+      "y": 0,
+      "w": 390,
+      "h": 60,
+      "title": "نوار بالای موبایل",
+      "page": "kit"
+    },
+    "MNav.dc.html": {
+      "x": 2520,
+      "y": 140,
+      "w": 390,
+      "h": 72,
+      "title": "ناوبری پایین موبایل",
+      "page": "kit"
+    },
+    "W47-NewProjectStep2.dc.html": {
+      "x": 1060,
+      "y": 15180,
+      "w": 980,
+      "h": 860,
+      "title": "پروژهٔ جدید — مرحلهٔ ۲: زمان و بودجه",
+      "page": "web"
+    },
+    "W48-NewProjectStep3.dc.html": {
+      "x": 2120,
+      "y": 15180,
+      "w": 980,
+      "h": 860,
+      "title": "پروژهٔ جدید — مرحلهٔ ۳: تیم",
+      "page": "web"
+    },
+    "W49-ImportReview.dc.html": {
+      "x": 3040,
+      "y": 13520,
+      "w": 1440,
+      "h": 1180,
+      "title": "ورود از MSP — بازبینی و ساخت WBS",
+      "page": "web",
+      "expand": "fill",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Icon.dc.html",
+    "Sidebar.dc.html",
+    "Topbar.dc.html",
+    "ProjectHeader.dc.html",
+    "LoginBrand.dc.html",
+    "MBar.dc.html",
+    "MNav.dc.html",
+    "W01-Login.dc.html",
+    "W02-LoginError.dc.html",
+    "W03-Otp.dc.html",
+    "W04-ResetPassword.dc.html",
+    "W05-Dashboard.dc.html",
+    "W06-Notifications.dc.html",
+    "W07-Projects.dc.html",
+    "W08-ProjectsCards.dc.html",
+    "W09-ProjectsEmpty.dc.html",
+    "W10-ProjectOverview.dc.html",
+    "W11-Wbs.dc.html",
+    "W12-WbsEdit.dc.html",
+    "W13-WbsEmpty.dc.html",
+    "W14-Cbs.dc.html",
+    "W15-Links.dc.html",
+    "W16-Members.dc.html",
+    "W17-Assignment.dc.html",
+    "W18-Risks.dc.html",
+    "W19-RiskDetail.dc.html",
+    "W20-FieldReports.dc.html",
+    "W21-ChartsProgress.dc.html",
+    "W22-ChartsCost.dc.html",
+    "W23-ChartsResources.dc.html",
+    "W24-ChartsRisk.dc.html",
+    "W25-ManagementReports.dc.html",
+    "W26-Users.dc.html",
+    "W27-Permissions.dc.html",
+    "W28-SettingsGeneral.dc.html",
+    "W29-SettingsWorkflow.dc.html",
+    "W30-SettingsIntegrations.dc.html",
+    "W31-Templates.dc.html",
+    "W32-Profile.dc.html",
+    "W33-Help.dc.html",
+    "W34-ImportUpload.dc.html",
+    "W35-ImportMapping.dc.html",
+    "W49-ImportReview.dc.html",
+    "W36-MspSync.dc.html",
+    "W37-NewProjectStep1.dc.html",
+    "W47-NewProjectStep2.dc.html",
+    "W48-NewProjectStep3.dc.html",
+    "W38-NewProjectStep4.dc.html",
+    "W39-UploadWbs.dc.html",
+    "W40-QuickApprove.dc.html",
+    "W41-Confirm.dc.html",
+    "W42-AddMember.dc.html",
+    "W43-CommandPalette.dc.html",
+    "W44-AddRisk.dc.html",
+    "W45-ContextMenus.dc.html",
+    "W46-States.dc.html",
+    "M01-Login.dc.html",
+    "M02-Otp.dc.html",
+    "M03-Today.dc.html",
+    "M04-Tasks.dc.html",
+    "M05-TaskDetail.dc.html",
+    "M06-ReportForm.dc.html",
+    "M07-Camera.dc.html",
+    "M08-ReviewSubmit.dc.html",
+    "M09-SyncQueue.dc.html",
+    "M10-MyReports.dc.html",
+    "M11-Revision.dc.html",
+    "M12-Notifications.dc.html",
+    "M13-SiteIssue.dc.html",
+    "M14-Profile.dc.html"
+  ],
+  "notes": {
+    "n1": {
+      "x": 0,
+      "y": 1320,
+      "text": "ورود و دسترسی",
+      "kind": "title1",
+      "maxW": 6000,
+      "page": "web"
+    },
+    "n2": {
+      "x": 0,
+      "y": 2620,
+      "text": "پرتفوی پروژه‌ها",
+      "kind": "title1",
+      "maxW": 6500,
+      "page": "web"
+    },
+    "n3": {
+      "x": 0,
+      "y": 4580,
+      "text": "پروژه — ساختار، هزینه و اتصالات",
+      "kind": "title1",
+      "maxW": 9040,
+      "page": "web"
+    },
+    "n4": {
+      "x": 0,
+      "y": 6880,
+      "text": "پروژه — تیم، ریسک و گزارش‌های کارگاه",
+      "kind": "title1",
+      "maxW": 7520,
+      "page": "web"
+    },
+    "n5": {
+      "x": 0,
+      "y": 8600,
+      "text": "تحلیل و گزارش‌های مدیریتی",
+      "kind": "title1",
+      "maxW": 7520,
+      "page": "web"
+    },
+    "n6": {
+      "x": 0,
+      "y": 10780,
+      "text": "سازمان، دسترسی‌ها و تنظیمات",
+      "kind": "title1",
+      "maxW": 12080,
+      "page": "web"
+    },
+    "n7": {
+      "x": 0,
+      "y": 13260,
+      "text": "ورود و همگام‌سازی با Microsoft Project",
+      "kind": "title1",
+      "maxW": 6000,
+      "page": "web"
+    },
+    "n8": {
+      "x": 0,
+      "y": 14920,
+      "text": "مودال‌ها، منوها و حالت‌های سیستم",
+      "kind": "title1",
+      "maxW": 13300,
+      "page": "web"
+    },
+    "m1": {
+      "x": 0,
+      "y": -260,
+      "text": "اپ سرپرست کارگاه — ورود و کار روزانه",
+      "kind": "title1",
+      "maxW": 3210,
+      "page": "mobile"
+    },
+    "m2": {
+      "x": 0,
+      "y": 984,
+      "text": "ارسال، پیگیری و حساب کاربری",
+      "kind": "title1",
+      "maxW": 3210,
+      "page": "mobile"
+    },
+    "k1": {
+      "x": 0,
+      "y": -260,
+      "text": "کامپوننت‌های مشترک",
+      "kind": "title1",
+      "maxW": 2910,
+      "page": "kit"
+    }
+  },
+  "designSystems": [
+    {
+      "title": "پروژه‌یار — Design System",
+      "namespace": "projeyar",
+      "artifact": "https://claude.ai/code/artifact/e174a6d9-6389-4129-bbd4-0c7f9074f508",
+      "version": "1793438198-a4b6",
+      "copiedAt": "2026-11-01T10:07:24Z"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────────────────────────────────────────────────────────
+   استایل‌های پایه — مستقیماً از designs/Design System.html
+   ─────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    font-feature-settings: 'ss01', 'cv01';
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    /* ارقام جدولی برای ترازبندی اعداد */
+    font-variant-numeric: tabular-nums;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+  }
+
+  /* ارقام فارسی پیش‌فرض در سراسر محصول */
+  .num-fa {
+    font-feature-settings: 'ss01';
+  }
+
+  /* Mono همیشه LTR حتی در RTL */
+  .mono {
+    @apply font-mono;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  /* اسکرول‌بار ظریف */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full border-2 border-gray-50;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  /* لنگر section با offset */
+  section[id] {
+    scroll-margin-top: 24px;
+  }
+
+  /* focus-visible سراسری — برای دسترسی‌پذیری */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+}
+
+@layer components {
+  /* ───── Spinner (لودینگ) ───── */
+  @keyframes spin {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+  .spin {
+    animation: spin 0.7s linear infinite;
+  }
+
+  /* ───── Skeleton (shimmer) ───── */
+  @keyframes shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #e4e4e7 0%, #f4f4f5 50%, #e4e4e7 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+}

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>پنل اعلان‌ها</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj" dir="rtl" lang="fa" style="width: 420px; height: 760px; padding: 12px; background: #F4F4F5">
+  <section class="card" aria-label="اعلان‌ها" style="height: 100%; display: flex; flex-direction: column; box-shadow: 0 10px 20px -5px rgba(24,24,27,0.10), 0 4px 8px -4px rgba(24,24,27,0.05)">
+    <div class="row between" style="padding: 14px 16px 10px">
+      <h2 class="h-hd row g8">اعلان‌ها <span class="bdg sm err pill">۳ جدید</span></h2>
+      <div class="row g4"><button class="link" type="button" style="font-size: 12px">همه خوانده شد</button><a class="ibtn sm" href="W30-SettingsIntegrations.dc.html" aria-label="تنظیمات اعلان‌ها"><dc-import name="Icon" i="settings" sz="15" hint-size="15px,15px"></dc-import></a></div>
+    </div>
+    <div style="padding: 0 16px 10px; border-bottom: 1px solid #F4F4F5">
+      <div class="seg" aria-label="دسته‌بندی اعلان‌ها" style="width: 100%">
+        <button class="on" type="button" aria-pressed="true">همه (۱۲)</button>
+        <button type="button" aria-pressed="false">تأییدها (۵)</button>
+        <button type="button" aria-pressed="false">ریسک‌ها (۲)</button>
+        <button type="button" aria-pressed="false">سیستم</button>
+      </div>
+    </div>
+    <div style="flex: 1 1 auto; overflow: hidden">
+      <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+        <div class="sect-t" style="padding: 10px 16px 4px">{{g.t}}</div>
+        <sc-for list="{{g.items}}" as="n" hint-placeholder-count="3">
+          <a class="row g10 ai-s" href="{{n.f}}" style="padding: 10px 16px; background: {{n.bg}}; border-bottom: 1px solid #F4F4F5">
+            <span class="icb sm {{n.tone}}"><dc-import name="Icon" i="{{n.ic}}" sz="13" hint-size="13px,13px"></dc-import></span>
+            <span class="col g2 grow"><span class="t-12 tx8 lh">{{n.t}}</span><span class="t-xs tx5">{{n.p}} · {{n.w}}</span></span>
+            <sc-if value="{{n.unread}}" hint-placeholder-val="{{false}}"><span class="dot" style="color: #2563EB; margin-top: 6px" aria-label="خوانده‌نشده"></span></sc-if>
+          </a>
+        </sc-for>
+      </sc-for>
+    </div>
+    <div class="card-f" style="justify-content: center"><a class="link" href="#">مشاهدهٔ همهٔ اعلان‌ها<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":420,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const N = (ic, tone, t, p, w, f, unread) => ({ ic, tone, t, p, w, f: f + '.dc.html', unread: !!unread, bg: unread ? '#F8FAFD' : '#FFFFFF' });
+    return { groups: [
+      { t: 'امروز', items: [
+        N('clipboard-check', 'inf', 'علی محمدی گزارش «بتن‌ریزی فونداسیون پایهٔ P3» را برای تأیید فرستاد', 'پل شهید سلیمانی', '۳۰ دقیقه پیش', 'W40-QuickApprove', 1),
+        N('shield-alert', 'err', 'ریسک «تأخیر تحویل ورق فولادی» بحرانی شد و به شما واگذار شد', 'مجتمع نگین شهر', '۱ ساعت پیش', 'W19-RiskDetail', 1),
+        N('trending-down', 'wrn', 'فعالیت «قالب‌بندی سقف طبقهٔ دوم» ۳۳٪ از برنامه عقب افتاد', 'مجتمع نگین شهر', '۴ ساعت پیش', 'W11-Wbs', 1)
+      ]},
+      { t: 'دیروز', items: [
+        N('refresh-cw', 'pri', 'همگام‌سازی با MSP انجام شد: ۴ فعالیت تغییر کرد', 'مجتمع نگین شهر', '۱۶:۴۰', 'W36-MspSync'),
+        N('check-circle-2', 'ok', 'مهندس رضایی ۶ آیتم از گزارش حسن کریمی را تأیید کرد', 'مجتمع نگین شهر', '۱۱:۰۵', 'W20-FieldReports'),
+        N('user-plus', 'pri', 'مهندس حسینی به پروژهٔ تونل البرز اضافه شد', 'تونل البرز', '۰۹:۲۰', 'W16-Members')
+      ]},
+      { t: 'این هفته', items: [
+        N('wallet', 'acc', 'مصرف بودجهٔ CBS «بتن C30» از ۹۰٪ گذشت', 'مجتمع نگین شهر', 'دوشنبه', 'W14-Cbs'),
+        N('file-down', 'neu', 'گزارش ماهانهٔ اردیبهشت آمادهٔ دانلود است', 'همهٔ پروژه‌ها', 'شنبه', 'W25-ManagementReports')
+      ]}
+    ] };
+  }
+}
+</script>
+</body>
+</html>

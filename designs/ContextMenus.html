@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Context Menus — پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+  --p1:#E5EBF3;--p3:#8AA2C2;--p5:#2C4A73;--p7:#1A3354;--p9:#0E1E38;
+  --a1:#FCEAD9;--a5:#E07A2C;--a7:#B45813;
+  --s50:#ECFDF3;--s5:#16A34A;--s7:#15803D;
+  --w50:#FFF8EB;--w5:#D97706;--w7:#B45309;
+  --e50:#FEF2F2;--e5:#DC2626;--e7:#B91C1C;
+  --i50:#EFF6FF;--i5:#2563EB;
+  --g0:#fff;--g50:#FAFAFA;--g1:#F4F4F5;--g2:#E4E4E7;--g3:#D4D4D8;
+  --g4:#A1A1AA;--g5:#71717A;--g6:#52525B;--g7:#3F3F46;--g9:#18181B;
+  --r4:4px;--r8:8px;--r10:10px;--r12:12px;--r16:16px;
+  --sh-md:0 4px 8px -2px rgba(24,24,27,.07),0 2px 4px -2px rgba(24,24,27,.05);
+  --sh-lg:0 12px 28px -6px rgba(24,24,27,.12),0 4px 10px -4px rgba(24,24,27,.07);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{font-family:'Vazirmatn',system-ui,sans-serif;color:var(--g9);background:var(--g50);-webkit-font-smoothing:antialiased;font-feature-settings:'ss01';font-size:13.5px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;direction:ltr;unicode-bidi:isolate}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--g3);border-radius:6px;border:2px solid transparent;background-clip:content-box}
+
+/* ── Shell ── */
+.shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{background:white;border-left:1px solid var(--g2);padding:20px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:0 8px 16px;border-bottom:1px solid var(--g1);margin-bottom:8px}
+.sb-mark{width:32px;height:32px;border-radius:var(--r8);background:var(--p7);color:white;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.sb-mark::after{content:'';position:absolute;right:5px;bottom:5px;width:7px;height:7px;background:var(--a5);border-radius:2px}
+.sb-brand strong{font-size:13px;font-weight:700;display:block}
+.sb-brand small{font-size:10.5px;color:var(--g5)}
+.sb-label{font-size:10px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;padding:8px 8px 4px;margin-top:4px}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r8);color:var(--g6);font-size:13px;font-weight:500;width:100%;text-align:right;border:0;background:transparent;cursor:pointer;transition:all .1s}
+.sb-btn:hover{background:var(--g1);color:var(--g9)}
+.sb-btn.active{background:var(--p1);color:var(--p7)}
+.sb-btn .sic{width:16px;height:16px;flex-shrink:0;opacity:.6}
+.sb-btn.active .sic{opacity:1}
+.sb-btn .cnt{margin-right:auto;font-size:10.5px;color:var(--g4);font-family:'JetBrains Mono',monospace}
+.sb-btn.active .cnt{color:var(--p5)}
+.sb-note{padding:8px 10px;font-size:11.5px;color:var(--g4);line-height:1.6;border-top:1px solid var(--g1);margin-top:auto;padding-top:12px}
+
+/* ── Main ── */
+.main{padding:32px 36px;overflow-y:auto}
+.main-header{margin-bottom:24px}
+.main-header .eyebrow{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--a7);margin-bottom:8px;letter-spacing:.04em}
+.main-header .eyebrow .bar{width:20px;height:1px;background:var(--a3)}
+.main-header h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0 0 4px}
+.main-header p{font-size:13px;color:var(--g5);margin:0;line-height:1.7}
+
+.section{display:none}
+.section.active{display:block}
+.section-title{font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--g2)}
+.menu-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-bottom:32px}
+.menu-group{display:flex;flex-direction:column;gap:8px}
+.menu-label{font-size:11.5px;font-weight:600;color:var(--g6);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.menu-label .variant-tag{font-size:10px;font-weight:500;padding:1px 7px;border-radius:999px;background:var(--g1);color:var(--g5)}
+.menu-label .variant-tag.leaf{background:var(--p1);color:var(--p7)}
+.menu-label .variant-tag.pending{background:var(--i50);color:var(--i5)}
+.menu-label .variant-tag.approved{background:var(--s50);color:var(--s7)}
+
+/* ── Context Menu ── */
+.cm{width:248px;background:white;border:1px solid var(--g2);border-radius:var(--r12);box-shadow:var(--sh-lg);overflow:hidden;padding:4px}
+.cm.sm{width:220px}
+.cm.lg{width:268px}
+.cm-divider{height:1px;background:var(--g1);margin:3px 6px}
+.cm-group-label{font-size:10px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.05em;padding:8px 12px 3px}
+
+.cm-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r8);cursor:pointer;position:relative;transition:background .08s}
+.cm-item:hover{background:var(--g1)}
+.cm-item.danger{color:var(--e7)}
+.cm-item.danger:hover{background:var(--e50)}
+.cm-item.warn{color:var(--w7)}
+.cm-item.warn:hover{background:var(--w50)}
+.cm-item.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
+.cm-item.disabled .cm-tooltip{display:none}
+.cm-item .cm-ic{width:15px;height:15px;flex-shrink:0;color:var(--g5)}
+.cm-item.danger .cm-ic{color:var(--e7)}
+.cm-item.warn .cm-ic{color:var(--w7)}
+.cm-item .cm-text{flex:1;font-size:13px;color:inherit;line-height:1.3}
+.cm-item .cm-sub{font-size:10.5px;color:var(--g4);display:block;margin-top:1px}
+.cm-item .cm-kbd{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;color:var(--g4);background:var(--g1);border:1px solid var(--g3);border-radius:4px;padding:1px 5px;white-space:nowrap;flex-shrink:0}
+.cm-item .cm-badge{font-size:10px;font-weight:600;color:var(--p7);background:var(--p1);padding:1px 6px;border-radius:999px;flex-shrink:0}
+.cm-item .warn-ic{width:13px;height:13px;color:var(--w5);flex-shrink:0}
+
+/* disabled tooltip */
+.has-tooltip{position:relative}
+.has-tooltip.disabled{pointer-events:auto;cursor:not-allowed}
+.has-tooltip .cm-tip{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:var(--g9);color:white;font-size:11px;padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:100}
+.has-tooltip .cm-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--g9)}
+.has-tooltip:hover .cm-tip{opacity:1}
+
+/* info badge for count */
+.cm-count{font-size:10.5px;font-weight:600;background:var(--g1);color:var(--g6);padding:1px 6px;border-radius:999px;flex-shrink:0}
+
+/* toast */
+@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes fadeOut{to{opacity:0}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--g9);color:white;padding:10px 18px;border-radius:var(--r8);box-shadow:var(--sh-lg);display:flex;align-items:center;gap:10px;font-size:13px;z-index:999;pointer-events:none;animation:fadeInUp .22s ease forwards}
+.toast.hide{animation:fadeOut .18s ease forwards}
+.toast .tic{width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--s5)}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+    <div><strong>Context Menus</strong><small>پروژه‌یار · Design System</small></div>
+  </div>
+
+  <div class="sb-label">منوها</div>
+  <button class="sb-btn active" onclick="show('s1',this)"><i data-lucide="folder-open" class="sic" style="width:16px;height:16px"></i>پروژه<span class="cnt">۱۰</span></button>
+  <button class="sb-btn" onclick="show('s2',this)"><i data-lucide="git-branch" class="sic" style="width:16px;height:16px"></i>WBS<span class="cnt">والد / برگ</span></button>
+  <button class="sb-btn" onclick="show('s3',this)"><i data-lucide="dollar-sign" class="sic" style="width:16px;height:16px"></i>CBS<span class="cnt">۸</span></button>
+  <button class="sb-btn" onclick="show('s4',this)"><i data-lucide="clipboard-list" class="sic" style="width:16px;height:16px"></i>گزارش فیلد<span class="cnt">در انتظار / تأیید</span></button>
+  <button class="sb-btn" onclick="show('s5',this)"><i data-lucide="users" class="sic" style="width:16px;height:16px"></i>عضو پروژه<span class="cnt">۸</span></button>
+  <button class="sb-btn" onclick="show('s6',this)"><i data-lucide="link-2" class="sic" style="width:16px;height:16px"></i>اتصال WBS-CBS<span class="cnt">۵</span></button>
+  <button class="sb-btn" onclick="show('s7',this)"><i data-lucide="bar-chart-2" class="sic" style="width:16px;height:16px"></i>نمودار<span class="cnt">۷</span></button>
+
+  <div class="sb-note">
+    <strong style="color:var(--g6)">قانون‌های عمومی:</strong><br>
+    حداکثر ۱۰ آیتم · اقدامات خطرناک پایین · جداکننده بین گروه‌ها · عرض ۲۴۸px
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <div class="main-header">
+    <div class="eyebrow"><span class="bar"></span>CONTEXT MENUS</div>
+    <h1>منوهای سه‌نقطه (Kebab / Context)</h1>
+    <p>هر منو با گروه‌بندی، آیکن Lucide، میانبر کیبورد، disabled state با tooltip، و حالت خطرناک قرمز.</p>
+  </div>
+
+  <!-- ══ S1: Project ══ -->
+  <div class="section active" id="s1">
+    <div class="section-title">پروژه — ردیف فهرست پروژه‌ها</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">حالت معمولی</div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('مشاهده جزئیات')"><i data-lucide="eye" class="cm-ic"></i><span class="cm-text">مشاهده جزئیات</span><span class="cm-kbd">Enter</span></div>
+          <div class="cm-item" onclick="toast('ویرایش پروژه')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش پروژه</span><span class="cm-kbd">E</span></div>
+          <div class="cm-item" onclick="toast('کپی پروژه')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی پروژه</span><span class="cm-sub">ساختار WBS/CBS بدون داده‌ها</span></div>
+          <div class="cm-item" onclick="toast('اشتراک‌گذاری')"><i data-lucide="share-2" class="cm-ic"></i><span class="cm-text">اشتراک‌گذاری</span><span class="cm-kbd">⌘S</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('خروجی Excel')"><i data-lucide="file-spreadsheet" class="cm-ic"></i><span class="cm-text">خروجی Excel</span></div>
+          <div class="cm-item" onclick="toast('خروجی MSP')"><i data-lucide="file-code-2" class="cm-ic"></i><span class="cm-text">خروجی به MSP (XML)</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('آرشیو')"><i data-lucide="archive" class="cm-ic"></i><span class="cm-text">آرشیو پروژه</span></div>
+          <div class="cm-item" onclick="toast('انتقال مالکیت')"><i data-lucide="user-check" class="cm-ic"></i><span class="cm-text">انتقال مالکیت</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف پروژه','error')"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف پروژه</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">حالت پروژه تمام‌شده <span class="variant-tag">archived</span></div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('مشاهده جزئیات')"><i data-lucide="eye" class="cm-ic"></i><span class="cm-text">مشاهده جزئیات</span></div>
+          <div class="cm-item" onclick="toast('بازگشت از آرشیو')"><i data-lucide="archive-restore" class="cm-ic"></i><span class="cm-text">بازگشت از آرشیو</span></div>
+          <div class="cm-item" onclick="toast('خروجی Excel')"><i data-lucide="file-spreadsheet" class="cm-ic"></i><span class="cm-text">خروجی Excel</span></div>
+          <div class="cm-item" onclick="toast('خروجی MSP')"><i data-lucide="file-code-2" class="cm-ic"></i><span class="cm-text">خروجی به MSP (XML)</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item has-tooltip disabled"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش پروژه</span><span class="cm-tip">پروژه آرشیو است — ابتدا بازگردانید</span></div>
+          <div class="cm-item has-tooltip disabled"><i data-lucide="user-check" class="cm-ic"></i><span class="cm-text">انتقال مالکیت</span><span class="cm-tip">فقط برای پروژه‌های فعال</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف دائمی','error')"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف دائمی</span><i data-lucide="alert-triangle" class="warn-ic" style="margin-right:auto"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S2: WBS ══ -->
+  <div class="section" id="s2">
+    <div class="section-title">WBS — آیتم والد و آیتم برگ</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">آیتم والد (پوشه) <span class="variant-tag">parent</span></div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('ویرایش جزئیات')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش جزئیات</span><span class="cm-kbd">E</span></div>
+          <div class="cm-item" onclick="toast('افزودن فرزند')"><i data-lucide="plus-circle" class="cm-ic"></i><span class="cm-text">افزودن فرزند</span></div>
+          <div class="cm-item" onclick="toast('افزودن خواهر')"><i data-lucide="plus-square" class="cm-ic"></i><span class="cm-text">افزودن آیتم خواهر/برادر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی شاخه')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی این شاخه</span></div>
+          <div class="cm-item" onclick="toast('انتقال')"><i data-lucide="move" class="cm-ic"></i><span class="cm-text">انتقال به والد دیگر</span></div>
+          <div class="cm-item" onclick="toast('انتقال بالا')"><i data-lucide="arrow-up" class="cm-ic"></i><span class="cm-text">انتقال به بالا</span></div>
+          <div class="cm-item" onclick="toast('انتقال پایین')"><i data-lucide="arrow-down" class="cm-ic"></i><span class="cm-text">انتقال به پایین</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('گزارش‌های مرتبط')"><i data-lucide="clipboard-list" class="cm-ic"></i><span class="cm-text">گزارش‌های مرتبط</span></div>
+          <div class="cm-item" onclick="toast('تاریخچه')"><i data-lucide="history" class="cm-ic"></i><span class="cm-text">تاریخچه تغییرات</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف شاخه','error')"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف این شاخه</span><span class="cm-sub" style="color:var(--e7);opacity:.8">۱۲ آیتم فرزند هم حذف می‌شوند</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">آیتم برگ (قابل گزارش‌گیری) <span class="variant-tag leaf">leaf</span></div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('ویرایش جزئیات')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش جزئیات</span><span class="cm-kbd">E</span></div>
+          <div class="cm-item" onclick="toast('تخصیص سرپرست')"><i data-lucide="user-plus" class="cm-ic"></i><span class="cm-text">تخصیص سرپرست</span></div>
+          <div class="cm-item" onclick="toast('اتصالات CBS')"><i data-lucide="link-2" class="cm-ic"></i><span class="cm-text">مدیریت اتصالات CBS</span></div>
+          <div class="cm-item" onclick="toast('مشاهده گزارش‌ها')"><i data-lucide="clipboard-check" class="cm-ic"></i><span class="cm-text">مشاهده گزارش‌ها</span><span class="cm-badge">۴</span></div>
+          <div class="cm-item" onclick="toast('ثبت دستی')"><i data-lucide="file-pen-line" class="cm-ic"></i><span class="cm-text">ثبت گزارش دستی</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی آیتم')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی این آیتم</span></div>
+          <div class="cm-item" onclick="toast('انتقال')"><i data-lucide="move" class="cm-ic"></i><span class="cm-text">انتقال به والد دیگر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تاریخچه')"><i data-lucide="history" class="cm-ic"></i><span class="cm-text">تاریخچه تغییرات</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item has-tooltip disabled danger"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف آیتم</span><span class="cm-tip">این آیتم ۴ گزارش دارد — ابتدا حذف کنید</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S3: CBS ══ -->
+  <div class="section" id="s3">
+    <div class="section-title">CBS — آیتم هزینه</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">آیتم برگ CBS (عادی)</div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('ویرایش جزئیات')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش جزئیات</span></div>
+          <div class="cm-item" onclick="toast('روند مصرف')"><i data-lucide="trending-up" class="cm-ic"></i><span class="cm-text">مشاهده روند مصرف</span></div>
+          <div class="cm-item" onclick="toast('WBS متصل')"><i data-lucide="git-merge" class="cm-ic"></i><span class="cm-text">WBSهای متصل</span><span class="cm-badge">۳</span></div>
+          <div class="cm-item" onclick="toast('بازنگری بودجه')"><i data-lucide="refresh-cw" class="cm-ic"></i><span class="cm-text">درخواست بازنگری بودجه</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی این آیتم</span></div>
+          <div class="cm-item" onclick="toast('انتقال')"><i data-lucide="move" class="cm-ic"></i><span class="cm-text">انتقال به والد دیگر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تاریخچه نرخ')"><i data-lucide="history" class="cm-ic"></i><span class="cm-text">تاریخچه تغییرات نرخ</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف','error')"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">CBS متصل به WBS <span class="variant-tag">linked</span></div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('ویرایش')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش جزئیات</span></div>
+          <div class="cm-item" onclick="toast('روند')"><i data-lucide="trending-up" class="cm-ic"></i><span class="cm-text">مشاهده روند مصرف</span></div>
+          <div class="cm-item" onclick="toast('WBS')"><i data-lucide="git-merge" class="cm-ic"></i><span class="cm-text">WBSهای متصل</span><span class="cm-badge">۵</span></div>
+          <div class="cm-item" onclick="toast('بازنگری')"><i data-lucide="refresh-cw" class="cm-ic"></i><span class="cm-text">درخواست بازنگری بودجه</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی این آیتم</span></div>
+          <div class="cm-item" onclick="toast('انتقال')"><i data-lucide="move" class="cm-ic"></i><span class="cm-text">انتقال به والد دیگر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تاریخچه')"><i data-lucide="history" class="cm-ic"></i><span class="cm-text">تاریخچه تغییرات نرخ</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item has-tooltip disabled danger"><i data-lucide="trash-2" class="cm-ic"></i><span class="cm-text">حذف</span><span class="cm-tip">۵ اتصال WBS فعال دارد</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S4: Field Reports ══ -->
+  <div class="section" id="s4">
+    <div class="section-title">گزارش فیلد — در انتظار و تأییدشده</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">گزارش در انتظار تأیید <span class="variant-tag pending">pending</span></div>
+        <div class="cm">
+          <div class="cm-item" style="color:var(--s7)" onclick="toast('تأیید سریع')"><i data-lucide="check-circle-2" class="cm-ic" style="color:var(--s5)"></i><span class="cm-text" style="font-weight:600">تأیید سریع</span><span class="cm-kbd">A</span></div>
+          <div class="cm-item" style="color:var(--w7)" onclick="toast('درخواست اصلاح','warn')"><i data-lucide="edit-3" class="cm-ic" style="color:var(--w5)"></i><span class="cm-text">درخواست اصلاح</span><span class="cm-kbd">E</span></div>
+          <div class="cm-item danger" onclick="toast('رد گزارش','error')"><i data-lucide="x-circle" class="cm-ic"></i><span class="cm-text">رد گزارش</span><span class="cm-kbd">R</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('جزئیات کامل')"><i data-lucide="external-link" class="cm-ic"></i><span class="cm-text">مشاهده جزئیات کامل</span></div>
+          <div class="cm-item" onclick="toast('روی نقشه')"><i data-lucide="map-pin" class="cm-ic"></i><span class="cm-text">مشاهده روی نقشه</span></div>
+          <div class="cm-item" onclick="toast('عکس‌ها')"><i data-lucide="camera" class="cm-ic"></i><span class="cm-text">مشاهده عکس‌ها</span><span class="cm-count">۳</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('یادآور')"><i data-lucide="bell-ring" class="cm-ic"></i><span class="cm-text">ارسال یادآور به سرپرست</span></div>
+          <div class="cm-item" onclick="toast('پیام')"><i data-lucide="message-square" class="cm-ic"></i><span class="cm-text">ارسال پیام به سرپرست</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('دانلود PDF')"><i data-lucide="file-down" class="cm-ic"></i><span class="cm-text">دانلود به PDF</span></div>
+          <div class="cm-item" onclick="toast('کپی لینک')"><i data-lucide="link-2" class="cm-ic"></i><span class="cm-text">کپی لینک گزارش</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">گزارش تأییدشده <span class="variant-tag approved">approved</span></div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('جزئیات')"><i data-lucide="eye" class="cm-ic"></i><span class="cm-text">مشاهده جزئیات</span></div>
+          <div class="cm-item" onclick="toast('دانلود')"><i data-lucide="file-down" class="cm-ic"></i><span class="cm-text">دانلود به PDF</span></div>
+          <div class="cm-item" onclick="toast('کپی لینک')"><i data-lucide="link-2" class="cm-ic"></i><span class="cm-text">کپی لینک</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item warn" onclick="toast('ابطال تأیید','warn')"><i data-lucide="undo-2" class="cm-ic"></i><span class="cm-text">ابطال تأیید</span><i data-lucide="alert-triangle" class="warn-ic" style="margin-right:auto"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S5: Member ══ -->
+  <div class="section" id="s5">
+    <div class="section-title">عضو پروژه — مدیریت کاربران</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">عضو فعال</div>
+        <div class="cm">
+          <div class="cm-item" onclick="toast('پروفایل')"><i data-lucide="user" class="cm-ic"></i><span class="cm-text">مشاهده پروفایل</span></div>
+          <div class="cm-item" onclick="toast('ویرایش نقش')"><i data-lucide="shield" class="cm-ic"></i><span class="cm-text">ویرایش نقش</span></div>
+          <div class="cm-item" onclick="toast('فعالیت‌ها')"><i data-lucide="list-checks" class="cm-ic"></i><span class="cm-text">فعالیت‌های اختصاصی</span><span class="cm-badge">۸</span></div>
+          <div class="cm-item" onclick="toast('گزارش‌ها')"><i data-lucide="clipboard-check" class="cm-ic"></i><span class="cm-text">گزارش‌های ثبت‌شده</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('یادآور')"><i data-lucide="bell-ring" class="cm-ic"></i><span class="cm-text">ارسال یادآور</span></div>
+          <div class="cm-item" onclick="toast('پیام')"><i data-lucide="message-square" class="cm-ic"></i><span class="cm-text">ارسال پیام</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item warn" onclick="toast('غیرفعال‌سازی','warn')"><i data-lucide="pause-circle" class="cm-ic"></i><span class="cm-text">غیرفعال‌سازی موقت</span></div>
+          <div class="cm-item danger" onclick="toast('حذف از پروژه','error')"><i data-lucide="user-x" class="cm-ic"></i><span class="cm-text">حذف از پروژه</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">مدیر پروژه <span class="variant-tag">PM — محدودیت دارد</span></div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('پروفایل')"><i data-lucide="user" class="cm-ic"></i><span class="cm-text">مشاهده پروفایل</span></div>
+          <div class="cm-item" onclick="toast('فعالیت‌ها')"><i data-lucide="list-checks" class="cm-ic"></i><span class="cm-text">فعالیت‌های اختصاصی</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item has-tooltip disabled"><i data-lucide="shield" class="cm-ic"></i><span class="cm-text">ویرایش نقش</span><span class="cm-tip">دسترسی مدیر سیستم لازم است</span></div>
+          <div class="cm-item has-tooltip disabled danger"><i data-lucide="user-x" class="cm-ic"></i><span class="cm-text">حذف از پروژه</span><span class="cm-tip">مدیر پروژه را نمی‌توان حذف کرد</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S6: WBS-CBS Link ══ -->
+  <div class="section" id="s6">
+    <div class="section-title">اتصال WBS به CBS — ردیف اتصال</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">اتصال فعال</div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('ویرایش مقدار')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش مقدار</span></div>
+          <div class="cm-item" onclick="toast('تأثیر بودجه')"><i data-lucide="calculator" class="cm-ic"></i><span class="cm-text">مشاهده تأثیر بر بودجه</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی به آیتم دیگر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف اتصال','error')"><i data-lucide="unlink-2" class="cm-ic"></i><span class="cm-text">حذف اتصال</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">اتصال با مصرف بالا <span class="variant-tag" style="background:var(--e50);color:var(--e7)">+۹۰٪</span></div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('ویرایش')"><i data-lucide="edit-3" class="cm-ic"></i><span class="cm-text">ویرایش مقدار</span></div>
+          <div class="cm-item" onclick="toast('بودجه')"><i data-lucide="calculator" class="cm-ic"></i><span class="cm-text">مشاهده تأثیر بر بودجه</span></div>
+          <div class="cm-item warn" onclick="toast('بازنگری بودجه','warn')"><i data-lucide="alert-triangle" class="cm-ic"></i><span class="cm-text">درخواست بازنگری بودجه</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('کپی')"><i data-lucide="copy" class="cm-ic"></i><span class="cm-text">کپی به آیتم دیگر</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item danger" onclick="toast('حذف','error')"><i data-lucide="unlink-2" class="cm-ic"></i><span class="cm-text">حذف اتصال</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S7: Chart ══ -->
+  <div class="section" id="s7">
+    <div class="section-title">نمودار — اقدامات هر نمودار</div>
+    <div class="menu-row">
+      <div class="menu-group">
+        <div class="menu-label">منوی روی نمودار</div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('دانلود PNG')"><i data-lucide="image-down" class="cm-ic"></i><span class="cm-text">دانلود PNG</span></div>
+          <div class="cm-item" onclick="toast('دانلود SVG')"><i data-lucide="file-image" class="cm-ic"></i><span class="cm-text">دانلود SVG</span></div>
+          <div class="cm-item" onclick="toast('دانلود داده')"><i data-lucide="file-spreadsheet" class="cm-ic"></i><span class="cm-text">دانلود داده‌ها (CSV/Excel)</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تمام صفحه')"><i data-lucide="maximize-2" class="cm-ic"></i><span class="cm-text">نمای تمام صفحه</span><span class="cm-kbd">F</span></div>
+          <div class="cm-item" onclick="toast('کپی')"><i data-lucide="clipboard-copy" class="cm-ic"></i><span class="cm-text">کپی به کلیپ‌بورد</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تنظیمات')"><i data-lucide="sliders-horizontal" class="cm-ic"></i><span class="cm-text">تنظیمات نمودار</span></div>
+        </div>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">نمودار embed شده <span class="variant-tag">read-only</span></div>
+        <div class="cm sm">
+          <div class="cm-item" onclick="toast('PNG')"><i data-lucide="image-down" class="cm-ic"></i><span class="cm-text">دانلود PNG</span></div>
+          <div class="cm-item" onclick="toast('SVG')"><i data-lucide="file-image" class="cm-ic"></i><span class="cm-text">دانلود SVG</span></div>
+          <div class="cm-item" onclick="toast('داده')"><i data-lucide="file-spreadsheet" class="cm-ic"></i><span class="cm-text">دانلود داده‌ها</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item" onclick="toast('تمام صفحه')"><i data-lucide="maximize-2" class="cm-ic"></i><span class="cm-text">نمای تمام صفحه</span><span class="cm-kbd">F</span></div>
+          <div class="cm-divider"></div>
+          <div class="cm-item has-tooltip disabled"><i data-lucide="sliders-horizontal" class="cm-ic"></i><span class="cm-text">تنظیمات نمودار</span><span class="cm-tip">فقط در نمای کامل تنظیمات</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(window.lucide) lucide.createIcons();
+}
+
+let toastTimer;
+function toast(text, kind='success') {
+  const old = document.querySelector('.toast'); if(old) old.remove();
+  const t = document.createElement('div'); t.className='toast';
+  const colors={success:'var(--s5)',error:'var(--e5)',warn:'var(--a5)',info:'var(--i5)'};
+  const icons={success:'check',error:'x',warn:'alert-triangle',info:'info'};
+  t.innerHTML=`<span class="tic" style="background:${colors[kind]}"><i data-lucide="${icons[kind]}" style="width:11px;height:11px"></i></span>${text} انتخاب شد`;
+  document.body.appendChild(t);
+  if(window.lucide) lucide.createIcons();
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.remove(),180);},1800);
+}
+
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

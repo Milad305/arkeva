@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تنظیمات پروژه — اطلاعات عمومی</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" crumbs="{{crumbs}}" hint-size="100%,52px"></dc-import>
+    <dc-import name="ProjectHeader" tab="settings" mini="{{yes}}" hint-size="100%,102px"></dc-import>
+    <div class="content">
+      <div class="row ai-st" style="gap: 28px">
+        <nav class="col" aria-label="بخش‌های تنظیمات" style="width: 220px; flex-shrink: 0; gap: 2px">
+          <span class="t-xs fw6 tx5" style="padding: 0 10px 8px">تنظیمات پروژه</span>
+          <sc-for list="{{nav}}" as="n" hint-placeholder-count="8"><a class="nav-a {{n.on}}" href="{{n.f}}" style="font-size: 13px"><dc-import name="Icon" i="{{n.i}}" sz="16" hint-size="16px,16px"></dc-import>{{n.t}}</a></sc-for>
+        </nav>
+        <div class="col g16" style="flex: 1 1 auto; max-width: 760px; min-width: 0">
+          <div class="row g12" style="padding: 10px 14px; background: #FFFFFF; border: 1px solid #F4B17C; border-radius: 10px; box-shadow: 0 4px 14px rgba(14, 30, 56, 0.06)">
+            <span style="width: 8px; height: 8px; border-radius: 999px; background: #E07A2C; flex-shrink: 0"></span>
+            <span class="t-13 fw5 tx9 grow">تغییرات ذخیره‌نشده دارید <span class="tx5 fw4">· توضیحات پروژه</span></span>
+            <button class="btn btn-g btn-sm" type="button">صرف‌نظر</button>
+            <button class="btn btn-p btn-sm" type="button"><dc-import name="Icon" i="save" sz="14" hint-size="14px,14px"></dc-import>ذخیرهٔ تغییرات</button>
+          </div>
+          <section class="card">
+            <div class="card-h"><div><h3>اطلاعات عمومی</h3><p class="sub">اطلاعات پایهٔ پروژه که در گزارش‌ها، داشبورد و اپلیکیشن سرپرستان نمایش داده می‌شود</p></div></div>
+            <div class="col g20" style="padding: 18px 20px 22px">
+              <div class="row g16">
+                <span class="thumb lg" style="width: 64px; height: 64px; border-radius: 14px; background: #1A3354"><dc-import name="Icon" i="building-2" sz="28" hint-size="28px,28px"></dc-import></span>
+                <div class="col g6"><span class="lbl">تصویر پروژه</span><div class="row g8"><button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="image-plus" sz="14" hint-size="14px,14px"></dc-import>تغییر تصویر</button><button class="btn btn-g btn-sm" type="button">حذف</button></div><span class="hint">PNG یا JPG، حداکثر ۲ مگابایت؛ تصویر مربعی بهتر نمایش داده می‌شود</span></div>
+              </div>
+              <div class="grid c2" style="gap: 16px 18px">
+                <label class="fg"><span class="lbl">نام پروژه <span class="req">*</span></span><span class="fld"><input type="text" value="مجتمع مسکونی نگین شهر"></span></label>
+                <div class="fg"><span class="lbl">کد پروژه</span><span class="fld ro"><span class="mono grow" style="text-align: right">PRJ-1404-021</span><dc-import name="Icon" i="lock" sz="14" hint-size="14px,14px"></dc-import></span><span class="hint">کد پس از ایجاد پروژه قابل تغییر نیست</span></div>
+                <label class="fg"><span class="lbl">کارفرما <span class="req">*</span></span><span class="fld"><input type="text" value="شهرداری تهران"></span></label>
+                <div class="fg"><span class="lbl">نوع پروژه</span><button class="fld sel" type="button"><span>ساختمان مسکونی</span><dc-import name="Icon" i="chevron-down" sz="15" hint-size="15px,15px"></dc-import></button></div>
+                <div class="fg"><span class="lbl">مدیر پروژه</span><button class="fld sel" type="button"><span class="row g8"><span class="av s a2">م.ر</span>مهندس رضایی</span><dc-import name="Icon" i="chevron-down" sz="15" hint-size="15px,15px"></dc-import></button><span class="hint">برای انتقال مالکیت پروژه به «منطقهٔ خطر» بروید</span></div>
+                <div class="fg"><span class="lbl">وضعیت پروژه</span><div class="seg" style="align-self: flex-start"><button class="on" type="button"><span class="dot" style="background: #16A34A"></span>فعال</button><button type="button">متوقف</button><button type="button">تمام‌شده</button></div></div>
+                <label class="fg full"><span class="lbl row g6">توضیحات <span class="opt">(اختیاری)</span><span style="width: 7px; height: 7px; border-radius: 999px; background: #E07A2C" title="تغییر ذخیره‌نشده"></span></span><textarea class="fld focus" rows="3">احداث مجتمع مسکونی ۸ بلوکه شامل ۲۴۰ واحد در منطقهٔ ۲۲ تهران؛ شامل سازهٔ بتنی، تأسیسات مکانیکی و برقی کامل و محوطه‌سازی. بلوک‌های A تا D در فاز اول.</textarea><span class="hint row between"><span>در صفحهٔ نخست گزارش ماهانهٔ کارفرما چاپ می‌شود</span><span>۱۴۷ / ۵۰۰</span></span></label>
+                <div class="fg"><span class="lbl">تاریخ شروع برنامه‌ای</span><span class="fld"><dc-import name="Icon" i="calendar" sz="15" hint-size="15px,15px"></dc-import><input type="text" value="۱۴۰۳/۰۵/۰۱" aria-label="تاریخ شروع برنامه‌ای"></span><span class="hint"><dc-import name="Icon" i="refresh-cw" sz="12" hint-size="12px,12px"></dc-import>همگام با فایل Microsoft Project</span></div>
+                <div class="fg"><span class="lbl">تاریخ پایان برنامه‌ای</span><span class="fld"><dc-import name="Icon" i="calendar" sz="15" hint-size="15px,15px"></dc-import><input type="text" value="۱۴۰۴/۰۸/۱۵" aria-label="تاریخ پایان برنامه‌ای"></span><span class="hint">پیش‌بینی فعلی: ۱۴۰۴/۰۹/۱۰ (۲۶ روز تأخیر)</span></div>
+                <label class="fg"><span class="lbl">بودجهٔ کل</span><span class="fld"><input type="text" value="۸۵۰"><span class="sfx">میلیارد ریال</span></span><span class="hint ok"><dc-import name="Icon" i="check-circle-2" sz="12" hint-size="12px,12px"></dc-import>با جمع اقلام CBS برابر است</span></label>
+                <div class="fg"><span class="lbl">واحد پول گزارش‌ها</span><button class="fld sel" type="button"><span>ریال</span><dc-import name="Icon" i="chevron-down" sz="15" hint-size="15px,15px"></dc-import></button></div>
+              </div>
+              <div class="hr"></div>
+              <div class="col g12">
+                <div><span class="lbl">موقعیت کارگاه</span><p class="hint" style="margin-top: 2px">گزارش‌های اندروید با این مختصات مقایسه می‌شوند تا گزارش‌های خارج از کارگاه علامت بخورند</p></div>
+                <div class="row ai-st g16">
+                  <div class="col g12 grow">
+                    <label class="fg"><span class="lbl t-12">نشانی</span><span class="fld sm"><input type="text" value="تهران، منطقهٔ ۲۲، بلوار کوهک، خیابان نگین"></span></label>
+                    <div class="fg"><span class="lbl t-12">مختصات</span><span class="fld sm"><dc-import name="Icon" i="map-pin" sz="14" hint-size="14px,14px"></dc-import><span class="mono grow" dir="ltr" style="text-align: right">35.7448, 51.2032</span><button class="link t-12" type="button">انتخاب روی نقشه</button></span></div>
+                    <span class="hint"><dc-import name="Icon" i="locate-fixed" sz="12" hint-size="12px,12px"></dc-import>شعاع مجاز ۳۰۰ متر؛ قابل تغییر در <a class="link" href="W29-SettingsWorkflow.dc.html">پیشرفت و گردش‌کار</a></span>
+                  </div>
+                  <svg width="260" height="150" viewBox="0 0 260 150" role="img" aria-label="نقشهٔ کارگاه با شعاع مجاز ۳۰۰ متر" style="flex-shrink: 0; border-radius: 10px; border: 1px solid #E4E4E7; background: #FAFAFA">
+                    <path d="M0 30H260M0 75H260M0 120H260M40 0V150M110 0V150M180 0V150M240 0V150" stroke="#F0F0F2" stroke-width="1"></path>
+                    <path d="M0 98C60 92 120 104 170 88S240 70 260 74" stroke="#E4E4E7" stroke-width="9" fill="none"></path>
+                    <path d="M150 0V150" stroke="#E4E4E7" stroke-width="6"></path>
+                    <circle cx="128" cy="66" r="44" fill="rgba(37,99,235,0.06)" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="4 4"></circle>
+                    <path d="M106 50H146V82H112L106 74Z" fill="#E5EBF3" stroke="#1A3354" stroke-width="1.5"></path>
+                    <path d="M128 44c-6 0-10 4.5-10 10 0 7.5 10 16 10 16s10-8.5 10-16c0-5.5-4-10-10-10z" fill="#E07A2C"></path>
+                    <circle cx="128" cy="54" r="3.5" fill="#FFFFFF"></circle>
+                    <text x="128" y="126" text-anchor="middle" font-size="10.5" fill="#1D4ED8" font-family="Vazirmatn">شعاع ۳۰۰ متر</text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="card">
+            <div class="card-h"><div><h3>تقویم و روزهای کاری</h3><p class="sub">برای محاسبهٔ تاریخ‌های پیش‌بینی، منحنی S و پوشش گزارش روزانه</p></div></div>
+            <div class="col g20" style="padding: 18px 20px 22px">
+              <div class="fg"><span class="lbl">روزهای کاری هفته</span><div class="row g6 wrap"><sc-for list="{{days}}" as="d" hint-placeholder-count="7"><span class="chip {{d.on}}" style="border-style: {{d.bs}}">{{d.t}}<span class="t-xs" style="opacity: 0.8">{{d.s}}</span></span></sc-for></div></div>
+              <div class="grid c3" style="gap: 16px">
+                <label class="fg"><span class="lbl">شروع کار روزانه</span><span class="fld"><dc-import name="Icon" i="clock" sz="15" hint-size="15px,15px"></dc-import><input type="text" value="۰۷:۰۰"></span></label>
+                <label class="fg"><span class="lbl">پایان کار روزانه</span><span class="fld"><dc-import name="Icon" i="clock" sz="15" hint-size="15px,15px"></dc-import><input type="text" value="۱۶:۰۰"></span></label>
+                <label class="fg"><span class="lbl">پایان کار پنجشنبه</span><span class="fld"><dc-import name="Icon" i="clock" sz="15" hint-size="15px,15px"></dc-import><input type="text" value="۱۲:۰۰"></span></label>
+              </div>
+              <div class="col g8">
+                <div class="row between"><div><span class="lbl">تعطیلات</span><p class="hint" style="margin-top: 2px">۱۱ تعطیلی رسمی تا پایان پروژه · ۱ تعطیلی دستی</p></div><div class="row g8"><button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="calendar-check" sz="14" hint-size="14px,14px"></dc-import>افزودن تعطیلات رسمی ۱۴۰۴</button><button class="btn btn-g btn-sm" type="button"><dc-import name="Icon" i="plus" sz="14" hint-size="14px,14px"></dc-import>روز تعطیل دستی</button></div></div>
+                <div style="border: 1px solid #E4E4E7; border-radius: 10px; overflow: hidden">
+                  <sc-for list="{{hol}}" as="h" hint-placeholder-count="6">
+                    <div class="row g12" style="padding: 9px 14px; border-bottom: 1px solid #F4F4F5">
+                      <span class="t-12 fw6 tx8" style="width: 84px">{{h.d}}</span>
+                      <span class="t-12 tx6" style="width: 64px">{{h.w}}</span>
+                      <span class="t-13 tx9 grow">{{h.t}}</span>
+                      <span class="bdg sm {{h.bt}}">{{h.b}}</span>
+                      <button class="sw on" type="button" aria-pressed="true" aria-label="در محاسبهٔ زمان‌بندی"></button>
+                    </div>
+                  </sc-for>
+                  <div class="row" style="padding: 9px 14px; background: #FAFAFA"><button class="link t-12" type="button">نمایش ۶ تعطیلی دیگر تا ۱۴۰۴/۰۸/۱۵</button></div>
+                </div>
+              </div>
+              <div class="alert inf"><span class="tx-inf" style="display: inline-flex; margin-top: 2px"><dc-import name="Icon" i="info" sz="16" hint-size="16px,16px"></dc-import></span><div>با تغییر تقویم، تاریخ‌های پیش‌بینی در WBS و منحنی S دوباره محاسبه می‌شود و تقویم پروژه در همگام‌سازی بعدی به فایل Microsoft Project هم ارسال می‌شود.</div></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const NAV = [['info', 'اطلاعات عمومی', 'W28-SettingsGeneral', 1], ['percent', 'پیشرفت و محاسبات', 'W29-SettingsWorkflow'], ['git-merge', 'گردش‌کار تأیید', 'W29-SettingsWorkflow'], ['bell', 'اعلان‌ها', 'W30-SettingsIntegrations'], ['calendar-days', 'تقویم و روزهای کاری', 'W28-SettingsGeneral'], ['plug', 'یکپارچه‌سازی', 'W30-SettingsIntegrations'], ['database-backup', 'پشتیبان و خروجی', 'W30-SettingsIntegrations'], ['alert-octagon', 'منطقهٔ خطر', 'W30-SettingsIntegrations']];
+    const nav = NAV.map(n => ({ i: n[0], t: n[1], f: n[2] + '.dc.html', on: n[3] ? 'on' : '' }));
+    const days = [['شنبه', 1], ['یکشنبه', 1], ['دوشنبه', 1], ['سه‌شنبه', 1], ['چهارشنبه', 1], ['پنجشنبه', 2], ['جمعه', 0]].map(d => ({ t: d[0], on: d[1] === 1 ? 'on' : '', s: d[1] === 2 ? 'نیم‌روز' : d[1] === 0 ? 'تعطیل' : '', bs: d[1] === 2 ? 'dashed' : 'solid' }));
+    const hol = [
+      ['۱۴۰۴/۰۳/۱۴', 'چهارشنبه', 'رحلت امام خمینی', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۳/۱۵', 'پنجشنبه', 'قیام ۱۵ خرداد', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۳/۱۶', 'جمعه', 'عید سعید قربان', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۳/۲۴', 'شنبه', 'عید سعید غدیر خم', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۴/۱۴', 'شنبه', 'تاسوعای حسینی', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۴/۱۵', 'یکشنبه', 'عاشورای حسینی', 'رسمی', 'neu'],
+      ['۱۴۰۴/۰۵/۰۵', 'یکشنبه', 'بازدید ایمنی سالانهٔ کارگاه', 'دستی', 'pri']
+    ].map(h => ({ d: h[0], w: h[1], t: h[2], b: h[3], bt: h[4] }));
+    return { yes: true, nav, days, hol, crumbs: [{ t: 'خانه', f: 'W05-Dashboard.dc.html' }, { t: 'پروژه‌ها', f: 'W07-Projects.dc.html' }, { t: 'مجتمع مسکونی نگین شهر', f: 'W10-ProjectOverview.dc.html' }, { t: 'تنظیمات' }] };
+  }
+}
+</script>
+</body>
+</html>

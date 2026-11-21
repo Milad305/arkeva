@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>پروژه‌یار | کنترل پروژهٔ عمرانی، کنار MS Project</title>
+  <meta name="description" content="پروژه‌یار گزارش روزانهٔ آفلاین کارگاه، تأیید یک یا دومرحله‌ای، پیشرفت فیزیکی و ریالی، ارزش کسب‌شده و هشدار با راهنمای اقدام را برای پیمانکاران پروژه‌های عمرانی کنار MS Project فراهم می‌کند." />
+  <meta name="theme-color" content="#060c17" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/landing.css" />
+</head>
+<body>
+<a class="sr" href="#main">رفتن به محتوای اصلی</a>
+
+<!-- ═════════ سربرگ ═════════ -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="پروژه‌یار، صفحهٔ اصلی">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 19V9l7-5 7 5v10"/><path d="M9 19v-5h6v5"/></svg>
+      </span>
+      <span class="brand-t"><strong>پروژه‌یار</strong><small>کنترل پروژهٔ عمرانی</small></span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="پیمایش اصلی">
+      <a href="#features">امکانات</a>
+      <a href="#loop">چگونه کار می‌کند</a>
+      <a href="#command">داشبورد</a>
+      <a href="#roles">نقش‌ها</a>
+      <a href="#security">امنیت</a>
+      <a href="#faq">پرسش‌ها</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-plain" href="/login">ورود</a>
+      <a class="btn btn-primary btn-sm" href="#demo">درخواست دمو <span class="arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 17 7 7M7 15V7h8"/></svg></span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="باز کردن فهرست" aria-expanded="false" aria-controls="navLinks">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ═════════ قهرمان ═════════ -->
+<section class="hero" id="top">
+  <div class="hero-card" id="heroCard">
+    <canvas class="ribbon" data-ribbon="hero" aria-hidden="true"></canvas>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-content" id="heroContent">
+      <span class="tag fade-load" style="--d:.1s">مکمل MS Project برای پیمانکاران</span>
+      <h1 class="h-xl split" data-split>برنامه در <span class="keep" dir="ltr">MS Project</span>؛<br><span class="grad-text">واقعیت در پروژه‌یار.</span></h1>
+      <p class="lead fade-load" style="--d:.75s">گزارش روزانهٔ کارگاه، حتی بدون اینترنت، تأیید می‌شود و همان روز به پیشرفت فیزیکی و ریالی، ارزش کسب‌شده و هشدار با راهنمای اقدام تبدیل می‌شود. هر عدد تا منبعش قابل ردیابی است.</p>
+      <div class="cta-row fade-load" style="--d:.9s">
+        <a class="btn btn-primary" href="#demo">درخواست دمو <span class="arrow" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 17 7 7M7 15V7h8"/></svg></span></a>
+        <a class="btn btn-ghost" href="#loop">ببینید چطور کار می‌کند</a>
+      </div>
+    </div>
+    <div class="hero-chips fade-load" style="--d:1.2s" aria-hidden="true">
+      <span class="hero-chip"><i></i>گزارش ۱۲ فعالیت تأیید شد</span>
+      <span class="hero-chip w"><i></i>CPI پروژه ۰٫۹۴ · هشدار هزینه</span>
+      <span class="hero-chip"><i></i>پیشرفت تأییدشده به MSP رفت</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ ویترین: لپ‌تاپ با داشبورد ═════════ -->
+<section class="showcase" id="showcase" aria-label="نمای داشبورد پروژه‌یار">
+  <div class="laptop" id="laptop">
+    <div class="lid">
+      <div class="screen" data-screen>
+        <!-- رابط نمونه؛ اعداد = مثال مرجع سند (BAC ۱٬۰۰۰، PV ۵۵۰، EV ۴۹۰، AC ۵۲۰) -->
+        <div class="app" data-app aria-hidden="true">
+          <aside class="ui-side">
+            <div class="ui-brand">
+              <span class="brand-mark">پ</span>
+              <div><strong>پروژه‌یار</strong><small>شرکت ساختمانی نمونه</small></div>
+            </div>
+            <a class="ui-nav on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>داشبورد</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6v4H4zM14 5h6v4h-6zM14 15h6v4h-6zM7 9v8h7"/></svg>ساختار WBS</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg>CBS و بودجه</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 7h4M9 12h6M9 16h4"/></svg>گزارش‌های کارگاه<b>۱۲</b></a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16M7 16V9M12 16V5M17 16v-4"/></svg>ارزش کسب‌شده</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h12"/></svg>دفتر هزینه</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>ریسک‌ها</a>
+            <span class="ui-sec">گزارش</span>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M9 13h6M9 17h4"/></svg>گزارش مدیریتی</a>
+            <a class="ui-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M20 4v5h-5M4 20v-5h5"/></svg>همگام‌سازی MSP</a>
+          </aside>
+          <div class="ui-main">
+            <div class="ui-top">
+              <div>
+                <div class="ui-crumb">پروژه‌ها / داشبورد</div>
+                <h4>مجتمع مسکونی نمونه <code>PRJ-1405-012</code></h4>
+              </div>
+              <div class="ui-tools">
+                <span class="ui-chip">تاریخ داده: ۲۹ آبان ۱۴۰۵</span>
+                <span class="ui-chip">مبالغ: میلیارد ریال</span>
+                <span class="ui-avatar">م‌پ</span>
+              </div>
+            </div>
+            <div class="ui-kpis">
+              <div class="ui-card ui-kpi" data-tour="1">
+                <span class="ui-badge warn">هشدار</span>
+                <span class="ui-k-l">پیشرفت فیزیکی واقعی</span>
+                <span class="ui-k-v"><span data-count="49.2" data-dec="1">۴۹٫۲</span>٪</span>
+                <span class="ui-k-s">برنامه‌ای ۵۵٪ · انحراف <span class="neg">−۵٫۸</span></span>
+                <div class="ui-bar"><span></span><i></i></div>
+              </div>
+              <div class="ui-card ui-kpi" data-tour="2">
+                <span class="ui-badge warn">زیر ۰٫۹۵</span>
+                <span class="ui-k-l">شاخص عملکرد هزینه (CPI)</span>
+                <span class="ui-k-v"><span data-count="0.9423" data-dec="2">۰٫۹۴</span></span>
+                <span class="ui-k-s">EV ۴۹۰ ÷ AC ۵۲۰</span>
+              </div>
+              <div class="ui-card ui-kpi">
+                <span class="ui-badge warn">کندتر از برنامه</span>
+                <span class="ui-k-l">شاخص عملکرد زمان (SPI)</span>
+                <span class="ui-k-v"><span data-count="0.8909" data-dec="2">۰٫۸۹</span></span>
+                <span class="ui-k-s">EV ۴۹۰ ÷ PV ۵۵۰</span>
+              </div>
+              <div class="ui-card ui-kpi" data-tour="3">
+                <span class="ui-badge info">پیش‌بینی</span>
+                <span class="ui-k-l">برآورد در اتمام (EAC)</span>
+                <span class="ui-k-v"><span data-count="1061.2245" data-dec="1">۱٬۰۶۱٫۲</span></span>
+                <span class="ui-k-s">BAC ۱٬۰۰۰ · VAC <span class="neg">−۶۱٫۲</span></span>
+              </div>
+            </div>
+            <div class="ui-row">
+              <section class="ui-card" data-tour="4">
+                <header>
+                  <h5>منحنی S پیشرفت ریالی</h5>
+                  <div class="ui-legend">
+                    <span><i style="background:var(--info-500)"></i>برنامه‌ای PV</span>
+                    <span><i style="background:var(--success-500)"></i>کسب‌شده EV</span>
+                    <span><i style="background:var(--error-500)"></i>واقعی AC</span>
+                    <span><i style="background:var(--gray-400)"></i>پیش‌بینی</span>
+                  </div>
+                </header>
+                <svg class="scurve" viewBox="0 0 640 262" data-scurve role="img" aria-label="منحنی S"></svg>
+              </section>
+              <section class="ui-card ui-alerts" data-tour="5">
+                <header><h5>هشدارهای باز</h5><span class="ui-count">۳</span></header>
+                <div class="ui-alert"><i></i><div><code>AL-CST-04</code><br>CPI پروژه ۰٫۹۴ است؛ برای هر ریال بودجه ۱٫۰۶ ریال خرج می‌شود.</div><a>بررسی هزینه‌ها ←</a></div>
+                <div class="ui-alert"><i></i><div><code>AL-PRG-02</code><br>پیشرفت پروژه ۴۹٫۲٪ در برابر ۵۵٪ برنامه‌ای است.</div><a>عقب‌مانده‌ترین فعالیت‌ها ←</a></div>
+                <div class="ui-alert inf"><i></i><div><code>AL-APR-01</code><br>۳ گزارش بیش از ۲۴ ساعت منتظر تأیید شماست.</div><a>صف تأیید ←</a></div>
+              </section>
+            </div>
+            <section class="ui-card">
+              <header><h5>صف تأیید امروز</h5><span class="ui-chip">مرحلهٔ اول · ناظر سازه</span></header>
+              <table class="ui-table">
+                <thead><tr><th>کد</th><th>فعالیت</th><th>سرپرست</th><th>تغییر</th><th>کنترل کیفیت</th><th>وضعیت</th></tr></thead>
+                <tbody>
+                  <tr><td><code>1.2.3.4</code></td><td>آرماتوربندی سقف طبقهٔ سوم</td><td>رضا کریمی</td><td class="ui-delta">۶۰٪ ← <b>۷۲٪</b></td><td><span class="flag ok">۳ عکس</span><span class="flag ok">GPS</span></td><td><span class="flag i">در انتظار ناظر</span></td></tr>
+                  <tr><td><code>1.3.1.2</code></td><td>لوله‌کشی آب طبقهٔ دوم</td><td>سارا محمدی</td><td class="ui-delta">۲۰٪ ← <b>۴۵٪</b></td><td><span class="flag e">جهش غیرعادی</span></td><td><span class="flag w">مرحلهٔ دوم</span></td></tr>
+                  <tr><td><code>1.1.2</code></td><td>خاکبرداری بلوک B</td><td>علی رستمی</td><td class="ui-delta">۸۸٪ ← <b>۸۹٪</b></td><td><span class="flag ok">۲ عکس</span><span class="flag ok">GPS</span></td><td><span class="flag ok">تأیید خودکار</span></td></tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="base"></div>
+  </div>
+
+  <div class="phone-float" id="phoneFloat" aria-hidden="true">
+    <div class="phone" data-phone>
+      <div class="phone-sc">
+        <span class="ph-notch"></span>
+        <div class="ph-status"><span>۹:۴۱</span><span>● ● ●</span></div>
+        <div class="ph-head">
+          <small>گزارش روزانه · ۲۹ آبان</small>
+          <strong>مجتمع مسکونی نمونه</strong><br>
+          <span class="ph-off"><i></i>آفلاین · ۲ گزارش در صف</span>
+        </div>
+        <div class="ph-body">
+          <div class="ph-meta">
+            <div><small>هوا</small>آفتابی ۱۴°</div>
+            <div><small>نفرات</small>۲۳ نفر</div>
+          </div>
+          <div class="ph-item">
+            <code>1.2.3.4</code>
+            <strong>آرماتوربندی سقف طبقهٔ سوم</strong>
+            <div class="ph-range"><span>۷۲٪</span><div class="ph-track"><span></span><i></i></div></div>
+            <div class="ph-photos"><span></span><span></span><span></span></div>
+            <div class="ph-ok"><span class="flag ok">۳ عکس</span><span class="flag ok">داخل محدودهٔ کارگاه</span></div>
+          </div>
+        </div>
+        <div class="ph-send">ذخیره و ارسال هنگام اتصال</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ معرفی + ویژگی‌ها (پنل تیره) ═════════ -->
+<section class="night" data-night id="features">
+  <div class="wrap sec intro">
+    <div class="intro-grid">
+      <div>
+        <span class="tag rv">پلتفرم کنترل پروژه</span>
+        <h2 class="h-lg scrub" data-scrub style="margin-top:22px">کنترل پروژه‌ای که از کارگاه شروع می‌شود، نه از اکسل آخر ماه.</h2>
+      </div>
+      <div class="intro-side rv" style="--d:.15s">
+        <p class="lead">در بیشتر شرکت‌های پیمانکاری، برنامه در MS Project است، پیشرفت با پیام‌رسان و کاغذ می‌رسد و هزینه جای دیگری ثبت می‌شود. پروژه‌یار این سه را روی یک داده می‌نشاند تا مدیر پروژه و مدیرعامل هر روز بدانند کجای کارند، چقدر عقب‌اند و چرا.</p>
+        <a class="btn btn-primary" href="#demo">درخواست دمو <span class="arrow" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 17 7 7M7 15V7h8"/></svg></span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-label="استانداردها و قابلیت‌های پایه">
+    <div class="marquee-track" data-marquee>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><path d="M13 24l5-6 4 3 6-7"/></svg><b>ارزش کسب‌شده</b> مطابق تعاریف PMI</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><path d="M14 16h12M14 20h12M14 24h8"/></svg><b>ورود و بازگشت</b> MS Project XML</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><rect x="15" y="12" width="10" height="16" rx="2"/></svg><b>اپ اندروید</b> آفلاین‌محور</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><rect x="13" y="14" width="14" height="13" rx="2"/><path d="M13 18h14M17 12v4M23 12v4"/></svg><b>تقویم شمسی</b> و ارقام فارسی</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><path d="M20 12l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8v-5z"/></svg><b>جداسازی داده</b> هر سازمان</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><circle cx="20" cy="20" r="6"/><path d="M20 17v3l2 1"/></svg><b>ردپای کامل</b> تغییرات</span>
+      <span class="mq-item"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 3 35 11.5v17L20 37 5 28.5v-17z"/><path d="M14 22l4 4 8-10"/></svg><b>تأیید</b> یک یا دومرحله‌ای</span>
+    </div>
+  </div>
+
+  <div class="wrap sec">
+    <div class="feat-head">
+      <div>
+        <span class="tag rv">آنچه به دست می‌آورید</span>
+        <h2 class="h-lg rv" style="margin-top:18px;--d:.08s">شش قابلیت، یک تصویر کامل</h2>
+      </div>
+      <p class="lead muted-d rv" style="max-width:460px;--d:.16s">از ساختار برنامه تا تصمیم مدیر؛ بدون ورود دوبارهٔ داده و بدون عددی که منبعش معلوم نباشد.</p>
+    </div>
+    <div class="feat-grid">
+      <article class="feat rv" style="--d:0s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 4h6v4H4zM14 4h6v4h-6zM14 16h6v4h-6zM14 10h6v4h-6zM7 8v10h7M7 12h7"/></svg></div>
+        <h3>ساختار از MS Project</h3>
+        <p>WBS وزن‌دار و CBS متصل به آن را از فایل MSP، قالب سازمانی یا دستی بسازید. هر فعالیت با UID پایدار تطبیق می‌شود.</p>
+      </article>
+      <article class="feat rv" style="--d:.08s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18h4M3 3l18 18"/></svg></div>
+        <h3>گزارش روزانه بدون اینترنت</h3>
+        <p>سرپرست در کارگاه پیشرفت، عکس، نفرات و هوا را ثبت می‌کند؛ اپ به‌محض اتصال، خودش همگام می‌شود.</p>
+      </article>
+      <article class="feat rv" style="--d:.16s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>کنترل کیفیت خودکار</h3>
+        <p>عکس ناکافی، جهش بیش از ۲۰ واحد، فاصلهٔ بیش از ۳۰۰ متر از کارگاه و ثبت با تأخیر، پیش از رسیدن به ناظر علامت می‌خورند.</p>
+      </article>
+      <article class="feat rv" style="--d:0s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 12l4 4 8-9M10 15l1 1 11-12"/></svg></div>
+        <h3>تأیید یک یا دومرحله‌ای</h3>
+        <p>تغییرهای کوچک و مستند خودکار تأیید می‌شوند؛ جهش‌ها و موارد بحرانی به مدیر پروژه می‌رسند، با مهلت ۲۴ ساعته و یادآوری.</p>
+      </article>
+      <article class="feat rv" style="--d:.08s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 20h18"/><path d="M4 17c4 0 5-10 9-10s4 6 7 6"/></svg></div>
+        <h3>ارزش کسب‌شده، هر روز</h3>
+        <p>PV، EV، AC، CPI، SPI و EAC فقط از گزارش‌های تأییدشده و دفتر هزینه محاسبه می‌شوند و هر عدد «از کجا آمد؟» دارد.</p>
+      </article>
+      <article class="feat rv" style="--d:.16s"><span class="line"></span>
+        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/></svg></div>
+        <h3>هشدار با راهنمای اقدام</h3>
+        <p>موتور هشدار فقط نمی‌گوید چه شده؛ می‌گوید چه کنید و شما را مستقیم به همان صفحه می‌برد.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ حلقه (پین‌شده با اسکرول) ═════════ -->
+<section class="loop" id="loop" data-loop>
+  <div class="loop-pin">
+    <div class="wrap loop-in">
+      <div class="loop-head">
+        <div>
+          <span class="tag tag-light">چگونه کار می‌کند</span>
+          <h2 class="h-lg" style="margin:18px 0 14px">از فایل برنامه تا تصمیم مدیر، در یک حلقهٔ بسته</h2>
+          <p class="lead">زنجیرهٔ ثابت پروژه‌یار: رویداد ← محاسبه ← هشدار ← اعلان. هر گزارش تأییدشده، همان لحظه اعداد پروژه را به‌روز می‌کند.</p>
+        </div>
+        <div class="loop-counter" aria-hidden="true"><b data-loop-n>۰۱</b><span>/۰۷</span></div>
+      </div>
+      <div class="loop-track">
+        <div class="loop-rail" aria-hidden="true"><span></span></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h4"/></svg></div><h4>ورود از MSP</h4><p>فایل XML یا MPP بدون تایپ دوباره وارد می‌شود.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h6v4H4zM14 4h6v4h-6zM14 16h6v4h-6zM7 8v10h7"/></svg></div><h4>ساختار و بودجه</h4><p>وزن‌دهی WBS و اتصال به CBS؛ فعال‌سازی = ثبت برنامهٔ مبنا.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 3-5.5 6-5.5s6 2 6 5.5M17 11l2 2 3-4"/></svg></div><h4>تخصیص به سرپرست</h4><p>هر فعالیت سرپرست خودش را دارد و فقط در اپ او دیده می‌شود.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18h4"/></svg></div><h4>گزارش کارگاه</h4><p>آفلاین، با عکس و GPS؛ کنترل کیفیت خودکار پرچم می‌زند.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 12l4 4 8-9M10 15l1 1 11-12"/></svg></div><h4>تأیید</h4><p>یک یا دو مرحله، در سطح هر آیتم؛ آیتم تأییدشده تغییرناپذیر است.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20h18M4 17c4 0 5-10 9-10s4 6 7 6"/></svg></div><h4>محاسبه و هشدار</h4><p>پیشرفت، EVM و انحراف بازمحاسبه و قواعد هشدار ارزیابی می‌شوند.</p></div>
+        <div class="step" data-step><div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M20 4v5h-5M4 20v-5h5"/></svg></div><h4>بازگشت به MSP</h4><p>درصد تأییدشدهٔ هر فعالیت به فایل برنامه برمی‌گردد.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ مرکز فرمان + تب‌ها (پنل تیره) ═════════ -->
+<section class="night" data-night id="command">
+  <div class="wrap sec cmd">
+    <span class="tag rv">داشبورد پروژه</span>
+    <h2 class="h-lg scrub" data-scrub>به مرکز فرمان پروژه خوش آمدید</h2>
+    <p class="lead rv" style="--d:.1s">پیشرفت، هزینه، ریسک و تأییدها را یک‌جا ببینید و با یک کلیک تا منبع هر عدد پایین بروید. وقتی همه یک تصویر را می‌بینند، به‌جای واکنش، کنترل می‌کنید.</p>
+    <div class="cmd-stage" id="cmdStage">
+      <div class="laptop rv-scale">
+        <div class="lid">
+          <div class="screen" data-screen id="cmdScreen">
+            <!-- نسخهٔ دوم داشبورد با JS از روی نسخهٔ بالا ساخته می‌شود -->
+            <div class="tour-card" id="tourCard" role="dialog" aria-live="polite" aria-label="تور داشبورد">
+              <h4 id="tourTitle">این داشبورد پروژهٔ شماست</h4>
+              <p id="tourText">در چند قدم ببینید اعداد از کجا می‌آیند. اعداد، مثال مرجع پروژه‌یارند.</p>
+              <div class="tour-foot" id="tourFoot">
+                <button class="tbtn pri" id="tourStart">شروع تور</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="base"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap sec tabs-sec" id="modules">
+    <div style="text-align:center;margin-bottom:40px">
+      <span class="tag rv">امکانات در جزئیات</span>
+      <h2 class="h-lg rv" style="margin-top:18px;--d:.08s">ساخته‌شده برای روش کار پیمانکار</h2>
+    </div>
+    <div class="tabs-nav" role="tablist" aria-label="امکانات" id="tabsNav">
+      <button class="tab-btn" role="tab" aria-selected="true" aria-controls="p1" id="t1">ساختار و بودجه<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p2" id="t2" tabindex="-1">گزارش کارگاه<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p3" id="t3" tabindex="-1">گردش تأیید<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p4" id="t4" tabindex="-1">ارزش کسب‌شده<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p5" id="t5" tabindex="-1">هشدار و ریسک<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p6" id="t6" tabindex="-1">گزارش مدیریتی<span class="prog"></span></button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="p7" id="t7" tabindex="-1">همگام‌سازی MSP<span class="prog"></span></button>
+    </div>
+
+    <div class="panels rv-scale" id="panels">
+      <div class="panel enter" role="tabpanel" id="p1" aria-labelledby="t1">
+        <div class="panel-copy">
+          <h3>WBS وزن‌دار، متصل به بودجه</h3>
+          <p>ساختار شکست کار را از MS Project، قالب سازمانی یا دستی بسازید و هر فعالیت را به اقلام هزینه وصل کنید تا پیشرفت فیزیکی و ریالی کنار هم دیده شوند.</p>
+          <ul class="ticks">
+            <li>ورود از MSP با تطبیق UID</li>
+            <li>قالب سازمانی برای پروژه‌های تکراری</li>
+            <li>وزن دستی یا ساخته‌شده از بودجه و مدت</li>
+            <li>اتصال هر فعالیت به یک یا چند قلم CBS</li>
+            <li>برنامهٔ مبنا و بازنگری‌های شماره‌دار</li>
+            <li>چهار روش اندازه‌گیری پیشرفت</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="mock-h"><strong>ساختار شکست کار</strong></div>
+          <table class="tree">
+            <tr><td><code>1</code></td><td>مجتمع مسکونی نمونه</td><td class="n">۱۰۰</td></tr>
+            <tr class="lv1"><td><code>1.1</code></td><td>عملیات خاکی</td><td class="n">۸</td></tr>
+            <tr class="lv1"><td><code>1.2</code></td><td>سازه</td><td class="n">۴۵</td></tr>
+            <tr class="lv2"><td><code>1.2.3</code></td><td>سقف‌ها</td><td class="n">۲۰</td></tr>
+            <tr class="lv3"><td><code>1.2.3.4</code></td><td class="leaf">آرماتوربندی سقف</td><td class="n">۳۵</td></tr>
+            <tr class="lv1"><td><code>1.3</code></td><td>تأسیسات</td><td class="n">۲۲</td></tr>
+          </table>
+          <div class="link-card">
+            <span>اتصال به CBS:</span><b>۱۴۵ تن</b><span class="eq">×</span><b>۹۵ میلیون ریال</b><span class="eq">=</span><b>۱۳٫۷۷۵ میلیارد ریال</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+        <div class="panel-copy">
+          <h3>گزارش روزانه، حتی بدون اینترنت</h3>
+          <p>سرپرست کارگاه فقط فعالیت‌های خودش را می‌بیند و گزارش را در چند دقیقه ثبت می‌کند. گزارش روی گوشی رمزنگاری‌شده می‌ماند تا اینترنت برسد.</p>
+          <ul class="ticks">
+            <li>مقداری، درصدی یا گام‌های وزنی</li>
+            <li>عکس، GPS، هوا و نفرات</li>
+            <li>صف ارسال و همگام‌سازی خودکار</li>
+            <li>دادهٔ رمزنگاری‌شده روی دستگاه</li>
+            <li>ثبت مشکل کارگاه و ارسال به دفتر ریسک</li>
+            <li>پیش‌نمایش لحظه‌ای؛ سرور داور نهایی</li>
+          </ul>
+        </div>
+        <div class="mock bare"><div data-phone-slot></div></div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+        <div class="panel-copy">
+          <h3>تأیید در سطح هر آیتم، با کنترل کیفیت خودکار</h3>
+          <p>ناظر فقط آنچه نیاز به نگاه دارد را می‌بیند. موارد کوچک و مستند خودکار تأیید می‌شوند و موارد بحرانی به مرحلهٔ دوم می‌روند.</p>
+          <ul class="ticks">
+            <li>تأیید خودکار: تغییر زیر ۲ واحد، ۲ عکس، GPS معتبر</li>
+            <li>مرحلهٔ دوم با مدیر پروژه</li>
+            <li>مهلت ۲۴ ساعته و یادآوری</li>
+            <li>تأییدکنندهٔ جایگزین</li>
+            <li>اصلاح = رکورد جدید، نه بازنویسی</li>
+            <li>دلیل برگشت برای سرپرست</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="mock-h"><strong>صف تأیید</strong></div>
+          <div class="q-row"><span class="q-av">رک</span><strong>آرماتوربندی سقف طبقهٔ سوم</strong><span class="act"><span>برگشت</span><span class="ok">تأیید</span></span><span class="q-meta">۶۰٪ ← ۷۲٪ · <span class="flag ok">۳ عکس</span><span class="flag ok">GPS</span></span></div>
+          <div class="q-row"><span class="q-av">سم</span><strong>لوله‌کشی آب طبقهٔ دوم</strong><span class="act"><span>برگشت</span><span class="ok">تأیید</span></span><span class="q-meta">۲۰٪ ← ۴۵٪ · <span class="flag e">جهش غیرعادی</span><span class="flag w">مرحلهٔ دوم</span></span></div>
+          <div class="q-row"><span class="q-av">عر</span><strong>نصب داربست نما</strong><span class="act"><span>برگشت</span><span class="ok">تأیید</span></span><span class="q-meta">۳۰٪ ← ۳۵٪ · <span class="flag w">عکس ناکافی</span><span class="flag e">خارج از محدوده</span></span></div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+        <div class="panel-copy">
+          <h3>شاخص‌های استاندارد، هر روز و قابل ردیابی</h3>
+          <p>اعداد فقط از گزارش‌های تأییدشده و دفتر هزینه ساخته می‌شوند. شاخص‌های هزینه با تاریخ کامل‌بودن هزینه‌ها کنارشان نمایش داده می‌شوند.</p>
+          <ul class="ticks">
+            <li>PV، EV، AC، CV، SV</li>
+            <li>CPI، SPI، EAC، VAC و TCPI</li>
+            <li>منحنی S با مبنا، بازنگری و پیش‌بینی</li>
+            <li>پیشرفت فیزیکی و ریالی کنار هم</li>
+            <li>«از کجا آمد؟» برای هر عدد</li>
+            <li>گرد کردن فقط در نمایش</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="mock-h"><strong>شاخص‌های ارزش کسب‌شده</strong></div>
+          <div class="tiles">
+            <div class="tile p"><small>BAC</small><b>۱٬۰۰۰</b><span>بودجه در اتمام</span></div>
+            <div class="tile"><small>PV</small><b>۵۵۰</b><span>ارزش برنامه‌ای</span></div>
+            <div class="tile"><small>EV</small><b>۴۹۰</b><span>ارزش کسب‌شده</span></div>
+            <div class="tile"><small>AC</small><b>۵۲۰</b><span>هزینهٔ واقعی</span></div>
+            <div class="tile w"><small>CPI</small><b>۰٫۹۴۲۳</b><span>EV ÷ AC</span></div>
+            <div class="tile w"><small>SPI</small><b>۰٫۸۹۰۹</b><span>EV ÷ PV</span></div>
+            <div class="tile e"><small>CV</small><b>−۳۰</b><span>EV − AC</span></div>
+            <div class="tile e"><small>SV</small><b>−۶۰</b><span>EV − PV</span></div>
+            <div class="tile"><small>EAC</small><b>۱٬۰۶۱٫۲۲</b><span>BAC ÷ CPI</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p5" aria-labelledby="t5" hidden>
+        <div class="panel-copy">
+          <h3>هشداری که می‌گوید چه باید کرد</h3>
+          <p>قواعد هشدار پیشرفت، هزینه، ساختار، کارگاه، تأیید و ریسک را می‌پایند و هر هشدار یک جملهٔ راهنما و یک لینک اقدام دارد.</p>
+          <ul class="ticks">
+            <li>آستانه‌های قابل تنظیم در هر پروژه</li>
+            <li>اعلان فوری برای موارد بحرانی</li>
+            <li>امتیاز ریسک = احتمال × اثر</li>
+            <li>اقدام اصلاحی با مالک و موعد</li>
+            <li>مشکل کارگاه با برچسب «از کارگاه»</li>
+            <li>ذخیرهٔ احتیاطی بیرون از BAC</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="alert-big">
+            <code>AL-X-01 · هشدار</code>
+            <p>«1.3.1.2 لوله‌کشی آب» ۱۶٪ عقب است ولی ریسک یا اقدام اصلاحی ثبت نشده. ریسک ثبت کنید.</p>
+            <a>ثبت ریسک برای این فعالیت ←</a>
+          </div>
+          <div class="heat-wrap">
+            <span class="heat-ax">احتمال</span>
+            <div>
+              <div class="heat">
+                <span class="l2">۵</span><span class="l2">۱۰</span><span class="l3">۱۵</span><span class="l4">۲۰</span><span class="l4">۲۵</span>
+                <span class="l1">۴</span><span class="l1">۸</span><span class="l2">۱۲</span><span class="l3">۱۶</span><span class="l4">۲۰</span>
+                <span class="l1">۳</span><span class="l1">۶</span><span class="l2">۹</span><span class="l2">۱۲</span><span class="l3">۱۵</span>
+                <span class="l1">۲</span><span class="l1">۴</span><span class="l1">۶</span><span class="l1">۸</span><span class="l2">۱۰</span>
+                <span class="l1">۱</span><span class="l1">۲</span><span class="l1">۳</span><span class="l1">۴</span><span class="l2">۵</span>
+              </div>
+              <div class="heat-cap">اثر ←</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p6" aria-labelledby="t6" hidden>
+        <div class="panel-copy">
+          <h3>گزارش هفتگی و ماهانه، بدون اکسل</h3>
+          <p>گزارش مدیرعامل و گزارش کارفرما از اعداد ذخیره‌شدهٔ سیستم ساخته می‌شوند، طبق زمان‌بندی ارسال می‌شوند و گزارش دورهٔ بسته دیگر تغییر نمی‌کند.</p>
+          <ul class="ticks">
+            <li>خروجی PDF راست‌به‌چپ و Excel</li>
+            <li>زمان‌بندی و فهرست گیرندگان</li>
+            <li>خلاصه، پیشرفت، هزینه، ریسک</li>
+            <li>عکس‌های تأییدشدهٔ دوره</li>
+            <li>بدون مبالغ برای ناظر کارفرما</li>
+            <li>تاریخ شمسی و ارقام فارسی</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="report">
+            <div class="page"><span class="ph t"></span><span class="ph s"></span><span class="ph"></span><div class="ptiles"><span></span><span></span><span></span><span></span></div><div class="bars"><span style="height:30%"></span><span style="height:45%"></span><span style="height:52%"></span><span style="height:70%"></span><span style="height:64%"></span><span style="height:88%"></span></div></div>
+            <div class="page"><span class="ph t"></span><span class="ph"></span><span class="ph s"></span><div class="ph-photos" style="margin-top:4px"><span></span><span></span></div><div class="ph-photos"><span></span><span></span></div><span class="ph s"></span></div>
+            <div class="page-cap"><span class="flag i">هفتگی · مدیرعامل</span><span class="flag ok">ارسال شد</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="p7" aria-labelledby="t7" hidden>
+        <div class="panel-copy">
+          <h3>رفت‌وبرگشت با MS Project</h3>
+          <p>برنامه‌ریز در ابزار خودش می‌ماند. تغییرهای فایل تازه با نسخهٔ جاری مقایسه می‌شوند و پیش از اعمال دیده می‌شوند؛ پیشرفت تأییدشده هم به MSP برمی‌گردد.</p>
+          <ul class="ticks">
+            <li>ورود XML و MPP</li>
+            <li>تطبیق با UID پایدار</li>
+            <li>مقایسهٔ تغییرات پیش از اعمال</li>
+            <li>بازنگری خودکار برنامه</li>
+            <li>خروجی پیشرفت در XML</li>
+            <li>مسیر بحرانی در MSP می‌ماند</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="sync-bar"><span class="sync-node">MS Project</span><span class="sync-line"></span><span class="sync-node">پروژه‌یار</span></div>
+          <div class="diff">
+            <div class="diff-row"><span class="k add">جدید</span><span>عایق‌کاری بام بلوک C</span><code>UID 418</code></div>
+            <div class="diff-row"><span class="k mod">تاریخ</span><span>بتن‌ریزی سقف طبقهٔ چهارم: ۱۲ ← ۱۹ آذر</span><code>UID 233</code></div>
+            <div class="diff-row"><span class="k mod">مدت</span><span>نازک‌کاری طبقهٔ اول: ۲۰ ← ۲۶ روز</span><code>UID 301</code></div>
+            <div class="diff-row"><span class="k out">به MSP</span><span>آرماتوربندی سقف طبقهٔ سوم: ۷۲٪</span><code>UID 207</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ نقش‌ها (کارت‌های روی هم) ═════════ -->
+<section class="sec" id="roles">
+  <div class="wrap">
+    <div class="roles-head">
+      <div>
+        <span class="tag tag-light rv">برای چه کسی</span>
+        <h2 class="h-lg rv" style="margin-top:18px;--d:.08s">برای هر نقشی که پروژه را جلو می‌برد</h2>
+      </div>
+      <p class="lead rv" style="--d:.16s">نقش هر کاربر در هر پروژه جداگانه تعیین می‌شود و هر کس فقط داده و مبلغی را می‌بیند که باید ببیند.</p>
+    </div>
+    <div class="stack" data-stack>
+      <article class="role" style="--i:0">
+        <div><span class="role-n">01</span><h3>مدیر پروژه</h3><p class="who">مسئول نهایی زمان، هزینه و کیفیت</p><p>هر صبح می‌داند پروژه کجاست، کدام فعالیت‌ها بیشترین عقب‌ماندگی را دارند و کدام هشدار امروز اقدام لازم دارد.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>تأیید مرحلهٔ دوم و تأییدکنندهٔ جایگزین</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>هشدارهای بحرانی و اعلان فوری</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>گزارش هفتگی آماده برای مدیرعامل</li>
+        </ul>
+      </article>
+      <article class="role" style="--i:1">
+        <div><span class="role-n">02</span><h3>برنامه‌ریز و کنترل پروژه</h3><p class="who">نگه‌دارندهٔ فایل MS Project</p><p>به‌جای جمع‌کردن پیشرفت از پیام‌رسان، پیشرفت تأییدشده را مستقیم به فایل برنامه برمی‌گرداند.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>ورود و همگام‌سازی MSP</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>ویرایش WBS، CBS، وزن‌ها و اتصال‌ها</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>بازنگری‌های شماره‌دار برنامه</li>
+        </ul>
+      </article>
+      <article class="role" style="--i:2">
+        <div><span class="role-n">03</span><h3>سرپرست کارگاه</h3><p class="who">اپ اندروید، بدون پنل وب</p><p>فقط فعالیت‌های خودش را می‌بیند و گزارش روزانه را در کارگاه، با یا بدون اینترنت، ثبت می‌کند.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>ثبت پیشرفت با عکس و موقعیت</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>گزارش مشکل کارگاه</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>دیدن دلیل برگشت و اصلاح</li>
+        </ul>
+      </article>
+      <article class="role" style="--i:3">
+        <div><span class="role-n">04</span><h3>ناظر داخلی</h3><p class="who">مهندس پیمانکار در هر حوزه</p><p>گزارش‌های حوزهٔ خودش را با پرچم‌های کنترل کیفیت می‌بیند و به‌جای همه، فقط موارد مشکوک را دقیق بررسی می‌کند.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>تأیید مرحلهٔ اول</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>عکس، GPS و سابقهٔ آیتم کنار هم</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>یادآوری پیش از پایان مهلت</li>
+        </ul>
+      </article>
+      <article class="role" style="--i:4">
+        <div><span class="role-n">05</span><h3>واحد مالی</h3><p class="who">حسابداری پروژه</p><p>هزینهٔ واقعی را در دفتر هزینه ثبت می‌کند و تاریخ کامل‌بودن هزینه‌ها را اعلام می‌کند تا CPI همیشه روی تاریخ درست باشد.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>ردیف هزینهٔ قطعی و اصلاح با رکورد جدید</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>هزینه به تفکیک نوع و قلم CBS</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>هشدار مصرف بودجهٔ هر قلم</li>
+        </ul>
+      </article>
+      <article class="role" style="--i:5">
+        <div><span class="role-n">06</span><h3>ناظر کارفرما</h3><p class="who">نمایندهٔ کارفرما یا مشاور</p><p>پیشرفت و گزارش‌ها را مستقیم می‌بیند، بی‌آنکه مبالغ و هزینه‌های داخلی پیمانکار برایش نمایش داده شود.</p></div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>مشاهدهٔ پیشرفت و منحنی S</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>گزارش ماهانه بدون مبالغ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>دسترسی فقط خواندنی</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ جایگاه: کنار MSP ═════════ -->
+<section class="sec-tight">
+  <div class="wrap">
+    <div style="max-width:760px">
+      <span class="tag tag-light rv">جایگاه پروژه‌یار</span>
+      <h2 class="h-lg scrub scrub-light" data-scrub style="margin-top:18px">کنار MS Project، نه به‌جای آن.</h2>
+      <p class="lead rv" style="color:var(--gray-600);margin-top:16px">پروژه‌یار کاری را که ابزارهای فعلی شما خوب انجام می‌دهند دوباره نمی‌سازد؛ حلقهٔ گم‌شدهٔ بین کارگاه، برنامه و هزینه را می‌بندد.</p>
+    </div>
+    <div class="pos">
+      <div class="pos-col yes rv">
+        <h3><i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5 9-10"/></svg></i>پروژه‌یار انجام می‌دهد</h3>
+        <ul>
+          <li>گزارش روزانهٔ کارگاه و تأیید<span>اپ و پنل وب</span></li>
+          <li>پیشرفت فیزیکی و ریالی<span>از آیتم‌های تأییدشده</span></li>
+          <li>ارزش کسب‌شده و پیش‌بینی<span>هر روز</span></li>
+          <li>دفتر هزینهٔ واقعی<span>متصل به CBS</span></li>
+          <li>هشدار، ریسک و گزارش مدیریتی<span>با راهنمای اقدام</span></li>
+        </ul>
+      </div>
+      <div class="pos-col no rv" style="--d:.12s">
+        <h3><i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M7 7h10v10"/></svg></i>به ابزار خودش می‌سپارد</h3>
+        <ul>
+          <li>زمان‌بندی، وابستگی‌ها و مسیر بحرانی<span>MS Project</span></li>
+          <li>حسابداری و دفاتر قانونی<span>نرم‌افزار حسابداری</span></li>
+          <li>صورت‌وضعیت به کارفرما و متره<span>خارج از نسخهٔ اول</span></li>
+          <li>مکاتبات و مدیریت اسناد<span>سامانهٔ فعلی شما</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ امنیت ═════════ -->
+<section class="night" data-night id="security">
+  <div class="wrap sec">
+    <div class="feat-head" style="margin-bottom:0">
+      <div>
+        <span class="tag rv">امنیت و اعتماد</span>
+        <h2 class="h-lg rv" style="margin-top:18px;--d:.08s">دادهٔ پروژه، فقط برای کسی که باید ببیند</h2>
+      </div>
+      <p class="lead muted-d rv" style="max-width:460px;--d:.16s">هر درخواست کد دسترسی و دامنهٔ دادهٔ خودش را دارد و دادهٔ هر سازمان در لایهٔ پایگاه داده از بقیه جداست.</p>
+    </div>
+    <div class="sec-grid">
+      <div class="sec-card rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg><h4>جداسازی سازمان‌ها</h4><p>هر پرس‌وجو به سازمان کاربر محدود است و پایگاه داده هم همین را با سیاست سطری اعمال می‌کند.</p></div>
+      <div class="sec-card rv" style="--d:.08s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><h4>دسترسی نقش‌محور</h4><p>نقش در هر پروژه جداست؛ مبالغ برای نقش‌هایی که نباید ببینند حذف می‌شوند.</p></div>
+      <div class="sec-card rv" style="--d:.16s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><h4>رمزنگاری روی گوشی</h4><p>دادهٔ اپ کارگاه روی دستگاه رمزنگاری‌شده نگه داشته می‌شود و پشتیبان‌ها هم رمزنگاری‌شده‌اند.</p></div>
+      <div class="sec-card rv" style="--d:.24s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg><h4>ردپای تغییرات</h4><p>واقعیت‌ها تغییرناپذیرند؛ آیتم تأییدشده و هزینهٔ قطعی بازنویسی نمی‌شوند و هر تغییر ثبت می‌شود.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ پرسش‌ها ═════════ -->
+<section class="sec" id="faq">
+  <div class="wrap faq-grid">
+    <div>
+      <span class="tag tag-light rv">پرسش‌های پرتکرار</span>
+      <h2 class="h-lg rv" style="margin-top:18px;--d:.08s">پیش از دمو بدانید</h2>
+      <p class="lead rv" style="--d:.16s">پرسش دیگری دارید؟ در جلسهٔ دمو با دادهٔ یکی از پروژه‌های خودتان پاسخ می‌دهیم.</p>
+    </div>
+    <div class="rv" style="--d:.1s">
+      <details class="qa"><summary>آیا پروژه‌یار جایگزین MS Project است؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>نه. زمان‌بندی، وابستگی‌ها و مسیر بحرانی در MS Project می‌مانند. پروژه‌یار ساختار و تاریخ‌ها را از فایل برنامه می‌خواند، پیشرفت واقعی و هزینه را کنارش می‌گذارد و پیشرفت تأییدشده را به فایل برمی‌گرداند.</p></div></details>
+      <details class="qa"><summary>اگر اینترنت کارگاه قطع باشد چه؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>اپ کارگاه آفلاین‌محور است. گزارش، عکس و موقعیت روی گوشی رمزنگاری‌شده ذخیره می‌شوند و به‌محض اتصال خودکار ارسال می‌شوند. اگر گزارشی بیش از ۲۴ ساعت در گوشی بماند، مدیر پروژه هشدار می‌گیرد.</p></div></details>
+      <details class="qa"><summary>کدام قالب فایل MS Project پشتیبانی می‌شود؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>ورود از XML و MPP. خروجی پیشرفت به MS Project در قالب XML است.</p></div></details>
+      <details class="qa"><summary>ناظر کارفرما مبالغ را می‌بیند؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>نه. ناظر کارفرما پیشرفت و گزارش‌ها را می‌بیند، ولی مبالغ و هزینه‌های داخلی پیمانکار در پاسخ سرور برای او حذف می‌شوند.</p></div></details>
+      <details class="qa"><summary>اپ کارگاه روی چه گوشی‌هایی کار می‌کند؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>گوشی‌های اندروید ۸ و بالاتر. سایر نقش‌ها از پنل وب استفاده می‌کنند.</p></div></details>
+      <details class="qa"><summary>جای نرم‌افزار حسابداری را می‌گیرد؟<i aria-hidden="true">+</i></summary><div class="qa-body"><p>نه. پروژه‌یار هزینهٔ واقعی را در یک دفتر هزینهٔ متصل به CBS نگه می‌دارد تا شاخص‌های هزینه ساخته شوند؛ دفاتر قانونی در نرم‌افزار حسابداری شما می‌مانند.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ پایانی + فرم دمو ═════════ -->
+<section class="night final" data-night id="demo">
+  <canvas class="ribbon" data-ribbon="final" aria-hidden="true"></canvas>
+  <div class="wrap sec final-in">
+    <div>
+      <span class="tag rv">درخواست دمو</span>
+      <h2 class="h-xl scrub" data-scrub style="margin-top:22px">پروژهٔ خودتان را در پروژه‌یار ببینید.</h2>
+      <p class="lead rv" style="--d:.1s">فایل MS Project یکی از پروژه‌هایتان را بیاورید؛ در جلسهٔ دمو ساختار، وزن‌ها و نخستین منحنی S را با هم می‌سازیم.</p>
+    </div>
+    <form class="form rv-scale" id="demoForm" novalidate data-endpoint="">
+      <h3>هماهنگی جلسهٔ دمو</h3>
+      <div class="field"><label for="f-name">نام و نام خانوادگی</label><input id="f-name" name="name" autocomplete="name" required /><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="f-co">نام شرکت</label><input id="f-co" name="company" autocomplete="organization" required /><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="f-tel">شمارهٔ همراه</label><input id="f-tel" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰" required dir="ltr" style="text-align:right" /><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="f-size">تعداد پروژه‌های در جریان</label>
+        <select id="f-size" name="projects"><option>۱ تا ۳ پروژه</option><option>۴ تا ۱۰ پروژه</option><option>بیش از ۱۰ پروژه</option></select>
+      </div>
+      <button class="btn btn-primary" type="submit">ثبت درخواست دمو <span class="arrow" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 17 7 7M7 15V7h8"/></svg></span></button>
+      <p class="form-note" id="formNote" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ═════════ پانویس ═════════ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 19V9l7-5 7 5v10"/><path d="M9 19v-5h6v5"/></svg></span><span class="brand-t"><strong>پروژه‌یار</strong><small>کنترل پروژهٔ عمرانی</small></span></a>
+        <p class="foot-blurb">پلتفرم کنترل پروژه برای پیمانکاران پروژه‌های ساختمانی، راه و پل و تأسیسات؛ کنار MS Project.</p>
+      </div>
+      <div><h5>محصول</h5><ul><li><a href="#features">امکانات</a></li><li><a href="#command">داشبورد</a></li><li><a href="#modules">ماژول‌ها</a></li><li><a href="#security">امنیت</a></li></ul></div>
+      <div><h5>برای</h5><ul><li><a href="#roles">مدیر پروژه</a></li><li><a href="#roles">برنامه‌ریز</a></li><li><a href="#roles">سرپرست کارگاه</a></li><li><a href="#roles">واحد مالی</a></li></ul></div>
+      <div><h5>شروع</h5><ul><li><a href="#demo">درخواست دمو</a></li><li><a href="/login">ورود به پنل</a></li><li><a href="#faq">پرسش‌ها</a></li></ul></div>
+    </div>
+    <div class="foot-word" aria-hidden="true">پروژه‌یار</div>
+    <div class="foot-bottom"><span>© ۱۴۰۵ پروژه‌یار</span><span>اعداد نمایش‌داده‌شده نمونه‌اند.</span></div>
+  </div>
+</footer>
+
+<script src="./assets/landing.js" defer></script>
+</body>
+</html>

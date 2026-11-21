@@ -1,0 +1,61 @@
+# ── Dependencies ──
+node_modules/
+.pnpm-store/
+
+# ── Build output ──
+dist/
+dist-ssr/
+coverage/
+*.tsbuildinfo
+
+# ── Environment / secrets (only examples are committed) ──
+.env
+.env.*
+!.env.example
+*.bak
+*.pem
+*.key
+*.jks
+*.keystore
+key.properties
+
+# ── Backend runtime data ──
+# MikroORM schema snapshots (dev DB and temporary integration-test DBs)
+backend/.snapshot-*.json
+# Local file storage (uploads, encrypted project backups)
+backend/var/
+
+# ── Local AI / dev-tool data ──
+.claude/
+**/.claude/
+ruvector.db
+*.db-journal
+*.db-wal
+*.db-shm
+.swarm/
+.claude-flow/
+.hive-mind/
+.mcp.json
+
+# Decoded conversation exports at the repo root
+/conversations_decoded.json
+/*_decoded.json
+/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]-[0-9a-f][0-9a-f][0-9a-f][0-9a-f]-*.json
+
+# Old archive of designs/docs (contents already in the tree)
+/Ashan.zip
+
+# ── Logs ──
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ── OS / editors ──
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp

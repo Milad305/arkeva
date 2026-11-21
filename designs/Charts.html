@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>نمودارها — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+    --shadow-xl: 0 20px 40px -10px rgb(24 24 27 / 0.18), 0 8px 16px -8px rgb(24 24 27 / 0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { font-family: 'Vazirmatn', system-ui, sans-serif; color: var(--gray-900); background: var(--gray-50); -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01'; font-size: 13.5px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 8px; border: 2px solid var(--gray-50); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+  .app { display: grid; grid-template-columns: 224px 1fr; min-height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  main { min-width: 0; }
+  .topbar { height: 52px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 20px; position: sticky; top: 0; z-index: 30; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; }
+  .ic-btn { width: 32px; height: 32px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 6px; left: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .proj-mini { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .proj-mini .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .proj-mini .thumb { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+  .proj-mini .thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-mini .thumb svg { position: relative; z-index: 1; }
+  .proj-mini h1 { font-size: 16px; font-weight: 600; margin: 0; color: var(--gray-900); line-height: 1.2; }
+  .proj-mini .meta-line { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .proj-mini .meta-line .mono { color: var(--gray-700); }
+  .proj-mini .actions { display: flex; align-items: center; gap: 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: var(--r-md); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+  .btn-sm { height: 27px; padding: 0 9px; font-size: 11.5px; border-radius: 6px; }
+
+  .tabs { display: flex; gap: 0; padding: 0 20px; background: white; border-bottom: 1px solid var(--gray-200); overflow-x: auto; }
+  .tab { position: relative; padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 10.5px; padding: 1px 5px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* page header */
+  .page-bar { padding: 16px 24px 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; max-width: 1520px; }
+  .page-bar h2 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .page-bar .sub { font-size: 12.5px; color: var(--gray-500); margin-top: 2px; }
+  .page-bar .tools { display: flex; align-items: center; gap: 8px; }
+  .date-field { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid var(--gray-300); background: white; border-radius: var(--r-md); font-size: 12px; color: var(--gray-700); }
+  .date-field .mono { font-size: 11.5px; }
+
+  /* sub tabs */
+  .subtabs { padding: 14px 24px 0; max-width: 1520px; }
+  .pill-tabs { display: inline-flex; background: white; border: 1px solid var(--gray-200); border-radius: var(--r-md); padding: 3px; gap: 2px; flex-wrap: wrap; }
+  .pill-tab { height: 30px; padding: 0 14px; border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; color: var(--gray-600); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .pill-tab.on { background: var(--primary-700); color: white; font-weight: 600; }
+
+  .content { padding: 16px 24px 40px; max-width: 1520px; }
+
+  /* chart card */
+  .chart-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 16px; }
+  .cc-head { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--gray-100); gap: 12px; }
+  .cc-head h3 { font-size: 14.5px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .cc-head h3 svg { color: var(--primary-500); }
+  .cc-head .sub { font-size: 11.5px; color: var(--gray-500); margin-top: 3px; }
+  .cc-tools { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .cc-tools .ic-tool { width: 28px; height: 28px; border-radius: 6px; background: transparent; border: 1px solid transparent; color: var(--gray-500); display: inline-flex; align-items: center; justify-content: center; }
+  .cc-tools .ic-tool:hover { background: var(--gray-100); color: var(--gray-900); border-color: var(--gray-200); }
+  .cc-body { padding: 14px 16px 18px; position: relative; }
+
+  /* legend with toggle */
+  .legend { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .leg-btn { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--gray-200); background: white; font-size: 11.5px; color: var(--gray-700); transition: all .12s; }
+  .leg-btn .sw { width: 14px; height: 3px; border-radius: 2px; }
+  .leg-btn .sw.dash { background-image: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 6px) !important; height: 2px; }
+  .leg-btn.off { opacity: 0.4; text-decoration: line-through; }
+  .leg-btn:hover { border-color: var(--gray-300); }
+
+  /* SVG chart */
+  .chart-svg { width: 100%; display: block; }
+  .chart-svg .grid line { stroke: var(--gray-100); stroke-width: 1; }
+  .chart-svg .axis text { font-family: 'Vazirmatn', sans-serif; font-size: 10.5px; fill: var(--gray-500); }
+  .chart-tooltip { position: absolute; background: var(--gray-900); color: white; border-radius: 8px; padding: 8px 12px; font-size: 11.5px; pointer-events: none; box-shadow: var(--shadow-lg); opacity: 0; transition: opacity .12s; transform: translate(-50%, -100%); z-index: 5; white-space: nowrap; }
+  .chart-tooltip strong { display: block; margin-bottom: 4px; }
+  .chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); }
+  .chart-tooltip .tt-row .sw { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* KPI ribbon */
+  .kpi-ribbon { display: flex; gap: 18px; padding: 10px 18px; background: var(--gray-50); border-top: 1px solid var(--gray-100); flex-wrap: wrap; }
+  .kpi-ribbon .k { display: flex; flex-direction: column; gap: 1px; }
+  .kpi-ribbon .k .lbl { font-size: 10.5px; color: var(--gray-500); }
+  .kpi-ribbon .k .val { font-size: 14px; font-weight: 700; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 1100px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Gantt */
+  .gantt { padding: 6px 0; }
+  .gantt-row { display: grid; grid-template-columns: 200px 1fr; align-items: center; border-bottom: 1px solid var(--gray-50); }
+  .gantt-row:last-child { border-bottom: 0; }
+  .gantt-label { padding: 7px 12px; font-size: 12px; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gantt-label .mono { font-size: 10px; color: var(--gray-400); }
+  .gantt-label.parent { font-weight: 600; color: var(--gray-900); }
+  .gantt-label.child { padding-right: 24px; color: var(--gray-700); }
+  .gantt-track { position: relative; height: 30px; }
+  .gantt-bar { position: absolute; height: 8px; border-radius: 999px; top: 6px; }
+  .gantt-bar.planned { background: var(--gray-300); }
+  .gantt-bar.actual { top: 16px; height: 7px; }
+  .gantt-ms { position: absolute; top: 4px; width: 12px; height: 12px; transform: rotate(45deg); border: 2px solid white; }
+  .gantt-head { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); }
+  .gantt-head .lbl { padding: 7px 12px; font-size: 10.5px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; }
+  .gantt-head .months { position: relative; height: 30px; }
+  .gantt-head .months span { position: absolute; top: 8px; font-size: 10px; color: var(--gray-500); transform: translateX(50%); }
+  .gantt-today { position: absolute; top: 0; bottom: 0; width: 1.5px; background: var(--error-500); z-index: 2; }
+
+  /* placeholder */
+  .placeholder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ph-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); padding: 28px 24px; min-height: 240px; display: flex; flex-direction: column; }
+  .ph-card.full { grid-column: 1 / -1; }
+  .ph-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .ph-head h3 { font-size: 14px; font-weight: 600; margin: 0; }
+  .ph-head .ic { color: var(--primary-500); }
+  .ph-sub { font-size: 11.5px; color: var(--gray-500); margin-bottom: 18px; }
+  .ph-canvas { flex: 1; border: 1.5px dashed var(--gray-200); border-radius: var(--r-md); background: repeating-linear-gradient(135deg, var(--gray-50) 0 12px, white 12px 24px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--gray-400); }
+  .ph-canvas .pic { width: 48px; height: 48px; border-radius: var(--r-lg); background: white; border: 1px solid var(--gray-200); display: inline-flex; align-items: center; justify-content: center; color: var(--gray-400); }
+  .ph-canvas .lbl { font-size: 12px; font-weight: 500; color: var(--gray-500); }
+  .ph-canvas .desc { font-size: 11px; color: var(--gray-400); max-width: 260px; text-align: center; line-height: 1.6; }
+  .ph-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--primary-700); background: var(--primary-100); padding: 3px 8px; border-radius: 999px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Modal (maximize) */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(24, 24, 27, 0.55); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 32px; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal { background: white; border-radius: var(--r-xl); box-shadow: var(--shadow-xl); width: 100%; max-width: 1100px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+  .modal-head h3 { font-size: 15px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .modal-body { padding: 20px; overflow: auto; }
+
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 5px 9px; font-size: 11px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 50; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="Dashboard.html"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Project.html">مجتمع مسکونی نگین شهر</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">نمودارها</span>
+      </nav>
+      <button class="ic-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+      <button class="ic-btn"><i data-lucide="bell" style="width:15px;height:15px"></i><span class="ping"></span></button>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 2px"></div>
+      <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12px;color:var(--gray-800)"><div class="avatar">م.ا</div><i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i></button>
+    </header>
+
+    <section class="proj-mini">
+      <div class="left">
+        <div class="thumb"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>
+        <div>
+          <h1>مجتمع مسکونی نگین شهر</h1>
+          <div class="meta-line">
+            <span>کد: <span class="mono">PRJ-1404-021</span></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>مدیر: <strong>مهندس رضایی</strong></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>پیشرفت: <strong style="color:var(--gray-900)">۶۵٪</strong> از <strong>۷۰٪</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="badge" style="background:var(--success-50);color:var(--success-700)"><span class="dot" style="background:var(--success-500)"></span>فعال</span>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab" onclick="location.href='Project.html'"><i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>نمای کلی</button>
+      <button class="tab" onclick="location.href='WBS.html'"><i data-lucide="git-branch" style="width:13px;height:13px"></i>WBS</button>
+      <button class="tab" onclick="location.href='CBS.html'"><i data-lucide="banknote" style="width:13px;height:13px"></i>CBS</button>
+      <button class="tab" onclick="location.href='Links.html'"><i data-lucide="link" style="width:13px;height:13px"></i>اتصالات</button>
+      <button class="tab has-warn"><i data-lucide="clipboard-check" style="width:13px;height:13px"></i>گزارش‌ها<span class="num">۸</span></button>
+      <button class="tab" onclick="location.href='Members.html'"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا<span class="num">۱۸</span></button>
+      <button class="tab active"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i>نمودارها</button>
+      <button class="tab"><i data-lucide="settings" style="width:13px;height:13px"></i>تنظیمات</button>
+    </nav>
+
+    <div class="page-bar">
+      <div>
+        <h2>نمودارها و گزارش‌های مدیریتی</h2>
+        <div class="sub">تحلیل گرافیکی پیشرفت، هزینه، منابع و ریسک پروژه</div>
+      </div>
+      <div class="tools">
+        <span class="date-field"><i data-lucide="calendar" style="width:13px;height:13px;color:var(--gray-500)"></i><span class="mono">۱۴۰۳/۰۵/۰۱</span><span style="color:var(--gray-400)">—</span><span class="mono">۱۴۰۴/۰۳/۰۱</span></span>
+        <button class="btn btn-outline" data-tip="بازنشانی نما"><i data-lucide="rotate-ccw" style="width:13px;height:13px"></i></button>
+        <button class="btn btn-primary"><i data-lucide="file-down" style="width:14px;height:14px"></i>خروجی PDF کامل</button>
+      </div>
+    </div>
+
+    <div class="subtabs">
+      <div class="pill-tabs" id="subtab-bar">
+        <button class="pill-tab on" data-panel="progress"><i data-lucide="trending-up" style="width:13px;height:13px"></i>پیشرفت و زمان</button>
+        <button class="pill-tab" data-panel="cost"><i data-lucide="banknote" style="width:13px;height:13px"></i>هزینه و بودجه</button>
+        <button class="pill-tab" data-panel="resources"><i data-lucide="users" style="width:13px;height:13px"></i>منابع و سرپرست‌ها</button>
+        <button class="pill-tab" data-panel="risk"><i data-lucide="alert-triangle" style="width:13px;height:13px"></i>ریسک و انحراف</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══════ PANEL 1: Progress & Time ═══════ -->
+      <div class="tab-panel active" id="panel-progress">
+
+        <!-- Chart 1: S-Curve -->
+        <div class="chart-card">
+          <div class="cc-head">
+            <div>
+              <h3><i data-lucide="line-chart" style="width:16px;height:16px"></i>منحنی پیشرفت پروژه (S-Curve)</h3>
+              <div class="sub">مقایسهٔ برنامه‌ای اولیه، بازنگری‌شده، واقعی و پیش‌بینی — ناحیهٔ سایه‌دار نشان‌دهندهٔ انحراف است</div>
+            </div>
+            <div class="cc-tools">
+              <button class="ic-tool" data-tip="دانلود PNG"><i data-lucide="image" style="width:15px;height:15px"></i></button>
+              <button class="ic-tool" data-tip="دانلود Excel"><i data-lucide="file-spreadsheet" style="width:15px;height:15px"></i></button>
+              <button class="ic-tool" data-tip="تمام‌صفحه" onclick="maximize('s-curve')"><i data-lucide="maximize-2" style="width:15px;height:15px"></i></button>
+            </div>
+          </div>
+          <div style="padding:12px 18px 0">
+            <div class="legend" id="scurve-legend">
+              <button class="leg-btn" data-line="baseline"><span class="sw dash" style="background:#8AA2C2;color:#8AA2C2"></span>برنامه‌ای اولیه</button>
+              <button class="leg-btn" data-line="revised"><span class="sw" style="background:#2C4A73"></span>برنامه‌ای بازنگری‌شده</button>
+              <button class="leg-btn" data-line="actual"><span class="sw" style="background:#1A3354;height:4px"></span>واقعی</button>
+              <button class="leg-btn" data-line="forecast"><span class="sw dash" style="background:#A1A1AA;color:#A1A1AA"></span>پیش‌بینی</button>
+            </div>
+          </div>
+          <div class="cc-body">
+            <div id="sc-tooltip" class="chart-tooltip"></div>
+            <svg viewBox="0 0 1280 360" class="chart-svg" preserveAspectRatio="none" id="scurve" style="height:360px"></svg>
+          </div>
+          <div class="kpi-ribbon">
+            <div class="k"><span class="lbl">پیشرفت واقعی</span><span class="val">۶۵٪</span></div>
+            <div class="k"><span class="lbl">برنامه‌ای امروز</span><span class="val">۷۰٪</span></div>
+            <div class="k"><span class="lbl">انحراف زمانی (SV)</span><span class="val" style="color:var(--error-700)">‎−۵٪</span></div>
+            <div class="k"><span class="lbl">پیش‌بینی اتمام</span><span class="val mono">۱۴۰۴/۰۹/۱۰</span></div>
+            <div class="k"><span class="lbl">تأخیر تخمینی</span><span class="val" style="color:var(--warning-700)">۲۶ روز</span></div>
+          </div>
+        </div>
+
+        <!-- Two-col: EV + Gantt -->
+        <div class="two-col">
+          <!-- Earned Value -->
+          <div class="chart-card" style="margin-bottom:0">
+            <div class="cc-head">
+              <div>
+                <h3><i data-lucide="activity" style="width:16px;height:16px"></i>تحلیل ارزش کسب‌شده (EVM)</h3>
+                <div class="sub">PV، EV و AC در طول زمان</div>
+              </div>
+              <div class="cc-tools">
+                <button class="ic-tool" data-tip="دانلود PNG"><i data-lucide="image" style="width:15px;height:15px"></i></button>
+                <button class="ic-tool" data-tip="دانلود Excel"><i data-lucide="file-spreadsheet" style="width:15px;height:15px"></i></button>
+                <button class="ic-tool" data-tip="تمام‌صفحه" onclick="maximize('evm')"><i data-lucide="maximize-2" style="width:15px;height:15px"></i></button>
+              </div>
+            </div>
+            <div style="padding:12px 18px 0">
+              <div class="legend">
+                <button class="leg-btn" style="cursor:default"><span class="sw" style="background:#2563EB"></span>PV — ارزش برنامه‌ای</button>
+                <button class="leg-btn" style="cursor:default"><span class="sw" style="background:#16A34A"></span>EV — ارزش کسب‌شده</button>
+                <button class="leg-btn" style="cursor:default"><span class="sw" style="background:#DC2626"></span>AC — هزینهٔ واقعی</button>
+              </div>
+            </div>
+            <div class="cc-body">
+              <div id="ev-tooltip" class="chart-tooltip"></div>
+              <svg viewBox="0 0 620 300" class="chart-svg" preserveAspectRatio="none" id="evm" style="height:300px"></svg>
+            </div>
+            <div class="kpi-ribbon">
+              <div class="k"><span class="lbl">CV (انحراف هزینه)</span><span class="val" style="color:var(--warning-700)">‎−۱۸ میلیارد</span></div>
+              <div class="k"><span class="lbl">SV (انحراف زمان)</span><span class="val" style="color:var(--error-700)">‎−۴۲ میلیارد</span></div>
+              <div class="k"><span class="lbl">CPI</span><span class="val mono">0.97</span></div>
+              <div class="k"><span class="lbl">SPI</span><span class="val mono" style="color:var(--error-700)">0.93</span></div>
+            </div>
+          </div>
+
+          <!-- Gantt -->
+          <div class="chart-card" style="margin-bottom:0">
+            <div class="cc-head">
+              <div>
+                <h3><i data-lucide="gantt-chart" style="width:16px;height:16px"></i>نمودار گانت فشرده</h3>
+                <div class="sub">سطح ۲ WBS — برنامه‌ای vs واقعی</div>
+              </div>
+              <div class="cc-tools">
+                <button class="ic-tool" data-tip="دانلود PNG"><i data-lucide="image" style="width:15px;height:15px"></i></button>
+                <button class="ic-tool" data-tip="دانلود Excel"><i data-lucide="file-spreadsheet" style="width:15px;height:15px"></i></button>
+                <button class="ic-tool" data-tip="تمام‌صفحه" onclick="maximize('gantt')"><i data-lucide="maximize-2" style="width:15px;height:15px"></i></button>
+              </div>
+            </div>
+            <div class="cc-body" style="padding:0">
+              <div class="gantt-head">
+                <div class="lbl">فعالیت</div>
+                <div class="months" id="gantt-months"></div>
+              </div>
+              <div class="gantt" id="gantt"></div>
+            </div>
+            <div class="kpi-ribbon">
+              <div class="k"><span class="lbl"><span style="display:inline-block;width:10px;height:4px;background:var(--gray-300);border-radius:2px;vertical-align:middle;margin-left:4px"></span>برنامه‌ای</span></div>
+              <div class="k"><span class="lbl"><span style="display:inline-block;width:10px;height:4px;background:var(--success-500);border-radius:2px;vertical-align:middle;margin-left:4px"></span>واقعی · در مسیر</span></div>
+              <div class="k"><span class="lbl"><span style="display:inline-block;width:10px;height:4px;background:var(--error-500);border-radius:2px;vertical-align:middle;margin-left:4px"></span>تأخیردار</span></div>
+              <div class="k"><span class="lbl"><span style="display:inline-block;width:8px;height:8px;background:var(--accent-500);transform:rotate(45deg);vertical-align:middle;margin-left:6px"></span>milestone</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ PANEL 2: Cost ═══════ -->
+      <div class="tab-panel" id="panel-cost">
+        <div class="placeholder-grid">
+          ${''}
+          <div class="ph-card full" style="min-height:auto">
+            <div class="ph-head"><i data-lucide="info" class="ic" style="width:16px;height:16px"></i><h3>دستهٔ هزینه و بودجه</h3></div>
+            <div class="ph-sub">این بخش در پرامپت بعدی با جزئیات کامل ساخته می‌شود. در ادامه نمودارهای برنامه‌ریزی‌شدهٔ این دسته آمده است.</div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="pie-chart" class="ic" style="width:16px;height:16px"></i><h3>توزیع بودجه (Donut)</h3></div>
+            <div class="ph-sub">تقسیم بودجه بر اساس نوع هزینهٔ CBS</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="pie-chart" style="width:22px;height:22px"></i></div><span class="lbl">Donut Chart</span><span class="desc">مرکز: مجموع بودجه و مصرف‌شده · legend با درصد و مبلغ</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="bar-chart-3" class="ic" style="width:16px;height:16px"></i><h3>بودجه vs هزینهٔ واقعی</h3></div>
+            <div class="ph-sub">میله‌ای — موارد فراتر از بودجه قرمز</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="bar-chart-3" style="width:22px;height:22px"></i></div><span class="lbl">Grouped Bar Chart</span><span class="desc">دو میله برای هر نوع هزینه: برنامه‌ای و واقعی</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="flame" class="ic" style="width:16px;height:16px"></i><h3>Burn Rate ماهانه</h3></div>
+            <div class="ph-sub">هزینهٔ ماهانه — برنامه‌ای vs واقعی</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="trending-up" style="width:22px;height:22px"></i></div><span class="lbl">Line Chart</span><span class="desc">با پیش‌بینی هزینهٔ ماه‌های آینده</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="bar-chart-horizontal" class="ic" style="width:16px;height:16px"></i><h3>۱۰ آیتم گران CBS</h3></div>
+            <div class="ph-sub">بیشترین بودجه + درصد مصرف</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="bar-chart-horizontal" style="width:22px;height:22px"></i></div><span class="lbl">Horizontal Bar Chart</span><span class="desc">۱۰ آیتم با بیشترین بودجه و درصد مصرف</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ PANEL 3: Resources ═══════ -->
+      <div class="tab-panel" id="panel-resources">
+        <div class="placeholder-grid">
+          <div class="ph-card full" style="min-height:auto">
+            <div class="ph-head"><i data-lucide="info" class="ic" style="width:16px;height:16px"></i><h3>دستهٔ منابع و سرپرست‌ها</h3></div>
+            <div class="ph-sub">این بخش در پرامپت بعدی با جزئیات کامل ساخته می‌شود.</div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="bar-chart-horizontal" class="ic" style="width:16px;height:16px"></i><h3>توزیع کار بین سرپرست‌ها</h3></div>
+            <div class="ph-sub">فعالیت‌ها، گزارش‌ها و میانگین پیشرفت</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="bar-chart-horizontal" style="width:22px;height:22px"></i></div><span class="lbl">Horizontal Bar Chart</span><span class="desc">برای هر سرپرست: تعداد فعالیت، گزارش و میانگین پیشرفت</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="grid-3x3" class="ic" style="width:16px;height:16px"></i><h3>عملکرد سرپرست‌ها (Heatmap)</h3></div>
+            <div class="ph-sub">ماتریس سرپرست × روزهای ماه</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="grid-3x3" style="width:22px;height:22px"></i></div><span class="lbl">Heatmap</span><span class="desc">رنگ سلول بر اساس تعداد گزارش‌های روزانه</span></div>
+          </div>
+          <div class="ph-card full">
+            <div class="ph-head"><i data-lucide="timer" class="ic" style="width:16px;height:16px"></i><h3>زمان متوسط تأیید گزارش</h3></div>
+            <div class="ph-sub">بر اساس ناظر — شناسایی گلوگاه</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="bar-chart-3" style="width:22px;height:22px"></i></div><span class="lbl">Bar Chart</span><span class="desc">میانگین زمان تأیید هر ناظر</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ PANEL 4: Risk ═══════ -->
+      <div class="tab-panel" id="panel-risk">
+        <div class="placeholder-grid">
+          <div class="ph-card full" style="min-height:auto">
+            <div class="ph-head"><i data-lucide="info" class="ic" style="width:16px;height:16px"></i><h3>دستهٔ ریسک و انحراف</h3></div>
+            <div class="ph-sub">این بخش در پرامپت بعدی با جزئیات کامل ساخته می‌شود.</div>
+          </div>
+          <div class="ph-card full">
+            <div class="ph-head"><i data-lucide="layout-grid" class="ic" style="width:16px;height:16px"></i><h3>نقشهٔ حرارتی ریسک (Treemap WBS)</h3></div>
+            <div class="ph-sub">اندازهٔ مربع = وزن · رنگ = انحراف</div>
+            <div class="ph-canvas" style="min-height:160px"><div class="pic"><i data-lucide="layout-grid" style="width:22px;height:22px"></i></div><span class="lbl">Treemap</span><span class="desc">همهٔ آیتم‌های برگ WBS؛ کلیک روی مربع → جزئیات</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="list-ordered" class="ic" style="width:16px;height:16px"></i><h3>۱۰ آیتم در تأخیر</h3></div>
+            <div class="ph-sub">انحراف، روزهای تأخیر، سرپرست</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="list-ordered" style="width:22px;height:22px"></i></div><span class="lbl">Ranked List</span><span class="desc">با اقدامات سریع برای هر آیتم</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-head"><i data-lucide="pie-chart" class="ic" style="width:16px;height:16px"></i><h3>توزیع وضعیت‌ها</h3></div>
+            <div class="ph-sub">Donut از وضعیت همهٔ آیتم‌های WBS</div>
+            <div class="ph-canvas"><div class="pic"><i data-lucide="pie-chart" style="width:22px;height:22px"></i></div><span class="lbl">Donut Chart</span><span class="desc">در حال انجام / تأخیردار / تمام‌شده / شروع‌نشده</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Maximize modal -->
+<div class="modal-overlay" id="max-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="max-title"><i data-lucide="maximize-2" style="width:16px;height:16px"></i>نمودار</h3>
+      <button class="ic-btn" onclick="document.getElementById('max-modal').classList.remove('open')"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body" id="max-body"></div>
+  </div>
+</div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  // sub-tab switching
+  document.querySelectorAll('#subtab-bar .pill-tab').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#subtab-bar .pill-tab').forEach(x => x.classList.toggle('on', x === b));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + b.dataset.panel));
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+
+  function smoothPath(pts) {
+    if (pts.length < 2) return '';
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x0, y0] = pts[i], [x1, y1] = pts[i+1];
+      const cx = (x0 + x1) / 2;
+      d += ` C${cx},${y0} ${cx},${y1} ${x1},${y1}`;
+    }
+    return d;
+  }
+
+  // ───── S-Curve ─────
+  const SC = { X0: 56, X1: 1264, Y0: 300, Y1: 30, W: 1280, H: 360 };
+  const scMonths = [
+    { m: 'مرداد ۰۳', baseline: 3,  revised: 2,  actual: 1 },
+    { m: 'مهر ۰۳',   baseline: 9,  revised: 7,  actual: 6 },
+    { m: 'آذر ۰۳',   baseline: 18, revised: 16, actual: 14 },
+    { m: 'بهمن ۰۳',  baseline: 32, revised: 30, actual: 27 },
+    { m: 'فروردین ۰۴', baseline: 50, revised: 48, actual: 44 },
+    { m: 'خرداد ۰۴', baseline: 72, revised: 70, actual: 65, today: true },
+    { m: 'مرداد ۰۴', baseline: 88, revised: 86, forecast: 80 },
+    { m: 'مهر ۰۴',   baseline: 96, revised: 95, forecast: 91 },
+    { m: 'آذر ۰۴',   baseline: 100, revised: 100, forecast: 99 },
+  ];
+  const scLines = { baseline: true, revised: true, actual: true, forecast: true };
+
+  function renderSCurve() {
+    const n = scMonths.length;
+    const xFor = i => SC.X0 + (SC.X1 - SC.X0) * (i / (n - 1));
+    const yFor = p => SC.Y0 - (p / 100) * (SC.Y0 - SC.Y1);
+    const todayIdx = scMonths.findIndex(m => m.today);
+
+    const baselinePts = scMonths.map((m, i) => [xFor(i), yFor(m.baseline)]);
+    const revisedPts = scMonths.map((m, i) => [xFor(i), yFor(m.revised)]);
+    const actualPts = scMonths.slice(0, todayIdx + 1).map((m, i) => [xFor(i), yFor(m.actual)]);
+    const forecastPts = [[xFor(todayIdx), yFor(scMonths[todayIdx].actual)], ...scMonths.slice(todayIdx + 1).map((m, i) => [xFor(todayIdx + 1 + i), yFor(m.forecast)])];
+
+    // deviation shaded area (between revised plan and actual, up to today)
+    const devTop = revisedPts.slice(0, todayIdx + 1);
+    const devArea = smoothPath(devTop) + ' ' + 'L' + actualPts.slice().reverse().map(p => `${p[0]},${p[1]}`).join(' L') + ' Z';
+
+    let svg = `
+      <defs>
+        <linearGradient id="devGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#DC2626" stop-opacity="0.10"/><stop offset="100%" stop-color="#DC2626" stop-opacity="0.03"/></linearGradient>
+      </defs>
+      <g class="grid">
+        ${[0,25,50,75,100].map(v => `<line x1="${SC.X0}" y1="${yFor(v)}" x2="${SC.X1}" y2="${yFor(v)}"/>`).join('')}
+      </g>
+      <g class="axis" text-anchor="start">
+        ${[0,25,50,75,100].map(v => `<text x="14" y="${yFor(v)+4}">${fa(v)}٪</text>`).join('')}
+      </g>`;
+
+    // deviation shading
+    if (scLines.revised && scLines.actual) svg += `<path d="${devArea}" fill="url(#devGrad)"/>`;
+
+    if (scLines.baseline) svg += `<path d="${smoothPath(baselinePts)}" stroke="#8AA2C2" stroke-width="2" fill="none" stroke-dasharray="5 5" stroke-linecap="round"/>`;
+    if (scLines.revised) svg += `<path d="${smoothPath(revisedPts)}" stroke="#2C4A73" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+    if (scLines.forecast) svg += `<path d="${smoothPath(forecastPts)}" stroke="#A1A1AA" stroke-width="2" fill="none" stroke-dasharray="4 5" stroke-linecap="round"/>`;
+    if (scLines.actual) svg += `<path d="${smoothPath(actualPts)}" stroke="#1A3354" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+
+    // today line
+    const tx = xFor(todayIdx);
+    svg += `<line x1="${tx}" y1="16" x2="${tx}" y2="${SC.Y0}" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <rect x="${tx-28}" y="4" width="56" height="22" rx="4" fill="#DC2626"/>
+      <text x="${tx}" y="19" text-anchor="middle" font-size="11" fill="white" font-family="Vazirmatn" font-weight="600">امروز</text>`;
+
+    // points + hit areas + x labels
+    scMonths.forEach((m, i) => {
+      const x = xFor(i);
+      if (scLines.actual && m.actual != null && i <= todayIdx) svg += `<circle cx="${x}" cy="${yFor(m.actual)}" r="4.5" fill="#1A3354" stroke="white" stroke-width="2"/>`;
+      else if (scLines.forecast && m.forecast != null) svg += `<circle cx="${x}" cy="${yFor(m.forecast)}" r="4" fill="white" stroke="#A1A1AA" stroke-width="2"/>`;
+      svg += `<circle cx="${x}" cy="${yFor(m.actual ?? m.forecast ?? m.revised)}" r="16" fill="transparent" class="sc-hit" data-i="${i}"/>`;
+      svg += `<text class="axis" x="${x}" y="${SC.Y0+22}" text-anchor="middle" ${m.today ? 'fill="#DC2626" font-weight="600"' : 'fill="#71717A"'} font-size="10.5" font-family="Vazirmatn">${m.m}</text>`;
+    });
+
+    document.getElementById('scurve').innerHTML = svg;
+
+    // tooltips
+    const chart = document.getElementById('scurve');
+    const tt = document.getElementById('sc-tooltip');
+    chart.querySelectorAll('.sc-hit').forEach(el => {
+      el.addEventListener('mousemove', () => {
+        const i = +el.dataset.i, m = scMonths[i];
+        const r = chart.getBoundingClientRect();
+        const sx = r.width / SC.W, sy = r.height / SC.H;
+        const y = yFor(m.actual ?? m.forecast ?? m.revised);
+        tt.style.left = (xFor(i) * sx) + 'px';
+        tt.style.top = (y * sy - 6) + 'px';
+        tt.innerHTML = `<strong>${m.m}</strong>
+          <div class="tt-row"><span class="sw" style="background:#8AA2C2"></span>اولیه: ${fa(m.baseline)}٪</div>
+          <div class="tt-row"><span class="sw" style="background:#2C4A73"></span>بازنگری: ${fa(m.revised)}٪</div>
+          ${m.actual != null ? `<div class="tt-row"><span class="sw" style="background:#1A3354"></span>واقعی: ${fa(m.actual)}٪</div>` : ''}
+          ${m.forecast != null ? `<div class="tt-row"><span class="sw" style="background:#A1A1AA"></span>پیش‌بینی: ${fa(m.forecast)}٪</div>` : ''}`;
+        tt.style.opacity = '1';
+      });
+      el.addEventListener('mouseleave', () => tt.style.opacity = '0');
+    });
+  }
+  // legend toggle
+  document.querySelectorAll('#scurve-legend .leg-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      scLines[b.dataset.line] = !scLines[b.dataset.line];
+      b.classList.toggle('off', !scLines[b.dataset.line]);
+      renderSCurve();
+    });
+  });
+
+  // ───── EVM chart ─────
+  const EV = { X0: 50, X1: 600, Y0: 250, Y1: 26, W: 620, H: 300 };
+  const evMonths = [
+    { m: 'مرداد', pv: 30,  ev: 28,  ac: 30 },
+    { m: 'مهر',   pv: 90,  ev: 82,  ac: 88 },
+    { m: 'آذر',   pv: 170, ev: 150, ac: 165 },
+    { m: 'بهمن',  pv: 300, ev: 268, ac: 290 },
+    { m: 'فروردین', pv: 440, ev: 400, ac: 430 },
+    { m: 'خرداد', pv: 595, ev: 553, ac: 571 },
+  ];
+  function renderEVM() {
+    const n = evMonths.length;
+    const maxV = 650;
+    const xFor = i => EV.X0 + (EV.X1 - EV.X0) * (i / (n - 1));
+    const yFor = v => EV.Y0 - (v / maxV) * (EV.Y0 - EV.Y1);
+    let svg = `<g class="grid">${[0,160,320,480,640].map(v => `<line x1="${EV.X0}" y1="${yFor(v)}" x2="${EV.X1}" y2="${yFor(v)}"/>`).join('')}</g>
+      <g class="axis" text-anchor="start">${[0,320,640].map(v => `<text x="10" y="${yFor(v)+4}">${fa(v)}</text>`).join('')}</g>`;
+    const lines = [['pv','#2563EB'],['ev','#16A34A'],['ac','#DC2626']];
+    lines.forEach(([key, col]) => {
+      const pts = evMonths.map((m, i) => [xFor(i), yFor(m[key])]);
+      svg += `<path d="${smoothPath(pts)}" stroke="${col}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+      pts.forEach(p => svg += `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="${col}" stroke="white" stroke-width="1.5"/>`);
+    });
+    evMonths.forEach((m, i) => {
+      svg += `<text class="axis" x="${xFor(i)}" y="${EV.Y0+20}" text-anchor="middle" fill="#71717A" font-size="10.5" font-family="Vazirmatn">${m.m}</text>`;
+      svg += `<circle cx="${xFor(i)}" cy="${yFor(m.pv)}" r="14" fill="transparent" class="ev-hit" data-i="${i}"/>`;
+    });
+    // Y-axis unit
+    svg += `<text class="axis" x="${EV.X0}" y="16" fill="#A1A1AA" font-size="10" font-family="Vazirmatn">میلیارد ﷼</text>`;
+    document.getElementById('evm').innerHTML = svg;
+
+    const chart = document.getElementById('evm');
+    const tt = document.getElementById('ev-tooltip');
+    chart.querySelectorAll('.ev-hit').forEach(el => {
+      el.addEventListener('mousemove', () => {
+        const i = +el.dataset.i, m = evMonths[i];
+        const r = chart.getBoundingClientRect();
+        const sx = r.width / EV.W, sy = r.height / EV.H;
+        tt.style.left = (xFor(i) * sx) + 'px';
+        tt.style.top = (yFor(m.pv) * sy - 6) + 'px';
+        tt.innerHTML = `<strong>${m.m} ۰۳/۰۴</strong>
+          <div class="tt-row"><span class="sw" style="background:#2563EB"></span>PV: ${fa(m.pv)} میلیارد</div>
+          <div class="tt-row"><span class="sw" style="background:#16A34A"></span>EV: ${fa(m.ev)} میلیارد</div>
+          <div class="tt-row"><span class="sw" style="background:#DC2626"></span>AC: ${fa(m.ac)} میلیارد</div>`;
+        tt.style.opacity = '1';
+      });
+      el.addEventListener('mouseleave', () => tt.style.opacity = '0');
+    });
+  }
+
+  // ───── Gantt ─────
+  const ganttData = [
+    { code: '1.1', title: 'عملیات خاکی', parent: true, ps: 0, pe: 14, as: 0, ae: 14, status: 'done' },
+    { code: '1.2', title: 'سازه', parent: true, ps: 12, pe: 62, as: 12, ae: 58, status: 'progress' },
+    { code: '1.2.1', title: 'فونداسیون', child: true, ps: 12, pe: 26, as: 12, ae: 26, status: 'done' },
+    { code: '1.2.2', title: 'سازه طبقات', child: true, ps: 24, pe: 52, as: 24, ae: 48, status: 'progress' },
+    { code: '1.2.3', title: 'سقف', child: true, ps: 40, pe: 62, as: 40, ae: 50, status: 'late', ms: 62 },
+    { code: '1.3', title: 'تأسیسات', parent: true, ps: 38, pe: 80, as: 38, ae: 52, status: 'progress' },
+    { code: '1.4', title: 'نازک‌کاری', parent: true, ps: 62, pe: 95, as: 62, ae: 70, status: 'late', ms: 95 },
+  ];
+  const GANTT_MAX = 100, TODAY_PCT = 58;
+  function renderGantt() {
+    const months = ['مرداد','مهر','آذر','بهمن','فروردین','خرداد','مرداد','مهر'];
+    document.getElementById('gantt-months').innerHTML = months.map((m, i) =>
+      `<span style="right:${(i / (months.length - 1)) * 100}%">${m}</span>`
+    ).join('') + `<div class="gantt-today" style="right:${TODAY_PCT}%"></div>`;
+
+    const colors = { done: '#16A34A', progress: '#2563EB', late: '#DC2626' };
+    document.getElementById('gantt').innerHTML = ganttData.map(g => {
+      const col = colors[g.status];
+      const ms = g.ms != null ? `<div class="gantt-ms" style="right:calc(${g.ms}% - 6px);background:${g.status === 'late' ? 'var(--error-500)' : 'var(--accent-500)'}"></div>` : '';
+      return `
+        <div class="gantt-row">
+          <div class="gantt-label ${g.parent ? 'parent' : 'child'}">
+            ${g.parent ? '<i data-lucide="folder" style="width:13px;height:13px;color:var(--gray-400)"></i>' : '<i data-lucide="file-text" style="width:12px;height:12px;color:var(--primary-500)"></i>'}
+            <span class="mono">${fa(g.code)}</span>${g.title}
+          </div>
+          <div class="gantt-track">
+            <div class="gantt-bar planned" style="right:${g.ps}%;width:${g.pe - g.ps}%"></div>
+            <div class="gantt-bar actual" style="right:${g.as}%;width:${g.ae - g.as}%;background:${col}"></div>
+            ${ms}
+            <div class="gantt-today" style="right:${TODAY_PCT}%;top:2px;bottom:2px"></div>
+          </div>
+        </div>`;
+    }).join('');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ───── Maximize ─────
+  const titles = { 's-curve': 'منحنی پیشرفت پروژه (S-Curve)', 'evm': 'تحلیل ارزش کسب‌شده (EVM)', 'gantt': 'نمودار گانت فشرده' };
+  window.maximize = (which) => {
+    const modal = document.getElementById('max-modal');
+    document.getElementById('max-title').innerHTML = `<i data-lucide="maximize-2" style="width:16px;height:16px"></i>${titles[which]}`;
+    const body = document.getElementById('max-body');
+    const srcCard = which === 's-curve' ? document.querySelector('#panel-progress .chart-card') : null;
+    // Clone the relevant SVG / gantt into modal at larger size
+    if (which === 's-curve') body.innerHTML = `<div style="position:relative">${document.querySelector('#scurve').outerHTML.replace('height:360px','height:520px')}</div>`;
+    else if (which === 'evm') body.innerHTML = `<div style="position:relative">${document.querySelector('#evm').outerHTML.replace('height:300px','height:520px')}</div>`;
+    else if (which === 'gantt') body.innerHTML = `<div style="border:1px solid var(--gray-200);border-radius:12px;overflow:hidden"><div class="gantt-head"><div class="lbl">فعالیت</div><div class="months">${document.getElementById('gantt-months').innerHTML}</div></div><div class="gantt">${document.getElementById('gantt').innerHTML}</div></div>`;
+    modal.classList.add('open');
+    if (window.lucide) lucide.createIcons();
+  };
+  document.getElementById('max-modal').addEventListener('click', e => { if (e.target.id === 'max-modal') e.currentTarget.classList.remove('open'); });
+
+  // init
+  renderSCurve();
+  renderEVM();
+  renderGantt();
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

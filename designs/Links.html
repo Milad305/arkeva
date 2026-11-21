@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>اتصالات WBS↔CBS — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+    --shadow-xl: 0 20px 40px -10px rgb(24 24 27 / 0.18), 0 8px 16px -8px rgb(24 24 27 / 0.10);
+    --cost-material: #2563EB; --cost-labor: #E07A2C; --cost-equip: #16A34A; --cost-sub: #7C3AED; --cost-overhead: #71717A; --cost-transport: #0891B2;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+    color: var(--gray-900); background: var(--gray-50);
+    -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01';
+    font-size: 13.5px;
+  }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select, textarea { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 8px; border: 2px solid white; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+  /* AppShell */
+  .app { display: grid; grid-template-columns: 224px 1fr; height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
+  .topbar { height: 52px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 20px; flex-shrink: 0; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; }
+  .ic-btn { width: 32px; height: 32px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 6px; left: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .proj-mini { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .proj-mini .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .proj-mini .thumb { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+  .proj-mini .thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-mini .thumb svg { position: relative; z-index: 1; }
+  .proj-mini h1 { font-size: 16px; font-weight: 600; margin: 0; color: var(--gray-900); line-height: 1.2; }
+  .proj-mini .meta-line { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .proj-mini .meta-line .mono { color: var(--gray-700); }
+  .proj-mini .actions { display: flex; align-items: center; gap: 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: var(--r-md); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+  .btn-sm { height: 26px; padding: 0 8px; font-size: 11.5px; border-radius: 6px; }
+  .btn-lg { height: 38px; padding: 0 16px; font-size: 13.5px; }
+  .btn-block { width: 100%; }
+
+  .tabs { display: flex; gap: 0; padding: 0 20px; background: white; border-bottom: 1px solid var(--gray-200); flex-shrink: 0; overflow-x: auto; }
+  .tab { position: relative; padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 10.5px; padding: 1px 5px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* ───── 2-col layout ───── */
+  .link-layout { flex: 1; display: grid; grid-template-columns: 44% 56%; overflow: hidden; }
+
+  /* RIGHT: WBS selector */
+  .wbs-select { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+  .ws-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--gray-100); flex-shrink: 0; }
+  .ws-head .title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .ws-head h2 { font-size: 14px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 7px; }
+  .ws-head h2 svg { color: var(--primary-500); }
+  /* stat card */
+  .ws-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--gray-200); border: 1px solid var(--gray-200); border-radius: var(--r-md); overflow: hidden; margin-bottom: 12px; }
+  .ws-stat { background: white; padding: 8px 10px; text-align: center; }
+  .ws-stat .v { font-size: 17px; font-weight: 700; color: var(--gray-900); line-height: 1.1; }
+  .ws-stat .v.warn { color: var(--error-700); }
+  .ws-stat .v.ok { color: var(--success-700); }
+  .ws-stat .k { font-size: 10.5px; color: var(--gray-500); margin-top: 2px; }
+  .ws-controls { display: flex; gap: 8px; }
+  .field { height: 32px; padding: 0 10px; border: 1px solid var(--gray-200); background: white; border-radius: var(--r-md); font-size: 12.5px; color: var(--gray-900); outline: none; transition: border-color .12s, box-shadow .12s; }
+  .field:hover { border-color: var(--gray-300); }
+  .field:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  .search-wrap { position: relative; flex: 1; }
+  .search-wrap .ico { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
+  .search-wrap input { padding-right: 32px; width: 100%; }
+  .seg { display: inline-flex; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: var(--r-md); padding: 2px; flex-shrink: 0; }
+  .seg button { height: 26px; padding: 0 9px; border: 0; background: transparent; border-radius: 5px; font-size: 11.5px; color: var(--gray-600); font-weight: 500; }
+  .seg button.on { background: white; color: var(--gray-900); box-shadow: var(--shadow-sm); }
+
+  .ws-tree { flex: 1; overflow: auto; padding: 6px 8px; }
+  .tnode { border-radius: var(--r-md); }
+  .trow { display: flex; align-items: center; gap: 6px; padding: 7px 8px; border-radius: var(--r-md); cursor: pointer; transition: background .1s; position: relative; }
+  .trow.parent { cursor: default; }
+  .trow.leaf:hover { background: var(--gray-50); }
+  .trow.selected { background: var(--primary-100); }
+  .trow.selected .t-title { color: var(--primary-900); font-weight: 600; }
+  .twisty { width: 18px; height: 18px; border-radius: 4px; color: var(--gray-400); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: transparent; border: 0; }
+  .twisty:hover { background: var(--gray-200); color: var(--gray-900); }
+  .twisty.empty { visibility: hidden; }
+  .t-ic { width: 16px; height: 16px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+  .t-ic.folder { color: var(--gray-400); }
+  .t-title { font-size: 12.5px; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+  .trow.parent .t-title { font-weight: 600; color: var(--gray-400); }
+  .t-code { font-size: 10px; color: var(--gray-400); flex-shrink: 0; }
+  .link-status { width: 18px; height: 18px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .link-status.linked { color: var(--success-500); }
+  .link-status.unlinked { color: var(--accent-500); }
+  .t-budget { font-size: 10.5px; color: var(--gray-500); flex-shrink: 0; }
+  .trow.selected .t-budget { color: var(--primary-700); }
+
+  /* LEFT: detail */
+  .link-detail { background: var(--gray-50); overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
+  .ld-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+  .ld-empty .icw { width: 72px; height: 72px; border-radius: var(--r-xl); background: white; border: 1px solid var(--gray-200); display: inline-flex; align-items: center; justify-content: center; color: var(--gray-300); margin-bottom: 18px; }
+  .ld-empty h3 { font-size: 16px; color: var(--gray-800); font-weight: 600; margin: 0 0 6px; }
+  .ld-empty p { font-size: 13px; color: var(--gray-500); margin: 0; line-height: 1.8; max-width: 320px; }
+  .ld-empty .hint { margin-top: 20px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); background: white; border: 1px solid var(--gray-200); padding: 6px 12px; border-radius: 999px; }
+
+  .ld-body { padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 14px; }
+  .ld-head .crumb { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gray-500); margin-bottom: 6px; }
+  .ld-head .crumb svg { color: var(--gray-300); }
+  .ld-head .crumb .leaf { color: var(--gray-700); font-weight: 500; }
+  .ld-head .title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .ld-head h1 { font-size: 20px; font-weight: 700; margin: 0; color: var(--gray-900); line-height: 1.35; letter-spacing: -0.01em; }
+  .ld-head .submeta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--gray-600); }
+  .ld-head .submeta > span { display: inline-flex; align-items: center; gap: 5px; }
+  .ld-head .submeta svg { color: var(--gray-400); }
+  .ld-head .submeta strong { color: var(--gray-800); font-weight: 600; }
+
+  .card { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); overflow: hidden; }
+  .card-pad { padding: 16px 18px; }
+
+  /* budget summary card */
+  .budget-card { display: grid; grid-template-columns: 1.3fr 1fr 1fr; }
+  .budget-card .seg-cell { padding: 14px 18px; border-left: 1px solid var(--gray-100); }
+  .budget-card .seg-cell:last-child { border-left: 0; }
+  .budget-card .k { font-size: 11px; color: var(--gray-500); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .budget-card .k svg { color: var(--gray-400); }
+  .budget-card .v { font-size: 22px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.01em; line-height: 1; }
+  .budget-card .v small { font-size: 12px; font-weight: 500; color: var(--gray-500); margin-right: 3px; }
+  .budget-card .sub { font-size: 11px; color: var(--gray-500); margin-top: 5px; }
+  .balance-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: var(--r-sm); font-size: 11px; font-weight: 600; margin-top: 6px; }
+
+  .section-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+  .section-label .lh { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--gray-800); }
+  .section-label .lh svg { color: var(--gray-500); }
+  .section-label .rh { font-size: 11.5px; color: var(--gray-500); }
+
+  /* connections table */
+  table.conn { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.conn th { text-align: right; font-size: 10.5px; font-weight: 600; color: var(--gray-500); padding: 9px 12px; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+  table.conn td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  table.conn tbody tr:last-child td { border-bottom: 0; }
+  table.conn tbody tr:hover { background: var(--gray-50); }
+  .cost-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: var(--r-sm); font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .cost-chip .d { width: 6px; height: 6px; border-radius: 2px; }
+  .cell-code { font-size: 11px; color: var(--gray-500); }
+  .cell-title { font-weight: 500; color: var(--gray-900); }
+  .qty-edit { display: inline-flex; align-items: center; gap: 4px; }
+  .qty-input { width: 64px; height: 28px; padding: 0 8px; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 12.5px; text-align: left; background: white; outline: none; font-family: 'JetBrains Mono', monospace; transition: border-color .12s, box-shadow .12s; }
+  .qty-input:hover { border-color: var(--gray-300); }
+  .qty-input:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  .qty-unit { font-size: 11px; color: var(--gray-500); }
+  .rate-cell { font-size: 11.5px; color: var(--gray-600); }
+  .subbudget-cell { font-weight: 600; color: var(--gray-900); }
+  .pct-cell { color: var(--gray-600); }
+  .row-acts { display: inline-flex; gap: 2px; }
+  .ic-row-btn { width: 26px; height: 26px; border-radius: 5px; background: transparent; border: 0; color: var(--gray-500); display: inline-flex; align-items: center; justify-content: center; }
+  .ic-row-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-row-btn.danger:hover { background: var(--error-50); color: var(--error-700); }
+  .conn-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--gray-50); border-top: 1px solid var(--gray-200); }
+  .conn-foot .sum-label { font-size: 12px; color: var(--gray-600); }
+  .conn-foot .sum-val { font-size: 17px; font-weight: 700; color: var(--gray-900); }
+  .conn-foot .sum-val small { font-size: 11px; color: var(--gray-500); font-weight: 500; }
+
+  /* suggestions */
+  .suggest { background: linear-gradient(180deg, #FBFCFE, white); border: 1px solid var(--primary-100); }
+  .suggest .sg-head { display: flex; align-items: center; gap: 8px; padding: 12px 16px 8px; }
+  .suggest .sg-head .ic { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; }
+  .suggest .sg-head h4 { font-size: 12.5px; font-weight: 600; margin: 0; color: var(--gray-800); }
+  .suggest .sg-head .sub { font-size: 11px; color: var(--gray-500); }
+  .suggest .sg-list { padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .sg-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; background: white; border: 1px solid var(--gray-100); border-radius: var(--r-md); }
+  .sg-item .left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .sg-item .title { font-size: 12px; color: var(--gray-800); }
+  .sg-item .meta { font-size: 10.5px; color: var(--gray-500); }
+
+  /* Alert banner */
+  .alert { display: flex; gap: 10px; padding: 11px 14px; border-radius: var(--r-md); border: 1px solid; font-size: 12.5px; line-height: 1.6; }
+  .alert svg { flex-shrink: 0; margin-top: 1px; }
+  .alert.warn { background: var(--warning-50); border-color: rgba(217,119,6,0.25); color: var(--warning-700); }
+  .alert.warn strong { color: var(--warning-700); }
+  .alert .a-actions { margin-right: auto; }
+
+  /* ───── Modal ───── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(24, 24, 27, 0.45); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal { background: white; border-radius: var(--r-xl); box-shadow: var(--shadow-xl); width: 100%; max-width: 540px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; transform: translateY(8px) scale(0.99); transition: transform .15s; }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+  .modal-head .lh { display: flex; align-items: center; gap: 10px; }
+  .modal-head .ic { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; }
+  .modal-head h3 { font-size: 15px; font-weight: 600; margin: 0; }
+  .modal-head .sub { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
+  .modal-body { padding: 18px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+  .modal-foot { padding: 14px 20px; border-top: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--gray-50); }
+
+  .mtab-bar { display: inline-flex; background: var(--gray-100); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+  .mtab { height: 30px; padding: 0 14px; border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; color: var(--gray-600); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .mtab.on { background: white; color: var(--gray-900); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+  .mform-label { font-size: 12px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; display: block; }
+  /* mini CBS tree in modal */
+  .cbs-pick { border: 1px solid var(--gray-200); border-radius: var(--r-md); max-height: 200px; overflow-y: auto; padding: 6px; }
+  .cbs-row { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+  .cbs-row:hover { background: var(--gray-50); }
+  .cbs-row.parent { cursor: default; }
+  .cbs-row.parent .cbs-title { font-weight: 600; color: var(--gray-500); }
+  .cbs-row.selected { background: var(--primary-100); }
+  .cbs-row .cbs-title { font-size: 12.5px; color: var(--gray-800); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cbs-row .cbs-code { font-size: 10px; color: var(--gray-400); }
+  .cbs-check { color: var(--primary-700); flex-shrink: 0; }
+
+  .search-results { border: 1px solid var(--gray-200); border-radius: var(--r-md); max-height: 180px; overflow-y: auto; }
+  .sr-item { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--gray-100); cursor: pointer; }
+  .sr-item:last-child { border-bottom: 0; }
+  .sr-item:hover { background: var(--gray-50); }
+  .sr-item .title { font-size: 12.5px; color: var(--gray-900); }
+  .sr-item .meta { font-size: 10.5px; color: var(--gray-500); }
+
+  .selected-cbs-card { background: var(--primary-100); border: 1px solid var(--primary-300); border-radius: var(--r-md); padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .selected-cbs-card .info { min-width: 0; }
+  .selected-cbs-card .info .t { font-size: 13px; font-weight: 600; color: var(--primary-900); }
+  .selected-cbs-card .info .m { font-size: 11px; color: var(--primary-700); margin-top: 2px; }
+  .selected-cbs-card .rate { text-align: left; flex-shrink: 0; }
+  .selected-cbs-card .rate .r { font-size: 13px; font-weight: 700; color: var(--primary-900); }
+  .selected-cbs-card .rate .u { font-size: 10.5px; color: var(--primary-700); }
+
+  .qty-block { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
+  .calc-budget { background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--r-md); padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .calc-budget .formula { font-size: 11px; color: var(--gray-500); }
+  .calc-budget .result { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+  textarea.field { height: auto; padding: 8px 10px; line-height: 1.6; width: 100%; resize: vertical; }
+
+  [data-tab="tree"] #pick-tree { display: block; }
+  [data-tab="tree"] #pick-search { display: none; }
+  [data-tab="search"] #pick-tree { display: none; }
+  [data-tab="search"] #pick-search { display: block; }
+
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 5px 9px; font-size: 11px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 50; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="#"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Project.html">مجتمع مسکونی نگین شهر</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">اتصالات</span>
+      </nav>
+      <button class="ic-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+      <button class="ic-btn"><i data-lucide="bell" style="width:15px;height:15px"></i><span class="ping"></span></button>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 2px"></div>
+      <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12px;color:var(--gray-800)"><div class="avatar">م.ا</div><i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i></button>
+    </header>
+
+    <section class="proj-mini">
+      <div class="left">
+        <div class="thumb"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>
+        <div>
+          <h1>مجتمع مسکونی نگین شهر</h1>
+          <div class="meta-line">
+            <span>کد: <span class="mono">PRJ-1404-021</span></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>روش پیشرفت: <strong>وزن‌دار هزینه‌ای</strong></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>اتصالات: <strong style="color:var(--gray-900)">۳۲</strong> از <strong>۴۸</strong> برگ</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="badge" style="background:var(--success-50);color:var(--success-700)"><span class="dot" style="background:var(--success-500)"></span>فعال</span>
+        <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی اتصالات</button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="edit-3" style="width:13px;height:13px"></i>ویرایش پروژه</button>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab" onclick="location.href='Project.html'"><i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>نمای کلی</button>
+      <button class="tab" onclick="location.href='WBS.html'"><i data-lucide="git-branch" style="width:13px;height:13px"></i>WBS</button>
+      <button class="tab" onclick="location.href='CBS.html'"><i data-lucide="banknote" style="width:13px;height:13px"></i>CBS</button>
+      <button class="tab active"><i data-lucide="link" style="width:13px;height:13px"></i>اتصالات</button>
+      <button class="tab has-warn"><i data-lucide="clipboard-check" style="width:13px;height:13px"></i>گزارش‌ها<span class="num">۸</span></button>
+      <button class="tab"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا<span class="num">۱۸</span></button>
+      <button class="tab"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i>نمودارها</button>
+      <button class="tab"><i data-lucide="settings" style="width:13px;height:13px"></i>تنظیمات</button>
+    </nav>
+
+    <!-- ───── 2-col ───── -->
+    <div class="link-layout">
+      <!-- RIGHT: WBS selector -->
+      <aside class="wbs-select">
+        <div class="ws-head">
+          <div class="title-row">
+            <h2><i data-lucide="git-branch" style="width:16px;height:16px"></i>ساختار WBS</h2>
+            <span class="badge" style="background:var(--gray-100);color:var(--gray-600)">فقط برگ‌ها قابل انتخاب</span>
+          </div>
+          <div class="ws-stats">
+            <div class="ws-stat"><div class="v">۴۸</div><div class="k">کل برگ‌ها</div></div>
+            <div class="ws-stat"><div class="v ok">۳۲</div><div class="k">با اتصال</div></div>
+            <div class="ws-stat"><div class="v warn">۱۶</div><div class="k">بدون اتصال</div></div>
+          </div>
+          <div class="ws-controls">
+            <div class="search-wrap">
+              <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+              <input class="field" type="text" placeholder="جستجوی آیتم…" />
+            </div>
+            <div class="seg" id="filter-seg">
+              <button class="on" data-filter="all">همه</button>
+              <button data-filter="linked">با اتصال</button>
+              <button data-filter="unlinked">بدون</button>
+            </div>
+          </div>
+        </div>
+        <div class="ws-tree" id="ws-tree"></div>
+      </aside>
+
+      <!-- LEFT: detail -->
+      <section class="link-detail" id="link-detail"></section>
+    </div>
+  </main>
+</div>
+
+<!-- ───── Add-link modal ───── -->
+<div class="modal-overlay" id="modal" data-tab="tree">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="lh">
+        <div class="ic"><i data-lucide="link" style="width:17px;height:17px"></i></div>
+        <div>
+          <h3>افزودن آیتم CBS</h3>
+          <div class="sub">یک آیتم هزینه را انتخاب و مقدار مصرف را وارد کنید</div>
+        </div>
+      </div>
+      <button class="ic-btn" onclick="closeModal()"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body">
+      <!-- Tabs: from tree / search -->
+      <div>
+        <span class="mform-label">انتخاب آیتم CBS</span>
+        <div class="mtab-bar" id="mtab-bar">
+          <button class="mtab on" data-mtab="tree"><i data-lucide="list-tree" style="width:13px;height:13px"></i>از درخت</button>
+          <button class="mtab" data-mtab="search"><i data-lucide="search" style="width:13px;height:13px"></i>جستجو</button>
+        </div>
+      </div>
+
+      <!-- pick: tree -->
+      <div id="pick-tree">
+        <div class="cbs-pick" id="cbs-pick"></div>
+      </div>
+      <!-- pick: search -->
+      <div id="pick-search">
+        <div class="search-wrap" style="margin-bottom:8px">
+          <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+          <input class="field" id="cbs-search-input" type="text" placeholder="نام یا کد CBS را تایپ کنید…" oninput="filterSearch(this.value)" style="width:100%;padding-right:32px" />
+        </div>
+        <div class="search-results" id="search-results"></div>
+      </div>
+
+      <!-- selected CBS card -->
+      <div id="selected-cbs-wrap" style="display:none">
+        <span class="mform-label">آیتم انتخاب‌شده</span>
+        <div class="selected-cbs-card">
+          <div class="info">
+            <div class="t" id="sel-cbs-title">—</div>
+            <div class="m"><span id="sel-cbs-code" class="mono">—</span> · <span id="sel-cbs-type">—</span></div>
+          </div>
+          <div class="rate">
+            <div class="r mono" id="sel-cbs-rate">—</div>
+            <div class="u">ریال / <span id="sel-cbs-unit">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- quantity input -->
+      <div id="qty-section" style="display:none">
+        <div class="qty-block">
+          <div>
+            <span class="mform-label">مقدار مصرف</span>
+            <input class="field" id="qty-input" type="text" placeholder="۰" style="width:100%" oninput="recalc()" />
+          </div>
+          <div>
+            <span class="mform-label">واحد</span>
+            <input class="field" id="qty-unit-input" type="text" disabled style="width:100%;background:var(--gray-50)" />
+          </div>
+        </div>
+        <div class="calc-budget" style="margin-top:12px">
+          <div>
+            <div class="formula" id="calc-formula">مقدار × نرخ واحد</div>
+            <div style="font-size:10.5px;color:var(--gray-400);margin-top:2px">زیربودجه محاسبه‌شده</div>
+          </div>
+          <div class="result mono" id="calc-result">۰ ریال</div>
+        </div>
+      </div>
+
+      <!-- notes -->
+      <div id="notes-section" style="display:none">
+        <span class="mform-label">توضیحات <span style="color:var(--gray-400);font-weight:400">(اختیاری)</span></span>
+        <textarea class="field" rows="2" placeholder="مثلاً: شامل پرت مصالح ۵٪"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">انصراف</button>
+      <button class="btn btn-primary" id="modal-add-btn" disabled><i data-lucide="plus" style="width:14px;height:14px"></i>افزودن اتصال</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  const faNum = n => fa(Number(n).toLocaleString('en-US'));
+  const PROJECT_BUDGET = 850e9; // 850 میلیارد ریال
+
+  // Cost type meta
+  const costTypes = {
+    material:  { label: 'مصالح',        color: 'var(--cost-material)',  bg: '#EFF6FF', fg: '#1D4ED8' },
+    labor:     { label: 'نیروی انسانی', color: 'var(--cost-labor)',     bg: '#FCEAD9', fg: '#B45813' },
+    equip:     { label: 'تجهیزات',      color: 'var(--cost-equip)',     bg: '#ECFDF3', fg: '#15803D' },
+    sub:       { label: 'پیمانکار جزء', color: 'var(--cost-sub)',       bg: '#F3EEFE', fg: '#6D28D9' },
+    overhead:  { label: 'سربار',        color: 'var(--cost-overhead)',  bg: '#F4F4F5', fg: '#3F3F46' },
+    transport: { label: 'حمل و نقل',    color: 'var(--cost-transport)', bg: '#ECFEFF', fg: '#0E7490' },
+  };
+
+  // CBS catalog (for modal pick + rate lookup)
+  const cbsCatalog = [
+    { code: 'C.1.1.1', title: 'سیمان',          type: 'material', unit: 'تن',        rate: 12000000 },
+    { code: 'C.1.1.2', title: 'آرماتور',        type: 'material', unit: 'تن',        rate: 95000000 },
+    { code: 'C.1.1.3', title: 'شن و ماسه',      type: 'material', unit: 'متر مکعب',  rate: 2000000 },
+    { code: 'C.1.1.4', title: 'بتن آماده',      type: 'material', unit: 'متر مکعب',  rate: 25000000 },
+    { code: 'C.1.2.1', title: 'کاشی و سرامیک',  type: 'material', unit: 'متر مربع',  rate: 1800000 },
+    { code: 'C.1.2.2', title: 'گچ و رنگ',       type: 'material', unit: 'متر مربع',  rate: 650000 },
+    { code: 'C.1.2.3', title: 'درب و پنجره',    type: 'material', unit: 'عدد',       rate: 18000000 },
+    { code: 'C.1.3.1', title: 'لوله‌کشی',       type: 'material', unit: 'متر',       rate: 850000 },
+    { code: 'C.1.3.2', title: 'سیم و کابل',     type: 'material', unit: 'متر',       rate: 320000 },
+    { code: 'C.2.1',   title: 'کارگر ماهر',     type: 'labor',    unit: 'نفر-ساعت',  rate: 800000 },
+    { code: 'C.2.2',   title: 'کارگر ساده',     type: 'labor',    unit: 'نفر-ساعت',  rate: 400000 },
+    { code: 'C.2.3',   title: 'مهندس مقیم',     type: 'labor',    unit: 'نفر-ماه',   rate: 450000000 },
+    { code: 'C.2.4',   title: 'سرپرست کارگاه',  type: 'labor',    unit: 'نفر-ماه',   rate: 380000000 },
+    { code: 'C.3.1',   title: 'اجاره جرثقیل برجی', type: 'equip', unit: 'دستگاه-ماه', rate: 280000000 },
+    { code: 'C.3.2',   title: 'اجاره بتن‌پمپ',  type: 'equip',    unit: 'روز',       rate: 35000000 },
+    { code: 'C.3.3',   title: 'لودر و بیل مکانیکی', type: 'equip', unit: 'دستگاه-روز', rate: 22000000 },
+    { code: 'C.4.1',   title: 'پیمانکار تأسیسات برقی',  type: 'sub', unit: 'مقطوع', rate: 4200000000 },
+    { code: 'C.4.2',   title: 'پیمانکار تأسیسات مکانیکی', type: 'sub', unit: 'مقطوع', rate: 3800000000 },
+    { code: 'C.4.3',   title: 'پیمانکار آسانسور', type: 'sub',    unit: 'دستگاه',    rate: 1500000000 },
+  ];
+  // CBS tree (for modal "from tree")
+  const cbsTree = [
+    { code: 'C.1', title: 'مصالح', children: [
+      { code: 'C.1.1', title: 'مصالح سازه‌ای', children: ['C.1.1.1','C.1.1.2','C.1.1.3','C.1.1.4'] },
+      { code: 'C.1.2', title: 'مصالح نازک‌کاری', children: ['C.1.2.1','C.1.2.2','C.1.2.3'] },
+      { code: 'C.1.3', title: 'مصالح تأسیسات', children: ['C.1.3.1','C.1.3.2'] },
+    ]},
+    { code: 'C.2', title: 'نیروی انسانی', children: [
+      { code: '_', title: '', children: ['C.2.1','C.2.2','C.2.3','C.2.4'] },
+    ]},
+    { code: 'C.3', title: 'تجهیزات و ماشین‌آلات', children: [
+      { code: '_', title: '', children: ['C.3.1','C.3.2','C.3.3'] },
+    ]},
+    { code: 'C.4', title: 'پیمانکاران جزء', children: [
+      { code: '_', title: '', children: ['C.4.1','C.4.2','C.4.3'] },
+    ]},
+  ];
+  const cbsByCode = Object.fromEntries(cbsCatalog.map(c => [c.code, c]));
+
+  // ───── WBS tree (leaf-selectable) ─────
+  // connections keyed by leaf code
+  const connections = {
+    '1.2.1.3': [ // بتن‌ریزی فونداسیون بلوک A — the rich example
+      { code: 'C.1.1.4', qty: 200 },
+      { code: 'C.1.1.2', qty: 15 },
+      { code: 'C.1.1.1', qty: 50 },
+      { code: 'C.2.1',   qty: 320 },
+      { code: 'C.2.2',   qty: 480 },
+      { code: 'C.3.2',   qty: 4 },
+    ],
+    '1.1.1': [ { code: 'C.3.3', qty: 60 }, { code: 'C.2.2', qty: 220 } ],
+    '1.2.1.1': [ { code: 'C.1.1.2', qty: 220 }, { code: 'C.2.1', qty: 180 } ],
+    '1.2.2.3': [ { code: 'C.1.1.4', qty: 980 }, { code: 'C.3.2', qty: 12 } ],
+  };
+  // wbs leaf budget weight for balance check (planned share of project)
+  const wbsTree = [
+    { code: '1.1', title: 'عملیات خاکی', children: [
+      { code: '1.1.1', title: 'خاکبرداری', leaf: true, qty: 8400, unit: 'متر مکعب', weight: 2.4 },
+      { code: '1.1.2', title: 'خاکریزی', leaf: true, qty: 3200, unit: 'متر مکعب', weight: 1.6 },
+      { code: '1.1.3', title: 'تسطیح', leaf: true, qty: 4600, unit: 'متر مربع', weight: 1.0 },
+    ]},
+    { code: '1.2', title: 'سازه', children: [
+      { code: '1.2.1', title: 'فونداسیون', children: [
+        { code: '1.2.1.1', title: 'آرماتوربندی فونداسیون', leaf: true, qty: 220, unit: 'تن', weight: 2.8 },
+        { code: '1.2.1.2', title: 'قالب‌بندی فونداسیون', leaf: true, qty: 1800, unit: 'متر مربع', weight: 1.6 },
+        { code: '1.2.1.3', title: 'بتن‌ریزی فونداسیون بلوک A', leaf: true, qty: 200, unit: 'متر مکعب', weight: 0.9 },
+      ]},
+      { code: '1.2.2', title: 'سازه طبقات', children: [
+        { code: '1.2.2.1', title: 'آرماتوربندی ستون‌ها', leaf: true, qty: 380, unit: 'تن', weight: 4.5 },
+        { code: '1.2.2.2', title: 'قالب‌بندی ستون‌ها', leaf: true, qty: 2400, unit: 'متر مربع', weight: 2.0 },
+        { code: '1.2.2.3', title: 'بتن‌ریزی ستون‌ها', leaf: true, qty: 980, unit: 'متر مکعب', weight: 3.6 },
+      ]},
+      { code: '1.2.3', title: 'سقف', children: [
+        { code: '1.2.3.1', title: 'قالب‌بندی سقف طبقهٔ دوم', leaf: true, qty: 1450, unit: 'متر مربع', weight: 2.2 },
+        { code: '1.2.3.2', title: 'آرماتوربندی سقف', leaf: true, qty: 145, unit: 'تن', weight: 1.8 },
+      ]},
+    ]},
+    { code: '1.3', title: 'تأسیسات', children: [
+      { code: '1.3.1', title: 'برقی', children: [
+        { code: '1.3.1.1', title: 'لوله‌گذاری برق', leaf: true, qty: 2400, unit: 'متر', weight: 1.2 },
+        { code: '1.3.1.2', title: 'کابل‌کشی برق', leaf: true, qty: 4800, unit: 'متر', weight: 1.5 },
+      ]},
+      { code: '1.3.2', title: 'مکانیکی', children: [
+        { code: '1.3.2.1', title: 'لوله‌کشی آب', leaf: true, qty: 1800, unit: 'متر', weight: 1.0 },
+        { code: '1.3.2.2', title: 'لوله‌کشی فاضلاب', leaf: true, qty: 1200, unit: 'متر', weight: 0.8 },
+      ]},
+    ]},
+    { code: '1.4', title: 'نازک‌کاری', children: [
+      { code: '1.4.1', title: 'گچ و رنگ', children: [
+        { code: '1.4.1.1', title: 'گچ‌کاری دیوارها', leaf: true, qty: 7800, unit: 'متر مربع', weight: 1.4 },
+        { code: '1.4.1.2', title: 'رنگ‌آمیزی', leaf: true, qty: 7800, unit: 'متر مربع', weight: 0.9 },
+      ]},
+    ]},
+  ];
+
+  // expand state
+  const expanded = { '1.1': true, '1.2': true, '1.2.1': true, '1.2.2': false, '1.2.3': false, '1.3': false, '1.4': false };
+  let selectedLeaf = '1.2.1.3';
+  let filter = 'all';
+
+  function connBudget(leafCode) {
+    const conns = connections[leafCode] || [];
+    return conns.reduce((s, c) => s + (cbsByCode[c.code].rate * c.qty), 0);
+  }
+  function hasLink(leafCode) { return (connections[leafCode] || []).length > 0; }
+
+  function findLeaf(code, nodes = wbsTree) {
+    for (const n of nodes) {
+      if (n.code === code) return n;
+      if (n.children) { const f = findLeaf(code, n.children); if (f) return f; }
+    }
+    return null;
+  }
+
+  // ───── Render WBS tree ─────
+  function renderWbsTree() {
+    const root = document.getElementById('ws-tree');
+    function walk(nodes, depth) {
+      let html = '';
+      for (const n of nodes) {
+        const isLeaf = !!n.leaf;
+        const indent = depth * 18;
+        if (isLeaf) {
+          if (filter === 'linked' && !hasLink(n.code)) continue;
+          if (filter === 'unlinked' && hasLink(n.code)) continue;
+          const linked = hasLink(n.code);
+          const sel = n.code === selectedLeaf;
+          const budget = connBudget(n.code);
+          html += `
+            <div class="trow leaf ${sel ? 'selected' : ''}" data-leaf="${n.code}" style="padding-right:${indent + 8}px">
+              <span class="twisty empty"></span>
+              <span class="link-status ${linked ? 'linked' : 'unlinked'}" data-tip="${linked ? 'دارای اتصال CBS' : 'بدون اتصال — نیاز به تخصیص'}">
+                <i data-lucide="${linked ? 'link-2' : 'alert-circle'}" style="width:14px;height:14px"></i>
+              </span>
+              <span class="t-ic" style="color:var(--primary-500)"><i data-lucide="file-text" style="width:14px;height:14px"></i></span>
+              <span class="t-title">${n.title}</span>
+              <span class="t-code mono">${fa(n.code)}</span>
+              ${linked ? `<span class="t-budget mono">${faNum((budget/1e9).toFixed(1))} م</span>` : ''}
+            </div>`;
+        } else {
+          const isOpen = expanded[n.code];
+          html += `
+            <div class="trow parent" data-toggle="${n.code}" style="padding-right:${indent}px">
+              <button class="twisty"><i data-lucide="${isOpen ? 'chevron-down' : 'chevron-left'}" style="width:13px;height:13px"></i></button>
+              <span class="t-ic folder"><i data-lucide="${isOpen ? 'folder-open' : 'folder'}" style="width:15px;height:15px"></i></span>
+              <span class="t-title">${n.title}</span>
+              <span class="t-code mono">${fa(n.code)}</span>
+            </div>`;
+          if (isOpen && n.children) html += walk(n.children, depth + 1);
+        }
+      }
+      return html;
+    }
+    // For filtered views, flatten leaves but keep parents that have matching children
+    root.innerHTML = walk(wbsTree, 0);
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ───── Render detail ─────
+  function renderDetail() {
+    const panel = document.getElementById('link-detail');
+    const leaf = selectedLeaf ? findLeaf(selectedLeaf) : null;
+    if (!leaf) {
+      panel.innerHTML = `
+        <div class="ld-empty">
+          <div class="icw"><i data-lucide="unlink" style="width:32px;height:32px"></i></div>
+          <h3>یک آیتم برگ WBS انتخاب کنید</h3>
+          <p>از درخت سمت راست، یک فعالیت برگ را انتخاب کنید تا آیتم‌های CBS متصل و بودجهٔ تخصیص‌یافتهٔ آن را ببینید و ویرایش کنید.</p>
+          <span class="hint"><i data-lucide="mouse-pointer-click" style="width:13px;height:13px"></i>فقط برگ‌ها (آیکن سند) قابل انتخاب‌اند</span>
+        </div>`;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    const conns = connections[leaf.code] || [];
+    const total = connBudget(leaf.code);
+    const pctOfProject = (total / PROJECT_BUDGET * 100);
+    const plannedShare = leaf.weight; // % of project from WBS weight
+    const diff = Math.abs(pctOfProject - plannedShare);
+    const balanced = diff <= 0.4;
+
+    const balanceBadge = conns.length === 0
+      ? `<span class="balance-badge" style="background:var(--gray-100);color:var(--gray-600)"><i data-lucide="minus" style="width:11px;height:11px"></i>بدون اتصال</span>`
+      : balanced
+        ? `<span class="balance-badge" style="background:var(--success-50);color:var(--success-700)"><i data-lucide="check-circle-2" style="width:11px;height:11px"></i>متعادل با وزن WBS</span>`
+        : `<span class="balance-badge" style="background:var(--warning-50);color:var(--warning-700)"><i data-lucide="alert-triangle" style="width:11px;height:11px"></i>نامتعادل — نیاز به بازنگری</span>`;
+
+    // Breadcrumb path
+    const parts = leaf.code.split('.');
+    const crumbCodes = parts.map((_, i) => parts.slice(0, i + 1).join('.'));
+    const crumbTitles = crumbCodes.map(c => (findLeaf(c)?.title) || c);
+
+    // build rows
+    const rowsHtml = conns.map((c, idx) => {
+      const cbs = cbsByCode[c.code];
+      const ct = costTypes[cbs.type];
+      const sub = cbs.rate * c.qty;
+      const pct = (sub / total * 100);
+      return `
+        <tr data-idx="${idx}">
+          <td><span class="cost-chip" style="background:${ct.bg};color:${ct.fg}"><span class="d" style="background:${ct.color}"></span>${ct.label}</span></td>
+          <td><span class="cell-code mono">${c.code}</span></td>
+          <td><span class="cell-title">${cbs.title}</span></td>
+          <td>
+            <span class="qty-edit">
+              <input class="qty-input" value="${faNum(c.qty)}" data-leaf="${leaf.code}" data-idx="${idx}" />
+              <span class="qty-unit">${cbs.unit}</span>
+            </span>
+          </td>
+          <td class="rate-cell mono">${faNum(cbs.rate)}</td>
+          <td class="subbudget-cell mono">${faNum(sub)}</td>
+          <td class="pct-cell">${fa(pct.toFixed(1))}٪</td>
+          <td>
+            <span class="row-acts">
+              <button class="ic-row-btn" data-tip="ویرایش"><i data-lucide="pencil" style="width:13px;height:13px"></i></button>
+              <button class="ic-row-btn danger" data-tip="حذف" onclick="removeConn('${leaf.code}', ${idx})"><i data-lucide="trash-2" style="width:13px;height:13px"></i></button>
+            </span>
+          </td>
+        </tr>`;
+    }).join('');
+
+    // suggestions (CBS not yet linked, from similar items)
+    const linkedCodes = new Set(conns.map(c => c.code));
+    const suggestions = ['C.1.1.3', 'C.3.3', 'C.5.1'].filter(c => !linkedCodes.has(c) && cbsByCode[c]).slice(0, 3);
+    const suggestHtml = suggestions.map(code => {
+      const cbs = cbsByCode[code] || { title: code, type: 'overhead', unit: '—', code };
+      const ct = costTypes[cbs.type];
+      return `
+        <div class="sg-item">
+          <div class="left">
+            <span class="cost-chip" style="background:${ct.bg};color:${ct.fg}"><span class="d" style="background:${ct.color}"></span>${ct.label}</span>
+            <div>
+              <div class="title">${cbs.title}</div>
+              <div class="meta mono">${cbs.code} · در ۷۸٪ آیتم‌های مشابه استفاده شده</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="color:var(--primary-700)"><i data-lucide="plus" style="width:13px;height:13px"></i>افزودن سریع</button>
+        </div>`;
+    }).join('');
+
+    panel.innerHTML = `
+      <div class="ld-body">
+        <div class="ld-head">
+          <div class="crumb">
+            ${crumbCodes.map((c, i) => `${i > 0 ? '<i data-lucide="chevron-left" style="width:11px;height:11px"></i>' : ''}<span class="${i === crumbCodes.length-1 ? 'leaf' : ''}">${crumbTitles[i]}</span>`).join('')}
+          </div>
+          <div class="title-row">
+            <div>
+              <h1>${leaf.title}</h1>
+              <div class="submeta">
+                <span><i data-lucide="hash" style="width:13px;height:13px"></i>کد: <strong class="mono">${fa(leaf.code)}</strong></span>
+                <span><i data-lucide="package" style="width:13px;height:13px"></i>مقدار کل: <strong>${faNum(leaf.qty)} ${leaf.unit}</strong></span>
+                <span><i data-lucide="percent" style="width:13px;height:13px"></i>وزن WBS: <strong>${fa(leaf.weight)}٪</strong></span>
+              </div>
+            </div>
+            <span class="badge" style="background:var(--primary-100);color:var(--primary-700)"><i data-lucide="file-text" style="width:12px;height:12px"></i>برگ — قابل گزارش‌گیری</span>
+          </div>
+        </div>
+
+        ${!balanced && conns.length > 0 ? `
+        <div class="alert warn">
+          <i data-lucide="alert-triangle" style="width:16px;height:16px"></i>
+          <div>
+            <strong>عدم تطابق بودجه و وزن.</strong> بودجهٔ تخصیص‌یافته (${fa(pctOfProject.toFixed(1))}٪ از پروژه) با وزن این آیتم در WBS (${fa(plannedShare)}٪) همخوان نیست. اختلاف ${fa(diff.toFixed(1))}٪ — بازنگری تخصیص توصیه می‌شود.
+          </div>
+          <button class="btn btn-ghost btn-sm a-actions" style="color:var(--warning-700)">بازنگری</button>
+        </div>` : ''}
+
+        <!-- Budget summary -->
+        <div class="card budget-card">
+          <div class="seg-cell">
+            <div class="k"><i data-lucide="wallet" style="width:13px;height:13px"></i>بودجهٔ تخصیص‌یافته</div>
+            <div class="v mono">${faNum((total/1e9).toFixed(2))}<small> میلیارد ﷼</small></div>
+            <div class="sub">${fa(conns.length)} آیتم CBS متصل</div>
+          </div>
+          <div class="seg-cell">
+            <div class="k"><i data-lucide="pie-chart" style="width:13px;height:13px"></i>سهم از پروژه</div>
+            <div class="v">${fa(pctOfProject.toFixed(2))}<small>٪</small></div>
+            <div class="sub">از ۸۵۰ میلیارد ریال</div>
+          </div>
+          <div class="seg-cell">
+            <div class="k"><i data-lucide="scale" style="width:13px;height:13px"></i>تطابق با وزن</div>
+            <div class="v" style="font-size:14px;padding-top:4px">${balanced ? 'هم‌تراز' : 'اختلاف ' + fa(diff.toFixed(1)) + '٪'}</div>
+            ${balanceBadge}
+          </div>
+        </div>
+
+        ${conns.length > 0 ? `
+        <!-- Connections table -->
+        <div>
+          <div class="section-label" style="margin-bottom:8px">
+            <div class="lh"><i data-lucide="link" style="width:15px;height:15px"></i>آیتم‌های CBS متصل</div>
+            <div class="rh">مقدارها قابل ویرایش‌اند — زیربودجه به‌صورت زنده محاسبه می‌شود</div>
+          </div>
+          <div class="card">
+            <table class="conn">
+              <thead>
+                <tr>
+                  <th style="width:96px">نوع</th>
+                  <th style="width:72px">کد</th>
+                  <th>عنوان</th>
+                  <th style="width:120px">مقدار</th>
+                  <th style="width:96px">نرخ واحد</th>
+                  <th style="width:120px">زیربودجه</th>
+                  <th style="width:56px">٪ کل</th>
+                  <th style="width:64px"></th>
+                </tr>
+              </thead>
+              <tbody id="conn-body">${rowsHtml}</tbody>
+            </table>
+            <div class="conn-foot">
+              <span class="sum-label"><i data-lucide="sigma" style="width:13px;height:13px;display:inline;vertical-align:-2px"></i> جمع کل زیربودجه‌ها</span>
+              <span class="sum-val mono" id="sum-val">${faNum(total)} <small>ریال</small></span>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" onclick="openModal()"><i data-lucide="plus" style="width:16px;height:16px"></i>افزودن اتصال جدید</button>
+
+        <!-- Suggestions -->
+        ${suggestHtml ? `
+        <div class="card suggest">
+          <div class="sg-head">
+            <div class="ic"><i data-lucide="sparkles" style="width:14px;height:14px"></i></div>
+            <div>
+              <h4>پیشنهادها</h4>
+              <div class="sub">CBSهایی که در آیتم‌های مشابه معمولاً متصل بوده‌اند</div>
+            </div>
+          </div>
+          <div class="sg-list">${suggestHtml}</div>
+        </div>` : ''}
+        ` : `
+        <!-- No connections empty -->
+        <div class="card" style="padding:40px 24px;text-align:center">
+          <div style="width:56px;height:56px;border-radius:14px;background:var(--accent-100);color:var(--accent-700);display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px"><i data-lucide="unlink" style="width:26px;height:26px"></i></div>
+          <h3 style="font-size:15px;margin:0 0 6px;color:var(--gray-900)">این آیتم هنوز به هیچ CBSی متصل نیست</h3>
+          <p style="font-size:12.5px;color:var(--gray-500);margin:0 0 18px;line-height:1.7">برای محاسبهٔ پیشرفت مالی، حداقل یک آیتم هزینه را به این فعالیت متصل کنید.</p>
+          <button class="btn btn-primary btn-lg" onclick="openModal()"><i data-lucide="plus" style="width:16px;height:16px"></i>افزودن اولین اتصال</button>
+        </div>`}
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    bindQtyInputs();
+  }
+
+  // qty inline edit
+  function bindQtyInputs() {
+    document.querySelectorAll('.qty-input').forEach(inp => {
+      inp.addEventListener('input', e => {
+        const idx = +inp.dataset.idx;
+        const leafCode = inp.dataset.leaf;
+        const raw = inp.value.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[^\d.]/g, '');
+        const val = parseFloat(raw) || 0;
+        connections[leafCode][idx].qty = val;
+        // live update sub-budget + pct + sum without full re-render
+        const total = connBudget(leafCode);
+        const tbody = document.getElementById('conn-body');
+        [...tbody.children].forEach((tr, i) => {
+          const c = connections[leafCode][i];
+          const cbs = cbsByCode[c.code];
+          const sub = cbs.rate * c.qty;
+          tr.querySelector('.subbudget-cell').textContent = faNum(sub);
+          tr.querySelector('.pct-cell').textContent = fa((sub / total * 100).toFixed(1)) + '٪';
+        });
+        document.getElementById('sum-val').innerHTML = `${faNum(total)} <small>ریال</small>`;
+      });
+    });
+  }
+
+  window.removeConn = (leafCode, idx) => {
+    if (confirm('این اتصال حذف شود؟')) {
+      connections[leafCode].splice(idx, 1);
+      renderWbsTree(); renderDetail();
+    }
+  };
+
+  // ───── Tree interactions ─────
+  document.getElementById('ws-tree').addEventListener('click', e => {
+    const tg = e.target.closest('[data-toggle]');
+    if (tg) { expanded[tg.dataset.toggle] = !expanded[tg.dataset.toggle]; renderWbsTree(); return; }
+    const lf = e.target.closest('[data-leaf]');
+    if (lf) { selectedLeaf = lf.dataset.leaf; renderWbsTree(); renderDetail(); }
+  });
+  document.querySelectorAll('#filter-seg button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#filter-seg button').forEach(x => x.classList.toggle('on', x === b));
+      filter = b.dataset.filter; renderWbsTree();
+    });
+  });
+
+  // ───── Modal ─────
+  let modalSelectedCbs = null;
+  function openModal() {
+    modalSelectedCbs = null;
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('modal').dataset.tab = 'tree';
+    document.querySelectorAll('#mtab-bar .mtab').forEach(x => x.classList.toggle('on', x.dataset.mtab === 'tree'));
+    document.getElementById('selected-cbs-wrap').style.display = 'none';
+    document.getElementById('qty-section').style.display = 'none';
+    document.getElementById('notes-section').style.display = 'none';
+    document.getElementById('modal-add-btn').disabled = true;
+    document.getElementById('cbs-search-input').value = '';
+    renderCbsPick();
+    filterSearch('');
+    if (window.lucide) lucide.createIcons();
+  }
+  window.openModal = openModal;
+  window.closeModal = () => document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+  document.querySelectorAll('#mtab-bar .mtab').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#mtab-bar .mtab').forEach(x => x.classList.toggle('on', x === b));
+      document.getElementById('modal').dataset.tab = b.dataset.mtab;
+    });
+  });
+
+  const cbsExpanded = { 'C.1': true, 'C.2': false, 'C.3': false, 'C.4': false };
+  function renderCbsPick() {
+    const root = document.getElementById('cbs-pick');
+    let html = '';
+    for (const top of cbsTree) {
+      const open = cbsExpanded[top.code];
+      html += `<div class="cbs-row parent" data-ctoggle="${top.code}"><button class="twisty"><i data-lucide="${open ? 'chevron-down' : 'chevron-left'}" style="width:12px;height:12px"></i></button><span class="t-ic folder"><i data-lucide="${open ? 'folder-open' : 'folder'}" style="width:14px;height:14px"></i></span><span class="cbs-title">${top.title}</span><span class="cbs-code mono">${top.code}</span></div>`;
+      if (open) {
+        for (const mid of top.children) {
+          const showMid = mid.code !== '_';
+          if (showMid) html += `<div class="cbs-row parent" style="padding-right:22px"><span class="twisty empty"></span><span class="t-ic folder"><i data-lucide="folder" style="width:13px;height:13px"></i></span><span class="cbs-title">${mid.title}</span><span class="cbs-code mono">${mid.code}</span></div>`;
+          for (const code of mid.children) {
+            const cbs = cbsByCode[code];
+            const ct = costTypes[cbs.type];
+            const sel = modalSelectedCbs === code;
+            html += `<div class="cbs-row ${sel ? 'selected' : ''}" data-cpick="${code}" style="padding-right:${showMid ? 40 : 22}px"><span class="d" style="width:6px;height:6px;border-radius:2px;background:${ct.color};flex-shrink:0"></span><span class="cbs-title">${cbs.title}</span><span class="cbs-code mono">${cbs.code}</span>${sel ? '<span class="cbs-check"><i data-lucide="check" style="width:14px;height:14px"></i></span>' : ''}</div>`;
+          }
+        }
+      }
+    }
+    root.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+  document.getElementById('cbs-pick').addEventListener('click', e => {
+    const tg = e.target.closest('[data-ctoggle]');
+    if (tg) { cbsExpanded[tg.dataset.ctoggle] = !cbsExpanded[tg.dataset.ctoggle]; renderCbsPick(); return; }
+    const pk = e.target.closest('[data-cpick]');
+    if (pk) { selectCbs(pk.dataset.cpick); renderCbsPick(); }
+  });
+
+  function filterSearch(q) {
+    const root = document.getElementById('search-results');
+    const qn = q.trim().toLowerCase();
+    const matches = cbsCatalog.filter(c => !qn || c.title.includes(qn) || c.code.toLowerCase().includes(qn)).slice(0, 8);
+    root.innerHTML = matches.length ? matches.map(c => {
+      const ct = costTypes[c.type];
+      return `<div class="sr-item" data-cpick="${c.code}">
+        <span class="d" style="width:7px;height:7px;border-radius:2px;background:${ct.color};flex-shrink:0"></span>
+        <div style="flex:1"><div class="title">${c.title}</div><div class="meta mono">${c.code} · ${ct.label} · ${faNum(c.rate)} ﷼/${c.unit}</div></div>
+        <i data-lucide="plus" style="width:14px;height:14px;color:var(--gray-400)"></i>
+      </div>`;
+    }).join('') : `<div style="padding:20px;text-align:center;color:var(--gray-400);font-size:12px">موردی یافت نشد</div>`;
+    if (window.lucide) lucide.createIcons();
+  }
+  window.filterSearch = filterSearch;
+  document.getElementById('search-results').addEventListener('click', e => {
+    const pk = e.target.closest('[data-cpick]');
+    if (pk) selectCbs(pk.dataset.cpick);
+  });
+
+  function selectCbs(code) {
+    modalSelectedCbs = code;
+    const cbs = cbsByCode[code];
+    const ct = costTypes[cbs.type];
+    document.getElementById('selected-cbs-wrap').style.display = 'block';
+    document.getElementById('qty-section').style.display = 'block';
+    document.getElementById('notes-section').style.display = 'block';
+    document.getElementById('sel-cbs-title').textContent = cbs.title;
+    document.getElementById('sel-cbs-code').textContent = cbs.code;
+    document.getElementById('sel-cbs-type').textContent = ct.label;
+    document.getElementById('sel-cbs-rate').textContent = faNum(cbs.rate);
+    document.getElementById('sel-cbs-unit').textContent = cbs.unit;
+    document.getElementById('qty-unit-input').value = cbs.unit;
+    document.getElementById('qty-input').value = '';
+    document.getElementById('calc-result').textContent = '۰ ریال';
+    document.getElementById('calc-formula').textContent = `مقدار × ${faNum(cbs.rate)} ﷼`;
+    document.getElementById('modal-add-btn').disabled = true;
+    if (window.lucide) lucide.createIcons();
+  }
+  function recalc() {
+    if (!modalSelectedCbs) return;
+    const cbs = cbsByCode[modalSelectedCbs];
+    const raw = document.getElementById('qty-input').value.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[^\d.]/g, '');
+    const qty = parseFloat(raw) || 0;
+    const sub = cbs.rate * qty;
+    document.getElementById('calc-result').textContent = faNum(sub) + ' ریال';
+    document.getElementById('modal-add-btn').disabled = qty <= 0;
+  }
+  window.recalc = recalc;
+
+  document.getElementById('modal-add-btn').addEventListener('click', () => {
+    if (!modalSelectedCbs) return;
+    const raw = document.getElementById('qty-input').value.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[^\d.]/g, '');
+    const qty = parseFloat(raw) || 0;
+    if (qty <= 0) return;
+    if (!connections[selectedLeaf]) connections[selectedLeaf] = [];
+    connections[selectedLeaf].push({ code: modalSelectedCbs, qty });
+    closeModal();
+    renderWbsTree(); renderDetail();
+  });
+
+  // init
+  renderWbsTree();
+  renderDetail();
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

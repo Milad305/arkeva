@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مجتمع مسکونی نگین شهر — پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* ───────── Design tokens ───────── */
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.06), 0 2px 4px -2px rgb(24 24 27 / 0.04);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.08), 0 4px 8px -4px rgb(24 24 27 / 0.04);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+    color: var(--gray-900); background: var(--gray-50);
+    -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01';
+    font-size: 14px;
+  }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 8px; border: 2px solid var(--gray-50); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+  /* ───────── AppShell ───────── */
+  .app { display: grid; grid-template-columns: 224px 1fr; min-height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+  .sb-user .more:hover { background: var(--gray-100); color: var(--gray-700); }
+
+  /* Topbar */
+  .topbar { height: 56px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 24px; position: sticky; top: 0; z-index: 30; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar-actions { display: flex; align-items: center; gap: 6px; }
+  .ic-btn { width: 34px; height: 34px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 7px; left: 8px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 30px; height: 30px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  /* ───────── Project header (sticky) ───────── */
+  .proj-header { background: white; border-bottom: 1px solid var(--gray-200); position: sticky; top: 56px; z-index: 20; }
+  .proj-header-inner { padding: 20px 32px 0; max-width: 1480px; }
+  .proj-meta-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .proj-title-block { display: flex; align-items: flex-start; gap: 14px; min-width: 0; }
+  .proj-thumb-lg { width: 52px; height: 52px; border-radius: var(--r-lg); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; flex-shrink: 0; }
+  .proj-thumb-lg::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-thumb-lg svg { position: relative; z-index: 1; }
+  .proj-title-block .crumb { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); margin-bottom: 4px; }
+  .proj-title-block .crumb svg { color: var(--gray-300); }
+  .proj-title-block .crumb a:hover { color: var(--gray-800); }
+  .proj-title-block h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; margin: 0; color: var(--gray-900); line-height: 1.3; }
+  .proj-title-block .submeta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-size: 12.5px; color: var(--gray-600); }
+  .proj-title-block .submeta > span { display: inline-flex; align-items: center; gap: 5px; }
+  .proj-title-block .submeta svg { color: var(--gray-400); }
+  .proj-title-block .submeta strong { color: var(--gray-800); font-weight: 500; }
+
+  .proj-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: var(--r-sm); font-size: 12px; font-weight: 500; line-height: 1; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 999px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 2px; padding: 14px 32px 0; max-width: 1480px; }
+  .tab { position: relative; padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 6px; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 11px; padding: 1px 6px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* Content */
+  .content { padding: 24px 32px 48px; max-width: 1480px; }
+
+  /* Stat cards */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); padding: 16px 18px; position: relative; overflow: hidden; }
+  .stat .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .stat .head .label { font-size: 12px; color: var(--gray-500); display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+  .stat .head .ic { width: 28px; height: 28px; border-radius: var(--r-md); display: inline-flex; align-items: center; justify-content: center; }
+  .stat .main { display: flex; align-items: flex-end; gap: 8px; line-height: 1; }
+  .stat .big { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--gray-900); }
+  .stat .unit { font-size: 13px; color: var(--gray-500); font-weight: 500; margin-bottom: 4px; }
+  .stat .sub { font-size: 12px; color: var(--gray-600); margin-top: 6px; line-height: 1.5; }
+  .stat .pbar { width: 100%; height: 5px; background: var(--gray-100); border-radius: 999px; overflow: hidden; margin-top: 10px; }
+  .stat .pbar > div { height: 100%; border-radius: 999px; }
+  .stat .delta-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 600; padding: 2px 6px; border-radius: var(--r-sm); }
+
+  /* circular progress mini */
+  .circ-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+  .circ-wrap .label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--gray-900); }
+
+  /* perf chips */
+  .perf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .perf-chip { padding: 8px 10px; border-radius: var(--r-md); border: 1px solid; }
+  .perf-chip .k { font-size: 11px; font-weight: 600; opacity: 0.8; margin-bottom: 2px; }
+  .perf-chip .v { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+
+  /* Section card */
+  .card {
+    background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg);
+    margin-bottom: 16px; overflow: hidden;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--gray-100);
+  }
+  .card-head h3 { font-size: 14.5px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .card-head .sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+  .card-head .actions { display: flex; align-items: center; gap: 6px; }
+  .card-body { padding: 18px; }
+
+  /* S-Curve chart */
+  .curve-card .card-body { padding: 6px 6px 16px; }
+  .curve-card .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--gray-700); }
+  .legend-dot { width: 14px; height: 3px; border-radius: 2px; display: inline-block; margin-left: 6px; vertical-align: middle; }
+  .legend-dot.dash { background-image: repeating-linear-gradient(90deg, var(--gray-400) 0 3px, transparent 3px 6px); background-color: transparent; height: 2px; }
+  .chart-svg { width: 100%; height: 320px; display: block; }
+  .chart-svg .grid line { stroke: var(--gray-100); stroke-width: 1; }
+  .chart-svg .axis text { font-family: 'Vazirmatn', sans-serif; font-size: 10.5px; fill: var(--gray-500); }
+  .chart-tooltip { position: absolute; background: var(--gray-900); color: white; border-radius: 8px; padding: 8px 12px; font-size: 11.5px; pointer-events: none; box-shadow: var(--shadow-lg); opacity: 0; transition: opacity .15s; transform: translate(-50%, -100%); z-index: 5; white-space: nowrap; }
+  .chart-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--gray-900); }
+  .chart-tooltip strong { color: white; font-weight: 600; display: block; margin-bottom: 4px; }
+  .chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); }
+  .chart-tooltip .tt-row .sw { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* Two-column lower */
+  .row-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 1100px) { .row-split { grid-template-columns: 1fr; } }
+
+  /* Mini table */
+  .mt { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .mt th { text-align: right; font-size: 11px; font-weight: 600; color: var(--gray-500); padding: 8px 14px; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+  .mt td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  .mt tbody tr { cursor: pointer; transition: background .12s; }
+  .mt tbody tr:hover { background: var(--gray-50); }
+  .mt tbody tr:last-child td { border-bottom: 0; }
+  .mt tbody tr.danger:hover { background: var(--error-50); }
+  .mt-code { font-size: 11px; color: var(--gray-500); }
+  .mt-name { font-weight: 500; color: var(--gray-900); }
+  .mt-pbar { width: 80px; height: 4px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+  .mt-pbar > div { height: 100%; border-radius: 999px; }
+  .owner-pill { display: inline-flex; align-items: center; gap: 5px; }
+  .owner-pill .av { width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+
+  /* Activity feed */
+  .feed { position: relative; padding: 4px 18px 4px 4px; }
+  .feed::before { content: ''; position: absolute; top: 8px; bottom: 8px; right: 28px; width: 2px; background: var(--gray-100); border-radius: 1px; }
+  .feed-item { position: relative; padding: 12px 28px 12px 0; display: flex; gap: 14px; }
+  .feed-dot { position: absolute; right: 19px; top: 18px; width: 20px; height: 20px; border-radius: 999px; background: white; border: 2px solid var(--gray-200); display: inline-flex; align-items: center; justify-content: center; z-index: 1; }
+  .feed-dot.success { border-color: var(--success-500); background: var(--success-50); color: var(--success-700); }
+  .feed-dot.info { border-color: var(--info-500); background: var(--info-50); color: var(--info-700); }
+  .feed-dot.warn { border-color: var(--warning-500); background: var(--warning-50); color: var(--warning-700); }
+  .feed-dot.error { border-color: var(--error-500); background: var(--error-50); color: var(--error-700); }
+  .feed-dot.primary { border-color: var(--primary-500); background: var(--primary-100); color: var(--primary-700); }
+  .feed-content { flex: 1; padding-right: 28px; }
+  .feed-title { font-size: 13.5px; color: var(--gray-800); line-height: 1.7; }
+  .feed-title strong { font-weight: 600; color: var(--gray-900); }
+  .feed-title .pill {
+    display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px;
+    border-radius: var(--r-sm); font-size: 11px;
+    background: var(--gray-100); color: var(--gray-700); font-weight: 500;
+    margin: 0 2px;
+  }
+  .feed-time { font-size: 11.5px; color: var(--gray-500); margin-top: 4px; }
+  .feed-meta { font-size: 11.5px; color: var(--gray-500); display: inline-flex; align-items: center; gap: 4px; }
+
+  /* Avatar helper */
+  .av { width: 28px; height: 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; flex-shrink: 0; }
+  .av.lg { width: 36px; height: 36px; font-size: 12px; }
+
+  /* tiny info pills under cards */
+  .help-line { font-size: 12px; color: var(--gray-500); margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/>
+        </svg>
+      </div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="#"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="#"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <!-- Topbar (compact, since project header has its own info) -->
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">مجتمع مسکونی نگین شهر</span>
+      </nav>
+      <div class="topbar-actions">
+        <button class="ic-btn"><i data-lucide="search" style="width:16px;height:16px"></i></button>
+        <button class="ic-btn"><i data-lucide="bell" style="width:16px;height:16px"></i><span class="ping"></span></button>
+        <button class="ic-btn"><i data-lucide="help-circle" style="width:16px;height:16px"></i></button>
+        <div style="width:1px;height:20px;background:var(--gray-200);margin:0 4px"></div>
+        <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12.5px;color:var(--gray-800)">
+          <div class="avatar">م.ا</div>
+          <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Project header -->
+    <section class="proj-header">
+      <div class="proj-header-inner">
+        <div class="proj-meta-row">
+          <div class="proj-title-block">
+            <div class="proj-thumb-lg" style="background:var(--primary-700)">
+              <i data-lucide="building-2" style="width:24px;height:24px"></i>
+            </div>
+            <div style="min-width:0">
+              <h1>مجتمع مسکونی نگین شهر</h1>
+              <div class="submeta">
+                <span><i data-lucide="briefcase" style="width:13px;height:13px"></i>کارفرما: <strong>شهرداری تهران</strong></span>
+                <span style="color:var(--gray-300)">·</span>
+                <span><i data-lucide="hash" style="width:13px;height:13px"></i>کد: <strong class="mono">PRJ-1404-021</strong></span>
+                <span style="color:var(--gray-300)">·</span>
+                <span><i data-lucide="play" style="width:13px;height:13px"></i>شروع: <strong class="mono">۱۴۰۳/۰۵/۰۱</strong></span>
+                <span><i data-lucide="flag" style="width:13px;height:13px"></i>پایان: <strong class="mono">۱۴۰۴/۰۸/۱۵</strong></span>
+                <span style="color:var(--gray-300)">·</span>
+                <span><i data-lucide="user" style="width:13px;height:13px"></i>مدیر: <strong>مهندس رضایی</strong></span>
+              </div>
+            </div>
+          </div>
+          <div class="proj-actions">
+            <span class="badge" style="background:var(--success-50);color:var(--success-700)">
+              <span class="dot" style="background:var(--success-500)"></span>فعال
+            </span>
+            <button class="btn btn-outline"><i data-lucide="share-2" style="width:13px;height:13px"></i>اشتراک‌گذاری</button>
+            <button class="btn btn-primary"><i data-lucide="edit-3" style="width:13px;height:13px"></i>ویرایش پروژه</button>
+            <button class="ic-btn" style="border:1px solid var(--gray-300);border-radius:8px;width:34px;height:34px"><i data-lucide="more-vertical" style="width:15px;height:15px"></i></button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <nav class="tabs" id="tabs" style="padding:14px 0 0">
+          <button class="tab active" data-tab="overview"><i data-lucide="layout-dashboard" style="width:14px;height:14px"></i>نمای کلی</button>
+          <button class="tab" data-tab="wbs"><i data-lucide="git-branch" style="width:14px;height:14px"></i>WBS</button>
+          <button class="tab" data-tab="cbs"><i data-lucide="banknote" style="width:14px;height:14px"></i>CBS</button>
+          <button class="tab" data-tab="links"><i data-lucide="link" style="width:14px;height:14px"></i>اتصالات</button>
+          <button class="tab has-warn" data-tab="reports"><i data-lucide="clipboard-check" style="width:14px;height:14px"></i>گزارش‌ها<span class="num">۸</span></button>
+          <button class="tab" data-tab="members"><i data-lucide="users" style="width:14px;height:14px"></i>اعضا<span class="num">۱۸</span></button>
+          <button class="tab" data-tab="charts"><i data-lucide="bar-chart-3" style="width:14px;height:14px"></i>نمودارها</button>
+          <button class="tab" data-tab="settings"><i data-lucide="settings" style="width:14px;height:14px"></i>تنظیمات</button>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Stat cards -->
+      <div class="stat-grid">
+        <!-- 1: overall progress -->
+        <div class="stat">
+          <div class="head">
+            <span class="label"><i data-lucide="activity" style="width:13px;height:13px;color:var(--primary-500)"></i>پیشرفت کلی</span>
+            <span class="ic" style="background:var(--primary-100);color:var(--primary-700)">
+              <i data-lucide="trending-up" style="width:14px;height:14px"></i>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div class="main">
+                <span class="big">۶۵</span><span class="unit">٪</span>
+              </div>
+              <div class="sub" style="color:var(--warning-700)">
+                <i data-lucide="alert-triangle" style="width:12px;height:12px;display:inline;vertical-align:-2px"></i>
+                ۵٪ عقب از برنامه (۷۰٪)
+              </div>
+            </div>
+            <div class="circ-wrap">
+              <svg viewBox="0 0 52 52" class="-scale-x-100" style="transform:scaleX(-1)">
+                <circle cx="26" cy="26" r="22" stroke="#E4E4E7" stroke-width="5" fill="none"/>
+                <circle cx="26" cy="26" r="22" stroke="#D97706" stroke-width="5" fill="none"
+                  stroke-dasharray="138.23" stroke-dashoffset="48.38" stroke-linecap="round"
+                  transform="rotate(-90 26 26)"/>
+              </svg>
+              <div class="label">۶۵٪</div>
+            </div>
+          </div>
+          <div class="pbar" style="margin-top:14px">
+            <div style="width:65%;background:var(--warning-500)"></div>
+          </div>
+        </div>
+
+        <!-- 2: Budget -->
+        <div class="stat">
+          <div class="head">
+            <span class="label"><i data-lucide="banknote" style="width:13px;height:13px;color:var(--accent-500)"></i>بودجه</span>
+            <span class="ic" style="background:var(--accent-100);color:var(--accent-700)">
+              <i data-lucide="wallet" style="width:14px;height:14px"></i>
+            </span>
+          </div>
+          <div class="main">
+            <span class="big">۵۵۰</span>
+            <span class="unit">میلیارد ﷼</span>
+          </div>
+          <div class="sub">از کل <strong style="color:var(--gray-900)">۸۵۰ میلیارد ﷼</strong> · مصرف: <strong style="color:var(--gray-900)">۶۴٫۷٪</strong></div>
+          <div class="pbar">
+            <div style="width:64.7%;background:var(--accent-500)"></div>
+          </div>
+          <div class="help-line">
+            <i data-lucide="info" style="width:11px;height:11px"></i>
+            مصرف بودجه با پیشرفت فیزیکی هم‌خوان است
+          </div>
+        </div>
+
+        <!-- 3: Time -->
+        <div class="stat">
+          <div class="head">
+            <span class="label"><i data-lucide="clock" style="width:13px;height:13px;color:var(--info-500)"></i>زمان</span>
+            <span class="ic" style="background:var(--info-50);color:var(--info-700)">
+              <i data-lucide="calendar" style="width:14px;height:14px"></i>
+            </span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:flex-start">
+            <div>
+              <div class="main"><span class="big" style="font-size:24px">۲۸۵</span><span class="unit">روز</span></div>
+              <div class="sub">سپری‌شده</div>
+            </div>
+            <div>
+              <div class="main"><span class="big" style="font-size:24px">۱۵۰</span><span class="unit">روز</span></div>
+              <div class="sub">باقی‌مانده</div>
+            </div>
+          </div>
+          <div class="pbar" style="margin-top:14px;height:5px;position:relative">
+            <div style="width:65.5%;background:var(--info-500)"></div>
+            <span style="position:absolute;top:-2px;bottom:-2px;right:65.5%;width:2px;background:var(--gray-700)" title="امروز"></span>
+          </div>
+          <div class="help-line"><i data-lucide="flag" style="width:11px;height:11px"></i>کل: ۴۳۵ روز · پایان <span class="mono" style="margin-right:2px">۱۴۰۴/۰۸/۱۵</span></div>
+        </div>
+
+        <!-- 4: KPI / Indices -->
+        <div class="stat">
+          <div class="head">
+            <span class="label"><i data-lucide="gauge" style="width:13px;height:13px;color:var(--gray-500)"></i>شاخص‌های عملکرد</span>
+            <span class="ic" style="background:var(--gray-100);color:var(--gray-700)">
+              <i data-lucide="bar-chart-2" style="width:14px;height:14px"></i>
+            </span>
+          </div>
+          <div class="perf-row">
+            <div class="perf-chip" style="background:var(--warning-50);border-color:rgba(217,119,6,0.25);color:var(--warning-700)">
+              <div class="k">CPI · هزینه</div>
+              <div class="v mono">0.97</div>
+            </div>
+            <div class="perf-chip" style="background:var(--error-50);border-color:rgba(220,38,38,0.25);color:var(--error-700)">
+              <div class="k">SPI · زمان</div>
+              <div class="v mono">0.93</div>
+            </div>
+          </div>
+          <div class="sub" style="margin-top:10px">
+            هزینهٔ پروژه نزدیک به برنامه، اما در زمان <strong style="color:var(--error-700)">۷٪ تأخیر</strong> داریم.
+          </div>
+        </div>
+      </div>
+
+      <!-- S-Curve -->
+      <div class="card curve-card">
+        <div class="card-head">
+          <div>
+            <h3>
+              <i data-lucide="line-chart" style="width:16px;height:16px;color:var(--primary-500)"></i>
+              منحنی پیشرفت (S-Curve)
+            </h3>
+            <div class="sub">مقایسهٔ پیشرفت برنامه‌ای، واقعی و پیش‌بینی تا پایان پروژه</div>
+          </div>
+          <div class="actions">
+            <div class="legend">
+              <span><span class="legend-dot" style="background:#8AA2C2"></span>برنامه‌ای</span>
+              <span><span class="legend-dot" style="background:var(--primary-700)"></span>واقعی</span>
+              <span><span class="legend-dot dash"></span>پیش‌بینی</span>
+            </div>
+            <div style="width:1px;height:20px;background:var(--gray-200);margin:0 6px"></div>
+            <button class="btn btn-ghost" style="height:30px;padding:0 10px;font-size:12px"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی</button>
+            <button class="btn btn-ghost" style="height:30px;padding:0 10px;font-size:12px"><i data-lucide="maximize-2" style="width:13px;height:13px"></i></button>
+          </div>
+        </div>
+        <div class="card-body" style="position:relative">
+          <div id="tooltip" class="chart-tooltip"></div>
+          <svg viewBox="0 0 1200 320" class="chart-svg" preserveAspectRatio="none" id="chart">
+            <defs>
+              <linearGradient id="plannedFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8AA2C2" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#8AA2C2" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="actualFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1A3354" stop-opacity="0.22"/>
+                <stop offset="100%" stop-color="#1A3354" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- grid -->
+            <g class="grid">
+              <line x1="60" y1="40"  x2="1180" y2="40"/>
+              <line x1="60" y1="100" x2="1180" y2="100"/>
+              <line x1="60" y1="160" x2="1180" y2="160"/>
+              <line x1="60" y1="220" x2="1180" y2="220"/>
+              <line x1="60" y1="280" x2="1180" y2="280"/>
+            </g>
+            <!-- y axis labels -->
+            <g class="axis" text-anchor="start">
+              <text x="20" y="44">۱۰۰٪</text>
+              <text x="20" y="104">۷۵٪</text>
+              <text x="20" y="164">۵۰٪</text>
+              <text x="20" y="224">۲۵٪</text>
+              <text x="20" y="284">۰٪</text>
+            </g>
+
+            <!-- Planned area + line (smooth S curve over project life) -->
+            <path id="planned-area" d="M60,278 C 200,275 300,265 420,225 S 720,80 1000,50 1180,42 1180,42 L1180,280 L60,280 Z" fill="url(#plannedFill)"/>
+            <path id="planned-line" d="M60,278 C 200,275 300,265 420,225 S 720,80 1000,50 1180,42 1180,42"
+                  stroke="#8AA2C2" stroke-width="2" fill="none" stroke-dasharray="5 5" stroke-linecap="round"/>
+
+            <!-- Actual area + line (up to today only) -->
+            <path d="M60,279 C 190,277 290,272 410,240 S 660,135 800,108 L800,280 L60,280 Z" fill="url(#actualFill)"/>
+            <path id="actual-line" d="M60,279 C 190,277 290,272 410,240 S 660,135 800,108"
+                  stroke="#1A3354" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+            <!-- Forecast (from today to end, dashed gray) -->
+            <path d="M800,108 C 920,82 1060,62 1180,55"
+                  stroke="#A1A1AA" stroke-width="2" fill="none" stroke-dasharray="4 5" stroke-linecap="round"/>
+
+            <!-- Data points (interactive) -->
+            <g id="points"></g>
+
+            <!-- Today marker -->
+            <line x1="800" y1="20" x2="800" y2="280" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <rect x="770" y="6" width="60" height="22" rx="4" fill="#DC2626"/>
+            <text x="800" y="21" text-anchor="middle" font-size="11" fill="white" font-family="Vazirmatn" font-weight="600">امروز</text>
+
+            <!-- X axis -->
+            <g class="axis" text-anchor="middle">
+              <text x="60"   y="302">مرداد ۰۳</text>
+              <text x="220"  y="302">مهر ۰۳</text>
+              <text x="380"  y="302">آذر ۰۳</text>
+              <text x="540"  y="302">بهمن ۰۳</text>
+              <text x="700"  y="302">فروردین ۰۴</text>
+              <text x="800"  y="302" fill="#DC2626" font-weight="600">اردیبهشت</text>
+              <text x="940"  y="302">تیر ۰۴</text>
+              <text x="1080" y="302">شهریور ۰۴</text>
+              <text x="1180" y="302">آبان ۰۴</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Two-column lower -->
+      <div class="row-split">
+        <!-- Critical WBS -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>
+                <i data-lucide="alert-triangle" style="width:16px;height:16px;color:var(--error-500)"></i>
+                آیتم‌های بحرانی WBS
+              </h3>
+              <div class="sub">۵ فعالیت با بیشترین تأخیر نسبت به برنامه</div>
+            </div>
+            <a href="#" style="font-size:12.5px;color:var(--primary-700);font-weight:500;display:inline-flex;align-items:center;gap:3px">
+              مشاهده همه <i data-lucide="arrow-left" style="width:13px;height:13px"></i>
+            </a>
+          </div>
+          <table class="mt">
+            <thead>
+              <tr>
+                <th style="width:80px">کد</th>
+                <th>فعالیت</th>
+                <th style="width:90px;text-align:center">برنامه‌ای</th>
+                <th style="width:90px;text-align:center">واقعی</th>
+                <th style="width:80px">انحراف</th>
+                <th style="width:120px">سرپرست</th>
+              </tr>
+            </thead>
+            <tbody id="critical-wbs"></tbody>
+          </table>
+        </div>
+
+        <!-- Top CBS -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>
+                <i data-lucide="wallet" style="width:16px;height:16px;color:var(--accent-500)"></i>
+                بیشترین مصرف CBS
+              </h3>
+              <div class="sub">۵ آیتم هزینه با بالاترین درصد مصرف بودجه</div>
+            </div>
+            <a href="#" style="font-size:12.5px;color:var(--primary-700);font-weight:500;display:inline-flex;align-items:center;gap:3px">
+              مشاهده همه <i data-lucide="arrow-left" style="width:13px;height:13px"></i>
+            </a>
+          </div>
+          <table class="mt">
+            <thead>
+              <tr>
+                <th style="width:80px">کد</th>
+                <th>عنوان</th>
+                <th style="width:120px">بودجه</th>
+                <th style="width:120px">مصرف‌شده</th>
+                <th style="width:80px;text-align:left">درصد</th>
+              </tr>
+            </thead>
+            <tbody id="top-cbs"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h3><i data-lucide="history" style="width:16px;height:16px;color:var(--gray-500)"></i>فعالیت‌های اخیر</h3>
+            <div class="sub">آخرین رویدادهای پروژه — به‌روزرسانی زنده</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-ghost" style="height:30px;padding:0 10px;font-size:12px"><i data-lucide="filter" style="width:13px;height:13px"></i>همه فعالیت‌ها</button>
+            <button class="btn btn-ghost" style="height:30px;padding:0 10px;font-size:12px;color:var(--primary-700)">مشاهده تاریخچهٔ کامل</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:8px 8px">
+          <div class="feed" id="feed"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  // ───────── Critical WBS data ─────────
+  const criticalWbs = [
+    { code: '1.2.4', name: 'قالب‌بندی سقف طبقهٔ دوم', planned: 55, actual: 22, owner: { initials: 'ع.ه', name: 'هاشمی', color: { bg: '#ECFDF3', fg: '#15803D' } } },
+    { code: '1.3',   name: 'اسکلت فلزی بلوک شمالی',   planned: 52, actual: 30, owner: { initials: 'م.ر', name: 'رضایی', color: { bg: '#FCEAD9', fg: '#B45813' } } },
+    { code: '1.5.2', name: 'نمای سرامیکی بلوک A',     planned: 65, actual: 48, owner: { initials: 'س.ک', name: 'کریمی', color: { bg: '#E5EBF3', fg: '#1A3354' } } },
+    { code: '2.1.2', name: 'عایق رطوبتی سقف',          planned: 78, actual: 60, owner: { initials: 'ر.ج', name: 'جمالی', color: { bg: '#FFF8EB', fg: '#B45309' } } },
+    { code: '3.2.1', name: 'کابل‌کشی برق طبقهٔ پنجم',  planned: 45, actual: 32, owner: { initials: 'م.ن', name: 'نوری',  color: { bg: '#EFF6FF', fg: '#1D4ED8' } } },
+  ];
+  function devBadge(d) {
+    if (d <= -20) return `<span class="badge" style="background:var(--error-50);color:var(--error-700)"><i data-lucide="alert-triangle" style="width:11px;height:11px"></i>${fa(d)}٪</span>`;
+    if (d <= -10) return `<span class="badge" style="background:var(--warning-50);color:var(--warning-700)"><i data-lucide="alert-triangle" style="width:11px;height:11px"></i>${fa(d)}٪</span>`;
+    return `<span class="badge" style="background:var(--success-50);color:var(--success-700)">${fa(d)}٪</span>`;
+  }
+  function pBar(value, color) {
+    return `<div class="mt-pbar"><div style="width:${value}%;background:${color}"></div></div>`;
+  }
+  document.getElementById('critical-wbs').innerHTML = criticalWbs.map(r => {
+    const d = r.actual - r.planned;
+    const col = d <= -20 ? '#DC2626' : d <= -10 ? '#D97706' : '#16A34A';
+    return `
+      <tr class="${d <= -20 ? 'danger' : ''}">
+        <td><span class="mono mt-code">${fa(r.code)}</span></td>
+        <td><span class="mt-name">${r.name}</span></td>
+        <td style="text-align:center">
+          <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+            <span style="color:var(--gray-700);font-weight:500">${fa(r.planned)}٪</span>
+            ${pBar(r.planned, '#A1A1AA')}
+          </div>
+        </td>
+        <td style="text-align:center">
+          <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+            <span style="color:var(--gray-900);font-weight:600">${fa(r.actual)}٪</span>
+            ${pBar(r.actual, col)}
+          </div>
+        </td>
+        <td>${devBadge(d)}</td>
+        <td>
+          <span class="owner-pill">
+            <span class="av" style="background:${r.owner.color.bg};color:${r.owner.color.fg}">${r.owner.initials}</span>
+            <span>${r.owner.name}</span>
+          </span>
+        </td>
+      </tr>`;
+  }).join('');
+
+  // ───────── Top CBS data ─────────
+  const topCbs = [
+    { code: 'CBS-001', name: 'بتن C30',                budget: 180, used: 172 },
+    { code: 'CBS-014', name: 'آرماتور AIII',           budget: 145, used: 132 },
+    { code: 'CBS-023', name: 'نیروی انسانی ماهر',      budget: 98,  used: 82 },
+    { code: 'CBS-007', name: 'قالب فلزی مدولار',       budget: 62,  used: 48 },
+    { code: 'CBS-019', name: 'اجاره جرثقیل برجی',      budget: 45,  used: 32 },
+  ];
+  document.getElementById('top-cbs').innerHTML = topCbs.map(r => {
+    const pct = +(r.used / r.budget * 100).toFixed(1);
+    const danger = pct >= 90;
+    const color = danger ? '#DC2626' : pct >= 75 ? '#D97706' : '#1A3354';
+    return `
+      <tr class="${danger ? 'danger' : ''}">
+        <td><span class="mono mt-code">${r.code}</span></td>
+        <td><span class="mt-name">${r.name}</span></td>
+        <td><span class="mono" style="font-size:12px;color:var(--gray-700)">${fa(r.budget)} میلیارد</span></td>
+        <td><span class="mono" style="font-size:12px;color:var(--gray-900);font-weight:600">${fa(r.used)} میلیارد</span></td>
+        <td style="text-align:left">
+          <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+            <span style="font-weight:700;color:${color};font-size:13px">${fa(pct.toString().replace('.', '٫'))}٪</span>
+            ${pBar(pct, color)}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  // ───────── Activity feed ─────────
+  const feed = [
+    { dot: 'info',    iconName: 'clipboard', title: '<strong>علی محمدی</strong> گزارش پیشرفت برای <span class="pill">بتن‌ریزی فونداسیون بلوک A</span> ثبت کرد', meta: '۳ عکس · ۴ متر مکعب · مختصات GPS', time: '۳۰ دقیقه پیش', when: 'today-30m' },
+    { dot: 'success', iconName: 'check',     title: '<strong>مهندس رضایی</strong> گزارش <span class="pill">بتن‌ریزی فونداسیون</span> را تأیید کرد', meta: 'یادداشت: «طبق نقشهٔ شمارهٔ ۱۲ تأیید می‌شود.»', time: '۲ ساعت پیش', when: 'today' },
+    { dot: 'warn',    iconName: 'alert-triangle', title: 'سامانه تشخیص داد <span class="pill">قالب‌بندی سقف طبقهٔ دوم</span> ۳۳٪ از برنامه عقب است', meta: 'هشدار خودکار براساس قاعدهٔ انحراف بحرانی', time: '۴ ساعت پیش', when: 'today' },
+    { dot: 'primary', iconName: 'user-plus', title: '<strong>حسن کریمی</strong> به پروژه اضافه شد', meta: 'نقش: سرپرست کارگاه · بلوک شمالی', time: 'دیروز · ۱۰:۲۲', when: 'yesterday' },
+    { dot: 'info',    iconName: 'upload',    title: 'آپلود فایل WBS جدید توسط <strong>مهندس احمدی</strong>', meta: 'پروژه‌نگین-WBS-v3.xml · ۱۲٫۴ مگابایت · ۲۳۴ آیتم', time: '۲ روز پیش', when: '2d' },
+    { dot: 'error',   iconName: 'x-circle',  title: '۳ گزارش به‌دلیل عدم‌تطابق با عکس‌های پیوست رد شد', meta: 'بازنگری توسط مهندس رضایی', time: '۳ روز پیش', when: '3d' },
+  ];
+  document.getElementById('feed').innerHTML = feed.map(it => `
+    <div class="feed-item">
+      <div class="feed-dot ${it.dot}"><i data-lucide="${it.iconName}" style="width:11px;height:11px"></i></div>
+      <div class="feed-content">
+        <div class="feed-title">${it.title}</div>
+        ${it.meta ? `<div class="feed-meta"><i data-lucide="dot" style="width:13px;height:13px"></i>${it.meta}</div>` : ''}
+        <div class="feed-time"><i data-lucide="clock" style="width:11px;height:11px;display:inline;vertical-align:-1px"></i> ${it.time}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // ───────── Chart interactivity ─────────
+  const chart = document.getElementById('chart');
+  const tt = document.getElementById('tooltip');
+  // Sample data points (months → planned, actual, forecast)
+  const points = [
+    { x: 60,   month: 'مرداد ۰۳',     planned: 2,   actual: 1,   forecast: null },
+    { x: 220,  month: 'مهر ۰۳',       planned: 6,   actual: 5,   forecast: null },
+    { x: 380,  month: 'آذر ۰۳',       planned: 14,  actual: 12,  forecast: null },
+    { x: 540,  month: 'بهمن ۰۳',      planned: 32,  actual: 26,  forecast: null },
+    { x: 700,  month: 'فروردین ۰۴',   planned: 56,  actual: 50,  forecast: null },
+    { x: 800,  month: 'اردیبهشت ۰۴ (امروز)', planned: 70, actual: 65, forecast: null, today: true },
+    { x: 940,  month: 'تیر ۰۴',       planned: 86,  actual: null, forecast: 80 },
+    { x: 1080, month: 'شهریور ۰۴',    planned: 94,  actual: null, forecast: 92 },
+    { x: 1180, month: 'آبان ۰۴',      planned: 100, actual: null, forecast: 99 },
+  ];
+  const yFor = pct => 280 - (pct / 100) * 240;
+
+  const ptsG = document.getElementById('points');
+  points.forEach((p, i) => {
+    const aY = p.actual != null ? yFor(p.actual) : null;
+    const pY = yFor(p.planned);
+    const fY = p.forecast != null ? yFor(p.forecast) : null;
+    if (aY != null) {
+      ptsG.insertAdjacentHTML('beforeend', `<circle cx="${p.x}" cy="${aY}" r="4.5" fill="#1A3354" stroke="white" stroke-width="2" data-i="${i}" class="dp"/>`);
+    } else if (fY != null) {
+      ptsG.insertAdjacentHTML('beforeend', `<circle cx="${p.x}" cy="${fY}" r="4" fill="white" stroke="#A1A1AA" stroke-width="2" data-i="${i}" class="dp"/>`);
+    }
+    // invisible larger hit area
+    ptsG.insertAdjacentHTML('beforeend', `<circle cx="${p.x}" cy="${aY ?? fY ?? pY}" r="14" fill="transparent" data-i="${i}" class="dp-hit"/>`);
+  });
+
+  document.querySelectorAll('.dp-hit').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const i = +el.dataset.i;
+      const p = points[i];
+      const svgRect = chart.getBoundingClientRect();
+      const scaleX = svgRect.width / 1200;
+      const scaleY = svgRect.height / 320;
+      const aY = p.actual != null ? yFor(p.actual) : (p.forecast != null ? yFor(p.forecast) : yFor(p.planned));
+      tt.style.left = (p.x * scaleX) + 'px';
+      tt.style.top  = (aY * scaleY - 8) + 'px';
+      tt.innerHTML = `
+        <strong>${p.month}</strong>
+        <div class="tt-row"><span class="sw" style="background:#8AA2C2"></span>برنامه‌ای: ${fa(p.planned)}٪</div>
+        ${p.actual != null ? `<div class="tt-row"><span class="sw" style="background:#1A3354"></span>واقعی: ${fa(p.actual)}٪</div>` : ''}
+        ${p.forecast != null ? `<div class="tt-row"><span class="sw" style="background:#A1A1AA"></span>پیش‌بینی: ${fa(p.forecast)}٪</div>` : ''}
+      `;
+      tt.style.opacity = '1';
+    });
+    el.addEventListener('mouseleave', () => { tt.style.opacity = '0'; });
+  });
+
+  // Tabs
+  document.querySelectorAll('#tabs .tab').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#tabs .tab').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

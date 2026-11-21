@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>منوهای سه‌نقطه</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj" dir="rtl" lang="fa" style="width: 1640px; min-height: 1440px; background: #FAFAFA; padding: 32px; box-sizing: border-box">
+  <div class="row between ai-e" style="margin-bottom: 24px">
+    <div class="col g6"><span class="eyebrow">CONTEXT MENUS</span><h1 class="h-t1">منوهای سه‌نقطه</h1><p class="sub" style="max-width: 760px">هر منو با گروه‌بندی، آیکن، میان‌بر صفحه‌کلید، حالت غیرفعال همراه با دلیل و اقدام خطرناک قرمز. منوها از دکمهٔ سه‌نقطهٔ هر ردیف یا کلیک راست باز می‌شوند.</p></div>
+    <div class="row g8 wrap" style="max-width: 560px; justify-content: flex-end"><span class="bdg neu">حداکثر ۱۰ آیتم</span><span class="bdg neu">اقدام خطرناک در پایین</span><span class="bdg neu">جداکننده بین گروه‌ها</span><span class="bdg neu mono">width 248px</span></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(6, 248px); gap: 28px 16px; align-items: start; justify-content: space-between">
+    <sc-for list="{{menus}}" as="m" hint-placeholder-count="14">
+      <div class="col g8">
+        <div class="row g6"><span class="t-12 fw6 tx9 trunc">{{m.t}}</span><span class="bdg sm neu ms-auto">{{m.v}}</span></div>
+        <div class="row g8" style="height: 34px; padding: 0 6px 0 10px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 8px">
+          <span style="display: inline-flex; color: #71717A"><dc-import name="Icon" i="{{m.ti}}" sz="14" hint-size="14px,14px"></dc-import></span>
+          <span class="t-12 tx8 grow trunc">{{m.tr}}</span>
+          <span class="ibtn sm" style="background: #E5EBF3; color: #1A3354"><dc-import name="Icon" i="more-vertical" sz="15" hint-size="15px,15px"></dc-import></span>
+        </div>
+        <div class="menu">
+          <sc-for list="{{m.items}}" as="it" hint-placeholder-count="8">
+            <sc-if value="{{it.sep}}" hint-placeholder-val="{{false}}"><div class="msep"></div></sc-if>
+            <sc-if value="{{it.item}}" hint-placeholder-val="{{true}}">
+              <div class="mi {{it.cls}}" style="align-items: flex-start">
+                <span class="ico" style="margin-top: 1px"><dc-import name="Icon" i="{{it.ic}}" sz="15" hint-size="15px,15px"></dc-import></span>
+                <span class="col grow" style="min-width: 0"><span>{{it.t}}</span><sc-if value="{{it.hasSub}}" hint-placeholder-val="{{false}}"><span class="ms">{{it.sub}}</span></sc-if></span>
+                <sc-if value="{{it.hasCnt}}" hint-placeholder-val="{{false}}"><span class="bdg sm neu mx">{{it.cnt}}</span></sc-if>
+                <sc-if value="{{it.hasK}}" hint-placeholder-val="{{false}}"><span class="kbd mx">{{it.k}}</span></sc-if>
+              </div>
+            </sc-if>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1640,"height":1440}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const M = [
+      ['پروژه — ردیف فهرست', 'فعال', 'building-2', 'مجتمع مسکونی نگین شهر', [
+        'eye|مشاهدهٔ جزئیات|Enter||', 'pencil|ویرایش پروژه|E|hov|', 'copy|کپی پروژه|||ساختار WBS و CBS بدون داده‌ها', 'share-2|اشتراک‌گذاری|Ctrl S||', '-',
+        'file-spreadsheet|خروجی Excel|||', 'file-code|خروجی به MSP (XML)|||', '-',
+        'archive|بایگانی پروژه||warn|', 'user-cog|انتقال مالکیت|||', 'trash-2|حذف پروژه||danger|']],
+      ['پروژه — تمام‌شده', 'بایگانی', 'car', 'پارکینگ طبقاتی فردوسی', [
+        'eye|مشاهدهٔ جزئیات|Enter||', 'archive-restore|بازگشت از بایگانی||good|', 'file-spreadsheet|خروجی Excel|||', 'file-code|خروجی به MSP (XML)|||', '-',
+        'pencil|ویرایش پروژه||dis|پروژه بایگانی است؛ ابتدا بازگردانید', 'user-cog|انتقال مالکیت||dis|فقط برای پروژه‌های فعال', '-', 'trash-2|حذف دائمی||danger|']],
+      ['WBS — آیتم والد', 'والد', 'folder-open', '1.2.3 · سقف', [
+        'pencil|ویرایش جزئیات|E||', 'plus|افزودن فرزند|||', 'plus-square|افزودن آیتم هم‌سطح|||', 'copy|کپی این شاخه|||', '-',
+        'move|انتقال به والد دیگر|||', 'arrow-up|انتقال به بالا|Alt ↑||', 'arrow-down|انتقال به پایین|Alt ↓||', '-',
+        'clipboard-check|گزارش‌های مرتبط|||', 'history|تاریخچهٔ تغییرات|||', '-', 'trash-2|حذف این شاخه||danger|۲ آیتم فرزند هم حذف می‌شوند']],
+      ['WBS — آیتم برگ', 'برگ', 'file-text', '1.2.3.1 · قالب‌بندی سقف', [
+        'pencil|ویرایش جزئیات|E||', 'user-check|تخصیص سرپرست|||', 'link|مدیریت اتصال‌های CBS|||', 'clipboard-check|مشاهدهٔ گزارش‌ها|#۴||', 'clipboard-list|ثبت گزارش دستی|||', '-',
+        'copy|کپی این آیتم|||', 'move|انتقال به والد دیگر|||', 'history|تاریخچهٔ تغییرات|||', '-', 'trash-2|حذف آیتم||danger dis|این آیتم ۴ گزارش دارد؛ ابتدا آن‌ها را بایگانی کنید']],
+      ['CBS — قلم هزینه', 'عادی', 'banknote', 'C.1.1.3 · شن و ماسه', [
+        'pencil|ویرایش جزئیات|E||', 'line-chart|مشاهدهٔ روند مصرف|||', 'git-branch|WBSهای متصل|#۳||', 'receipt|درخواست بازنگری بودجه|||', '-',
+        'copy|کپی این قلم|||', 'move|انتقال به والد دیگر|||', 'history|تاریخچهٔ تغییرات نرخ|||', '-', 'trash-2|حذف قلم||danger|']],
+      ['CBS — قلم متصل', 'متصل', 'banknote', 'C.1.1.2 · آرماتور AIII', [
+        'pencil|ویرایش جزئیات|E||', 'line-chart|مشاهدهٔ روند مصرف|||', 'git-branch|WBSهای متصل|#۵||', 'receipt|درخواست بازنگری بودجه||warn|مصرف ۹۱٪ از بودجه', '-',
+        'copy|کپی این قلم|||', 'move|انتقال به والد دیگر|||', 'history|تاریخچهٔ تغییرات نرخ|||', '-', 'trash-2|حذف قلم||danger dis|۵ اتصال WBS فعال دارد']],
+      ['گزارش کارگاه', 'در انتظار', 'clipboard-check', 'FR-1404-0309 · سعید قاسمی', [
+        'check|تأیید سریع|A|good|', 'rotate-ccw|درخواست اصلاح|E|warn|', 'x-circle|رد گزارش|R|danger|', '-',
+        'eye|مشاهدهٔ جزئیات کامل|||', 'map-pin|مشاهده روی نقشه|||', 'image|مشاهدهٔ عکس‌ها|#۳||', '-',
+        'bell-ring|یادآوری به سرپرست|||', 'message-square|پیام به سرپرست|||', '-', 'file-down|دانلود PDF|||', 'link-2|کپی پیوند گزارش|||']],
+      ['گزارش کارگاه', 'تأییدشده', 'clipboard-check', 'FR-1404-0301 · حسن کریمی', [
+        'eye|مشاهدهٔ جزئیات|||', 'file-down|دانلود PDF|||', 'link-2|کپی پیوند|||', '-', 'undo-2|ابطال تأیید||danger|پیشرفت آیتم به مقدار قبلی برمی‌گردد']],
+      ['عضو پروژه', 'فعال', 'user', 'رضا اکبری · سرپرست', [
+        'user|مشاهدهٔ پروفایل|||', 'user-cog|ویرایش نقش|||', 'list-checks|فعالیت‌های تخصیص‌یافته|#۵||', 'clipboard-check|گزارش‌های ثبت‌شده|||', '-',
+        'bell-ring|ارسال یادآوری|||', 'message-square|ارسال پیام|||', '-', 'pause-circle|غیرفعال‌سازی موقت||warn|', 'user-x|حذف از پروژه||danger|']],
+      ['عضو پروژه', 'مدیر پروژه', 'user', 'مهندس رضایی · مدیر پروژه', [
+        'user|مشاهدهٔ پروفایل|||', 'list-checks|فعالیت‌های تخصیص‌یافته|||', '-', 'user-cog|ویرایش نقش||dis|دسترسی مدیر سازمان لازم است', 'user-x|حذف از پروژه||danger dis|مدیر پروژه را نمی‌توان حذف کرد']],
+      ['اتصال WBS ↔ CBS', 'فعال', 'link', '1.2.2.1 ↔ C.1.1.2', [
+        'pencil|ویرایش مقدار|E||', 'bar-chart-3|مشاهدهٔ اثر بر بودجه|||', 'copy|کپی به آیتم دیگر|||', '-', 'unlink-2|حذف اتصال||danger|']],
+      ['اتصال WBS ↔ CBS', 'مصرف +۹۰٪', 'link', '1.2.3.2 ↔ C.1.1.2', [
+        'pencil|ویرایش مقدار|E||', 'bar-chart-3|مشاهدهٔ اثر بر بودجه|||', 'receipt|درخواست بازنگری بودجه||warn|', 'copy|کپی به آیتم دیگر|||', '-', 'unlink-2|حذف اتصال||danger|']],
+      ['نمودار', 'کامل', 'line-chart', 'منحنی S پیشرفت', [
+        'image-down|دانلود PNG|||', 'file-image|دانلود SVG|||', 'file-spreadsheet|دانلود داده‌ها (CSV یا Excel)|||', '-', 'maximize-2|نمای تمام‌صفحه|F||', 'clipboard-copy|کپی در کلیپ‌بورد|||', '-', 'settings|تنظیمات نمودار|||']],
+      ['نمودار', 'جاسازی‌شده', 'line-chart', 'منحنی S در داشبورد', [
+        'image-down|دانلود PNG|||', 'file-image|دانلود SVG|||', 'file-spreadsheet|دانلود داده‌ها|||', '-', 'maximize-2|نمای تمام‌صفحه|F||', 'settings|تنظیمات نمودار||dis|فقط در نمای کامل نمودار']]
+    ];
+    const menus = M.map(m => ({
+      t: m[0], v: m[1], ti: m[2], tr: m[3],
+      items: m[4].map(s => {
+        if (s === '-') return { sep: true, item: false };
+        const p = s.split('|'), k = p[2] || '', isCnt = k[0] === '#';
+        return { sep: false, item: true, ic: p[0], t: p[1], hasK: !!k && !isCnt, k: isCnt ? '' : k, hasCnt: isCnt, cnt: isCnt ? k.slice(1) : '', cls: p[3] || '', hasSub: !!p[4], sub: p[4] || '' };
+      })
+    }));
+    return { menus };
+  }
+}
+</script>
+</body>
+</html>

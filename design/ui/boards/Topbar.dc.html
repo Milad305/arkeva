@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>نوار بالا</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<header class="pj topbar" dir="rtl" lang="fa" style="font-family: 'Vazirmatn', system-ui, sans-serif; color: #18181B; width: 100%">
+  <sc-if value="{{hasTitle}}" hint-placeholder-val="{{false}}">
+    <div class="tb-title"><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="{{ic}}" sz="16" hint-size="16px,16px"></dc-import></span>{{title}}</div>
+  </sc-if>
+  <sc-if value="{{hasCrumbs}}" hint-placeholder-val="{{true}}">
+    <nav class="crumbs" aria-label="مسیر">
+      <sc-for list="{{crumbs}}" as="c" hint-placeholder-count="3">
+        <sc-if value="{{c.link}}" hint-placeholder-val="{{true}}"><a href="{{c.f}}" class="row g4"><sc-if value="{{c.home}}" hint-placeholder-val="{{false}}"><dc-import name="Icon" i="home" sz="12" hint-size="12px,12px"></dc-import></sc-if>{{c.t}}</a></sc-if>
+        <sc-if value="{{c.leaf}}" hint-placeholder-val="{{false}}"><span class="leaf trunc">{{c.t}}</span></sc-if>
+        <sc-if value="{{c.more}}" hint-placeholder-val="{{true}}"><span class="sep"><dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></span></sc-if>
+      </sc-for>
+    </nav>
+  </sc-if>
+  <sc-if value="{{search}}" hint-placeholder-val="{{false}}">
+    <a class="tb-search" href="W43-CommandPalette.dc.html"><dc-import name="Icon" i="search" sz="14" hint-size="14px,14px"></dc-import><span class="grow trunc">جستجوی سراسری در پروژه‌ها، گزارش‌ها و کاربران…</span><span class="kbd">Ctrl+K</span></a>
+  </sc-if>
+  <div class="row g4 ms-auto">
+    <sc-if value="{{noSearch}}" hint-placeholder-val="{{true}}">
+      <a class="ibtn" href="W43-CommandPalette.dc.html" aria-label="جستجو"><dc-import name="Icon" i="search" sz="16" hint-size="16px,16px"></dc-import></a>
+    </sc-if>
+    <a class="ibtn" href="W06-Notifications.dc.html" aria-label="اعلان‌ها، ۳ مورد خوانده‌نشده"><dc-import name="Icon" i="bell" sz="16" hint-size="16px,16px"></dc-import><span class="ping"></span></a>
+    <a class="ibtn" href="W33-Help.dc.html" aria-label="راهنما"><dc-import name="Icon" i="help-circle" sz="16" hint-size="16px,16px"></dc-import></a>
+    <span class="vsep"></span>
+    <a class="me" href="W32-Profile.dc.html" aria-label="حساب کاربری مهندس احمدی"><span class="av a1">م.ا</span><dc-import name="Icon" i="chevron-down" sz="14" hint-size="14px,14px"></dc-import></a>
+  </div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"crumbs":{"editor":null},"title":{"editor":"text","default":""},"ic":{"editor":"text","default":"layout-dashboard"},"search":{"editor":"boolean","default":false},"$preview":{"width":1216,"height":52}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const raw = this.props.crumbs || [
+      { t: 'خانه', f: 'W05-Dashboard.dc.html' },
+      { t: 'پروژه‌ها', f: 'W07-Projects.dc.html' },
+      { t: 'مجتمع مسکونی نگین شهر' }
+    ];
+    const crumbs = raw.map((c, i) => ({ t: c.t, f: c.f || '#', link: !!c.f && i < raw.length - 1, leaf: !c.f || i === raw.length - 1, more: i < raw.length - 1, home: i === 0 && c.t === 'خانه' }));
+    const s = this.props.search === true || this.props.search === 'true';
+    const title = this.props.title || '';
+    return { crumbs, hasCrumbs: crumbs.length > 0 && !title, hasTitle: !!title, title, ic: this.props.ic || 'layout-dashboard', search: s, noSearch: !s };
+  }
+}
+</script>
+</body>
+</html>

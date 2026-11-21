@@ -1,0 +1,382 @@
+/* پروژه‌یار — تنظیمات سراسری بیرون از kit
+   این فایل فقط چیزهایی را دارد که آرت‌بوردهای بوم در <helmet> خودشان داشتند
+   و در kit.css نیستند، به‌علاوهٔ تنظیمات سطح سند. */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--gray-50);
+  font-family: var(--font-sans, 'Vazirmatn', system-ui, sans-serif);
+  /* ss01 شکل درست «ی» و «ک» فارسی را در Vazirmatn می‌دهد */
+  font-feature-settings: 'ss01';
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* محتوا در عرض‌های بزرگ‌تر از سقف ۱۴۸۰px وسط‌چین می‌شود.
+   آرت‌بوردهای بوم همه ۱۴۴۰ عرض دارند، پس این حالت در طرح تعریف نشده؛
+   بدون این قاعده محتوا به لبهٔ راست می‌چسبد و در مانیتور ۲۵۶۰ حدود
+   ۸۵۰px خاکستری مرده می‌ماند. در عرض‌های ≤۱۴۸۰ هیچ اثری ندارد. */
+.pj .content {
+  margin-inline: auto;
+}
+
+/* اسپینر — در بوم داخل <helmet> صفحهٔ W46 تعریف شده بود */
+@keyframes pjspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pj-spin {
+  animation: pjspin 0.8s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* نوار اسکرول — ظریف، هم‌رنگ توکن‌های خاکستری */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border: 2px solid var(--gray-50);
+  border-radius: var(--radius-full, 999px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ظرف اسکرول‌دار درون پنل‌ها: نوار نازک‌تر */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scroll-thin::-webkit-scrollbar-thumb {
+  border-width: 2px;
+  border-color: #fff;
+}
+
+/* عددهای فارسی در جدول‌ها باید هم‌عرض باشند تا ستون‌ها نلرزند */
+.num,
+.mono,
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* مخفی‌کردن ورودی بومی چک‌باکس/رادیو که ظاهر بصری‌اش span است */
+.sr-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+/* چک‌باکس بومی جدول‌ها — در بوم با accent-color استایل شده */
+input[type='checkbox']:not(.sr-input),
+input[type='radio']:not(.sr-input) {
+  accent-color: var(--primary-700);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * شبکهٔ واکنش‌گرا — kit ستون‌های ثابت دارد (`.grid.c3`)؛ با `.rsp` در عرض کم می‌شکند.
+ * W05: چهار کارت شاخص و سه کارت هر ردیف روی لپ‌تاپ کوچک دو ستون و روی موبایل یک ستون.
+ */
+@media (max-width: 1180px) {
+  .grid.rsp.c4,
+  .grid.rsp.c3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid.rsp > .span2 {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 760px) {
+  .grid.rsp.c2,
+  .grid.rsp.c3,
+  .grid.rsp.c4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .grid.rsp > .span2 {
+    grid-column: auto;
+  }
+}
+
+/*
+ * جستجوی سراسری نوار بالا در عرض کم: متن طولانی nowrap کف عرض دکمه را بالا می‌برد و
+ * کل پوسته را در موبایل ۶۱۱px می‌کرد. حالا کوچک می‌شود و در موبایل فقط آیکن می‌ماند.
+ */
+.tb-search {
+  min-width: 0;
+}
+@media (max-width: 640px) {
+  .tb-search {
+    flex: 0 0 auto;
+    margin-inline: 0;
+  }
+  .tb-search > :not(svg) {
+    display: none;
+  }
+}
+
+/* نشانگر جای رها کردن ردیف در درخت ویرایش W12 */
+.tree tr[data-drop='before'] td {
+  box-shadow: inset 0 2px 0 var(--primary-500);
+}
+.tree tr[data-drop='after'] td {
+  box-shadow: inset 0 -2px 0 var(--primary-500);
+}
+
+/* ردیف‌های پیش‌نمایش ورود فایل (W39): هشدار و خطا */
+.tbl tr.row-wrn > td { background: #fffcf5; }
+.tbl tr.row-err > td { background: #fef8f8; }
+
+/* W17 — سه ستون تخصیص (بوم ۲۸/۴۲/۳۰) با ارتفاع ثابت؛ زیر ۱۱۰۰ پیکسل زیر هم */
+.assign-grid { display: grid; grid-template-columns: 28% minmax(0, 42%) minmax(0, 30%); gap: 14px; height: calc(100vh - 290px); min-height: 520px; }
+@media (max-width: 1100px) {
+  .assign-grid { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .assign-grid > .card { max-height: 560px; }
+}
+
+/* برچسب پنهان سرستون (`.sr-input`، absolute) نباید از ظرف اسکرول جدول بیرون بزند و صفحه را
+   در موبایل پهن کند؛ ظرف را مرجع موقعیت می‌کنیم. */
+.tbl-wrap { position: relative; }
+
+/* KPIهای پنج‌تایی (W16) در عرض کم دوستونه */
+@media (max-width: 760px) {
+  .grid.rsp.c5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* F14 ریسک — چیدمان‌های دوستونه که در عرض کم یک‌ستونه می‌شوند */
+.risk-top-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
+.risk-detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.risk-action-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 14px 16px; }
+.risk-add-action { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; padding: 12px 16px; border-top: 1px solid #F4F4F5; align-items: end; }
+@media (max-width: 1100px) {
+  .risk-detail-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .risk-top-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .risk-action-grid,
+  .risk-add-action { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* F09 صندوق گزارش‌ها (W20) — فهرست و جزئیات کنار هم، در عرض کم زیر هم */
+.fr-split { display: grid; grid-template-columns: minmax(300px, 2fr) minmax(0, 3fr); align-items: stretch; min-height: 560px; }
+.fr-list { display: flex; flex-direction: column; min-width: 0; border-inline-end: 1px solid #E4E4E7; }
+.fr-scroll { flex: 1 1 auto; overflow-y: auto; max-height: calc(100vh - 330px); min-height: 360px; }
+.fr-detail { display: flex; flex-direction: column; min-width: 0; }
+.fr-actions { padding: 12px 18px; border-top: 1px solid #E4E4E7; background: #FFFFFF; position: sticky; bottom: 0; }
+@media (max-width: 1000px) {
+  .fr-split { grid-template-columns: minmax(0, 1fr); }
+  .fr-list { border-inline-end: 0; border-bottom: 1px solid #E4E4E7; }
+  .fr-scroll { max-height: 360px; min-height: 0; }
+}
+
+/* پانویس مودال در عرض کم دو ردیف می‌شود (ویزارد پروژه با چهار دکمه) */
+.modal .mf { flex-wrap: wrap; row-gap: 8px; }
+.modal .mf > .row { flex-wrap: wrap; }
+
+/* نوار مراحل در موبایل: فقط برچسب مرحلهٔ جاری */
+@media (max-width: 640px) {
+  .steps .step:not(.on) .t { display: none; }
+}
+
+/* F17 نمودارها */
+.gantt-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+.charts-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.charts-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; }
+.charts-risk { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+@media (max-width: 1100px) {
+  .charts-two, .charts-split, .charts-risk { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .gantt-row { grid-template-columns: 120px minmax(0, 1fr); }
+}
+@media print {
+  .sb, aside, header.topbar, .no-print { display: none !important; }
+  .main { margin: 0 !important; }
+  .card { break-inside: avoid; }
+}
+.strip.c5, .strip.c6 { margin-bottom: 16px; }
+@media (max-width: 1100px) {
+  .strip.c5, .strip.c6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .strip.c5, .strip.c6 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── W27 ماتریس دسترسی ── */
+.pm-grid { display: grid; border-bottom: 1px solid #F4F4F5; }
+.pm-head { background: #FAFAFA; border-bottom-color: #E4E4E7; }
+.pm-label { display: flex; align-items: center; gap: 8px; padding: 8px 16px; min-width: 0; }
+.pm-role { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; border-inline-start: 1px solid #F4F4F5; min-width: 0; }
+.pm-dot { width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; display: inline-block; }
+.pm-group { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #F4F4F5; border-bottom: 1px solid #E4E4E7; }
+.pm-expand { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; border: 0; background: transparent; color: #71717A; cursor: pointer; flex-shrink: 0; }
+.pm-expand:hover { background: #F4F4F5; color: #27272A; }
+.pm-cell { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 4px; border: 0; border-inline-start: 1px solid #F4F4F5; background: #FFFFFF; font: inherit; color: inherit; cursor: pointer; min-width: 0; }
+button.pm-cell:hover:not(:disabled) { background: #F8FAFD; }
+.pm-cell:focus-visible { outline: 2px solid var(--primary-500, #3B5B8A); outline-offset: -2px; }
+.pm-cell.locked { background: #FAFAFA; cursor: default; }
+.pm-cell.locked .cb { opacity: .55; }
+.pm-cell.chg, button.pm-cell.chg:hover:not(:disabled) { background: #FCEAD9; }
+.pm-cell.chg .cb { box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #E07A2C; }
+.pm-cell .pm-note { text-align: center; line-height: 1.4; color: #71717A; }
+.pm-cell.chg .pm-note { color: #B45813; }
+.pm-chg { position: absolute; top: 6px; left: 8px; width: 7px; height: 7px; border-radius: 999px; background: #E07A2C; }
+.pm-code .pm-label { background: #FCFCFD; }
+.pm-code .pm-cell { cursor: default; background: #FCFCFD; }
+.pm-code .pm-cell.chg { background: #FCEAD9; }
+.pm-scope { width: 100%; max-width: 132px; height: 28px; border: 1px solid #D4D4D8; border-radius: 6px; background: #FFFFFF; font: inherit; font-size: 12px; padding: 0 6px; color: #27272A; }
+.pm-scope:disabled { background: #F4F4F5; color: #A1A1AA; }
+.pm-legend-chg { width: 16px; height: 16px; border-radius: 4px; background: #FCEAD9; box-shadow: inset 0 0 0 1.5px #E07A2C; display: inline-block; }
+.pm-savebar { position: sticky; bottom: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; background: #FFFFFF; box-shadow: 0 -6px 16px rgba(14, 30, 56, 0.06); border-radius: 0 0 12px 12px; }
+.mb16 { margin-bottom: 16px; }
+tr.muted td { opacity: .6; }
+
+/* ── W32 حساب من ── */
+.acc-wrap { container-type: inline-size; }
+.acc-layout { display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap; }
+.acc-nav { width: 220px; flex: 0 0 220px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 72px; }
+.acc-nav .nav-a { font-size: 13px; }
+.acc-me { padding: 0 10px 14px; }
+.acc-sep { margin: 10px 0; }
+.acc-out { color: #B91C1C; background: none; border: 0; font: inherit; cursor: pointer; text-align: start; width: 100%; }
+.acc-main { flex: 1 1 520px; max-width: 760px; min-width: 0; }
+.acc-card { scroll-margin-top: 72px; }
+.acc-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 0; border-bottom: 1px solid #F4F4F5; }
+.acc-role { padding: 10px 14px; border-bottom: 1px solid #F4F4F5; align-items: center; }
+.acc-role:last-child { border-bottom: 0; }
+.acc-device { padding: 10px 12px; border: 1px solid #E4E4E7; border-radius: 10px; background: #FFFFFF; align-items: center; }
+.acc-device.cur { border-color: #A7D7B8; background: #ECFDF3; }
+tr.row-warn td { background: #FEF8F8; }
+@container (max-width: 780px) {
+  .acc-nav { position: static; width: 100%; flex: 1 1 100%; flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .acc-me, .acc-sep { display: none; }
+  .acc-nav .nav-a, .acc-out { width: auto; }
+}
+
+/* ── W33 راهنما ── */
+.help-hero { margin-bottom: 16px; background: #0E1E38; border-color: #0E1E38; }
+.help-chip { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); color: #E5EBF3; }
+.help-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+@media (max-width: 1080px) { .help-grid { grid-template-columns: minmax(0, 1fr); } }
+.help-guide { background: #FFFFFF; padding: 14px; text-align: start; font: inherit; color: inherit; cursor: pointer; }
+.help-guide:hover { border-color: #A1A1AA; }
+.help-q { width: 100%; padding: 13px 18px; text-align: start; background: none; border: 0; font: inherit; cursor: pointer; align-items: center; }
+.help-q:hover { background: #FAFAFA; }
+.help-a { padding: 0 46px 16px 18px; line-height: 1.9; }
+.help-rot { transform: rotate(180deg); }
+
+/* ── W25 گزارش‌های مدیریتی ── */
+.rpt-grid { display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 16px; align-items: start; }
+@media (max-width: 1180px) { .rpt-grid { grid-template-columns: minmax(0, 1fr); } }
+.rpt-tpl { width: 100%; padding: 12px; text-align: start; font: inherit; color: inherit; background: #FFFFFF; cursor: pointer; }
+.rpt-tpl:hover { border-color: #A1A1AA; }
+.rpt-tpl.on { background: #E5EBF3; border-color: #2C4A73; }
+.rpt-stage { padding: 4px 22px 18px; background: #F4F4F5; border-top: 1px solid #E4E4E7; border-bottom: 1px solid #E4E4E7; }
+
+/* صفحهٔ گزارش — همان چیزی که سرور به PDF تبدیل می‌کند */
+.rpt-sheet { --sheet-fs: 8.5px; position: relative; margin-top: 16px; display: flex; flex-direction: column; gap: 11px; padding: 18px 18px 12px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 4px; box-shadow: 0 8px 24px rgba(14, 30, 56, 0.08); font-size: var(--sheet-fs); line-height: 1.8; color: #3F3F46; }
+.rpt-sheet.compact { aspect-ratio: 1 / 1.414; overflow: hidden; }
+.rpt-sheet .mono { font-family: 'JetBrains Mono', monospace; }
+.rpt-sheet-head { padding-bottom: 9px; border-bottom: 2px solid #1A3354; }
+.rpt-sheet-foot { margin-top: auto; padding-top: 6px; border-top: 1px solid #F4F4F5; color: #71717A; font-size: calc(var(--sheet-fs) * 0.9); }
+.rpt-h1 { font-size: calc(var(--sheet-fs) * 1.55); font-weight: 700; color: #18181B; }
+.rpt-h3 { font-size: calc(var(--sheet-fs) * 1.12); font-weight: 600; color: #27272A; }
+.rpt-muted { color: #71717A; font-size: calc(var(--sheet-fs) * 0.92); }
+.rpt-block { display: flex; flex-direction: column; gap: 4px; }
+.rpt-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 6px; }
+.rpt-kpi { display: flex; flex-direction: column; gap: 1px; padding: 6px 7px; border: 1px solid #E4E4E7; border-radius: 4px; }
+.rpt-kpi-v { font-size: calc(var(--sheet-fs) * 1.5); font-weight: 700; color: #18181B; }
+.rpt-pair { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid #F4F4F5; }
+.rpt-note { margin: 0; padding: 7px 9px; background: #FAFAFA; border-radius: 4px; }
+.rpt-table { width: 100%; border-collapse: collapse; }
+.rpt-table th { text-align: start; font-weight: 600; color: #71717A; border-bottom: 1px solid #E4E4E7; padding: 3px 4px; }
+.rpt-table td { padding: 3px 4px; border-bottom: 1px solid #F4F4F5; }
+.rpt-photos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.rpt-photo { margin: 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rpt-photo-box { display: block; aspect-ratio: 4 / 3; border-radius: 3px; background: repeating-linear-gradient(45deg, #F4F4F5, #F4F4F5 6px, #EBEBEE 6px, #EBEBEE 12px); }
+.rpt-wm { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.rpt-wm span { font-size: calc(var(--sheet-fs) * 7); font-weight: 700; color: rgba(185, 28, 28, 0.07); transform: rotate(-24deg); }
+
+@media print {
+  body[data-print='report'] * { visibility: hidden !important; }
+  body[data-print='report'] .rpt-sheet, body[data-print='report'] .rpt-sheet * { visibility: visible !important; }
+  body[data-print='report'] .rpt-sheet { --sheet-fs: 11px; position: absolute; inset-block-start: 0; inset-inline: 0; margin: 0; border: 0; border-radius: 0; box-shadow: none; aspect-ratio: auto; overflow: visible; }
+}
+@media (max-width: 620px) {
+  .rpt-lib { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── W34/W35/W49/W36 ورود و همگام‌سازی MSP ── */
+.msp-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+@media (max-width: 1180px) { .msp-grid { grid-template-columns: minmax(0, 1fr); } }
+.msp-side { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+@media (max-width: 1180px) { .msp-side { grid-template-columns: minmax(0, 1fr); } }
+.msp-actions { margin-top: 18px; padding: 12px 16px; background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 12px; box-shadow: 0 -4px 14px rgba(14, 30, 56, 0.05); align-items: center; position: sticky; bottom: 12px; z-index: 5; }
+
+/* ── W43 جستجوی سریع ── */
+.cmdk-backdrop { position: fixed; inset: 0; z-index: 120; height: auto; min-height: 0; align-items: flex-start; padding-top: 56px; }
+.cmdk { width: min(620px, calc(100vw - 32px)); max-height: min(70vh, 560px); display: flex; flex-direction: column; }
+.cmdk-head { padding: 14px 18px; border-bottom: 1px solid #E4E4E7; align-items: center; }
+.cmdk-input { flex: 1 1 auto; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 16px; background: transparent; color: #18181B; }
+.cmdk-filters { padding: 8px 14px; border-bottom: 1px solid #F4F4F5; }
+.cmdk-body { padding: 4px 6px 8px; overflow-y: auto; flex: 1 1 auto; }
+.cmdk-item { width: 100%; text-align: start; background: none; border: 0; font: inherit; cursor: pointer; padding: 8px 10px; }
+.cmdk-item.on { background: #F4F4F5; }
+.cmdk-foot { padding: 9px 18px; border-top: 1px solid #E4E4E7; background: #FAFAFA; flex-wrap: wrap; }
+@media (max-width: 560px) {
+  .cmdk-backdrop { padding-top: 12px; }
+  .cmdk-foot span:not(.ms-auto) { display: none; }
+}
+
+/* ── راهنمای نمودار (هاور و صفحه‌کلید) ── */
+.chart-wrap { position: relative; }
+.chart-wrap svg:focus-visible { outline: 2px solid var(--primary-700); outline-offset: 2px; border-radius: 6px; }
+.chart-tip {
+  position: absolute; z-index: 6; pointer-events: none; display: flex; flex-direction: column; gap: 4px;
+  min-width: 132px; max-width: 230px; padding: 8px 10px; background: #FFFFFF; color: #18181B;
+  border: 1px solid #E4E4E7; border-radius: 10px; box-shadow: 0 8px 22px rgba(14, 30, 56, 0.14); font-size: 12px;
+}
+.chart-tip-title { font-weight: 600; color: #3F3F46; font-size: 11.5px; }
+.chart-tip-row { display: flex; align-items: center; gap: 6px; }
+.chart-tip-swatch { inline-size: 12px; block-size: 3px; border-radius: 2px; flex: 0 0 auto; }
+.chart-tip-label { color: #52525B; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chart-tip-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+.chart-tip-note { color: #71717A; font-size: 11px; }
+.chart-sr-table { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media print { .chart-tip { display: none; } }

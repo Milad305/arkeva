@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>داشبورد سازمان</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="dashboard" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" title="داشبورد" ic="layout-dashboard" search="{{yes}}" hint-size="100%,52px"></dc-import>
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <h1 class="h-display">خوش آمدید، مهندس احمدی</h1>
+          <p class="sub" style="font-size: 13px">خلاصهٔ پروژه‌های شما — شنبه ۱ خرداد ۱۴۰۴</p>
+        </div>
+        <div class="row g8">
+          <button class="btn btn-o" type="button"><dc-import name="Icon" i="calendar" sz="14" hint-size="14px,14px"></dc-import>این ماه<dc-import name="Icon" i="chevron-down" sz="14" hint-size="14px,14px"></dc-import></button>
+          <a class="btn btn-p" href="W37-NewProjectStep1.dc.html"><dc-import name="Icon" i="plus" sz="15" hint-size="15px,15px"></dc-import>پروژهٔ جدید</a>
+        </div>
+      </div>
+
+      <div class="grid c4" style="margin-bottom: 18px">
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l">پروژه‌های فعال</span><span class="icb pri"><dc-import name="Icon" i="folder-kanban" sz="15" hint-size="15px,15px"></dc-import></span></div>
+          <div class="row between ai-e"><div class="row g8 ai-e"><span class="kpi-v">۸</span><span class="delta ok"><dc-import name="Icon" i="arrow-up" sz="11" hint-size="11px,11px"></dc-import>۱</span></div>
+            <svg width="92" height="32" viewBox="0 0 92 32" aria-hidden="true"><polyline fill="none" stroke="#2C4A73" stroke-width="1.5" points="0,24 13,22 26,23 39,18 52,19 65,14 78,15 92,10" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></div>
+          <div class="row between t-sm tx5"><span>نسبت به هفتهٔ گذشته</span><span class="tx7">از ۱۲ پروژه</span></div>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l">گزارش‌های در انتظار تأیید</span><span class="icb inf"><dc-import name="Icon" i="clock" sz="15" hint-size="15px,15px"></dc-import></span></div>
+          <span class="kpi-v">۲۳</span>
+          <div class="row between t-sm tx5"><span>۵ مورد بیش از ۴۸ ساعت</span><a class="link" href="W20-FieldReports.dc.html">بررسی همه<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l">پروژه‌های در خطر</span><span class="icb err"><dc-import name="Icon" i="alert-triangle" sz="15" hint-size="15px,15px"></dc-import></span></div>
+          <div class="row g8 ai-e"><span class="kpi-v tx-err">۳</span><span class="delta err"><dc-import name="Icon" i="arrow-up" sz="11" hint-size="11px,11px"></dc-import>۱</span></div>
+          <div class="t-sm tx5">بیش از ۱۵٪ عقب از برنامه یا CPI کمتر از ۰٫۹</div>
+        </div>
+        <div class="kpi">
+          <div class="row between"><span class="kpi-l">میانگین پیشرفت</span><span class="icb ok"><dc-import name="Icon" i="trending-up" sz="15" hint-size="15px,15px"></dc-import></span></div>
+          <div class="row between">
+            <div class="col g6"><span class="kpi-v">۶۲<span class="t-16 tx5 fw5">٪</span></span><span class="t-sm tx5">در برابر <strong class="tx7">۶۸٪</strong> برنامه‌ای</span></div>
+            <svg width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="۶۲ درصد"><circle cx="26" cy="26" r="22" stroke="#E4E4E7" stroke-width="5" fill="none"></circle><circle cx="26" cy="26" r="22" stroke="#D97706" stroke-width="5" fill="none" stroke-dasharray="138.23" stroke-dashoffset="52.5" stroke-linecap="round" transform="rotate(-90 26 26) translate(52 0) scale(-1 1)"></circle><text x="26" y="30" text-anchor="middle" font-size="12" font-weight="700" fill="#18181B" font-family="Vazirmatn">۶۲٪</text></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid c2" style="margin-bottom: 18px">
+        <section class="card">
+          <div class="card-h"><h3><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="folder-kanban" sz="16" hint-size="16px,16px"></dc-import></span>پروژه‌های فعال</h3><a class="link" href="W07-Projects.dc.html">مشاهدهٔ همه<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+          <div class="tbl-wrap"><table class="tbl">
+            <thead><tr><th>پروژه</th><th>پیشرفت (برنامه‌ای / واقعی)</th><th>وضعیت</th></tr></thead>
+            <tbody>
+              <sc-for list="{{projects}}" as="p" hint-placeholder-count="8">
+                <tr>
+                  <td><a class="row g10" href="W10-ProjectOverview.dc.html"><span class="thumb sm" style="background: {{p.tint}}"><dc-import name="Icon" i="{{p.ic}}" sz="14" hint-size="14px,14px"></dc-import></span><span class="col"><span class="fw6 tx9">{{p.n}}</span><span class="t-xs tx5">{{p.c}}</span></span></a></td>
+                  <td style="width: 46%"><div class="col g4">
+                    <span class="pbar thin" style="max-width: 180px; background: #F4F4F5"><i style="width: {{p.pl}}%; background: #D4D4D8"></i></span>
+                    <span class="pbar thin" style="max-width: 180px"><i style="width: {{p.ac}}%; background: {{p.col}}"></i></span>
+                    <span class="row g8 t-xs"><span class="tx5">برنامه‌ای {{p.plf}}٪</span><span class="fw6" style="color: {{p.col}}">واقعی {{p.acf}}٪</span></span>
+                  </div></td>
+                  <td><span class="bdg {{p.st}}"><span class="dot"></span>{{p.stl}}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="bar-chart-horizontal" sz="16" hint-size="16px,16px"></dc-import></span>مقایسهٔ پیشرفت پروژه‌ها</h3><span class="t-sm tx5">مرتب‌شده بر اساس انحراف</span></div>
+          <div class="col g12" style="padding: 14px 16px">
+            <sc-for list="{{sorted}}" as="p" hint-placeholder-count="8">
+              <div class="col g4">
+                <div class="row between"><span class="t-12 fw5 tx8">{{p.n}}</span><span class="bdg sm {{p.dt}}">{{p.devf}}٪</span></div>
+                <div class="col g2"><span class="pbar" style="height: 7px"><i style="width: {{p.pl}}%; background: #8AA2C2"></i></span><span class="pbar" style="height: 7px"><i style="width: {{p.ac}}%; background: #1A3354"></i></span></div>
+              </div>
+            </sc-for>
+            <div class="row g16" style="padding-top: 8px; border-top: 1px solid #F4F4F5"><span class="lg"><i style="background: #8AA2C2"></i>برنامه‌ای</span><span class="lg"><i style="background: #1A3354"></i>واقعی</span></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid c3" style="margin-bottom: 18px">
+        <section class="card">
+          <div class="card-h"><h3><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="clipboard-check" sz="16" hint-size="16px,16px"></dc-import></span>در انتظار تأیید من <span class="bdg sm inf pill">۲۳</span></h3></div>
+          <div class="col">
+            <sc-for list="{{approvals}}" as="a" hint-placeholder-count="5">
+              <div class="row g10" style="padding: 10px 14px; border-bottom: 1px solid #F4F4F5">
+                <span class="av m {{a.av}}">{{a.i}}</span>
+                <div class="col grow"><span class="t-12 trunc"><strong class="fw6">{{a.s}}</strong> · {{a.t}}</span><span class="t-xs tx5 row g4"><dc-import name="Icon" i="folder" sz="11" hint-size="11px,11px"></dc-import>{{a.p}} · {{a.w}}</span></div>
+                <span class="t-12 fw7 tx-ok">{{a.pct}}٪</span>
+                <a class="btn btn-o btn-xs" href="W40-QuickApprove.dc.html">بررسی</a>
+              </div>
+            </sc-for>
+          </div>
+          <div class="card-f" style="justify-content: center"><a class="link" href="W20-FieldReports.dc.html">مشاهدهٔ همه (۲۳)<dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></a></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="history" sz="16" hint-size="16px,16px"></dc-import></span>فعالیت‌های اخیر</h3><a class="link" href="#">همه</a></div>
+          <div class="feed">
+            <div class="fi"><span class="fd inf"><dc-import name="Icon" i="clipboard" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>علی محمدی</strong> گزارشی در <span class="q">مجتمع نگین شهر</span> ثبت کرد</p><p class="fm">۳۰ دقیقه پیش</p></div></div>
+            <div class="fi"><span class="fd ok"><dc-import name="Icon" i="play" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">پروژهٔ <span class="q">پل شهید سلیمانی</span> دوباره فعال شد</p><p class="fm">۱ ساعت پیش</p></div></div>
+            <div class="fi"><span class="fd pri"><dc-import name="Icon" i="user-plus" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft"><strong>مهندس حسینی</strong> به پروژهٔ <span class="q">تونل البرز</span> اضافه شد</p><p class="fm">۲ ساعت پیش</p></div></div>
+            <div class="fi"><span class="fd acc"><dc-import name="Icon" i="upload" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">نسخهٔ جدید WBS از MSP در <span class="q">مجتمع نگین شهر</span> همگام شد</p><p class="fm">۴ ساعت پیش</p></div></div>
+            <div class="fi"><span class="fd ok"><dc-import name="Icon" i="check" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">گزارش <strong>حسن کریمی</strong> را مهندس رضایی تأیید کرد</p><p class="fm">دیروز · ۱۶:۴۰</p></div></div>
+            <div class="fi"><span class="fd wrn"><dc-import name="Icon" i="shield-alert" sz="11" hint-size="11px,11px"></dc-import></span><div><p class="ft">ریسک «تأخیر تحویل ورق فولادی» به سطح <strong>بالا</strong> رسید</p><p class="fm">دیروز · ۱۰:۱۲</p></div></div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx-wrn" style="display: inline-flex"><dc-import name="Icon" i="alert-triangle" sz="16" hint-size="16px,16px"></dc-import></span>نیاز به توجه <span class="bdg sm err pill">۵</span></h3></div>
+          <div class="col">
+            <a class="row g10 ai-s" href="W10-ProjectOverview.dc.html" style="padding: 11px 14px; border-bottom: 1px solid #F4F4F5"><span class="icb sm err"><dc-import name="Icon" i="trending-down" sz="13" hint-size="13px,13px"></dc-import></span><span class="col g2"><span class="t-12 tx8 lh">پروژهٔ <strong class="fw6">نیروگاه خورشیدی یزد</strong> ۲۰٪ از برنامه عقب است</span><span class="t-xs tx5">تأخیر بحرانی</span></span></a>
+            <a class="row g10 ai-s" href="W11-Wbs.dc.html" style="padding: 11px 14px; border-bottom: 1px solid #F4F4F5"><span class="icb sm err"><dc-import name="Icon" i="alert-octagon" sz="13" hint-size="13px,13px"></dc-import></span><span class="col g2"><span class="t-12 tx8 lh"><strong class="fw6">۳ فعالیت WBS</strong> در مجتمع نگین شهر در تأخیر بحرانی‌اند</span><span class="t-xs tx5">نیاز به اقدام فوری</span></span></a>
+            <a class="row g10 ai-s" href="W22-ChartsCost.dc.html" style="padding: 11px 14px; border-bottom: 1px solid #F4F4F5"><span class="icb sm acc"><dc-import name="Icon" i="wallet" sz="13" hint-size="13px,13px"></dc-import></span><span class="col g2"><span class="t-12 tx8 lh">بودجهٔ <strong class="fw6">بیمارستان امام رضا</strong> ۸۸٪ مصرف شده و ۱۰٪ کار مانده است</span><span class="t-xs tx5">ریسک فراتر رفتن از بودجه</span></span></a>
+            <a class="row g10 ai-s" href="W20-FieldReports.dc.html" style="padding: 11px 14px; border-bottom: 1px solid #F4F4F5"><span class="icb sm wrn"><dc-import name="Icon" i="clock" sz="13" hint-size="13px,13px"></dc-import></span><span class="col g2"><span class="t-12 tx8 lh"><strong class="fw6">۵ گزارش</strong> بیش از ۴۸ ساعت در انتظار تأیید شماست</span><span class="t-xs tx5">گزارش‌های معوق</span></span></a>
+            <a class="row g10 ai-s" href="W16-Members.dc.html" style="padding: 11px 14px"><span class="icb sm wrn"><dc-import name="Icon" i="user-x" sz="13" hint-size="13px,13px"></dc-import></span><span class="col g2"><span class="t-12 tx8 lh">سرپرست برق <strong class="fw6">پارکینگ فردوسی</strong> ۱۰ روز است گزارشی ثبت نکرده</span><span class="t-xs tx5">عدم فعالیت</span></span></a>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid c3">
+        <section class="card span2">
+          <div class="card-h"><h3><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="line-chart" sz="16" hint-size="16px,16px"></dc-import></span>روند کلی پیشرفت — همهٔ پروژه‌ها</h3>
+            <div class="row g12"><span class="lg" style="color: #8AA2C2"><i class="dash"></i><span class="tx6">برنامه‌ای</span></span><span class="lg"><i style="background: #1A3354; height: 4px"></i>واقعی</span><span class="lg" style="color: #A1A1AA"><i class="dash"></i><span class="tx6">پیش‌بینی</span></span><button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="download" sz="13" hint-size="13px,13px"></dc-import>خروجی</button></div></div>
+          <div class="chart" style="padding: 12px 12px 8px">
+            <svg viewBox="0 0 1000 250" width="100%" role="img" aria-label="منحنی تجمعی پیشرفت؛ امروز ۶۲٪ واقعی در برابر ۶۸٪ برنامه‌ای" style="display: block">
+              <path d="M50 20H980M50 70H980M50 120H980M50 170H980M50 220H980" stroke="#F4F4F5" stroke-width="1"></path>
+              <text class="ax" x="8" y="24">۱۰۰٪</text><text class="ax" x="14" y="74">۷۵٪</text><text class="ax" x="14" y="124">۵۰٪</text><text class="ax" x="14" y="174">۲۵٪</text><text class="ax" x="22" y="224">۰٪</text>
+              <path d="{{c.pArea}}" fill="rgba(138,162,194,0.14)"></path>
+              <path d="{{c.p}}" stroke="#8AA2C2" stroke-width="2" fill="none" stroke-dasharray="5 5" stroke-linecap="round"></path>
+              <path d="{{c.aArea}}" fill="rgba(26,51,84,0.16)"></path>
+              <path d="{{c.f}}" stroke="#A1A1AA" stroke-width="2" fill="none" stroke-dasharray="4 5" stroke-linecap="round"></path>
+              <path d="{{c.a}}" stroke="#1A3354" stroke-width="3" fill="none" stroke-linecap="round"></path>
+              <path d="{{c.dots}}" fill="#1A3354" stroke="#FFFFFF" stroke-width="2"></path>
+              <path d="M{{c.tx}} 26V220" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 4"></path>
+              <rect x="{{c.trx}}" y="2" width="56" height="20" rx="4" fill="#DC2626"></rect>
+              <text x="{{c.tx}}" y="16" text-anchor="middle" font-size="11" fill="#FFFFFF" font-family="Vazirmatn" font-weight="600">امروز</text>
+            </svg>
+            <div class="row between t-xs tx5" style="padding: 0 1% 0 4%; direction: ltr"><sc-for list="{{c.labels}}" as="l" hint-placeholder-count="9"><span style="color: {{l.c}}; font-weight: {{l.w}}">{{l.t}}</span></sc-for></div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h3><span class="tx-err" style="display: inline-flex"><dc-import name="Icon" i="shield-alert" sz="16" hint-size="16px,16px"></dc-import></span>ریسک‌های مهم سازمان</h3><a class="link" href="W18-Risks.dc.html">ثبت ریسک‌ها</a></div>
+          <div class="col">
+            <sc-for list="{{risks}}" as="r" hint-placeholder-count="5">
+              <a class="row g10" href="W19-RiskDetail.dc.html" style="padding: 10px 14px; border-bottom: 1px solid #F4F4F5">
+                <span class="icb sm {{r.tone}}" style="font-size: 12px; font-weight: 700">{{r.sc}}</span>
+                <span class="col grow"><span class="t-12 fw5 tx8 trunc">{{r.t}}</span><span class="t-xs tx5 trunc">{{r.p}} · مالک: {{r.o}}</span></span>
+                <span class="bdg sm {{r.tone}}">{{r.lv}}</span>
+              </a>
+            </sc-for>
+          </div>
+          <div class="card-f"><span class="t-sm tx6">امتیاز = احتمال × اثر (۱ تا ۲۵)</span><a class="link" href="W24-ChartsRisk.dc.html">ماتریس ریسک</a></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]).replace('-', '−');
+    const devCol = d => d <= -15 ? '#DC2626' : d < -5 ? '#D97706' : d > 0 ? '#16A34A' : '#2C4A73';
+    const devTone = d => d <= -15 ? 'err' : d < -5 ? 'wrn' : d > 0 ? 'ok' : 'pri';
+    const raw = [
+      ['نیروگاه خورشیدی یزد', 'ساتبا', '#D97706', 'sun', 35, 15, 'err', 'در خطر'],
+      ['پل شهید سلیمانی', 'وزارت راه و شهرسازی', '#15803D', 'milestone', 50, 42, 'ok', 'فعال'],
+      ['مجتمع مسکونی نگین شهر', 'شهرداری تهران', '#1A3354', 'building-2', 70, 65, 'ok', 'فعال'],
+      ['مجتمع تجاری زیتون', 'گروه سرمایه‌گذاری ایرانیان', '#1D4ED8', 'store', 58, 55, 'ok', 'فعال'],
+      ['بیمارستان امام رضا', 'دانشگاه علوم پزشکی مشهد', '#B45813', 'cross', 90, 88, 'ok', 'فعال'],
+      ['تونل البرز', 'شرکت ساخت و توسعه', '#3F3F46', 'mountain', 25, 30, 'ok', 'فعال'],
+      ['مرکز دادهٔ تهران', 'شرکت مخابرات', '#1A3354', 'building-2', 42, 38, 'ok', 'فعال'],
+      ['دانشکدهٔ فنی کرج', 'دانشگاه تهران', '#1A3354', 'building-2', 60, 58, 'ok', 'فعال']
+    ];
+    const projects = raw.map(r => { const d = r[5] - r[4]; return { n: r[0], c: r[1], tint: r[2], ic: r[3], pl: r[4], ac: r[5], plf: fa(r[4]), acf: fa(r[5]), st: r[6], stl: r[7], col: devCol(d), dev: d, devf: (d > 0 ? '+' : '') + fa(d), dt: devTone(d) }; });
+    const sorted = projects.slice().sort((a, b) => a.dev - b.dev);
+    const approvals = [
+      { s: 'علی محمدی', i: 'ع.م', av: 'a5', t: 'بتن‌ریزی فونداسیون پایهٔ P3', p: 'پل شهید سلیمانی', w: '۳۰ دقیقه پیش', pct: '۶۸' },
+      { s: 'حسن کریمی', i: 'ح.ک', av: 'a6', t: 'آرماتوربندی ستون‌ها', p: 'مجتمع نگین شهر', w: '۱ ساعت پیش', pct: '۸۸' },
+      { s: 'رضا اکبری', i: 'ر.ا', av: 'a1', t: 'کابل‌کشی برق طبقهٔ سوم', p: 'پل شهید سلیمانی', w: '۲ ساعت پیش', pct: '۴۵' },
+      { s: 'مهدی نوری', i: 'م.ن', av: 'a2', t: 'لوله‌کشی آب', p: 'تونل البرز', w: '۳ ساعت پیش', pct: '۳۵' },
+      { s: 'سعید قاسمی', i: 'س.ق', av: 'a7', t: 'قالب‌بندی سقف', p: 'بیمارستان امام رضا', w: '۴ ساعت پیش', pct: '۵۲' }
+    ];
+    const risks = [
+      { sc: '۲۰', tone: 'err', lv: 'بحرانی', t: 'تأخیر تحویل ورق فولادی سقف', p: 'مجتمع نگین شهر', o: 'مهندس رضایی' },
+      { sc: '۱۶', tone: 'err', lv: 'بالا', t: 'تأخیر تأمین پنل‌های خورشیدی وارداتی', p: 'نیروگاه یزد', o: 'مهندس جمالی' },
+      { sc: '۱۲', tone: 'wrn', lv: 'متوسط', t: 'افزایش نرخ آرماتور بیش از ۱۵٪', p: 'مجتمع نگین شهر', o: 'مهندس احمدی' },
+      { sc: '۱۲', tone: 'wrn', lv: 'متوسط', t: 'ریزش موضعی در قطعهٔ ۳ تونل', p: 'تونل البرز', o: 'مهندس هاشمی' },
+      { sc: '۸', tone: 'pri', lv: 'کم', t: 'کمبود نیروی ماهر جوشکار', p: 'پل شهید سلیمانی', o: 'مهندس کریمی' }
+    ];
+    const months = ['آذر ۰۳', 'دی ۰۳', 'بهمن ۰۳', 'اسفند ۰۳', 'فروردین ۰۴', 'اردیبهشت ۰۴', 'خرداد ۰۴', 'تیر ۰۴', 'مرداد ۰۴'];
+    const plan = [30, 38, 46, 54, 61, 68, 76, 85, 94], act = [26, 33, 41, 49, 56, 62], fc = [62, 70, 80, 91];
+    const X = i => 50 + i * (930 / 8), Y = v => 220 - v * 2, T = 5;
+    const sm = pts => { let d = 'M' + pts[0][0] + ',' + pts[0][1]; for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], cx = (x0 + x1) / 2; d += ' C' + cx + ',' + y0 + ' ' + cx + ',' + y1 + ' ' + x1 + ',' + y1; } return d; };
+    const pp = plan.map((v, i) => [X(i), Y(v)]), ap = act.map((v, i) => [X(i), Y(v)]), fp = fc.map((v, i) => [X(T + i), Y(v)]);
+    const dots = ap.map(([x, y]) => 'M' + (x - 4.5) + ' ' + y + 'a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0 -9 0').join('');
+    const c = {
+      p: sm(pp), pArea: sm(pp) + ' L980,220 L50,220 Z', a: sm(ap), aArea: sm(ap) + ' L' + X(T) + ',220 L50,220 Z', f: sm(fp), dots,
+      tx: X(T), trx: X(T) - 28,
+      labels: months.map((m, i) => ({ t: m, c: i === T ? '#DC2626' : '#71717A', w: i === T ? 600 : 400 }))
+    };
+    return { yes: true, projects, sorted, approvals, risks, c };
+  }
+}
+</script>
+</body>
+</html>

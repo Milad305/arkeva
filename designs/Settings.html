@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تنظیمات پروژه — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+    --shadow-xl: 0 20px 40px -10px rgb(24 24 27 / 0.18), 0 8px 16px -8px rgb(24 24 27 / 0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  body { font-family: 'Vazirmatn', system-ui, sans-serif; color: var(--gray-900); background: var(--gray-50); -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01'; font-size: 13.5px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select, textarea { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 8px; border: 2px solid white; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+  .app { display: grid; grid-template-columns: 224px 1fr; height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
+  .topbar { height: 52px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 20px; flex-shrink: 0; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; }
+  .ic-btn { width: 32px; height: 32px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 6px; left: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .proj-mini { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .proj-mini .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .proj-mini .thumb { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+  .proj-mini .thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-mini .thumb svg { position: relative; z-index: 1; }
+  .proj-mini h1 { font-size: 16px; font-weight: 600; margin: 0; color: var(--gray-900); line-height: 1.2; }
+  .proj-mini .meta-line { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .proj-mini .meta-line .mono { color: var(--gray-700); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 32px; padding: 0 13px; border-radius: var(--r-md); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: 6px; }
+  .btn-danger { background: var(--error-500); color: white; }
+  .btn-danger:hover { background: var(--error-700); }
+  .btn-danger-outline { background: white; color: var(--error-700); border-color: rgba(220,38,38,0.4); }
+  .btn-danger-outline:hover { background: var(--error-50); border-color: var(--error-500); }
+
+  .tabs { display: flex; gap: 0; padding: 0 20px; background: white; border-bottom: 1px solid var(--gray-200); flex-shrink: 0; overflow-x: auto; }
+  .tab { position: relative; padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 10.5px; padding: 1px 5px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* ───── Settings 2-col ───── */
+  .settings-layout { flex: 1; display: grid; grid-template-columns: 240px 1fr; overflow: hidden; }
+  .set-nav { background: white; border-left: 1px solid var(--gray-200); overflow-y: auto; padding: 16px 12px; }
+  .set-nav .nav-title { font-size: 10.5px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 10px 8px; }
+  .set-nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-md); color: var(--gray-700); font-size: 13px; font-weight: 500; border: 0; background: transparent; text-align: right; width: 100%; transition: all .12s; }
+  .set-nav-link svg { color: var(--gray-400); flex-shrink: 0; }
+  .set-nav-link:hover { background: var(--gray-50); }
+  .set-nav-link.active { background: var(--primary-100); color: var(--primary-900); font-weight: 600; }
+  .set-nav-link.active svg { color: var(--primary-700); }
+  .set-nav-link.danger.active { background: var(--error-50); color: var(--error-700); }
+  .set-nav-link.danger.active svg { color: var(--error-700); }
+  .set-nav-link.danger svg { color: var(--error-500); }
+
+  .set-content { overflow-y: auto; position: relative; }
+  .set-inner { max-width: 760px; padding: 28px 32px 120px; }
+
+  /* unsaved bar */
+  .unsaved-bar { position: sticky; top: 0; z-index: 20; background: var(--gray-900); color: white; padding: 10px 32px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12.5px; transform: translateY(-100%); transition: transform .2s; }
+  .unsaved-bar.show { transform: translateY(0); }
+  .unsaved-bar .lh { display: flex; align-items: center; gap: 8px; }
+  .unsaved-bar .lh .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent-500); }
+  .unsaved-bar .actions { display: flex; gap: 8px; }
+  .unsaved-bar .btn-ghost { color: rgba(255,255,255,0.8); }
+  .unsaved-bar .btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+
+  .sec-head { margin-bottom: 22px; }
+  .sec-head h2 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .sec-head .desc { font-size: 12.5px; color: var(--gray-500); margin-top: 4px; line-height: 1.6; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* field group */
+  .fg { margin-bottom: 18px; }
+  .fg > label { display: block; font-size: 12.5px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+  .fg .hint { font-size: 11.5px; color: var(--gray-500); margin-top: 6px; line-height: 1.5; }
+  .field { width: 100%; height: 38px; padding: 0 12px; border: 1px solid var(--gray-300); background: white; border-radius: var(--r-md); font-size: 13.5px; color: var(--gray-900); outline: none; transition: border-color .12s, box-shadow .12s; }
+  .field:hover { border-color: var(--gray-400); }
+  .field:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  textarea.field { height: auto; padding: 10px 12px; line-height: 1.7; resize: vertical; }
+  .select { appearance: none; padding-left: 32px; background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat left 12px center; }
+  .input-suffix { position: relative; display: flex; }
+  .input-suffix .suffix { position: absolute; left: 0; top: 0; bottom: 0; display: flex; align-items: center; padding: 0 12px; color: var(--gray-500); font-size: 12.5px; border-right: 1px solid var(--gray-200); background: var(--gray-50); border-radius: 0 var(--r-md) var(--r-md) 0; }
+  .input-suffix input { padding-left: 56px; }
+  .num-input { width: 90px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* card section */
+  .scard { border: 1px solid var(--gray-200); border-radius: var(--r-lg); background: white; margin-bottom: 16px; overflow: hidden; }
+  .scard-head { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); }
+  .scard-head h3 { font-size: 13.5px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .scard-head .sub { font-size: 11.5px; color: var(--gray-500); margin-top: 3px; }
+  .scard-body { padding: 16px; }
+
+  /* radio option */
+  .radio-card { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid var(--gray-200); border-radius: var(--r-md); cursor: pointer; transition: all .12s; margin-bottom: 8px; }
+  .radio-card:hover { border-color: var(--gray-300); }
+  .radio-card.on { border-color: var(--primary-500); background: var(--primary-100); }
+  .radio-card .rd { width: 18px; height: 18px; border: 1.5px solid var(--gray-300); border-radius: 999px; flex-shrink: 0; margin-top: 1px; transition: all .12s; }
+  .radio-card.on .rd { border-color: var(--primary-700); border-width: 5px; }
+  .radio-card .rl { font-size: 13px; font-weight: 500; color: var(--gray-900); }
+  .radio-card .rl small { display: block; font-size: 11px; color: var(--gray-500); font-weight: 400; margin-top: 2px; }
+
+  /* switch row */
+  .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+  .switch-row:last-child { border-bottom: 0; }
+  .switch-row .info .t { font-size: 13px; font-weight: 500; color: var(--gray-900); }
+  .switch-row .info .d { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; line-height: 1.5; }
+  .switch { width: 38px; height: 22px; background: var(--gray-300); border-radius: 999px; position: relative; cursor: pointer; flex-shrink: 0; transition: background .15s; border: 0; }
+  .switch::after { content: ''; position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; background: white; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,.15); transition: transform .15s; }
+  .switch.on { background: var(--primary-700); }
+  .switch.on::after { transform: translateX(-16px); }
+
+  /* checkbox */
+  .cb { width: 18px; height: 18px; border: 1.5px solid var(--gray-300); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; cursor: pointer; transition: all .12s; }
+  .cb.checked { background: var(--primary-700); border-color: var(--primary-700); color: white; }
+  .cb-label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; color: var(--gray-700); }
+
+  /* logo upload */
+  .logo-row { display: flex; align-items: center; gap: 16px; }
+  .logo-box { width: 72px; height: 72px; border-radius: var(--r-lg); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; overflow: hidden; flex-shrink: 0; }
+  .logo-box::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 7px, rgba(255,255,255,0.08) 7px 8px); }
+  .logo-box svg { position: relative; z-index: 1; }
+
+  /* notification table */
+  .notif-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .notif-table th { text-align: center; font-size: 10.5px; font-weight: 600; color: var(--gray-500); padding: 8px; border-bottom: 1px solid var(--gray-200); text-transform: uppercase; }
+  .notif-table th:first-child { text-align: right; }
+  .notif-table td { padding: 11px 8px; border-bottom: 1px solid var(--gray-100); text-align: center; }
+  .notif-table td:first-child { text-align: right; }
+  .notif-table tr:last-child td { border-bottom: 0; }
+  .notif-name { font-weight: 500; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
+  .notif-name .ic { width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* weekday chips */
+  .weekdays { display: flex; gap: 6px; flex-wrap: wrap; }
+  .wday { width: 56px; height: 38px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; color: var(--gray-600); cursor: pointer; transition: all .12s; background: white; }
+  .wday.on { background: var(--primary-700); color: white; border-color: var(--primary-700); font-weight: 600; }
+  .wday.off { background: var(--gray-50); }
+
+  /* holiday list */
+  .holiday-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border: 1px solid var(--gray-100); border-radius: var(--r-md); margin-bottom: 6px; background: var(--gray-50); }
+  .holiday-item .info { display: flex; align-items: center; gap: 10px; }
+  .holiday-item .mono { font-size: 12px; color: var(--gray-700); }
+  .holiday-item .name { font-size: 12.5px; color: var(--gray-800); }
+
+  /* integration card */
+  .integ-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--gray-200); border-radius: var(--r-lg); margin-bottom: 12px; }
+  .integ-card .logo { width: 44px; height: 44px; border-radius: var(--r-md); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .integ-card .info { flex: 1; min-width: 0; }
+  .integ-card .info .t { font-size: 13.5px; font-weight: 600; }
+  .integ-card .info .d { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; }
+  .status-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 999px; }
+
+  /* backup list */
+  .backup-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--gray-100); }
+  .backup-item:last-child { border-bottom: 0; }
+  .backup-item .ic { width: 32px; height: 32px; border-radius: 7px; background: var(--gray-100); color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .backup-item .info { flex: 1; }
+  .backup-item .info .t { font-size: 12.5px; font-weight: 500; }
+  .backup-item .info .d { font-size: 11px; color: var(--gray-500); }
+  .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .export-opt { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--gray-200); border-radius: var(--r-md); cursor: pointer; transition: all .12s; }
+  .export-opt:hover { border-color: var(--primary-300); background: var(--primary-100); }
+  .export-opt .ic { width: 32px; height: 38px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; color: white; font-size: 8px; font-weight: 700; }
+  .export-opt .info .t { font-size: 12.5px; font-weight: 600; }
+  .export-opt .info .d { font-size: 10.5px; color: var(--gray-500); }
+
+  /* danger zone */
+  .danger-zone { border: 1px solid rgba(220,38,38,0.3); border-radius: var(--r-lg); background: linear-gradient(180deg, #FFFBFB, white); overflow: hidden; }
+  .danger-zone .dz-head { padding: 14px 16px; background: var(--error-50); border-bottom: 1px solid rgba(220,38,38,0.2); display: flex; align-items: center; gap: 8px; }
+  .danger-zone .dz-head h3 { font-size: 13.5px; font-weight: 700; color: var(--error-700); margin: 0; }
+  .dz-item { padding: 16px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dz-item:last-child { border-bottom: 0; }
+  .dz-item .info { flex: 1; }
+  .dz-item .info .t { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+  .dz-item .info .d { font-size: 11.5px; color: var(--gray-600); margin-top: 3px; line-height: 1.6; max-width: 440px; }
+
+  /* sticky save */
+  .save-bar { position: sticky; bottom: 0; background: white; border-top: 1px solid var(--gray-200); padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .save-bar .status { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 6px; }
+
+  /* modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(24, 24, 27, 0.5); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal { background: white; border-radius: var(--r-xl); box-shadow: var(--shadow-xl); width: 100%; max-width: 460px; overflow: hidden; transform: translateY(8px); transition: transform .15s; }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-head { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+  .modal-head .ic { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--error-50); color: var(--error-700); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-head h3 { font-size: 15px; font-weight: 600; margin: 0; }
+  .modal-body { padding: 0 20px 18px; }
+  .modal-body p { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin: 0 0 14px; }
+  .modal-foot { padding: 14px 20px; border-top: 1px solid var(--gray-100); display: flex; justify-content: space-between; gap: 8px; background: var(--gray-50); }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; padding: 12px 18px; border-radius: var(--r-md); box-shadow: var(--shadow-xl); display: flex; align-items: center; gap: 10px; font-size: 13px; z-index: 200; opacity: 0; pointer-events: none; transition: all .25s; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ic { width: 24px; height: 24px; border-radius: 999px; background: var(--success-500); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 5px 9px; font-size: 11px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 50; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="Dashboard.html"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Project.html">مجتمع مسکونی نگین شهر</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">تنظیمات</span>
+      </nav>
+      <button class="ic-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+      <button class="ic-btn"><i data-lucide="bell" style="width:15px;height:15px"></i><span class="ping"></span></button>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 2px"></div>
+      <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12px;color:var(--gray-800)"><div class="avatar">م.ا</div><i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i></button>
+    </header>
+
+    <section class="proj-mini">
+      <div class="left">
+        <div class="thumb"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>
+        <div>
+          <h1>مجتمع مسکونی نگین شهر</h1>
+          <div class="meta-line">
+            <span>کد: <span class="mono">PRJ-1404-021</span></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>مدیر: <strong>مهندس رضایی</strong></span>
+          </div>
+        </div>
+      </div>
+      <span class="badge" style="background:var(--success-50);color:var(--success-700)"><span class="dot" style="background:var(--success-500)"></span>فعال</span>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab" onclick="location.href='Project.html'"><i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>نمای کلی</button>
+      <button class="tab" onclick="location.href='WBS.html'"><i data-lucide="git-branch" style="width:13px;height:13px"></i>WBS</button>
+      <button class="tab" onclick="location.href='CBS.html'"><i data-lucide="banknote" style="width:13px;height:13px"></i>CBS</button>
+      <button class="tab" onclick="location.href='Links.html'"><i data-lucide="link" style="width:13px;height:13px"></i>اتصالات</button>
+      <button class="tab has-warn"><i data-lucide="clipboard-check" style="width:13px;height:13px"></i>گزارش‌ها<span class="num">۸</span></button>
+      <button class="tab" onclick="location.href='Members.html'"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا<span class="num">۱۸</span></button>
+      <button class="tab" onclick="location.href='Charts.html'"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i>نمودارها</button>
+      <button class="tab active"><i data-lucide="settings" style="width:13px;height:13px"></i>تنظیمات</button>
+    </nav>
+
+    <div class="settings-layout">
+      <!-- Settings nav -->
+      <nav class="set-nav" id="set-nav">
+        <div class="nav-title">تنظیمات پروژه</div>
+        <button class="set-nav-link active" data-sec="general"><i data-lucide="info" style="width:16px;height:16px"></i>اطلاعات عمومی</button>
+        <button class="set-nav-link" data-sec="progress"><i data-lucide="calculator" style="width:16px;height:16px"></i>پیشرفت و محاسبات</button>
+        <button class="set-nav-link" data-sec="workflow"><i data-lucide="git-pull-request" style="width:16px;height:16px"></i>گردش‌کار تأیید</button>
+        <button class="set-nav-link" data-sec="notifications"><i data-lucide="bell" style="width:16px;height:16px"></i>اعلان‌ها</button>
+        <button class="set-nav-link" data-sec="calendar"><i data-lucide="calendar-days" style="width:16px;height:16px"></i>تقویم و روزهای کاری</button>
+        <button class="set-nav-link" data-sec="integration"><i data-lucide="plug" style="width:16px;height:16px"></i>یکپارچه‌سازی</button>
+        <button class="set-nav-link" data-sec="backup"><i data-lucide="database-backup" style="width:16px;height:16px"></i>بکاپ و خروجی</button>
+        <div style="height:1px;background:var(--gray-100);margin:10px 6px"></div>
+        <button class="set-nav-link danger" data-sec="danger"><i data-lucide="alert-octagon" style="width:16px;height:16px"></i>منطقهٔ خطر</button>
+      </nav>
+
+      <!-- Settings content -->
+      <div class="set-content">
+        <!-- unsaved bar -->
+        <div class="unsaved-bar" id="unsaved-bar">
+          <div class="lh"><span class="dot"></span>شما تغییرات ذخیره‌نشده دارید.</div>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" onclick="discardChanges()">صرف‌نظر</button>
+            <button class="btn btn-primary btn-sm" onclick="saveChanges()"><i data-lucide="check" style="width:13px;height:13px"></i>ذخیره</button>
+          </div>
+        </div>
+
+        <div class="set-inner">
+
+          <!-- ═══ SECTION 1: General ═══ -->
+          <div class="panel active" id="sec-general">
+            <div class="sec-head"><h2>اطلاعات عمومی</h2><div class="desc">اطلاعات پایهٔ پروژه که در گزارش‌ها و داشبوردها نمایش داده می‌شود.</div></div>
+
+            <div class="fg">
+              <label>لوگو / تصویر پروژه</label>
+              <div class="logo-row">
+                <div class="logo-box"><i data-lucide="building-2" style="width:32px;height:32px"></i></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;gap:8px">
+                    <button class="btn btn-outline btn-sm"><i data-lucide="upload" style="width:13px;height:13px"></i>تغییر تصویر</button>
+                    <button class="btn btn-ghost btn-sm" style="color:var(--error-700)">حذف</button>
+                  </div>
+                  <span class="hint">PNG یا JPG — حداکثر ۲ مگابایت، مربعی توصیه می‌شود.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="fg"><label>نام پروژه</label><input class="field js-change" value="مجتمع مسکونی نگین شهر" /></div>
+              <div class="fg"><label>کد پروژه</label><input class="field mono js-change" value="PRJ-1404-021" dir="ltr" style="text-align:right" /></div>
+            </div>
+            <div class="grid-2">
+              <div class="fg"><label>کارفرما</label><input class="field js-change" value="شهرداری تهران" /></div>
+              <div class="fg"><label>نوع پروژه</label>
+                <select class="field select js-change"><option>ساختمان مسکونی</option><option>ساختمان صنعتی</option><option>راه</option><option>تونل</option><option>پل</option></select>
+              </div>
+            </div>
+            <div class="fg"><label>توضیحات</label><textarea class="field js-change" rows="3">احداث مجتمع مسکونی ۸ بلوکه شامل ۲۴۰ واحد، در منطقهٔ ۲۲ تهران. شامل سازهٔ بتنی، تأسیسات مکانیکی و برقی کامل و محوطه‌سازی.</textarea></div>
+            <div class="grid-2">
+              <div class="fg"><label>تاریخ شروع برنامه‌ای</label>
+                <div style="position:relative"><i data-lucide="calendar" style="width:14px;height:14px;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray-500);pointer-events:none"></i><input class="field mono js-change" value="۱۴۰۳/۰۵/۰۱" style="padding-right:36px" /></div>
+              </div>
+              <div class="fg"><label>تاریخ پایان برنامه‌ای</label>
+                <div style="position:relative"><i data-lucide="calendar" style="width:14px;height:14px;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray-500);pointer-events:none"></i><input class="field mono js-change" value="۱۴۰۴/۰۸/۱۵" style="padding-right:36px" /></div>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="fg"><label>بودجهٔ کل</label>
+                <div class="input-suffix"><span class="suffix">میلیارد ﷼</span><input class="field js-change" value="۸۵۰" /></div>
+              </div>
+              <div class="fg"><label>واحد پول</label>
+                <select class="field select js-change"><option>ریال</option><option>تومان</option><option>دلار</option><option>یورو</option></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 2: Progress ═══ -->
+          <div class="panel" id="sec-progress">
+            <div class="sec-head"><h2>پیشرفت و محاسبات</h2><div class="desc">روش محاسبهٔ پیشرفت و قواعد ثبت گزارش‌های فیلد.</div></div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="calculator" style="width:15px;height:15px;color:var(--primary-500)"></i>روش محاسبهٔ پیشرفت</h3><div class="sub">نحوهٔ ترکیب وزن آیتم‌ها برای محاسبهٔ درصد کل پروژه</div></div>
+              <div class="scard-body">
+                <div class="radio-group" data-radio="calc-method">
+                  <label class="radio-card"><span class="rd"></span><span class="rl">وزن‌دار بر اساس مدت زمان<small>پیشرفت بر اساس درصد زمان سپری‌شده هر فعالیت</small></span></label>
+                  <label class="radio-card on"><span class="rd"></span><span class="rl">وزن‌دار بر اساس هزینه<small>پیشرفت بر اساس بودجهٔ تخصیص‌یافته (CBS) — پیش‌فرض</small></span></label>
+                  <label class="radio-card"><span class="rd"></span><span class="rl">هر دو (نمایش هم‌زمان)<small>هر دو شاخص محاسبه و کنار هم نمایش داده می‌شود</small></span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="alert-triangle" style="width:15px;height:15px;color:var(--warning-500)"></i>آستانه‌های هشدار انحراف</h3><div class="sub">میزان عقب‌ماندگی از برنامه که هشدار رنگی فعال می‌کند</div></div>
+              <div class="scard-body">
+                <div class="grid-2">
+                  <div class="fg" style="margin:0"><label>آستانهٔ زرد (هشدار)</label>
+                    <div class="input-suffix"><span class="suffix">٪</span><input class="field js-change num-input" value="۵" style="width:100%" /></div>
+                    <span class="hint">انحراف بیش از این مقدار، وضعیت زرد می‌شود.</span>
+                  </div>
+                  <div class="fg" style="margin:0"><label>آستانهٔ قرمز (بحرانی)</label>
+                    <div class="input-suffix"><span class="suffix">٪</span><input class="field js-change num-input" value="۱۵" style="width:100%" /></div>
+                    <span class="hint">انحراف بیش از این مقدار، وضعیت قرمز می‌شود.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="clipboard-list" style="width:15px;height:15px;color:var(--primary-500)"></i>قواعد گزارش فیلد</h3></div>
+              <div class="scard-body">
+                <div class="switch-row">
+                  <div class="info"><div class="t">اجازهٔ ثبت درصد کاهشی</div><div class="d">اگر فعال باشد، سرپرست می‌تواند درصدی کمتر از گزارش قبلی ثبت کند (مثلاً پس از بازرسی و اصلاح).</div></div>
+                  <button class="switch js-change" onclick="this.classList.toggle('on')"></button>
+                </div>
+                <div class="switch-row" style="align-items:flex-start">
+                  <div class="info"><div class="t">حداقل تعداد عکس برای هر گزارش</div><div class="d">تعداد عکس الزامی هنگام ثبت گزارش پیشرفت.</div></div>
+                  <input class="field js-change num-input" value="۱" style="height:34px" />
+                </div>
+                <div class="switch-row" style="align-items:flex-start;border-bottom:0">
+                  <div class="info"><div class="t">حداکثر فاصلهٔ GPS از مختصات پروژه</div><div class="d">اگر ثبت شود، گزارش‌های خارج از این شعاع علامت‌گذاری می‌شوند. خالی = بدون محدودیت.</div></div>
+                  <div class="input-suffix" style="width:130px"><span class="suffix">متر</span><input class="field js-change" value="۵۰۰" style="width:100%" /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 3: Workflow ═══ -->
+          <div class="panel" id="sec-workflow">
+            <div class="sec-head"><h2>گردش‌کار تأیید</h2><div class="desc">مسیر تأیید گزارش‌های ثبت‌شده از کارگاه.</div></div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="git-pull-request" style="width:15px;height:15px;color:var(--primary-500)"></i>سطوح تأیید</h3></div>
+              <div class="scard-body">
+                <div class="radio-group" data-radio="approval-levels">
+                  <label class="radio-card"><span class="rd"></span><span class="rl">یک‌مرحله‌ای<small>فقط ناظر گزارش را تأیید می‌کند</small></span></label>
+                  <label class="radio-card on"><span class="rd"></span><span class="rl">دومرحله‌ای<small>ابتدا ناظر، سپس مدیر پروژه تأیید نهایی می‌کند — پیش‌فرض</small></span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="zap" style="width:15px;height:15px;color:var(--accent-500)"></i>تأیید خودکار</h3><div class="sub">قواعدی که نیاز به بررسی دستی را کاهش می‌دهند</div></div>
+              <div class="scard-body">
+                <div class="switch-row" style="align-items:flex-start">
+                  <div class="info"><div class="t">تأیید خودکار گزارش‌های کم‌اهمیت</div><div class="d">گزارش‌هایی با پیشرفت دوره‌ای کمتر از مقدار زیر، خودکار تأیید می‌شوند.</div></div>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div class="input-suffix" style="width:90px"><span class="suffix">٪</span><input class="field js-change" value="۵" style="width:100%;height:34px" /></div>
+                    <button class="switch on js-change" onclick="this.classList.toggle('on')"></button>
+                  </div>
+                </div>
+                <div class="switch-row" style="align-items:flex-start;border-bottom:0">
+                  <div class="info"><div class="t">تأیید خودکار پس از مهلت</div><div class="d">اگر گزارش تا مدت زیر بررسی نشود، به‌صورت خودکار تأیید می‌شود.</div></div>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div class="input-suffix" style="width:110px"><span class="suffix">ساعت</span><input class="field js-change" value="۷۲" style="width:100%;height:34px" /></div>
+                    <button class="switch js-change" onclick="this.classList.toggle('on')"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 4: Notifications ═══ -->
+          <div class="panel" id="sec-notifications">
+            <div class="sec-head"><h2>اعلان‌ها</h2><div class="desc">برای هر رویداد، روش‌های اطلاع‌رسانی را انتخاب کنید.</div></div>
+            <div class="scard">
+              <div class="scard-body" style="padding:8px 16px">
+                <table class="notif-table">
+                  <thead>
+                    <tr><th>رویداد</th><th>درون‌برنامه‌ای</th><th>ایمیل</th><th>پیامک</th></tr>
+                  </thead>
+                  <tbody id="notif-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 5: Calendar ═══ -->
+          <div class="panel" id="sec-calendar">
+            <div class="sec-head"><h2>تقویم و روزهای کاری</h2><div class="desc">روزهای کاری و تعطیلات برای محاسبهٔ دقیق زمان‌بندی.</div></div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="calendar-check" style="width:15px;height:15px;color:var(--primary-500)"></i>روزهای کاری هفته</h3></div>
+              <div class="scard-body">
+                <div class="weekdays" id="weekdays"></div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="clock" style="width:15px;height:15px;color:var(--primary-500)"></i>ساعت کاری روزانه</h3></div>
+              <div class="scard-body">
+                <div class="grid-2">
+                  <div class="fg" style="margin:0"><label>شروع</label><input class="field js-change mono" value="۰۷:۳۰" dir="ltr" style="text-align:right" /></div>
+                  <div class="fg" style="margin:0"><label>پایان</label><input class="field js-change mono" value="۱۶:۳۰" dir="ltr" style="text-align:right" /></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head" style="display:flex;align-items:center;justify-content:space-between">
+                <div><h3><i data-lucide="palmtree" style="width:15px;height:15px;color:var(--accent-500)"></i>تعطیلات رسمی</h3><div class="sub">۴ تعطیلی ثبت شده در بازهٔ پروژه</div></div>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-outline btn-sm"><i data-lucide="download-cloud" style="width:13px;height:13px"></i>افزودن تعطیلات ۱۴۰۴</button>
+                  <button class="btn btn-ghost btn-sm"><i data-lucide="plus" style="width:13px;height:13px"></i>دستی</button>
+                </div>
+              </div>
+              <div class="scard-body">
+                <div id="holidays"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 6: Integration ═══ -->
+          <div class="panel" id="sec-integration">
+            <div class="sec-head"><h2>یکپارچه‌سازی</h2><div class="desc">اتصال به نرم‌افزارهای دیگر برای سینک داده.</div></div>
+
+            <div class="integ-card">
+              <div class="logo" style="background:var(--primary-100);color:var(--primary-700)"><i data-lucide="file-code" style="width:22px;height:22px"></i></div>
+              <div class="info">
+                <div class="t">Microsoft Project</div>
+                <div class="d">سینک WBS و زمان‌بندی · آخرین سینک: <span class="mono">۱۴۰۴/۰۲/۲۸ — ۰۹:۱۲</span></div>
+              </div>
+              <span class="status-chip" style="background:var(--success-50);color:var(--success-700)"><span style="width:6px;height:6px;border-radius:999px;background:var(--success-500)"></span>متصل</span>
+              <button class="btn btn-outline btn-sm">تنظیمات</button>
+            </div>
+
+            <div class="integ-card">
+              <div class="logo" style="background:var(--accent-100);color:var(--accent-700)"><i data-lucide="briefcase" style="width:22px;height:22px"></i></div>
+              <div class="info">
+                <div class="t">ERP داخلی شرکت</div>
+                <div class="d">سینک اطلاعات مالی و انبار (نسخهٔ سازمانی)</div>
+              </div>
+              <span class="status-chip" style="background:var(--gray-100);color:var(--gray-600)"><span style="width:6px;height:6px;border-radius:999px;background:var(--gray-400)"></span>آماده اتصال</span>
+              <button class="btn btn-primary btn-sm">اتصال</button>
+            </div>
+
+            <div class="integ-card">
+              <div class="logo" style="background:var(--info-50);color:var(--info-700)"><i data-lucide="calculator" style="width:22px;height:22px"></i></div>
+              <div class="info">
+                <div class="t">سیستم حسابداری</div>
+                <div class="d">سینک صورت‌وضعیت و پرداخت‌ها</div>
+              </div>
+              <span class="status-chip" style="background:var(--error-50);color:var(--error-700)"><span style="width:6px;height:6px;border-radius:999px;background:var(--error-500)"></span>خطای اتصال</span>
+              <button class="btn btn-outline btn-sm">رفع خطا</button>
+            </div>
+
+            <div class="scard" style="margin-top:16px">
+              <div class="scard-head"><h3><i data-lucide="key" style="width:15px;height:15px;color:var(--gray-500)"></i>تنظیمات اتصال ERP</h3></div>
+              <div class="scard-body">
+                <div class="fg"><label>آدرس سرور (URL)</label><input class="field js-change" value="https://erp.abadgaran.ir/api/v2" dir="ltr" style="text-align:left" /></div>
+                <div class="fg" style="margin:0"><label>کلید API</label>
+                  <div style="position:relative"><input class="field js-change mono" type="password" value="sk_live_4f8a9b2c1d3e" dir="ltr" style="text-align:left;padding-left:40px" /><button class="ic-btn" style="position:absolute;left:4px;top:3px"><i data-lucide="eye" style="width:15px;height:15px"></i></button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 7: Backup ═══ -->
+          <div class="panel" id="sec-backup">
+            <div class="sec-head"><h2>بکاپ و خروجی</h2><div class="desc">پشتیبان‌گیری خودکار و خروجی داده‌ها به فرمت‌های مختلف.</div></div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="database-backup" style="width:15px;height:15px;color:var(--primary-500)"></i>بکاپ خودکار</h3></div>
+              <div class="scard-body">
+                <div class="radio-group" data-radio="backup-freq" style="display:flex;gap:8px">
+                  <label class="radio-card on" style="flex:1;margin:0"><span class="rd"></span><span class="rl">روزانه</span></label>
+                  <label class="radio-card" style="flex:1;margin:0"><span class="rd"></span><span class="rl">هفتگی</span></label>
+                  <label class="radio-card" style="flex:1;margin:0"><span class="rd"></span><span class="rl">غیرفعال</span></label>
+                </div>
+                <button class="btn btn-outline" style="margin-top:14px;width:100%"><i data-lucide="download" style="width:14px;height:14px"></i>دریافت بکاپ کامل پروژه (ZIP — WBS، CBS، گزارش‌ها، عکس‌ها)</button>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="history" style="width:15px;height:15px;color:var(--gray-500)"></i>بکاپ‌های قبلی</h3></div>
+              <div class="scard-body" style="padding:0">
+                <div id="backups"></div>
+              </div>
+            </div>
+
+            <div class="scard">
+              <div class="scard-head"><h3><i data-lucide="file-output" style="width:15px;height:15px;color:var(--primary-500)"></i>خروجی به فرمت‌های دیگر</h3></div>
+              <div class="scard-body">
+                <div class="export-grid">
+                  <div class="export-opt"><span class="ic" style="background:#1A3354">XML</span><div class="info"><div class="t">Microsoft Project</div><div class="d">فایل XML سازگار با MSP</div></div></div>
+                  <div class="export-opt"><span class="ic" style="background:#B45813">XER</span><div class="info"><div class="t">Primavera P6</div><div class="d">فایل XER</div></div></div>
+                  <div class="export-opt"><span class="ic" style="background:#15803D">XLS</span><div class="info"><div class="t">Excel جامع</div><div class="d">همهٔ داده‌ها در یک فایل</div></div></div>
+                  <div class="export-opt"><span class="ic" style="background:#DC2626">PDF</span><div class="info"><div class="t">گزارش مدیریتی</div><div class="d">گزارش PDF آماده‌چاپ</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ SECTION 8: Danger ═══ -->
+          <div class="panel" id="sec-danger">
+            <div class="sec-head"><h2>منطقهٔ خطر</h2><div class="desc">اقدامات حساس و غیرقابل‌بازگشت. با احتیاط استفاده کنید.</div></div>
+            <div class="danger-zone">
+              <div class="dz-head"><i data-lucide="alert-octagon" style="width:16px;height:16px;color:var(--error-700)"></i><h3>اقدامات پرخطر</h3></div>
+              <div class="dz-item">
+                <div class="info"><div class="t">آرشیو کردن پروژه</div><div class="d">پروژه به آرشیو منتقل می‌شود. داده‌ها حفظ می‌شوند ولی کسی نمی‌تواند تغییری ایجاد کند. می‌توان بعداً بازیابی کرد.</div></div>
+                <button class="btn btn-outline"><i data-lucide="archive" style="width:14px;height:14px"></i>آرشیو</button>
+              </div>
+              <div class="dz-item">
+                <div class="info"><div class="t">تغییر مدیر پروژه</div><div class="d">مالکیت کامل پروژه به عضو دیگری منتقل می‌شود. شما دسترسی مدیریتی خود را از دست می‌دهید.</div></div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select class="field select" style="width:160px;height:34px;font-size:12px"><option>مهندس رضایی</option><option>مهندس حسینی</option><option>مهندس احمدی</option></select>
+                  <button class="btn btn-outline">انتقال مالکیت</button>
+                </div>
+              </div>
+              <div class="dz-item">
+                <div class="info"><div class="t" style="color:var(--error-700)">حذف کل پروژه</div><div class="d">تمام داده‌های پروژه شامل WBS، CBS، گزارش‌ها و عکس‌ها برای همیشه حذف می‌شوند. <strong>این عمل قابل بازگشت نیست.</strong></div></div>
+                <button class="btn btn-danger" onclick="openDeleteModal()"><i data-lucide="trash-2" style="width:14px;height:14px"></i>حذف پروژه</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sticky save bar -->
+        <div class="save-bar">
+          <div class="status" id="save-status"><i data-lucide="check-circle-2" style="width:14px;height:14px;color:var(--success-500)"></i>همهٔ تغییرات ذخیره شده است</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="discardChanges()" id="discard-btn" disabled>صرف‌نظر</button>
+            <button class="btn btn-primary" onclick="saveChanges()" id="save-btn" disabled><i data-lucide="check" style="width:14px;height:14px"></i>ذخیرهٔ تغییرات</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="ic"><i data-lucide="trash-2" style="width:18px;height:18px"></i></div>
+      <h3>حذف پروژه</h3>
+    </div>
+    <div class="modal-body">
+      <p>آیا کاملاً مطمئن هستید؟ این عمل <strong>غیرقابل بازگشت</strong> است و تمام داده‌های «مجتمع مسکونی نگین شهر» را برای همیشه حذف می‌کند.</p>
+      <label style="font-size:12px;font-weight:600;color:var(--gray-800);display:block;margin-bottom:6px">برای تأیید، نام پروژه را تایپ کنید:</label>
+      <input class="field" id="del-confirm" placeholder="مجتمع مسکونی نگین شهر" oninput="checkDelName(this.value)" />
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeDeleteModal()">انصراف</button>
+      <button class="btn btn-danger" id="confirm-del-btn" disabled><i data-lucide="trash-2" style="width:14px;height:14px"></i>حذف نهایی پروژه</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="ic"><i data-lucide="check" style="width:14px;height:14px"></i></span><span id="toast-text">ذخیره شد</span></div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  // section nav
+  document.querySelectorAll('#set-nav .set-nav-link').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#set-nav .set-nav-link').forEach(x => x.classList.toggle('active', x === b));
+      document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'sec-' + b.dataset.sec));
+      document.querySelector('.set-content').scrollTop = 0;
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+
+  // radio groups
+  document.querySelectorAll('[data-radio]').forEach(g => {
+    g.querySelectorAll('.radio-card').forEach(c => {
+      c.addEventListener('click', () => {
+        g.querySelectorAll('.radio-card').forEach(x => x.classList.toggle('on', x === c));
+        markDirty();
+      });
+    });
+  });
+
+  // dirty tracking
+  let dirty = false;
+  function markDirty() {
+    if (dirty) return;
+    dirty = true;
+    document.getElementById('unsaved-bar').classList.add('show');
+    document.getElementById('save-btn').disabled = false;
+    document.getElementById('discard-btn').disabled = false;
+    document.getElementById('save-status').innerHTML = '<i data-lucide="circle-dot" style="width:14px;height:14px;color:var(--accent-500)"></i>تغییرات ذخیره‌نشده';
+    if (window.lucide) lucide.createIcons();
+  }
+  function clearDirty() {
+    dirty = false;
+    document.getElementById('unsaved-bar').classList.remove('show');
+    document.getElementById('save-btn').disabled = true;
+    document.getElementById('discard-btn').disabled = true;
+    document.getElementById('save-status').innerHTML = '<i data-lucide="check-circle-2" style="width:14px;height:14px;color:var(--success-500)"></i>همهٔ تغییرات ذخیره شده است';
+    if (window.lucide) lucide.createIcons();
+  }
+  document.querySelectorAll('.js-change').forEach(el => {
+    el.addEventListener('input', markDirty);
+    if (el.classList.contains('switch')) el.addEventListener('click', markDirty);
+  });
+  document.querySelectorAll('.switch.js-change').forEach(el => el.addEventListener('click', markDirty));
+
+  window.saveChanges = () => { clearDirty(); showToast('تغییرات با موفقیت ذخیره شد'); };
+  window.discardChanges = () => { clearDirty(); showToast('تغییرات لغو شد'); };
+
+  function showToast(text) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = text;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // notifications
+  const notifs = [
+    { name: 'گزارش جدید ثبت شد', ic: 'clipboard-plus', bg: 'var(--info-50)', fg: 'var(--info-700)', app: true, email: true, sms: false },
+    { name: 'گزارش رد شد', ic: 'x-circle', bg: 'var(--error-50)', fg: 'var(--error-700)', app: true, email: false, sms: true },
+    { name: 'گزارش تأیید شد', ic: 'check-circle-2', bg: 'var(--success-50)', fg: 'var(--success-700)', app: true, email: false, sms: false },
+    { name: 'پروژه در ریسک قرار گرفت', ic: 'alert-triangle', bg: 'var(--warning-50)', fg: 'var(--warning-700)', app: true, email: true, sms: false },
+    { name: 'بودجه فراتر از ۹۰٪ رفت', ic: 'wallet', bg: 'var(--accent-100)', fg: 'var(--accent-700)', app: true, email: true, sms: true },
+    { name: 'عضو جدید اضافه شد', ic: 'user-plus', bg: 'var(--primary-100)', fg: 'var(--primary-700)', app: true, email: false, sms: false },
+    { name: 'مهلت فعالیت نزدیک است', ic: 'clock', bg: 'var(--gray-100)', fg: 'var(--gray-700)', app: true, email: true, sms: false },
+  ];
+  document.getElementById('notif-body').innerHTML = notifs.map((nt, i) => `
+    <tr>
+      <td><div class="notif-name"><span class="ic" style="background:${nt.bg};color:${nt.fg}"><i data-lucide="${nt.ic}" style="width:14px;height:14px"></i></span>${nt.name}</div></td>
+      <td><span class="cb ${nt.app ? 'checked' : ''}" data-cb="${i}-app">${nt.app ? check() : ''}</span></td>
+      <td><span class="cb ${nt.email ? 'checked' : ''}" data-cb="${i}-email">${nt.email ? check() : ''}</span></td>
+      <td><span class="cb ${nt.sms ? 'checked' : ''}" data-cb="${i}-sms">${nt.sms ? check() : ''}</span></td>
+    </tr>`).join('');
+  function check() { return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>'; }
+  document.querySelectorAll('[data-cb]').forEach(cb => {
+    cb.addEventListener('click', () => {
+      cb.classList.toggle('checked');
+      cb.innerHTML = cb.classList.contains('checked') ? check() : '';
+      markDirty();
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+
+  // weekdays
+  const days = [['شنبه',1],['یک‌شنبه',1],['دوشنبه',1],['سه‌شنبه',1],['چهارشنبه',1],['پنج‌شنبه',0],['جمعه',0]];
+  document.getElementById('weekdays').innerHTML = days.map(([d, on]) =>
+    `<button class="wday ${on ? 'on' : 'off'}" onclick="this.classList.toggle('on');this.classList.toggle('off');window._md&&window._md()">${d}</button>`
+  ).join('');
+  window._md = markDirty;
+
+  // holidays
+  const holidays = [
+    { date: '۱۴۰۴/۰۱/۰۱', name: 'عید نوروز' },
+    { date: '۱۴۰۴/۰۱/۱۳', name: 'روز طبیعت' },
+    { date: '۱۴۰۴/۰۳/۱۴', name: 'رحلت امام خمینی' },
+    { date: '۱۴۰۴/۰۳/۱۵', name: 'قیام ۱۵ خرداد' },
+  ];
+  document.getElementById('holidays').innerHTML = holidays.map(h => `
+    <div class="holiday-item">
+      <div class="info"><i data-lucide="calendar-x" style="width:14px;height:14px;color:var(--accent-500)"></i><span class="mono">${h.date}</span><span class="name">${h.name}</span></div>
+      <button class="ic-btn" data-tip="حذف" style="width:26px;height:26px"><i data-lucide="x" style="width:13px;height:13px"></i></button>
+    </div>`).join('');
+
+  // backups
+  const backups = [
+    { date: '۱۴۰۴/۰۳/۰۱ — ۰۲:۰۰', size: '۴۸٫۲ مگابایت', auto: true },
+    { date: '۱۴۰۴/۰۲/۲۹ — ۰۲:۰۰', size: '۴۷٫۸ مگابایت', auto: true },
+    { date: '۱۴۰۴/۰۲/۲۸ — ۰۲:۰۰', size: '۴۷٫۱ مگابایت', auto: true },
+    { date: '۱۴۰۴/۰۲/۲۵ — ۱۴:۳۰', size: '۴۶٫۹ مگابایت', auto: false },
+  ];
+  document.getElementById('backups').innerHTML = backups.map(b => `
+    <div class="backup-item">
+      <span class="ic"><i data-lucide="archive" style="width:15px;height:15px"></i></span>
+      <div class="info"><div class="t mono">${b.date}</div><div class="d">${b.size} · ${b.auto ? 'خودکار' : 'دستی'}</div></div>
+      <button class="btn btn-ghost btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>دانلود</button>
+    </div>`).join('');
+
+  // delete modal
+  window.openDeleteModal = () => { document.getElementById('delete-modal').classList.add('open'); document.getElementById('del-confirm').value=''; checkDelName(''); };
+  window.closeDeleteModal = () => document.getElementById('delete-modal').classList.remove('open');
+  window.checkDelName = (v) => { document.getElementById('confirm-del-btn').disabled = v.trim() !== 'مجتمع مسکونی نگین شهر'; };
+  document.getElementById('delete-modal').addEventListener('click', e => { if (e.target.id === 'delete-modal') closeDeleteModal(); });
+  document.getElementById('confirm-del-btn').addEventListener('click', () => { closeDeleteModal(); showToast('پروژه حذف شد'); });
+
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

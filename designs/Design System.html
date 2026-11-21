@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>سیستم طراحی — پنل مدیریت پروژه‌های عمرانی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Vazirmatn', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        },
+        colors: {
+          // Primary — Navy
+          primary: {
+            100: '#E5EBF3',
+            300: '#8AA2C2',
+            500: '#2C4A73',
+            700: '#1A3354',
+            900: '#0E1E38',
+          },
+          // Accent — Warm orange (CTA)
+          accent: {
+            100: '#FCEAD9',
+            300: '#F4B17C',
+            500: '#E07A2C',
+            700: '#B45813',
+            900: '#74380A',
+          },
+          // Status
+          success:  { 50: '#ECFDF3', 500: '#16A34A', 700: '#15803D' },
+          warning:  { 50: '#FFF8EB', 500: '#D97706', 700: '#B45309' },
+          error:    { 50: '#FEF2F2', 500: '#DC2626', 700: '#B91C1C' },
+          info:     { 50: '#EFF6FF', 500: '#2563EB', 700: '#1D4ED8' },
+          // Gray scale
+          gray: {
+            0:   '#FFFFFF',
+            50:  '#FAFAFA',
+            100: '#F4F4F5',
+            200: '#E4E4E7',
+            300: '#D4D4D8',
+            400: '#A1A1AA',
+            500: '#71717A',
+            600: '#52525B',
+            700: '#3F3F46',
+            800: '#27272A',
+            900: '#18181B',
+          },
+        },
+        borderRadius: {
+          'sm': '4px',
+          DEFAULT: '8px',
+          'lg': '12px',
+          'xl': '16px',
+        },
+        boxShadow: {
+          'sm': '0 1px 2px 0 rgb(24 24 27 / 0.04)',
+          DEFAULT: '0 1px 3px 0 rgb(24 24 27 / 0.06), 0 1px 2px -1px rgb(24 24 27 / 0.04)',
+          'md': '0 4px 8px -2px rgb(24 24 27 / 0.06), 0 2px 4px -2px rgb(24 24 27 / 0.04)',
+          'lg': '0 10px 20px -5px rgb(24 24 27 / 0.08), 0 4px 8px -4px rgb(24 24 27 / 0.04)',
+          'xl': '0 20px 32px -8px rgb(24 24 27 / 0.10), 0 8px 16px -6px rgb(24 24 27 / 0.04)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { font-feature-settings: 'ss01', 'cv01'; }
+  body {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+    /* Persian digits everywhere by default */
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    color: #18181B;
+    background: #FAFAFA;
+  }
+  /* Force Persian numerals via locale */
+  .num-fa { font-feature-settings: 'ss01'; }
+  /* Mono is LTR even in RTL */
+  .mono { font-family: 'JetBrains Mono', monospace; direction: ltr; unicode-bidi: isolate; }
+
+  /* Custom scrollbar — sober */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D4D4D8; border-radius: 8px; border: 2px solid #FAFAFA; }
+  ::-webkit-scrollbar-thumb:hover { background: #A1A1AA; }
+
+  /* Section anchors with offset */
+  section[id] { scroll-margin-top: 24px; }
+
+  /* Loading spinner */
+  @keyframes spin { to { transform: rotate(-360deg); } }
+  .spin { animation: spin 0.7s linear infinite; }
+
+  /* Skeleton shimmer */
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  .skeleton {
+    background: linear-gradient(90deg, #E4E4E7 0%, #F4F4F5 50%, #E4E4E7 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+
+  /* Switch */
+  .switch { width: 36px; height: 20px; background: #D4D4D8; border-radius: 999px; position: relative; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+  .switch::after { content: ''; position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; background: white; border-radius: 999px; box-shadow: 0 1px 2px rgba(0,0,0,.15); transition: transform .15s; }
+  .switch.on { background: #2C4A73; }
+  .switch.on::after { transform: translateX(-16px); }
+  .switch:focus-visible { outline: 2px solid #2C4A73; outline-offset: 2px; }
+
+  /* Custom radio/checkbox */
+  .cb { width: 18px; height: 18px; border: 1.5px solid #D4D4D8; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; transition: all .12s; }
+  .cb.checked { background: #2C4A73; border-color: #2C4A73; }
+  .cb.checked svg { color: white; }
+  .rd { width: 18px; height: 18px; border: 1.5px solid #D4D4D8; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; transition: all .12s; }
+  .rd.checked { border-color: #2C4A73; border-width: 5px; }
+
+  /* Tooltip */
+  .has-tip { position: relative; }
+  .has-tip .tip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #18181B; color: white; font-size: 12px; padding: 6px 10px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
+  .has-tip .tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #18181B; }
+  .has-tip:hover .tip { opacity: 1; }
+
+  /* Progress circular animation track */
+  .prog-track { stroke: #E4E4E7; }
+  .prog-fill { stroke: #2C4A73; transition: stroke-dashoffset .6s ease; }
+
+  /* Hover ring for swatches */
+  .swatch:hover { transform: translateY(-1px); }
+  .swatch { transition: transform .12s; }
+
+  /* Empty placeholder pattern (used in components if needed) */
+  .stripe-bg {
+    background-image: repeating-linear-gradient(135deg, #F4F4F5 0 12px, #FAFAFA 12px 24px);
+  }
+
+  /* Side nav active */
+  .nav-link.active { color: #1A3354; background: #E5EBF3; }
+  .nav-link.active .dot { background: #2C4A73; }
+</style>
+</head>
+<body class="text-gray-900 bg-gray-50">
+
+<!-- ───────── Top bar ───────── -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200">
+  <div class="max-w-[1440px] mx-auto px-8 h-16 flex items-center justify-between gap-6">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-primary-700 flex items-center justify-center">
+        <svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg>
+      </div>
+      <div class="flex flex-col leading-tight">
+        <span class="text-[15px] font-bold text-gray-900">سیستم طراحی</span>
+        <span class="text-xs text-gray-500">پنل مدیریت پیشرفت پروژه‌های عمرانی</span>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-2 text-xs text-gray-500">
+      <span class="px-2 py-1 rounded bg-gray-100 mono">v1.0</span>
+      <span>·</span>
+      <span>RTL · Vazirmatn · Tailwind</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 text-xs text-gray-600 px-2.5 py-1.5 rounded-md bg-gray-100 border border-gray-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-success-500"></span>
+        نسخهٔ نهایی MVP
+      </span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-[1440px] mx-auto px-8 flex gap-8 py-10">
+
+  <!-- ───────── Right nav (RTL = right-aligned sticky) ───────── -->
+  <aside class="hidden lg:block w-56 flex-shrink-0">
+    <nav class="sticky top-24 space-y-1 text-sm" id="sidenav">
+      <a href="#intro" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>مقدمه</a>
+      <a href="#colors" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>پالت رنگ</a>
+      <a href="#typography" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>تایپوگرافی</a>
+      <a href="#spacing" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>فاصله، رادیوس، سایه</a>
+      <a href="#icons" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>آیکن‌ها</a>
+      <a href="#buttons" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>دکمه‌ها</a>
+      <a href="#forms" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>فرم‌ها</a>
+      <a href="#selection" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>انتخاب‌ها</a>
+      <a href="#badges" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>نشان‌ها</a>
+      <a href="#cards" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>کارت</a>
+      <a href="#tabs" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>تب‌ها</a>
+      <a href="#breadcrumb" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>مسیر و آواتار</a>
+      <a href="#table" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>جدول</a>
+      <a href="#tree" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>درخت WBS</a>
+      <a href="#progress" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>پیشرفت</a>
+      <a href="#feedback" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>اعلان و خطا</a>
+      <a href="#overlay" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>مودال و Tooltip</a>
+      <a href="#empty" class="nav-link flex items-center gap-2 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100"><span class="dot w-1 h-1 rounded-full bg-gray-300"></span>خالی و در حال بارگذاری</a>
+    </nav>
+  </aside>
+
+  <!-- ───────── Main content ───────── -->
+  <main class="flex-1 min-w-0 space-y-16 pb-24">
+
+    <!-- INTRO -->
+    <section id="intro" class="space-y-4">
+      <div class="flex items-center gap-2 text-xs font-medium text-accent-700">
+        <span class="mono">01</span>
+        <span class="w-8 h-px bg-accent-300"></span>
+        <span>FOUNDATION</span>
+      </div>
+      <h1 class="text-[40px] leading-tight font-bold tracking-tight text-gray-900">سیستم طراحی پنل کنترل پروژه</h1>
+      <p class="text-[17px] leading-[1.9] text-gray-600 max-w-3xl">
+        این سند، مرجع بصری و تعاملی محصول است؛ زبانی مشترک میان طراحی، توسعه و محصول. تمام تصمیم‌های ظاهری و رفتاری اجزای رابط کاربری در همین فایل تعریف می‌شود. هدف: یک ابزار حرفه‌ای، خوانا و قابل اعتماد برای کسی که روزانه ۸ تا ۱۰ ساعت با آن کار می‌کند.
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4">
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <div class="text-[11px] uppercase tracking-wider text-gray-500 mono">PRIMARY</div>
+          <div class="mt-2 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-primary-700"></span>
+            <span class="mono text-xs text-gray-600">#1A3354</span>
+          </div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <div class="text-[11px] uppercase tracking-wider text-gray-500 mono">ACCENT</div>
+          <div class="mt-2 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-accent-500"></span>
+            <span class="mono text-xs text-gray-600">#E07A2C</span>
+          </div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <div class="text-[11px] uppercase tracking-wider text-gray-500 mono">TYPE</div>
+          <div class="mt-2 text-sm text-gray-800">Vazirmatn</div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <div class="text-[11px] uppercase tracking-wider text-gray-500 mono">GRID</div>
+          <div class="mt-2 text-sm text-gray-800 mono">4px base</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLORS -->
+    <section id="colors" class="space-y-8">
+      <header class="flex items-end justify-between gap-6 border-b border-gray-200 pb-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+            <span class="mono">02</span><span class="w-8 h-px bg-accent-300"></span><span>COLORS</span>
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight">پالت رنگ</h2>
+        </div>
+        <p class="text-sm text-gray-500 max-w-md leading-relaxed">آبی سرمه‌ای به‌عنوان رنگ اصلی برندی، نارنجی گرم برای CTAها و تأکیدها، رنگ‌های وضعیت ساده و کنتراست‌محور.</p>
+      </header>
+
+      <!-- Primary -->
+      <div>
+        <div class="flex items-baseline gap-3 mb-3">
+          <h3 class="text-base font-semibold text-gray-900">اصلی — سرمه‌ای</h3>
+          <span class="text-xs text-gray-500">Primary · Navy</span>
+        </div>
+        <div class="grid grid-cols-5 gap-3" id="primary-swatches"></div>
+      </div>
+
+      <!-- Accent -->
+      <div>
+        <div class="flex items-baseline gap-3 mb-3">
+          <h3 class="text-base font-semibold text-gray-900">ثانویه — نارنجی گرم</h3>
+          <span class="text-xs text-gray-500">Accent · Warm Orange · CTA</span>
+        </div>
+        <div class="grid grid-cols-5 gap-3" id="accent-swatches"></div>
+      </div>
+
+      <!-- Status -->
+      <div>
+        <div class="flex items-baseline gap-3 mb-3">
+          <h3 class="text-base font-semibold text-gray-900">رنگ‌های وضعیت</h3>
+          <span class="text-xs text-gray-500">Semantic</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="status-swatches"></div>
+      </div>
+
+      <!-- Grays -->
+      <div>
+        <div class="flex items-baseline gap-3 mb-3">
+          <h3 class="text-base font-semibold text-gray-900">خاکستری — ۱۰ مرحله</h3>
+          <span class="text-xs text-gray-500">Neutral</span>
+        </div>
+        <div class="grid grid-cols-5 md:grid-cols-10 gap-2" id="gray-swatches"></div>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section id="typography" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">03</span><span class="w-8 h-px bg-accent-300"></span><span>TYPOGRAPHY</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">تایپوگرافی</h2>
+      </header>
+
+      <div class="rounded-xl border border-gray-200 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-[200px_1fr] divide-y md:divide-y-0 md:divide-x md:divide-x-reverse divide-gray-200">
+          <div class="p-6 bg-gray-50/60">
+            <div class="text-xs text-gray-500 mono mb-1">FAMILY</div>
+            <div class="text-xl font-bold">Vazirmatn</div>
+            <div class="mt-4 text-xs text-gray-500 mono mb-1">WEIGHTS</div>
+            <div class="space-y-1.5 mt-1">
+              <div class="text-sm"><span class="font-normal">۴۰۰ — معمولی</span></div>
+              <div class="text-sm"><span class="font-medium">۵۰۰ — متوسط</span></div>
+              <div class="text-sm"><span class="font-bold">۷۰۰ — توپر</span></div>
+            </div>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">40 / 48</span><span class="mono text-xs text-gray-400">H1</span>
+              <span class="text-[40px] leading-[1.2] font-bold tracking-tight">گزارش پیشرفت پروژه</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">32 / 40</span><span class="mono text-xs text-gray-400">H2</span>
+              <span class="text-[32px] leading-[1.25] font-bold tracking-tight">سازه فلزی بلوک شمالی</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">24 / 32</span><span class="mono text-xs text-gray-400">H3</span>
+              <span class="text-2xl leading-[1.33] font-semibold">بتن‌ریزی فونداسیون</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">20 / 28</span><span class="mono text-xs text-gray-400">H4</span>
+              <span class="text-xl leading-[1.4] font-semibold">تیم اجرایی کارگاه ۳</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">18 / 28</span><span class="mono text-xs text-gray-400">Lead</span>
+              <span class="text-[18px] leading-[1.55] font-medium text-gray-700">تأخیر ۱۲ روزه در دیوارچینی نسبت به برنامه زمان‌بندی</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">16 / 26</span><span class="mono text-xs text-gray-400">Body</span>
+              <span class="text-base leading-[1.62] text-gray-700">آرماتوربندی ستون‌های محور B در طبقه دوم، طبق نقشه اجرایی شماره ۳۲ تکمیل شد.</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">14 / 22</span><span class="mono text-xs text-gray-400">Sm</span>
+              <span class="text-sm leading-[1.57] text-gray-600">ثبت‌شده توسط مهندس کریمی — ۱۴۰۴/۰۲/۱۸ ساعت ۱۴:۲۲</span>
+            </div>
+            <div class="grid grid-cols-[80px_60px_1fr] items-center px-6 py-3 gap-4">
+              <span class="mono text-xs text-gray-500">12 / 18</span><span class="mono text-xs text-gray-400">Xs</span>
+              <span class="text-xs leading-[1.5] text-gray-500 uppercase tracking-wide">برچسب · LABEL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Number example & line-height -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-lg border border-gray-200 bg-white p-5">
+          <div class="text-xs text-gray-500 mb-3">اعداد فارسی پیش‌فرض</div>
+          <div class="text-3xl font-bold tracking-tight">۸۴٪ پیشرفت</div>
+          <div class="text-sm text-gray-600 mt-1">۱٬۲۴۰ متر مکعب از ۱٬۴۸۰ متر مکعب</div>
+          <div class="mt-3 text-xs text-gray-500 mono" dir="ltr">font-feature-settings: 'ss01';</div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-5">
+          <div class="text-xs text-gray-500 mb-3">خط‌فاصله مناسب فارسی</div>
+          <p class="text-base leading-[1.75] text-gray-700">برای متن طولانی فارسی، خط‌فاصلهٔ بین ۱٫۶۲ تا ۱٫۸ توصیه می‌شود تا چشم در خواندن طولانی خسته نشود و کشیدگی حروف فارسی به‌خوبی نشان داده شود.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACING / RADIUS / SHADOWS -->
+    <section id="spacing" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">04</span><span class="w-8 h-px bg-accent-300"></span><span>SPACING · RADIUS · SHADOW</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">فاصله، گردی لبه‌ها، سایه‌ها</h2>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Spacing -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-sm font-semibold text-gray-900">فاصله‌ها — مقیاس ۴ پیکسلی</h3>
+          <p class="text-xs text-gray-500 mt-1">پایه: 4px. مجاز: 4, 8, 12, 16, 24, 32, 48, 64</p>
+          <div class="mt-5 space-y-2.5" id="spacing-bars"></div>
+        </div>
+        <!-- Radius -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-sm font-semibold text-gray-900">گردی لبه‌ها</h3>
+          <p class="text-xs text-gray-500 mt-1">از کنترل‌های ریز تا کارت‌ها و تصاویر</p>
+          <div class="mt-5 grid grid-cols-5 gap-3">
+            <div class="text-center"><div class="aspect-square bg-primary-100 border border-primary-300" style="border-radius:4px"></div><div class="text-[11px] text-gray-500 mt-2 mono">4</div><div class="text-[11px] text-gray-700">sm</div></div>
+            <div class="text-center"><div class="aspect-square bg-primary-100 border border-primary-300" style="border-radius:8px"></div><div class="text-[11px] text-gray-500 mt-2 mono">8</div><div class="text-[11px] text-gray-700">md</div></div>
+            <div class="text-center"><div class="aspect-square bg-primary-100 border border-primary-300" style="border-radius:12px"></div><div class="text-[11px] text-gray-500 mt-2 mono">12</div><div class="text-[11px] text-gray-700">lg</div></div>
+            <div class="text-center"><div class="aspect-square bg-primary-100 border border-primary-300" style="border-radius:16px"></div><div class="text-[11px] text-gray-500 mt-2 mono">16</div><div class="text-[11px] text-gray-700">xl</div></div>
+            <div class="text-center"><div class="aspect-square bg-primary-100 border border-primary-300 rounded-full"></div><div class="text-[11px] text-gray-500 mt-2 mono">∞</div><div class="text-[11px] text-gray-700">full</div></div>
+          </div>
+        </div>
+        <!-- Shadows -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-sm font-semibold text-gray-900">سایه‌ها — ظرافت بالا</h3>
+          <p class="text-xs text-gray-500 mt-1">سایه‌ها فقط برای ارتفاع‌بخشی، نه نمایش</p>
+          <div class="mt-5 grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg shadow-sm h-16 flex items-center justify-center text-xs text-gray-600">sm</div>
+            <div class="bg-white rounded-lg shadow h-16 flex items-center justify-center text-xs text-gray-600">DEFAULT</div>
+            <div class="bg-white rounded-lg shadow-md h-16 flex items-center justify-center text-xs text-gray-600">md</div>
+            <div class="bg-white rounded-lg shadow-lg h-16 flex items-center justify-center text-xs text-gray-600">lg</div>
+            <div class="col-span-2 bg-white rounded-lg shadow-xl h-16 flex items-center justify-center text-xs text-gray-600">xl</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ICONS -->
+    <section id="icons" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4 flex items-end justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+            <span class="mono">05</span><span class="w-8 h-px bg-accent-300"></span><span>ICONS</span>
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight">آیکن‌ها — Lucide</h2>
+        </div>
+        <p class="text-xs text-gray-500">stroke-width: 1.75 — اندازه پیش‌فرض ۱۸px</p>
+      </header>
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" id="icon-grid"></div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section id="buttons" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">06</span><span class="w-8 h-px bg-accent-300"></span><span>BUTTONS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">دکمه‌ها</h2>
+      </header>
+
+      <!-- Variants grid -->
+      <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+        <div class="grid grid-cols-[140px_1fr] divide-y divide-gray-100">
+          <div class="contents text-xs text-gray-500 mono">
+            <div class="px-5 py-3 bg-gray-50/60 border-b border-gray-200"></div>
+            <div class="px-5 py-3 bg-gray-50/60 border-b border-gray-200 grid grid-cols-4 gap-3 text-right">
+              <span>Normal</span><span>Hover</span><span>Disabled</span><span>Loading</span>
+            </div>
+          </div>
+
+          <!-- Primary -->
+          <div class="contents">
+            <div class="px-5 py-4 flex items-center bg-gray-50/40 border-b border-gray-100"><span class="text-sm font-medium">Primary</span></div>
+            <div class="px-5 py-4 border-b border-gray-100 grid grid-cols-4 gap-3 items-center">
+              <button class="btn-primary">ثبت گزارش</button>
+              <button class="btn-primary is-hover">ثبت گزارش</button>
+              <button class="btn-primary" disabled>ثبت گزارش</button>
+              <button class="btn-primary"><svg class="w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/></svg><span>در حال ثبت…</span></button>
+            </div>
+          </div>
+          <!-- Secondary -->
+          <div class="contents">
+            <div class="px-5 py-4 flex items-center bg-gray-50/40 border-b border-gray-100"><span class="text-sm font-medium">Secondary</span></div>
+            <div class="px-5 py-4 border-b border-gray-100 grid grid-cols-4 gap-3 items-center">
+              <button class="btn-secondary">انصراف</button>
+              <button class="btn-secondary is-hover">انصراف</button>
+              <button class="btn-secondary" disabled>انصراف</button>
+              <button class="btn-secondary"><svg class="w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/></svg><span>صبر کنید…</span></button>
+            </div>
+          </div>
+          <!-- Outline -->
+          <div class="contents">
+            <div class="px-5 py-4 flex items-center bg-gray-50/40 border-b border-gray-100"><span class="text-sm font-medium">Outline</span></div>
+            <div class="px-5 py-4 border-b border-gray-100 grid grid-cols-4 gap-3 items-center">
+              <button class="btn-outline">فیلتر</button>
+              <button class="btn-outline is-hover">فیلتر</button>
+              <button class="btn-outline" disabled>فیلتر</button>
+              <button class="btn-outline"><svg class="w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/></svg><span>…</span></button>
+            </div>
+          </div>
+          <!-- Ghost -->
+          <div class="contents">
+            <div class="px-5 py-4 flex items-center bg-gray-50/40 border-b border-gray-100"><span class="text-sm font-medium">Ghost</span></div>
+            <div class="px-5 py-4 border-b border-gray-100 grid grid-cols-4 gap-3 items-center">
+              <button class="btn-ghost">جزئیات</button>
+              <button class="btn-ghost is-hover">جزئیات</button>
+              <button class="btn-ghost" disabled>جزئیات</button>
+              <button class="btn-ghost"><svg class="w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/></svg></button>
+            </div>
+          </div>
+          <!-- Destructive -->
+          <div class="contents">
+            <div class="px-5 py-4 flex items-center bg-gray-50/40"><span class="text-sm font-medium">Destructive</span></div>
+            <div class="px-5 py-4 grid grid-cols-4 gap-3 items-center">
+              <button class="btn-destructive">حذف</button>
+              <button class="btn-destructive is-hover">حذف</button>
+              <button class="btn-destructive" disabled>حذف</button>
+              <button class="btn-destructive"><svg class="w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56" stroke-linecap="round"/></svg><span>…</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sizes -->
+      <div class="rounded-xl border border-gray-200 bg-white p-5">
+        <h3 class="text-sm font-semibold mb-4">اندازه‌ها</h3>
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="btn-primary btn-sm"><i data-lucide="plus" class="w-3.5 h-3.5"></i> کوچک · sm</button>
+          <button class="btn-primary"><i data-lucide="plus" class="w-4 h-4"></i> پیش‌فرض · md</button>
+          <button class="btn-primary btn-lg"><i data-lucide="plus" class="w-[18px] h-[18px]"></i> بزرگ · lg</button>
+          <div class="w-px h-8 bg-gray-200 mx-2"></div>
+          <button class="btn-icon btn-sm" aria-label="ویرایش"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+          <button class="btn-icon" aria-label="ویرایش"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+          <button class="btn-icon btn-lg" aria-label="ویرایش"><i data-lucide="edit-3" class="w-[18px] h-[18px]"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMS -->
+    <section id="forms" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">07</span><span class="w-8 h-px bg-accent-300"></span><span>FORMS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">فیلدهای فرم</h2>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Input -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-5">
+          <h3 class="text-sm font-semibold">Input</h3>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">کد پروژه</label>
+            <input type="text" class="field" value="PRJ-1404-021" />
+            <p class="text-xs text-gray-500">باید یکتا و حداکثر ۱۲ کاراکتر باشد.</p>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">نام پروژه</label>
+            <div class="field-wrap">
+              <i data-lucide="folder" class="field-icon w-4 h-4"></i>
+              <input type="text" class="field with-icon" placeholder="مثلاً برج مسکونی الوند" />
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">بودجه (ریال)</label>
+            <input type="text" class="field is-focus" value="۸۲٬۴۰۰٬۰۰۰٬۰۰۰" />
+            <p class="text-xs text-info-700 flex items-center gap-1"><i data-lucide="info" class="w-3 h-3"></i>به ریال وارد کنید.</p>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">واحد سنجش</label>
+            <input type="text" class="field is-error" value="" placeholder="انتخاب کنید" />
+            <p class="text-xs text-error-700 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i>این فیلد الزامی است.</p>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-400">وضعیت پروژه</label>
+            <input type="text" class="field" value="فعال" disabled />
+          </div>
+        </div>
+
+        <!-- Textarea / Select -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-5">
+          <h3 class="text-sm font-semibold">Select &amp; Textarea</h3>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">نوع پروژه</label>
+            <button class="field text-right flex items-center justify-between" type="button">
+              <span class="text-gray-900">ساختمان مسکونی</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+            </button>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">مدیر پروژه</label>
+            <button class="field text-right flex items-center justify-between" type="button">
+              <span class="text-gray-400">یک نفر را انتخاب کنید</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+            </button>
+            <!-- open dropdown -->
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md overflow-hidden">
+              <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-gray-400"></i>
+                <input class="text-sm flex-1 outline-none bg-transparent placeholder:text-gray-400" placeholder="جستجو..." />
+              </div>
+              <ul class="text-sm max-h-48 overflow-auto py-1">
+                <li class="px-3 py-2 flex items-center justify-between hover:bg-gray-50">
+                  <span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary-100 text-primary-700 text-[11px] flex items-center justify-center font-semibold">م.ا</span>مهندس احمدی</span>
+                </li>
+                <li class="px-3 py-2 flex items-center justify-between bg-primary-100/60">
+                  <span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-accent-100 text-accent-700 text-[11px] flex items-center justify-center font-semibold">م.ر</span>مهندس رضایی</span>
+                  <i data-lucide="check" class="w-4 h-4 text-primary-700"></i>
+                </li>
+                <li class="px-3 py-2 flex items-center justify-between hover:bg-gray-50">
+                  <span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-success-50 text-success-700 text-[11px] flex items-center justify-center font-semibold">س.ک</span>مهندس کریمی</span>
+                </li>
+                <li class="px-3 py-2 flex items-center justify-between hover:bg-gray-50">
+                  <span class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-gray-200 text-gray-700 text-[11px] flex items-center justify-center font-semibold">ع.ه</span>مهندس هاشمی</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">توضیحات گزارش</label>
+            <textarea rows="4" class="field resize-none">آرماتوربندی ستون‌های محور B، طبقه دوم، طبق نقشه شماره ۳۲ تکمیل شد. آماده برای بازرسی ناظر.</textarea>
+            <p class="text-xs text-gray-500 flex justify-between"><span>حداکثر ۵۰۰ کاراکتر</span><span class="mono">۱۲۸ / ۵۰۰</span></p>
+          </div>
+        </div>
+
+        <!-- Date & specials -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-5">
+          <h3 class="text-sm font-semibold">تاریخ، عدد و فایل</h3>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">تاریخ گزارش</label>
+            <div class="field-wrap">
+              <i data-lucide="calendar" class="field-icon w-4 h-4"></i>
+              <input type="text" class="field with-icon" value="۱۴۰۴/۰۲/۱۸" />
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">درصد پیشرفت تجمعی</label>
+            <div class="flex">
+              <input type="text" class="field flex-1" value="۸۴" style="border-radius: 0 8px 8px 0; border-left:0" />
+              <span class="px-3 inline-flex items-center text-sm text-gray-600 bg-gray-100 border border-gray-200" style="border-radius: 8px 0 0 8px">%</span>
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-gray-800">آپلود فایل WBS</label>
+            <label class="block cursor-pointer">
+              <div class="rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-500 hover:bg-primary-100/30 transition-colors px-4 py-8 text-center">
+                <i data-lucide="upload-cloud" class="w-6 h-6 text-gray-400 mx-auto mb-2"></i>
+                <div class="text-sm text-gray-700"><span class="font-medium text-primary-700">انتخاب فایل</span> یا کشیدن و رها کردن</div>
+                <div class="text-xs text-gray-500 mt-1">فرمت‌های مجاز: .xml, .mpp, .xlsx — حداکثر ۲۰ مگابایت</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTION CONTROLS -->
+    <section id="selection" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">08</span><span class="w-8 h-px bg-accent-300"></span><span>SELECTION</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">چک‌باکس، رادیو و سوییچ</h2>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+          <h3 class="text-sm font-semibold">Checkbox</h3>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="cb checked"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M5 12l5 5 9-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="text-sm">آرماتوربندی</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="cb checked"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M5 12l5 5 9-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="text-sm">بتن‌ریزی</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="cb"></span>
+            <span class="text-sm">قالب‌بندی</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer opacity-50">
+            <span class="cb"></span>
+            <span class="text-sm">عایق‌کاری <span class="text-xs text-gray-500">(غیرفعال)</span></span>
+          </label>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+          <h3 class="text-sm font-semibold">Radio</h3>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="rd checked"></span>
+            <span class="text-sm">وزن‌دار زمانی</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="rd"></span>
+            <span class="text-sm">وزن‌دار هزینه‌ای</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <span class="rd"></span>
+            <span class="text-sm">ترکیبی</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer opacity-50">
+            <span class="rd"></span>
+            <span class="text-sm">سفارشی <span class="text-xs text-gray-500">(فاز ۲)</span></span>
+          </label>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+          <h3 class="text-sm font-semibold">Switch / Toggle</h3>
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="text-sm">فعال‌سازی یادآور هفتگی</span>
+            <span class="switch on" onclick="this.classList.toggle('on')"></span>
+          </label>
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="text-sm">نمایش اعداد فارسی</span>
+            <span class="switch on" onclick="this.classList.toggle('on')"></span>
+          </label>
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="text-sm">اطلاع‌رسانی ایمیلی روزانه</span>
+            <span class="switch" onclick="this.classList.toggle('on')"></span>
+          </label>
+          <label class="flex items-center justify-between cursor-pointer opacity-50">
+            <span class="text-sm">حالت تاریک <span class="text-xs text-gray-500">(فاز ۲)</span></span>
+            <span class="switch"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- BADGES -->
+    <section id="badges" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">09</span><span class="w-8 h-px bg-accent-300"></span><span>BADGES</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">نشان‌ها (Badges)</h2>
+      </header>
+      <div class="rounded-xl border border-gray-200 bg-white p-6 space-y-5">
+        <div class="grid grid-cols-[140px_1fr] gap-x-6 gap-y-4 items-center">
+          <div class="text-xs text-gray-500 mono">SOLID</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge-solid bg-primary-700">پروژه فعال</span>
+            <span class="badge-solid bg-success-500">تأیید شده</span>
+            <span class="badge-solid bg-warning-500">در انتظار</span>
+            <span class="badge-solid bg-error-500">رد شده</span>
+            <span class="badge-solid bg-info-500">جدید</span>
+            <span class="badge-solid bg-gray-700">پیش‌نویس</span>
+          </div>
+          <div class="text-xs text-gray-500 mono">SOFT</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge-soft bg-primary-100 text-primary-700">برنامه‌ریز</span>
+            <span class="badge-soft bg-success-50 text-success-700">تأیید شده</span>
+            <span class="badge-soft bg-warning-50 text-warning-700">در انتظار تأیید</span>
+            <span class="badge-soft bg-error-50 text-error-700">تأخیر بحرانی</span>
+            <span class="badge-soft bg-info-50 text-info-700">به‌روز شده</span>
+            <span class="badge-soft bg-gray-100 text-gray-700">آرشیو</span>
+          </div>
+          <div class="text-xs text-gray-500 mono">WITH DOT</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge-soft bg-success-50 text-success-700"><span class="w-1.5 h-1.5 rounded-full bg-success-500 ml-1.5"></span>آنلاین</span>
+            <span class="badge-soft bg-warning-50 text-warning-700"><span class="w-1.5 h-1.5 rounded-full bg-warning-500 ml-1.5"></span>در حال سینک</span>
+            <span class="badge-soft bg-error-50 text-error-700"><span class="w-1.5 h-1.5 rounded-full bg-error-500 ml-1.5"></span>آفلاین</span>
+            <span class="badge-soft bg-gray-100 text-gray-700"><span class="w-1.5 h-1.5 rounded-full bg-gray-400 ml-1.5"></span>متوقف</span>
+          </div>
+          <div class="text-xs text-gray-500 mono">WITH ICON</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge-soft bg-success-50 text-success-700"><i data-lucide="check" class="w-3 h-3 ml-1"></i>تأیید سرپرست</span>
+            <span class="badge-soft bg-warning-50 text-warning-700"><i data-lucide="clock" class="w-3 h-3 ml-1"></i>منتظر ناظر</span>
+            <span class="badge-soft bg-info-50 text-info-700"><i data-lucide="camera" class="w-3 h-3 ml-1"></i>۴ عکس</span>
+            <span class="badge-soft bg-accent-100 text-accent-700"><i data-lucide="alert-triangle" class="w-3 h-3 ml-1"></i>نیاز به بازنگری</span>
+          </div>
+          <div class="text-xs text-gray-500 mono">NUMERIC</div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <span class="badge-num">۳</span>
+            <span class="badge-num">۲۴</span>
+            <span class="badge-num bg-error-500">۹۹+</span>
+            <span class="badge-num bg-success-500">۷</span>
+            <span class="badge-num bg-gray-700">۰</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS -->
+    <section id="cards" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">10</span><span class="w-8 h-px bg-accent-300"></span><span>CARDS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">کارت‌ها</h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Basic card -->
+        <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-semibold">برج مسکونی الوند</h3>
+              <p class="text-xs text-gray-500 mt-0.5 mono">PRJ-1404-021</p>
+            </div>
+            <button class="btn-icon" aria-label="بیشتر"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
+          </div>
+          <div class="px-5 py-4 space-y-3">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-600">پیشرفت فیزیکی</span>
+              <span class="font-semibold">۶۸٪</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5">
+              <div class="bg-primary-700 h-1.5 rounded-full" style="width:68%"></div>
+            </div>
+            <div class="flex items-center justify-between text-sm pt-1">
+              <span class="text-gray-600">پیشرفت برنامه‌ای</span>
+              <span class="text-gray-700">۷۲٪</span>
+            </div>
+          </div>
+          <div class="px-5 py-3 border-t border-gray-200 bg-gray-50/60 flex items-center justify-between text-xs text-gray-600">
+            <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5"></i>۱۲ نفر</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>پایان: ۱۴۰۴/۰۸/۱۲</span>
+          </div>
+        </div>
+
+        <!-- Stat card -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs text-gray-500">گزارش‌های در انتظار تأیید</span>
+            <i data-lucide="clock" class="w-4 h-4 text-warning-500"></i>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-3xl font-bold tracking-tight">۲۴</span>
+            <span class="text-xs text-success-700 flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>۸٪</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">نسبت به هفته گذشته</div>
+          <!-- Mini sparkline -->
+          <svg viewBox="0 0 120 32" class="w-full h-8 mt-3 text-primary-500">
+            <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="0,20 15,18 30,22 45,12 60,16 75,10 90,14 105,8 120,12" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- Highlighted card -->
+        <div class="rounded-xl border-2 border-accent-500 bg-white p-5 relative">
+          <span class="absolute top-3 left-3 badge-soft bg-accent-100 text-accent-700">پیشنهاد ویژه</span>
+          <div class="w-10 h-10 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center mb-3">
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-semibold">به‌روزرسانی S-Curve</h3>
+          <p class="text-sm text-gray-600 mt-1 leading-relaxed">داشبورد منحنی پیشرفت با امکان مقایسه چند سناریو فعال شده است.</p>
+          <button class="btn-outline mt-4 w-full justify-center">مشاهده داشبورد</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <section id="tabs" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">11</span><span class="w-8 h-px bg-accent-300"></span><span>TABS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">تب‌ها</h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Underline tabs -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-xs text-gray-500 mono mb-3">UNDERLINE</h3>
+          <div class="border-b border-gray-200">
+            <div class="flex gap-6 -mb-px" id="tabset-1">
+              <button class="tab-underline active" data-tab="ov">نمای کلی</button>
+              <button class="tab-underline" data-tab="wbs">WBS</button>
+              <button class="tab-underline" data-tab="cbs">CBS</button>
+              <button class="tab-underline" data-tab="rep">گزارش‌ها <span class="ml-1 badge-num inline-flex">۳</span></button>
+              <button class="tab-underline" data-tab="set">تنظیمات</button>
+            </div>
+          </div>
+          <div class="pt-4 text-sm text-gray-600">محتوای تب فعال در این بخش نمایش داده می‌شود.</div>
+        </div>
+        <!-- Pill tabs -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-xs text-gray-500 mono mb-3">PILL / SEGMENTED</h3>
+          <div class="inline-flex p-1 bg-gray-100 rounded-lg" id="tabset-2">
+            <button class="tab-pill active">روزانه</button>
+            <button class="tab-pill">هفتگی</button>
+            <button class="tab-pill">ماهانه</button>
+            <button class="tab-pill">سالانه</button>
+          </div>
+          <div class="pt-4 text-sm text-gray-600">گزارش پیشرفت در بازه انتخاب‌شده.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BREADCRUMB / AVATAR -->
+    <section id="breadcrumb" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">12</span><span class="w-8 h-px bg-accent-300"></span><span>BREADCRUMB · AVATAR</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">مسیر و آواتار</h2>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-sm font-semibold mb-3">Breadcrumb</h3>
+          <nav class="text-sm text-gray-600 flex items-center gap-1.5 flex-wrap">
+            <a href="#" class="hover:text-primary-700">پروژه‌ها</a>
+            <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+            <a href="#" class="hover:text-primary-700">برج الوند</a>
+            <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+            <a href="#" class="hover:text-primary-700">سازه</a>
+            <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+            <span class="text-gray-900 font-medium">آرماتوربندی طبقه دوم</span>
+          </nav>
+          <div class="border-t border-gray-100 mt-4 pt-4">
+            <h4 class="text-xs text-gray-500 mono mb-2">COMPACT (با خلاصه‌سازی)</h4>
+            <nav class="text-sm text-gray-600 flex items-center gap-1.5">
+              <a href="#" class="hover:text-primary-700">پروژه‌ها</a>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+              <button class="px-1.5 hover:text-primary-700">…</button>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+              <a href="#" class="hover:text-primary-700">سازه</a>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+              <span class="text-gray-900 font-medium">آرماتوربندی</span>
+            </nav>
+          </div>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-sm font-semibold mb-3">Avatar</h3>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="w-7 h-7 rounded-full bg-primary-100 text-primary-700 text-xs flex items-center justify-center font-semibold">م.ا</div>
+            <div class="w-9 h-9 rounded-full bg-accent-100 text-accent-700 text-sm flex items-center justify-center font-semibold">م.ر</div>
+            <div class="w-11 h-11 rounded-full bg-success-50 text-success-700 text-base flex items-center justify-center font-semibold">س.ک</div>
+            <div class="w-14 h-14 rounded-full bg-gray-200 text-gray-700 text-lg flex items-center justify-center font-semibold">ع.ه</div>
+            <div class="w-11 h-11 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center"><i data-lucide="user" class="w-5 h-5"></i></div>
+          </div>
+          <div class="mt-5">
+            <h4 class="text-xs text-gray-500 mono mb-2">AVATAR GROUP</h4>
+            <div class="flex -space-x-2 space-x-reverse">
+              <div class="w-9 h-9 rounded-full bg-primary-100 text-primary-700 text-sm flex items-center justify-center font-semibold ring-2 ring-white">م.ا</div>
+              <div class="w-9 h-9 rounded-full bg-accent-100 text-accent-700 text-sm flex items-center justify-center font-semibold ring-2 ring-white">م.ر</div>
+              <div class="w-9 h-9 rounded-full bg-success-50 text-success-700 text-sm flex items-center justify-center font-semibold ring-2 ring-white">س.ک</div>
+              <div class="w-9 h-9 rounded-full bg-gray-200 text-gray-700 text-sm flex items-center justify-center font-semibold ring-2 ring-white">ع.ه</div>
+              <div class="w-9 h-9 rounded-full bg-gray-100 text-gray-600 text-xs flex items-center justify-center font-medium ring-2 ring-white">+۸</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section id="table" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">13</span><span class="w-8 h-px bg-accent-300"></span><span>TABLE</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">جدول</h2>
+      </header>
+
+      <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-gray-200 flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-2.5">
+            <h3 class="text-sm font-semibold">گزارش‌های اخیر فیلد</h3>
+            <span class="badge-soft bg-gray-100 text-gray-700">۴۲ مورد</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="field-wrap" style="width: 240px">
+              <i data-lucide="search" class="field-icon w-3.5 h-3.5"></i>
+              <input class="field with-icon btn-sm-style" placeholder="جستجو در گزارش‌ها…" />
+            </div>
+            <button class="btn-outline btn-sm"><i data-lucide="filter" class="w-3.5 h-3.5"></i>فیلتر</button>
+            <button class="btn-outline btn-sm"><i data-lucide="download" class="w-3.5 h-3.5"></i>خروجی Excel</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50/60 text-xs text-gray-600">
+              <tr>
+                <th class="w-10 px-4 py-3"><span class="cb"></span></th>
+                <th class="px-4 py-3 text-right font-medium">
+                  <button class="inline-flex items-center gap-1 hover:text-gray-900">کد WBS <i data-lucide="arrow-up-down" class="w-3 h-3"></i></button>
+                </th>
+                <th class="px-4 py-3 text-right font-medium">عنوان فعالیت</th>
+                <th class="px-4 py-3 text-right font-medium">سرپرست</th>
+                <th class="px-4 py-3 text-right font-medium">تاریخ ثبت</th>
+                <th class="px-4 py-3 text-right font-medium">
+                  <button class="inline-flex items-center gap-1 text-gray-900">پیشرفت <i data-lucide="arrow-down" class="w-3 h-3"></i></button>
+                </th>
+                <th class="px-4 py-3 text-right font-medium">وضعیت</th>
+                <th class="px-4 py-3 w-12"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="hover:bg-gray-50/60">
+                <td class="px-4 py-3"><span class="cb checked"><svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M5 12l5 5 9-11" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+                <td class="px-4 py-3 mono text-xs text-gray-700">1.2.3.1</td>
+                <td class="px-4 py-3 font-medium">آرماتوربندی ستون محور B</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary-100 text-primary-700 text-[10px] flex items-center justify-center font-semibold">س.ک</span>کریمی</span>
+                </td>
+                <td class="px-4 py-3 text-gray-600">۱۴۰۴/۰۲/۱۸</td>
+                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="flex-1 h-1.5 rounded-full bg-gray-100 max-w-[80px]"><div class="h-1.5 rounded-full bg-success-500" style="width:84%"></div></div><span class="text-xs font-medium">۸۴٪</span></div></td>
+                <td class="px-4 py-3"><span class="badge-soft bg-success-50 text-success-700">تأیید شده</span></td>
+                <td class="px-4 py-3"><button class="btn-icon btn-sm"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></td>
+              </tr>
+              <tr class="hover:bg-gray-50/60">
+                <td class="px-4 py-3"><span class="cb"></span></td>
+                <td class="px-4 py-3 mono text-xs text-gray-700">1.2.3.2</td>
+                <td class="px-4 py-3 font-medium">بتن‌ریزی ستون محور B</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-accent-100 text-accent-700 text-[10px] flex items-center justify-center font-semibold">م.ر</span>رضایی</span>
+                </td>
+                <td class="px-4 py-3 text-gray-600">۱۴۰۴/۰۲/۱۸</td>
+                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="flex-1 h-1.5 rounded-full bg-gray-100 max-w-[80px]"><div class="h-1.5 rounded-full bg-warning-500" style="width:45%"></div></div><span class="text-xs font-medium">۴۵٪</span></div></td>
+                <td class="px-4 py-3"><span class="badge-soft bg-warning-50 text-warning-700">در انتظار تأیید</span></td>
+                <td class="px-4 py-3"><button class="btn-icon btn-sm"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></td>
+              </tr>
+              <tr class="hover:bg-gray-50/60">
+                <td class="px-4 py-3"><span class="cb"></span></td>
+                <td class="px-4 py-3 mono text-xs text-gray-700">1.2.4.1</td>
+                <td class="px-4 py-3 font-medium">قالب‌بندی دیوار حائل غربی</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-success-50 text-success-700 text-[10px] flex items-center justify-center font-semibold">ع.ه</span>هاشمی</span>
+                </td>
+                <td class="px-4 py-3 text-gray-600">۱۴۰۴/۰۲/۱۷</td>
+                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="flex-1 h-1.5 rounded-full bg-gray-100 max-w-[80px]"><div class="h-1.5 rounded-full bg-error-500" style="width:22%"></div></div><span class="text-xs font-medium">۲۲٪</span></div></td>
+                <td class="px-4 py-3"><span class="badge-soft bg-error-50 text-error-700">رد شده</span></td>
+                <td class="px-4 py-3"><button class="btn-icon btn-sm"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></td>
+              </tr>
+              <tr class="hover:bg-gray-50/60">
+                <td class="px-4 py-3"><span class="cb"></span></td>
+                <td class="px-4 py-3 mono text-xs text-gray-700">1.3.1.4</td>
+                <td class="px-4 py-3 font-medium">دیوارچینی واحد A۳۰۲</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-gray-200 text-gray-700 text-[10px] flex items-center justify-center font-semibold">م.ن</span>نوری</span>
+                </td>
+                <td class="px-4 py-3 text-gray-600">۱۴۰۴/۰۲/۱۶</td>
+                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="flex-1 h-1.5 rounded-full bg-gray-100 max-w-[80px]"><div class="h-1.5 rounded-full bg-primary-700" style="width:100%"></div></div><span class="text-xs font-medium">۱۰۰٪</span></div></td>
+                <td class="px-4 py-3"><span class="badge-soft bg-primary-100 text-primary-700">خاتمه‌یافته</span></td>
+                <td class="px-4 py-3"><button class="btn-icon btn-sm"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></td>
+              </tr>
+              <tr class="hover:bg-gray-50/60">
+                <td class="px-4 py-3"><span class="cb"></span></td>
+                <td class="px-4 py-3 mono text-xs text-gray-700">2.1.2.3</td>
+                <td class="px-4 py-3 font-medium">عایق رطوبتی سقف</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-info-50 text-info-700 text-[10px] flex items-center justify-center font-semibold">ر.ج</span>جمالی</span>
+                </td>
+                <td class="px-4 py-3 text-gray-600">۱۴۰۴/۰۲/۱۵</td>
+                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="flex-1 h-1.5 rounded-full bg-gray-100 max-w-[80px]"><div class="h-1.5 rounded-full bg-info-500" style="width:60%"></div></div><span class="text-xs font-medium">۶۰٪</span></div></td>
+                <td class="px-4 py-3"><span class="badge-soft bg-info-50 text-info-700"><span class="w-1.5 h-1.5 rounded-full bg-info-500 ml-1.5"></span>در حال انجام</span></td>
+                <td class="px-4 py-3"><button class="btn-icon btn-sm"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-600 flex-wrap gap-2">
+          <span>نمایش <strong class="text-gray-900">۱-۵</strong> از <strong class="text-gray-900">۴۲</strong> مورد</span>
+          <div class="flex items-center gap-1">
+            <button class="btn-icon btn-sm" disabled><i data-lucide="chevrons-right" class="w-3.5 h-3.5"></i></button>
+            <button class="btn-icon btn-sm" disabled><i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></button>
+            <button class="w-7 h-7 rounded-md bg-primary-700 text-white text-xs font-medium">۱</button>
+            <button class="w-7 h-7 rounded-md hover:bg-gray-100 text-xs">۲</button>
+            <button class="w-7 h-7 rounded-md hover:bg-gray-100 text-xs">۳</button>
+            <span class="text-gray-400 px-1">…</span>
+            <button class="w-7 h-7 rounded-md hover:bg-gray-100 text-xs">۹</button>
+            <button class="btn-icon btn-sm"><i data-lucide="chevron-left" class="w-3.5 h-3.5"></i></button>
+            <button class="btn-icon btn-sm"><i data-lucide="chevrons-left" class="w-3.5 h-3.5"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TREE -->
+    <section id="tree" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">14</span><span class="w-8 h-px bg-accent-300"></span><span>TREE · WBS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">درخت WBS</h2>
+        <p class="text-sm text-gray-500 mt-2">والدها با آیکن پوشه، برگ‌ها (قابل گزارش‌گیری) با آیکن سند. درصد پیشرفت و سرپرست در هر ردیف.</p>
+      </header>
+      <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+        <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+          <div class="flex items-center gap-2 text-sm">
+            <button class="btn-ghost btn-sm"><i data-lucide="chevrons-down-up" class="w-3.5 h-3.5"></i>جمع‌کردن همه</button>
+            <button class="btn-ghost btn-sm"><i data-lucide="chevrons-up-down" class="w-3.5 h-3.5"></i>گسترش همه</button>
+          </div>
+          <button class="btn-primary btn-sm"><i data-lucide="plus" class="w-3.5 h-3.5"></i>افزودن آیتم</button>
+        </div>
+        <div class="text-sm" id="wbs-tree"></div>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="progress" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">15</span><span class="w-8 h-px bg-accent-300"></span><span>PROGRESS</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">پیشرفت — خطی و دایره‌ای</h2>
+      </header>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-gray-200 bg-white p-6 space-y-5">
+          <h3 class="text-sm font-semibold">Linear Progress</h3>
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1.5"><span class="text-gray-600">پیشرفت کلی پروژه</span><span class="font-semibold">۶۸٪</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-primary-700 h-2 rounded-full" style="width:68%"></div></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1.5"><span class="text-gray-600">سازه</span><span class="font-semibold text-success-700">۹۲٪</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-success-500 h-2 rounded-full" style="width:92%"></div></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1.5"><span class="text-gray-600">معماری</span><span class="font-semibold text-warning-700">۴۸٪</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-warning-500 h-2 rounded-full" style="width:48%"></div></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1.5"><span class="text-gray-600">تأسیسات برقی</span><span class="font-semibold text-error-700">۱۲٪</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-error-500 h-2 rounded-full" style="width:12%"></div></div>
+          </div>
+          <div class="pt-2 border-t border-gray-100">
+            <div class="text-xs text-gray-600 mb-1.5">دو خطی — برنامه‌ای vs واقعی</div>
+            <div class="relative w-full bg-gray-100 rounded-full h-3">
+              <div class="absolute inset-y-0 right-0 bg-gray-300 h-3 rounded-full" style="width:72%"></div>
+              <div class="absolute inset-y-0 right-0 bg-primary-700 h-3 rounded-full" style="width:68%"></div>
+            </div>
+            <div class="flex items-center gap-4 mt-2 text-xs text-gray-600">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-primary-700"></span>واقعی ۶۸٪</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-gray-300"></span>برنامه‌ای ۷۲٪</span>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-6">
+          <h3 class="text-sm font-semibold mb-5">Circular Progress</h3>
+          <div class="grid grid-cols-4 gap-4 items-end" id="circle-progress"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEEDBACK (Toast + Inline alerts) -->
+    <section id="feedback" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">16</span><span class="w-8 h-px bg-accent-300"></span><span>FEEDBACK</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">اعلان‌ها و هشدارها</h2>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-3">
+          <h3 class="text-xs text-gray-500 mono">TOAST</h3>
+          <div class="toast">
+            <div class="toast-icon bg-success-50 text-success-700"><i data-lucide="check" class="w-4 h-4"></i></div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">گزارش با موفقیت ثبت شد</div>
+              <div class="text-xs text-gray-600 mt-0.5">گزارش به‌صورت خودکار به ناظر مربوطه ارجاع شد.</div>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+          <div class="toast">
+            <div class="toast-icon bg-warning-50 text-warning-700"><i data-lucide="alert-triangle" class="w-4 h-4"></i></div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">اتصال اینترنت ضعیف است</div>
+              <div class="text-xs text-gray-600 mt-0.5">داده‌ها به‌محض برقراری اتصال سینک می‌شوند.</div>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+          <div class="toast">
+            <div class="toast-icon bg-error-50 text-error-700"><i data-lucide="x" class="w-4 h-4"></i></div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">آپلود فایل ناموفق بود</div>
+              <div class="text-xs text-gray-600 mt-0.5">حجم فایل بیش از ۲۰ مگابایت است.</div>
+              <div class="mt-2"><button class="text-xs font-medium text-error-700 hover:underline">تلاش مجدد</button></div>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+          <div class="toast">
+            <div class="toast-icon bg-info-50 text-info-700"><i data-lucide="info" class="w-4 h-4"></i></div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">۳ گزارش جدید منتظر تأیید شماست</div>
+              <div class="text-xs text-gray-600 mt-0.5">ثبت‌شده توسط مهندس کریمی و رضایی.</div>
+            </div>
+            <button class="text-gray-400 hover:text-gray-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <h3 class="text-xs text-gray-500 mono">INLINE ALERTS</h3>
+          <div class="alert bg-success-50 border-success-500/30 text-success-700">
+            <i data-lucide="check-circle-2" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-sm font-semibold">فایل WBS با موفقیت پردازش شد</div>
+              <div class="text-xs mt-0.5 text-success-700/90">۲۳۴ آیتم وارد ساختار پروژه شد.</div>
+            </div>
+          </div>
+          <div class="alert bg-warning-50 border-warning-500/30 text-warning-700">
+            <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-sm font-semibold">پروژه ۱۲ روز از برنامه عقب است</div>
+              <div class="text-xs mt-0.5 text-warning-700/90">بیشترین تأخیر در سازه فلزی بلوک شمالی است.</div>
+            </div>
+          </div>
+          <div class="alert bg-error-50 border-error-500/30 text-error-700">
+            <i data-lucide="x-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-sm font-semibold">مجموع وزن فرزندان برابر ۱۰۰ نیست</div>
+              <div class="text-xs mt-0.5 text-error-700/90">مجموع فعلی: ۹۲٪. تا قبل از ذخیره اصلاح کنید.</div>
+            </div>
+          </div>
+          <div class="alert bg-info-50 border-info-500/30 text-info-700">
+            <i data-lucide="info" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="text-sm font-semibold">نسخه جدید Microsoft Project پشتیبانی شد</div>
+              <div class="text-xs mt-0.5 text-info-700/90">امکان ورود فایل‌های .mpp از نسخه ۲۰۲۴ فراهم است.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERLAY: Modal + Tooltip -->
+    <section id="overlay" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">17</span><span class="w-8 h-px bg-accent-300"></span><span>OVERLAY</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">مودال و راهنما</h2>
+      </header>
+      <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+        <!-- Modal (inline preview) -->
+        <div class="rounded-xl border border-gray-200 bg-gray-100/50 p-6">
+          <h3 class="text-xs text-gray-500 mono mb-3">MODAL — INLINE PREVIEW</h3>
+          <div class="bg-white rounded-xl shadow-xl border border-gray-200 max-w-md mx-auto overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-error-50 text-error-700 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></div>
+                <h3 class="font-semibold">حذف آیتم WBS</h3>
+              </div>
+              <button class="btn-icon btn-sm"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="px-5 py-5 text-sm text-gray-700 leading-relaxed">
+              آیا از حذف آیتم <strong>«آرماتوربندی ستون محور B»</strong> اطمینان دارید؟ این عمل به همراه ۳ زیرمجموعه و ۲ گزارش مرتبط حذف خواهد شد و قابل بازگشت نیست.
+              <label class="mt-4 flex items-center gap-2 cursor-pointer">
+                <span class="cb"></span>
+                <span class="text-xs text-gray-700">فایل‌های پیوست را هم حذف کن</span>
+              </label>
+            </div>
+            <div class="px-5 py-3 border-t border-gray-200 bg-gray-50/60 flex items-center justify-between gap-2">
+              <button class="btn-ghost btn-sm">انصراف</button>
+              <button class="btn-destructive btn-sm"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i>حذف نهایی</button>
+            </div>
+          </div>
+        </div>
+        <!-- Tooltip examples -->
+        <div class="rounded-xl border border-gray-200 bg-white p-6 space-y-6">
+          <h3 class="text-xs text-gray-500 mono">TOOLTIP</h3>
+          <div class="flex flex-wrap items-end gap-4 pt-6">
+            <span class="has-tip"><button class="btn-icon"><i data-lucide="edit-3" class="w-4 h-4"></i></button><span class="tip">ویرایش</span></span>
+            <span class="has-tip"><button class="btn-icon"><i data-lucide="trash-2" class="w-4 h-4"></i></button><span class="tip">حذف</span></span>
+            <span class="has-tip"><button class="btn-icon"><i data-lucide="download" class="w-4 h-4"></i></button><span class="tip">دانلود</span></span>
+            <span class="has-tip"><button class="btn-icon"><i data-lucide="settings" class="w-4 h-4"></i></button><span class="tip">تنظیمات</span></span>
+          </div>
+          <div>
+            <p class="text-sm text-gray-700">شناور ساده با پس‌زمینه تیره و دم نشانگر. متن کوتاه (یک خط)، فاصله ۸ پیکسلی از عنصر مرجع، تأخیر نمایش ۲۰۰ میلی‌ثانیه.</p>
+          </div>
+          <div class="bg-gray-900 text-white text-xs p-3 rounded-md max-w-xs">
+            <div class="font-semibold mb-0.5">آرماتوربندی ستون محور B</div>
+            <div class="text-gray-300 text-[11px]">سرپرست: مهندس کریمی</div>
+            <div class="text-gray-300 text-[11px]">آخرین به‌روزرسانی: ۱۴۰۴/۰۲/۱۸ — ۱۴:۲۲</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPTY / SKELETON -->
+    <section id="empty" class="space-y-6">
+      <header class="border-b border-gray-200 pb-4">
+        <div class="flex items-center gap-2 text-xs font-medium text-accent-700 mb-2">
+          <span class="mono">18</span><span class="w-8 h-px bg-accent-300"></span><span>EMPTY · LOADING</span>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight">حالت‌های خالی و در حال بارگذاری</h2>
+      </header>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Empty -->
+        <div class="rounded-xl border border-gray-200 bg-white p-10 text-center">
+          <div class="mx-auto w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center mb-4">
+            <i data-lucide="folder-open" class="w-7 h-7 text-gray-400"></i>
+          </div>
+          <h3 class="text-base font-semibold">هنوز پروژه‌ای ایجاد نکرده‌اید</h3>
+          <p class="text-sm text-gray-600 mt-1 max-w-sm mx-auto leading-relaxed">با ایجاد اولین پروژه، می‌توانید WBS و CBS را وارد کنید و گزارش‌گیری از کارگاه را آغاز کنید.</p>
+          <div class="mt-5 flex items-center justify-center gap-2">
+            <button class="btn-primary"><i data-lucide="plus" class="w-4 h-4"></i>پروژه جدید</button>
+            <button class="btn-outline"><i data-lucide="upload" class="w-4 h-4"></i>ورود از MSP</button>
+          </div>
+        </div>
+        <!-- Skeleton -->
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
+          <h3 class="text-xs text-gray-500 mono mb-4">LOADING SKELETON</h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="skeleton w-10 h-10 rounded-full"></div>
+              <div class="flex-1 space-y-2">
+                <div class="skeleton h-3 rounded w-1/3"></div>
+                <div class="skeleton h-2.5 rounded w-1/2"></div>
+              </div>
+              <div class="skeleton h-7 rounded-md w-20"></div>
+            </div>
+            <div class="space-y-2">
+              <div class="skeleton h-3 rounded w-full"></div>
+              <div class="skeleton h-3 rounded w-11/12"></div>
+              <div class="skeleton h-3 rounded w-3/4"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 pt-2">
+              <div class="skeleton h-16 rounded-lg"></div>
+              <div class="skeleton h-16 rounded-lg"></div>
+              <div class="skeleton h-16 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer summary -->
+    <section class="pt-8 border-t border-gray-200">
+      <div class="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <div class="text-sm font-semibold">سیستم طراحی · نسخه ۱.۰ MVP</div>
+          <p class="text-xs text-gray-500 mt-1">برای کاربری حرفه‌ای، با تمرکز بر تراکم اطلاعات و خوانایی بلندمدت.</p>
+        </div>
+        <div class="text-xs text-gray-500 flex items-center gap-4">
+          <span>Vazirmatn</span><span>·</span>
+          <span>Tailwind v3</span><span>·</span>
+          <span>Lucide Icons</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Reusable component styles via Tailwind layer-equivalent injected as CSS -->
+<style>
+  /* Buttons */
+  .btn-primary, .btn-secondary, .btn-outline, .btn-ghost, .btn-destructive {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 36px; padding: 0 14px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; line-height: 1;
+    transition: background-color .12s, border-color .12s, color .12s, box-shadow .12s;
+    white-space: nowrap; cursor: pointer; border: 1px solid transparent;
+  }
+  .btn-primary { background: #1A3354; color: white; }
+  .btn-primary.is-hover, .btn-primary:hover { background: #0E1E38; }
+  .btn-primary:active { background: #0E1E38; }
+  .btn-primary:disabled { background: #D4D4D8; color: #71717A; cursor: not-allowed; }
+
+  .btn-secondary { background: #F4F4F5; color: #18181B; border-color: transparent; }
+  .btn-secondary.is-hover, .btn-secondary:hover { background: #E4E4E7; }
+  .btn-secondary:disabled { background: #F4F4F5; color: #A1A1AA; cursor: not-allowed; }
+
+  .btn-outline { background: white; color: #27272A; border-color: #D4D4D8; }
+  .btn-outline.is-hover, .btn-outline:hover { background: #F4F4F5; border-color: #A1A1AA; }
+  .btn-outline:disabled { color: #A1A1AA; border-color: #E4E4E7; cursor: not-allowed; background: white; }
+
+  .btn-ghost { background: transparent; color: #27272A; }
+  .btn-ghost.is-hover, .btn-ghost:hover { background: #F4F4F5; }
+  .btn-ghost:disabled { color: #A1A1AA; cursor: not-allowed; }
+
+  .btn-destructive { background: #DC2626; color: white; }
+  .btn-destructive.is-hover, .btn-destructive:hover { background: #B91C1C; }
+  .btn-destructive:disabled { background: #FECACA; color: white; cursor: not-allowed; }
+
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12.5px; border-radius: 6px; }
+  .btn-lg { height: 44px; padding: 0 18px; font-size: 15px; border-radius: 10px; }
+
+  .btn-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 8px;
+    color: #52525B; background: transparent; border: 1px solid transparent;
+    transition: background-color .12s, color .12s; cursor: pointer;
+  }
+  .btn-icon:hover { background: #F4F4F5; color: #18181B; }
+  .btn-icon.btn-sm { width: 26px; height: 26px; border-radius: 6px; }
+  .btn-icon.btn-lg { width: 40px; height: 40px; border-radius: 10px; }
+
+  /* Form fields */
+  .field {
+    width: 100%; height: 38px; padding: 0 12px; border-radius: 8px;
+    border: 1px solid #D4D4D8; background: white; color: #18181B;
+    font-size: 14px; font-family: inherit; transition: border-color .12s, box-shadow .12s, background-color .12s;
+    outline: none;
+  }
+  .field::placeholder { color: #A1A1AA; }
+  .field:hover { border-color: #A1A1AA; }
+  .field:focus, .field.is-focus { border-color: #2C4A73; box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.12); }
+  .field.is-error { border-color: #DC2626; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10); }
+  .field:disabled { background: #F4F4F5; color: #A1A1AA; cursor: not-allowed; }
+  textarea.field { height: auto; padding: 10px 12px; line-height: 1.7; }
+  .field.btn-sm-style { height: 30px; font-size: 13px; }
+
+  .field-wrap { position: relative; }
+  .field-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); color: #71717A; pointer-events: none; }
+  .field.with-icon { padding-right: 36px; }
+
+  /* Badges */
+  .badge-solid { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; color: white; line-height: 1; }
+  .badge-soft { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; font-weight: 500; line-height: 1; }
+  .badge-num { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 1; color: white; background: #2C4A73; }
+
+  /* Tabs */
+  .tab-underline { padding: 10px 0; font-size: 14px; color: #52525B; border-bottom: 2px solid transparent; transition: color .12s, border-color .12s; }
+  .tab-underline:hover { color: #18181B; }
+  .tab-underline.active { color: #1A3354; border-bottom-color: #1A3354; font-weight: 600; }
+  .tab-pill { padding: 6px 14px; font-size: 13px; border-radius: 6px; color: #52525B; transition: all .12s; }
+  .tab-pill:hover { color: #18181B; }
+  .tab-pill.active { background: white; color: #18181B; box-shadow: 0 1px 2px rgba(24, 24, 27, .08); font-weight: 600; }
+
+  /* Toast */
+  .toast { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: white; border: 1px solid #E4E4E7; border-radius: 10px; box-shadow: 0 4px 12px -2px rgb(24 24 27 / 0.06), 0 2px 4px -2px rgb(24 24 27 / 0.04); }
+  .toast-icon { width: 28px; height: 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* Inline alert */
+  .alert { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; border: 1px solid; }
+
+  /* Tree row */
+  .tree-row { display: grid; grid-template-columns: 1fr 100px 110px 90px 40px; align-items: center; gap: 12px; padding: 8px 16px; border-bottom: 1px solid #F4F4F5; font-size: 13.5px; }
+  .tree-row:hover { background: #FAFAFA; }
+  .tree-row .twisty { width: 16px; height: 16px; border-radius: 4px; color: #71717A; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+  .tree-row .twisty:hover { background: #E4E4E7; color: #18181B; }
+  .tree-row .twisty.empty { cursor: default; }
+  .tree-row .twisty.empty:hover { background: transparent; color: #71717A; }
+</style>
+
+<script>
+  // ───────── Color swatches data ─────────
+  const primary = [
+    { name: '100', hex: '#E5EBF3', label: 'سایه روشن — پس‌زمینه‌ها', text: 'text-primary-700' },
+    { name: '300', hex: '#8AA2C2', label: 'سایه متوسط — حالت‌های ثانویه', text: 'text-primary-700' },
+    { name: '500', hex: '#2C4A73', label: 'رنگ اصلی — متن لینک‌ها', text: 'text-white' },
+    { name: '700', hex: '#1A3354', label: 'تیره — دکمه‌ها و عنوان‌ها', text: 'text-white' },
+    { name: '900', hex: '#0E1E38', label: 'تیره‌ترین — تأکیدها', text: 'text-white' },
+  ];
+  const accent = [
+    { name: '100', hex: '#FCEAD9', label: 'پس‌زمینه CTA لطیف', text: 'text-accent-700' },
+    { name: '300', hex: '#F4B17C', label: 'سایه متوسط', text: 'text-accent-700' },
+    { name: '500', hex: '#E07A2C', label: 'CTA اصلی', text: 'text-white' },
+    { name: '700', hex: '#B45813', label: 'CTA تیره — Hover', text: 'text-white' },
+    { name: '900', hex: '#74380A', label: 'فقط برای تأکید', text: 'text-white' },
+  ];
+  const status = [
+    { name: 'Success', hex: '#16A34A', faName: 'موفقیت', soft: '#ECFDF3' },
+    { name: 'Warning', hex: '#D97706', faName: 'هشدار', soft: '#FFF8EB' },
+    { name: 'Error',   hex: '#DC2626', faName: 'خطا',   soft: '#FEF2F2' },
+    { name: 'Info',    hex: '#2563EB', faName: 'اطلاع', soft: '#EFF6FF' },
+  ];
+  const grays = [
+    { name: '0',   hex: '#FFFFFF' }, { name: '50',  hex: '#FAFAFA' },
+    { name: '100', hex: '#F4F4F5' }, { name: '200', hex: '#E4E4E7' },
+    { name: '300', hex: '#D4D4D8' }, { name: '400', hex: '#A1A1AA' },
+    { name: '500', hex: '#71717A' }, { name: '600', hex: '#52525B' },
+    { name: '700', hex: '#3F3F46' }, { name: '900', hex: '#18181B' },
+  ];
+
+  function swatchCard(c) {
+    const textColor = c.text || (parseInt(c.name) >= 500 ? 'text-white' : 'text-gray-900');
+    return `
+      <div class="swatch rounded-lg overflow-hidden border border-gray-200 bg-white">
+        <div class="h-20 px-3 py-2 flex flex-col justify-between ${textColor}" style="background:${c.hex}">
+          <span class="text-xs font-medium opacity-90">${c.name}</span>
+          <span class="mono text-[11px] opacity-90">${c.hex}</span>
+        </div>
+        <div class="px-3 py-2 text-[11.5px] text-gray-600 leading-tight min-h-[36px]">${c.label || ''}</div>
+      </div>`;
+  }
+  function statusCard(c) {
+    return `
+      <div class="swatch rounded-lg border border-gray-200 bg-white overflow-hidden">
+        <div class="h-20 px-3 py-2 flex flex-col justify-between text-white" style="background:${c.hex}">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium">${c.name}</span>
+            <span class="text-[11px] opacity-90">${c.faName}</span>
+          </div>
+          <span class="mono text-[11px] opacity-90">${c.hex}</span>
+        </div>
+        <div class="px-3 py-2 flex items-center gap-2 text-[11px]">
+          <span class="w-3.5 h-3.5 rounded border border-gray-200" style="background:${c.soft}"></span>
+          <span class="mono text-gray-500">${c.soft}</span>
+          <span class="text-gray-400 mr-1">soft</span>
+        </div>
+      </div>`;
+  }
+  function grayCard(c) {
+    const textColor = parseInt(c.name) >= 500 ? 'text-white' : 'text-gray-900';
+    const border = c.name === '0' ? 'border border-gray-200' : '';
+    return `
+      <div class="rounded-md overflow-hidden ${border}">
+        <div class="h-14 ${textColor} flex items-end p-2" style="background:${c.hex}">
+          <span class="text-[11px] font-medium">${c.name}</span>
+        </div>
+        <div class="bg-white px-2 py-1.5 mono text-[10.5px] text-gray-600 text-center">${c.hex}</div>
+      </div>`;
+  }
+
+  document.getElementById('primary-swatches').innerHTML = primary.map(swatchCard).join('');
+  document.getElementById('accent-swatches').innerHTML = accent.map(swatchCard).join('');
+  document.getElementById('status-swatches').innerHTML = status.map(statusCard).join('');
+  document.getElementById('gray-swatches').innerHTML = grays.map(grayCard).join('');
+
+  // ───────── Spacing bars ─────────
+  const spacingValues = [4, 8, 12, 16, 24, 32, 48, 64];
+  document.getElementById('spacing-bars').innerHTML = spacingValues.map(v => `
+    <div class="flex items-center gap-3">
+      <span class="mono text-[11px] text-gray-500 w-10 text-right">${v}px</span>
+      <div class="bg-primary-700 h-2 rounded" style="width:${v}px"></div>
+      <span class="text-[11px] text-gray-600">space-${v / 4}</span>
+    </div>
+  `).join('');
+
+  // ───────── Icons ─────────
+  const iconList = [
+    ['folder', 'پوشه'], ['file-text', 'سند'], ['plus', 'افزودن'], ['edit-3', 'ویرایش'],
+    ['trash-2', 'حذف'], ['eye', 'مشاهده'], ['download', 'دانلود'], ['upload', 'آپلود'],
+    ['filter', 'فیلتر'], ['search', 'جستجو'], ['settings', 'تنظیمات'], ['user', 'کاربر'],
+    ['users', 'تیم'], ['calendar', 'تقویم'], ['clock', 'زمان'], ['check', 'تأیید'],
+    ['x', 'بستن'], ['alert-triangle', 'هشدار'], ['chevron-left', 'چپ'], ['chevron-right', 'راست'],
+    ['more-vertical', 'بیشتر'], ['image', 'تصویر'], ['camera', 'دوربین'], ['map-pin', 'مکان'],
+  ];
+  document.getElementById('icon-grid').innerHTML = iconList.map(([name, fa]) => `
+    <div class="group rounded-lg border border-gray-200 bg-white p-3 flex flex-col items-center gap-2 hover:border-primary-500 hover:bg-primary-100/40 transition-colors cursor-pointer">
+      <i data-lucide="${name}" class="w-[18px] h-[18px] text-gray-700 group-hover:text-primary-700" stroke-width="1.75"></i>
+      <span class="text-[11px] text-gray-700">${fa}</span>
+      <span class="mono text-[10px] text-gray-400">${name}</span>
+    </div>
+  `).join('');
+
+  // ───────── WBS Tree ─────────
+  const wbsData = [
+    { code: '1', title: 'سازه', isLeaf: false, level: 0, progress: 78, planned: 82, owner: null, expanded: true, children: [
+      { code: '1.1', title: 'فونداسیون', isLeaf: false, level: 1, progress: 100, planned: 100, owner: 'م.ر', expanded: true, children: [
+        { code: '1.1.1', title: 'گودبرداری و تسطیح', isLeaf: true, level: 2, progress: 100, planned: 100, owner: 'م.ر' },
+        { code: '1.1.2', title: 'بتن مگر و آرماتوربندی', isLeaf: true, level: 2, progress: 100, planned: 100, owner: 'م.ر' },
+        { code: '1.1.3', title: 'بتن‌ریزی فونداسیون اصلی', isLeaf: true, level: 2, progress: 100, planned: 100, owner: 'م.ر' },
+      ]},
+      { code: '1.2', title: 'اسکلت بتنی', isLeaf: false, level: 1, progress: 68, planned: 75, owner: null, expanded: true, children: [
+        { code: '1.2.1', title: 'آرماتوربندی ستون‌های محور A', isLeaf: true, level: 2, progress: 100, planned: 100, owner: 'س.ک' },
+        { code: '1.2.2', title: 'آرماتوربندی ستون‌های محور B', isLeaf: true, level: 2, progress: 84, planned: 90, owner: 'س.ک' },
+        { code: '1.2.3', title: 'بتن‌ریزی ستون‌ها', isLeaf: true, level: 2, progress: 45, planned: 60, owner: 'م.ر' },
+        { code: '1.2.4', title: 'قالب‌بندی سقف طبقه دوم', isLeaf: true, level: 2, progress: 22, planned: 55, owner: 'ع.ه' },
+      ]},
+      { code: '1.3', title: 'اسکلت فلزی بلوک شمالی', isLeaf: false, level: 1, progress: 30, planned: 52, owner: null, expanded: false, children: [] },
+    ]},
+    { code: '2', title: 'معماری', isLeaf: false, level: 0, progress: 48, planned: 60, owner: null, expanded: false, children: [] },
+    { code: '3', title: 'تأسیسات', isLeaf: false, level: 0, progress: 12, planned: 25, owner: null, expanded: false, children: [] },
+  ];
+
+  function progressColor(p, planned) {
+    const diff = p - planned;
+    if (diff >= -2) return 'bg-success-500';
+    if (diff >= -10) return 'bg-warning-500';
+    return 'bg-error-500';
+  }
+  function ownerBadge(o) {
+    if (!o) return '';
+    const map = { 'م.ر':'bg-accent-100 text-accent-700', 'س.ک':'bg-primary-100 text-primary-700', 'ع.ه':'bg-success-50 text-success-700', 'م.ا':'bg-info-50 text-info-700' };
+    return `<span class="w-6 h-6 rounded-full ${map[o]||'bg-gray-200 text-gray-700'} text-[10px] flex items-center justify-center font-semibold">${o}</span>`;
+  }
+
+  function renderTree(nodes, parentExpanded = true) {
+    if (!parentExpanded) return '';
+    return nodes.map(n => {
+      const indent = n.level * 24;
+      const hasChildren = n.children && n.children.length > 0;
+      const twisty = hasChildren
+        ? `<span class="twisty" data-toggle="${n.code}"><i data-lucide="${n.expanded ? 'chevron-down' : 'chevron-left'}" class="w-3.5 h-3.5"></i></span>`
+        : `<span class="twisty empty"></span>`;
+      const icon = n.isLeaf
+        ? `<i data-lucide="file-text" class="w-4 h-4 text-gray-500"></i>`
+        : `<i data-lucide="folder" class="w-4 h-4 text-primary-500"></i>`;
+      const fa = (s) => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+      return `
+        <div class="tree-row">
+          <div class="flex items-center min-w-0" style="padding-right:${indent}px">
+            ${twisty}
+            <span class="ml-2"></span>
+            ${icon}
+            <span class="mr-2 mono text-[11px] text-gray-500">${fa(n.code)}</span>
+            <span class="${n.isLeaf ? 'text-gray-800' : 'font-semibold text-gray-900'} truncate">${n.title}</span>
+            ${n.isLeaf ? '' : `<span class="mr-2 badge-soft bg-gray-100 text-gray-600 text-[10.5px]">پوشه</span>`}
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex-1 h-1.5 bg-gray-100 rounded-full"><div class="${progressColor(n.progress, n.planned)} h-1.5 rounded-full" style="width:${n.progress}%"></div></div>
+            <span class="text-xs font-medium w-10 text-left mono">${fa(n.progress)}٪</span>
+          </div>
+          <div class="text-xs text-gray-600 mono">${fa(n.planned)}٪ برنامه</div>
+          <div class="flex items-center justify-start">${ownerBadge(n.owner)}</div>
+          <div><button class="btn-icon btn-sm" aria-label="بیشتر"><i data-lucide="more-vertical" class="w-3.5 h-3.5"></i></button></div>
+        </div>
+        ${hasChildren ? renderTree(n.children, n.expanded) : ''}
+      `;
+    }).join('');
+  }
+  function paintTree() {
+    document.getElementById('wbs-tree').innerHTML = `
+      <div class="tree-row" style="background:#FAFAFA; border-bottom:1px solid #E4E4E7;">
+        <span class="text-[11px] text-gray-500 mono uppercase tracking-wide">عنوان</span>
+        <span class="text-[11px] text-gray-500 mono uppercase tracking-wide">پیشرفت واقعی</span>
+        <span class="text-[11px] text-gray-500 mono uppercase tracking-wide">برنامه‌ای</span>
+        <span class="text-[11px] text-gray-500 mono uppercase tracking-wide">سرپرست</span>
+        <span></span>
+      </div>` + renderTree(wbsData);
+    if (window.lucide) lucide.createIcons();
+  }
+  paintTree();
+
+  function findNode(nodes, code) {
+    for (const n of nodes) {
+      if (n.code === code) return n;
+      if (n.children) { const f = findNode(n.children, code); if (f) return f; }
+    }
+    return null;
+  }
+  document.getElementById('wbs-tree').addEventListener('click', e => {
+    const t = e.target.closest('[data-toggle]'); if (!t) return;
+    const node = findNode(wbsData, t.dataset.toggle); if (node) { node.expanded = !node.expanded; paintTree(); }
+  });
+
+  // ───────── Circular progress ─────────
+  const ringData = [
+    { value: 92, label: 'سازه', color: '#16A34A' },
+    { value: 68, label: 'کل پروژه', color: '#2C4A73' },
+    { value: 48, label: 'معماری', color: '#D97706' },
+    { value: 12, label: 'تأسیسات', color: '#DC2626' },
+  ];
+  document.getElementById('circle-progress').innerHTML = ringData.map(r => {
+    const R = 32, C = 2 * Math.PI * R;
+    const offset = C - (r.value / 100) * C;
+    const fa = (s) => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    return `
+      <div class="flex flex-col items-center gap-2">
+        <div class="relative">
+          <svg viewBox="0 0 80 80" class="w-20 h-20 -scale-x-100">
+            <circle cx="40" cy="40" r="${R}" stroke="#E4E4E7" stroke-width="6" fill="none"/>
+            <circle cx="40" cy="40" r="${R}" stroke="${r.color}" stroke-width="6" fill="none"
+              stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center text-sm font-bold">${fa(r.value)}٪</div>
+        </div>
+        <span class="text-xs text-gray-700">${r.label}</span>
+      </div>`;
+  }).join('');
+
+  // ───────── Tabs ─────────
+  document.querySelectorAll('#tabset-1 button, #tabset-2 button').forEach(b => {
+    b.addEventListener('click', () => {
+      b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+
+  // ───────── Side nav active-on-scroll ─────────
+  const links = [...document.querySelectorAll('.nav-link')];
+  const sections = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  function syncNav() {
+    const y = window.scrollY + 120;
+    let cur = sections[0];
+    for (const s of sections) if (s.offsetTop <= y) cur = s;
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur.id));
+  }
+  window.addEventListener('scroll', syncNav, { passive: true }); syncNav();
+
+  // ───────── Lucide ─────────
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

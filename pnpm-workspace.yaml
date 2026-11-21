@@ -1,0 +1,15 @@
+# مخزن واحد پروژه‌یار (docs/backend/03-project-structure.md ۱)
+packages:
+  - frontend
+  - backend
+  - packages/*
+
+allowBuilds:
+  esbuild: false
+  '@swc/core': false
+  '@nestjs/core': false
+  sharp: false
+  '@scarf/scarf': false
+
+# نسخه‌ای که از حداقل عمر انتشار pnpm جوان‌تر است استثنا نمی‌شود؛ نسخهٔ قبلی قفل می‌شود
+# (docs/backend/02-stack.md، امنیت زنجیرهٔ تأمین)

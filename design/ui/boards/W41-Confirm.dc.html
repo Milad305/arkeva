@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تأییدهای عمومی</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj" dir="rtl" lang="fa" style="width: 1460px; height: 440px">
+  <div class="backdrop" style="gap: 24px; align-items: flex-start">
+    <section class="modal sm" aria-labelledby="cf-del">
+      <div class="mb" style="padding-top: 22px">
+        <div class="row ai-s g12"><span class="icb lg err"><dc-import name="Icon" i="trash-2" sz="18" hint-size="18px,18px"></dc-import></span><div class="col" style="gap: 6px"><h3 id="cf-del" class="t-16 fw6 tx9">پروژهٔ «مجتمع مسکونی نگین شهر» حذف شود؟</h3><p class="t-13 tx6 lh">همهٔ WBS، CBS، ۴۸۲ گزارش کارگاه و ۵٬۸۲۰ عکس برای همیشه حذف می‌شود. <strong class="tx-err">این کار قابل بازگشت نیست.</strong></p></div></div>
+        <label class="fg"><span class="lbl t-12">برای تأیید، نام پروژه را تایپ کنید</span><span class="fld focus"><input type="text" value="مجتمع مسکونی نگین"></span><span class="hint">هنوز با نام پروژه یکسان نیست</span></label>
+      </div>
+      <div class="mf" style="justify-content: flex-end"><button class="btn btn-g" type="button">انصراف</button><button class="btn btn-d dis" type="button" disabled="disabled"><dc-import name="Icon" i="trash-2" sz="16" hint-size="16px,16px"></dc-import>حذف نهایی پروژه</button></div>
+    </section>
+    <section class="modal sm" aria-labelledby="cf-wrn">
+      <div class="mb" style="padding-top: 22px">
+        <div class="row ai-s g12"><span class="icb lg wrn"><dc-import name="Icon" i="alert-triangle" sz="18" hint-size="18px,18px"></dc-import></span><div class="col" style="gap: 6px"><h3 id="cf-wrn" class="t-16 fw6 tx9">صفحه را بدون ذخیره ترک می‌کنید؟</h3><p class="t-13 tx6 lh">۲ تغییر ذخیره‌نشده در ماتریس دسترسی از بین می‌رود: اصلاح گزارش تأییدشده برای ناظر و مشاهدهٔ مبالغ قرارداد برای واحد مالی.</p></div></div>
+      </div>
+      <div class="mf" style="justify-content: flex-end"><button class="btn btn-g" type="button">ماندن در صفحه</button><button class="btn btn-w" type="button">ترک بدون ذخیره</button></div>
+    </section>
+    <section class="modal sm" aria-labelledby="cf-inf">
+      <div class="mb" style="padding-top: 22px">
+        <div class="row ai-s g12"><span class="icb lg inf"><dc-import name="Icon" i="refresh-cw" sz="18" hint-size="18px,18px"></dc-import></span><div class="col" style="gap: 6px"><h3 id="cf-inf" class="t-16 fw6 tx9">پیشرفت‌ها در فایل MSP نوشته شود؟</h3><p class="t-13 tx6 lh">۲۳ پیشرفت تأییدشده در فایل <span class="mono">Negin-Shahr_Rev3.mpp</span> ثبت می‌شود. از فایل فعلی پیش از تغییر نسخهٔ پشتیبان گرفته می‌شود.</p></div></div>
+        <label class="row g8 t-13 tx8"><span class="cb on"><dc-import name="Icon" i="check" sz="12" hint-size="12px,12px"></dc-import></span>ارسال خلاصهٔ تغییرات به مدیر پروژه</label>
+      </div>
+      <div class="mf" style="justify-content: flex-end"><button class="btn btn-g" type="button">انصراف</button><button class="btn btn-p" type="button"><dc-import name="Icon" i="refresh-cw" sz="16" hint-size="16px,16px"></dc-import>نوشتن در فایل</button></div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1460,"height":440}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

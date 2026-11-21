@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>سربرگ پروژه</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<section class="pj ph" dir="rtl" lang="fa" style="font-family: 'Vazirmatn', system-ui, sans-serif; color: #18181B; width: 100%">
+  <sc-if value="{{full}}" hint-placeholder-val="{{true}}">
+    <div class="ph-in">
+      <div class="row between ai-s wrap g16">
+        <div class="row g14 ai-s">
+          <span class="thumb lg"><dc-import name="Icon" i="building-2" sz="24" hint-size="24px,24px"></dc-import></span>
+          <div class="col g6">
+            <h1 class="h-t1">مجتمع مسکونی نگین شهر</h1>
+            <div class="meta">
+              <span><dc-import name="Icon" i="briefcase" sz="13" hint-size="13px,13px"></dc-import>کارفرما: <strong>شهرداری تهران</strong></span><span class="d">·</span>
+              <span><dc-import name="Icon" i="hash" sz="13" hint-size="13px,13px"></dc-import>کد: <strong class="mono">PRJ-1404-021</strong></span><span class="d">·</span>
+              <span><dc-import name="Icon" i="play" sz="13" hint-size="13px,13px"></dc-import>شروع: <strong>۱۴۰۳/۰۵/۰۱</strong></span>
+              <span><dc-import name="Icon" i="flag" sz="13" hint-size="13px,13px"></dc-import>پایان: <strong>۱۴۰۴/۰۸/۱۵</strong></span><span class="d">·</span>
+              <span><dc-import name="Icon" i="user" sz="13" hint-size="13px,13px"></dc-import>مدیر پروژه: <strong>مهندس رضایی</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="row g8">
+          <span class="bdg ok"><span class="dot"></span>فعال</span>
+          <button class="btn btn-o" type="button"><dc-import name="Icon" i="share-2" sz="14" hint-size="14px,14px"></dc-import>اشتراک‌گذاری</button>
+          <button class="btn btn-p" type="button"><dc-import name="Icon" i="pencil" sz="14" hint-size="14px,14px"></dc-import>ویرایش پروژه</button>
+          <button class="ibtn bd" type="button" aria-label="اقدامات بیشتر"><dc-import name="Icon" i="more-vertical" sz="16" hint-size="16px,16px"></dc-import></button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{mini}}" hint-placeholder-val="{{false}}">
+    <div class="ph-mini">
+      <div class="row g12">
+        <span class="thumb"><dc-import name="Icon" i="building-2" sz="18" hint-size="18px,18px"></dc-import></span>
+        <div class="col g2">
+          <h1 class="h-hd">مجتمع مسکونی نگین شهر</h1>
+          <div class="meta t-sm"><span>کد: <strong class="mono">PRJ-1404-021</strong></span><span class="d">·</span><span>مدیر: <strong>مهندس رضایی</strong></span><span class="d">·</span><span>پیشرفت: <strong>۶۵٪</strong> از ۷۰٪ برنامه</span></div>
+        </div>
+      </div>
+      <div class="row g8">
+        <span class="bdg ok"><span class="dot"></span>فعال</span>
+        <button class="btn btn-o btn-sm" type="button"><dc-import name="Icon" i="share-2" sz="13" hint-size="13px,13px"></dc-import>اشتراک‌گذاری</button>
+        <button class="btn btn-p btn-sm" type="button"><dc-import name="Icon" i="pencil" sz="13" hint-size="13px,13px"></dc-import>ویرایش پروژه</button>
+      </div>
+    </div>
+  </sc-if>
+  <nav class="tabs" aria-label="بخش‌های پروژه" style="padding-inline: {{tabPad}}">
+    <sc-for list="{{tabs}}" as="t" hint-placeholder-count="9">
+      <a class="tab {{t.on}}" href="{{t.f}}"><dc-import name="Icon" i="{{t.ic}}" sz="14" hint-size="14px,14px"></dc-import>{{t.t}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{false}}"><span class="n {{t.nc}}">{{t.n}}</span></sc-if></a>
+    </sc-for>
+  </nav>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tab":{"editor":"enum","options":["overview","wbs","cbs","links","reports","risks","members","charts","settings"],"default":"overview"},"mini":{"editor":"boolean","default":false},"$preview":{"width":1216,"height":150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.tab ?? 'overview';
+    const mini = this.props.mini === true || this.props.mini === 'true';
+    const T = (k, ic, t, f, n, nc) => ({ ic, t, f: f + '.dc.html', on: k === a ? 'on' : '', hasN: !!n, n: n || '', nc: nc || '' });
+    return {
+      full: !mini, mini, tabPad: mini ? '20px' : '28px',
+      tabs: [
+        T('overview', 'layout-dashboard', 'نمای کلی', 'W10-ProjectOverview'),
+        T('wbs', 'git-branch', 'WBS', 'W11-Wbs'),
+        T('cbs', 'banknote', 'CBS', 'W14-Cbs'),
+        T('links', 'link', 'اتصالات', 'W15-Links'),
+        T('reports', 'clipboard-check', 'گزارش‌ها', 'W20-FieldReports', '۸', 'w'),
+        T('risks', 'shield-alert', 'ریسک‌ها', 'W18-Risks', '۶', 'e'),
+        T('members', 'users', 'اعضا', 'W16-Members', '۱۲'),
+        T('charts', 'bar-chart-3', 'نمودارها', 'W21-ChartsProgress'),
+        T('settings', 'settings', 'تنظیمات', 'W28-SettingsGeneral')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>اعضای پروژه — مجتمع مسکونی نگین شهر | پروژه‌یار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --primary-100: #E5EBF3; --primary-300: #8AA2C2; --primary-500: #2C4A73;
+    --primary-700: #1A3354; --primary-900: #0E1E38;
+    --accent-100: #FCEAD9; --accent-300: #F4B17C; --accent-500: #E07A2C; --accent-700: #B45813;
+    --success-50: #ECFDF3; --success-500: #16A34A; --success-700: #15803D;
+    --warning-50: #FFF8EB; --warning-500: #D97706; --warning-700: #B45309;
+    --error-50:   #FEF2F2; --error-500:   #DC2626; --error-700:   #B91C1C;
+    --info-50:    #EFF6FF; --info-500:    #2563EB; --info-700:    #1D4ED8;
+    --gray-0: #FFFFFF; --gray-50: #FAFAFA; --gray-100: #F4F4F5; --gray-200: #E4E4E7;
+    --gray-300: #D4D4D8; --gray-400: #A1A1AA; --gray-500: #71717A; --gray-600: #52525B;
+    --gray-700: #3F3F46; --gray-800: #27272A; --gray-900: #18181B;
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --shadow-sm: 0 1px 2px 0 rgb(24 24 27 / 0.04);
+    --shadow-md: 0 4px 8px -2px rgb(24 24 27 / 0.05), 0 2px 4px -2px rgb(24 24 27 / 0.03);
+    --shadow-lg: 0 10px 20px -5px rgb(24 24 27 / 0.06), 0 4px 8px -4px rgb(24 24 27 / 0.03);
+    --shadow-xl: 0 20px 40px -10px rgb(24 24 27 / 0.18), 0 8px 16px -8px rgb(24 24 27 / 0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  body { font-family: 'Vazirmatn', system-ui, sans-serif; color: var(--gray-900); background: var(--gray-50); -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01'; font-size: 13.5px; }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select, textarea { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 8px; border: 2px solid white; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+  .app { display: grid; grid-template-columns: 224px 1fr; height: 100vh; }
+  .sidebar { background: white; border-left: 1px solid var(--gray-200); display: flex; flex-direction: column; height: 100vh; }
+  .sb-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; border-bottom: 1px solid var(--gray-100); }
+  .sb-brand .mark { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+  .sb-brand .mark::after { content: ''; position: absolute; right: 5px; bottom: 5px; width: 7px; height: 7px; background: var(--accent-500); border-radius: 2px; }
+  .sb-brand .name { display: flex; flex-direction: column; line-height: 1.15; }
+  .sb-brand .name strong { font-size: 14px; font-weight: 700; }
+  .sb-brand .name small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-org { margin: 14px 12px 4px; padding: 8px 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); background: var(--gray-50); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .sb-org:hover { background: var(--gray-100); }
+  .sb-org .org-mark { width: 26px; height: 26px; border-radius: var(--r-sm); background: var(--accent-100); color: var(--accent-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .sb-org .org-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-org .org-meta strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sb-org .org-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-section { margin: 18px 14px 6px; font-size: 10px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-nav { padding: 0 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+  .sb-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: background .12s, color .12s; border: 0; background: transparent; text-align: right; width: 100%; }
+  .sb-link svg { color: var(--gray-500); flex-shrink: 0; }
+  .sb-link:hover { background: var(--gray-100); color: var(--gray-900); }
+  .sb-link.active { background: var(--primary-700); color: white; }
+  .sb-link.active svg { color: white; }
+  .sb-link .count { margin-right: auto; background: var(--gray-100); color: var(--gray-600); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: var(--r-sm); min-width: 20px; text-align: center; }
+  .sb-link.active .count { background: rgba(255,255,255,0.18); color: white; }
+  .sb-user { margin: 10px 10px 12px; padding: 10px; border: 1px solid var(--gray-200); border-radius: var(--r-md); display: flex; align-items: center; gap: 10px; background: white; flex-shrink: 0; }
+  .sb-user .avatar { width: 32px; height: 32px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+  .sb-user .user-meta { flex: 1; min-width: 0; line-height: 1.2; }
+  .sb-user .user-meta strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .sb-user .user-meta small { font-size: 10.5px; color: var(--gray-500); }
+  .sb-user .more { color: var(--gray-400); padding: 4px; border-radius: 4px; background: transparent; border: 0; }
+
+  main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
+  .topbar { height: 52px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 16px; padding: 0 20px; flex-shrink: 0; }
+  .topbar .crumb-strip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0; }
+  .topbar .crumb-strip a:hover { color: var(--gray-900); }
+  .topbar .crumb-strip svg { color: var(--gray-300); flex-shrink: 0; }
+  .topbar .crumb-strip .leaf { color: var(--gray-900); font-weight: 500; }
+  .ic-btn { width: 32px; height: 32px; border-radius: var(--r-md); background: transparent; border: 0; color: var(--gray-600); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .ic-btn .ping { position: absolute; top: 6px; left: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--error-500); border: 1.5px solid white; }
+  .topbar .avatar { width: 28px; height: 28px; border-radius: 999px; background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  .proj-mini { background: white; border-bottom: 1px solid var(--gray-200); padding: 12px 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .proj-mini .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .proj-mini .thumb { width: 36px; height: 36px; border-radius: var(--r-md); background: var(--primary-700); color: white; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+  .proj-mini .thumb::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,0.08) 6px 7px); }
+  .proj-mini .thumb svg { position: relative; z-index: 1; }
+  .proj-mini h1 { font-size: 16px; font-weight: 600; margin: 0; color: var(--gray-900); line-height: 1.2; }
+  .proj-mini .meta-line { font-size: 11.5px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .proj-mini .meta-line .mono { color: var(--gray-700); }
+  .proj-mini .actions { display: flex; align-items: center; gap: 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+  .badge .dot { width: 5px; height: 5px; border-radius: 999px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: var(--r-md); font-size: 12.5px; font-weight: 500; line-height: 1; border: 1px solid transparent; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--primary-700); color: white; }
+  .btn-primary:hover { background: var(--primary-900); }
+  .btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+  .btn-outline { background: white; color: var(--gray-800); border-color: var(--gray-300); }
+  .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-ghost { background: transparent; color: var(--gray-700); }
+  .btn-ghost:hover { background: var(--gray-100); color: var(--gray-900); }
+  .btn-sm { height: 26px; padding: 0 8px; font-size: 11.5px; border-radius: 6px; }
+  .btn-lg { height: 38px; padding: 0 16px; font-size: 13.5px; }
+  .btn-block { width: 100%; }
+  .btn-danger { background: white; color: var(--error-700); border-color: var(--gray-200); }
+  .btn-danger:hover { background: var(--error-50); border-color: var(--error-500); }
+
+  .tabs { display: flex; gap: 0; padding: 0 20px; background: white; border-bottom: 1px solid var(--gray-200); flex-shrink: 0; overflow-x: auto; }
+  .tab { position: relative; padding: 10px 12px; font-size: 12.5px; font-weight: 500; color: var(--gray-600); background: transparent; border: 0; border-bottom: 2px solid transparent; transition: color .12s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .tab:hover { color: var(--gray-900); }
+  .tab.active { color: var(--primary-700); border-bottom-color: var(--primary-700); font-weight: 600; }
+  .tab .num { background: var(--gray-100); color: var(--gray-700); font-size: 10.5px; padding: 1px 5px; border-radius: 999px; font-weight: 600; min-width: 18px; text-align: center; }
+  .tab.has-warn .num { background: var(--warning-50); color: var(--warning-700); }
+
+  /* sub-tabs (pill) */
+  .subtabs { padding: 12px 24px 0; background: var(--gray-50); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .pill-tabs { display: inline-flex; background: white; border: 1px solid var(--gray-200); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+  .pill-tab { height: 30px; padding: 0 14px; border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; color: var(--gray-600); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .pill-tab.on { background: var(--primary-700); color: white; font-weight: 600; }
+
+  .scroll-area { flex: 1; overflow-y: auto; }
+  .content { padding: 18px 24px 40px; max-width: 1480px; }
+
+  /* Avatar helper */
+  .av { border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+
+  /* Page header */
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .page-head h2 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .page-head .sub { font-size: 12.5px; color: var(--gray-500); margin-top: 2px; }
+
+  /* Stat strip */
+  .stat-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px; }
+  .stat { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); padding: 14px 16px; }
+  .stat .label { font-size: 11.5px; color: var(--gray-500); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .stat .label .ic { width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; }
+  .stat .value { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+  .stat .foot { font-size: 11px; color: var(--gray-500); margin-top: 5px; }
+
+  /* Members table */
+  .card { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); overflow: hidden; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--gray-200); gap: 12px; flex-wrap: wrap; }
+  .card-head .lh { display: flex; align-items: center; gap: 8px; }
+  .card-head h3 { font-size: 14px; font-weight: 600; margin: 0; }
+  .search-wrap { position: relative; }
+  .search-wrap .ico { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
+  .field { height: 32px; padding: 0 10px; border: 1px solid var(--gray-200); background: white; border-radius: var(--r-md); font-size: 12.5px; color: var(--gray-900); outline: none; transition: border-color .12s, box-shadow .12s; }
+  .field:hover { border-color: var(--gray-300); }
+  .field:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px rgba(44, 74, 115, 0.10); }
+  .search-wrap input { padding-right: 32px; width: 240px; }
+  .select { appearance: none; padding-left: 28px; background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2371717A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat left 10px center; }
+
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.tbl thead { background: var(--gray-50); }
+  table.tbl th { text-align: right; font-size: 11px; font-weight: 600; color: var(--gray-500); padding: 9px 14px; border-bottom: 1px solid var(--gray-200); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
+  table.tbl td { padding: 11px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  table.tbl tbody tr:hover { background: var(--gray-50); }
+  table.tbl tbody tr:last-child td { border-bottom: 0; }
+  .member-cell { display: flex; align-items: center; gap: 10px; }
+  .member-cell .av { width: 34px; height: 34px; font-size: 12px; }
+  .member-cell .nm { font-weight: 600; color: var(--gray-900); }
+  .member-cell .em { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+  .assign-link { display: inline-flex; align-items: center; gap: 5px; color: var(--primary-700); font-weight: 500; font-size: 12.5px; }
+  .assign-link:hover { text-decoration: underline; }
+  .assign-link.none { color: var(--gray-400); font-weight: 400; }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+  .status-pill .d { width: 7px; height: 7px; border-radius: 999px; }
+  .ic-row-btn { width: 28px; height: 28px; border-radius: 6px; background: transparent; border: 0; color: var(--gray-500); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .ic-row-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+
+  /* Row menu */
+  .row-menu { position: absolute; left: 0; top: calc(100% + 4px); background: white; border: 1px solid var(--gray-200); border-radius: var(--r-md); box-shadow: var(--shadow-lg); padding: 4px; width: 200px; z-index: 40; display: none; }
+  .row-menu.open { display: block; }
+  .row-menu button { display: flex; align-items: center; gap: 8px; width: 100%; text-align: right; padding: 8px 10px; border: 0; background: transparent; border-radius: 6px; font-size: 12.5px; color: var(--gray-700); }
+  .row-menu button:hover { background: var(--gray-100); }
+  .row-menu button.danger { color: var(--error-700); }
+  .row-menu button.danger:hover { background: var(--error-50); }
+  .row-menu .sep { height: 1px; background: var(--gray-100); margin: 4px 0; }
+
+  /* ───── Assignment (3-col) ───── */
+  .assign-layout { display: grid; grid-template-columns: 30% 40% 30%; gap: 14px; height: calc(100vh - 230px); min-height: 480px; }
+  .assign-col { background: white; border: 1px solid var(--gray-200); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; }
+  .assign-col .col-head { padding: 12px 14px; border-bottom: 1px solid var(--gray-100); flex-shrink: 0; }
+  .assign-col .col-head h4 { font-size: 13px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 7px; }
+  .assign-col .col-head h4 svg { color: var(--gray-500); }
+  .assign-col .col-head .sub { font-size: 11px; color: var(--gray-500); margin-top: 3px; }
+  .assign-col .col-body { flex: 1; overflow-y: auto; padding: 8px; }
+
+  /* Supervisor cards */
+  .sup-card { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; transition: all .12s; position: relative; }
+  .sup-card:hover { background: var(--gray-50); }
+  .sup-card.selected { background: var(--primary-100); border-color: var(--primary-300); }
+  .sup-card .av { width: 36px; height: 36px; font-size: 12px; }
+  .sup-card .info { flex: 1; min-width: 0; }
+  .sup-card .info .nm { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+  .sup-card .info .meta { font-size: 11px; color: var(--gray-500); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .sup-card .cnt { font-size: 16px; font-weight: 700; color: var(--primary-700); }
+  .sup-card .cnt small { font-size: 10px; color: var(--gray-500); font-weight: 500; display: block; text-align: center; }
+  .sup-card.drop-target { background: var(--success-50); border-color: var(--success-500); border-style: dashed; }
+
+  /* WBS assign tree */
+  .atree-row { display: flex; align-items: center; gap: 6px; padding: 7px 8px; border-radius: var(--r-md); transition: background .1s; }
+  .atree-row.leaf { cursor: pointer; }
+  .atree-row.leaf:hover { background: var(--gray-50); }
+  .atree-row.leaf[draggable=true] { cursor: grab; }
+  .atree-row.dragging { opacity: 0.5; }
+  .atree-row .twisty { width: 18px; height: 18px; border-radius: 4px; color: var(--gray-400); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: transparent; border: 0; }
+  .atree-row .twisty:hover { background: var(--gray-200); }
+  .atree-row .twisty.empty { visibility: hidden; }
+  .atree-row .acheck { width: 17px; height: 17px; border: 1.5px solid var(--gray-300); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; background: white; flex-shrink: 0; transition: all .12s; }
+  .atree-row .acheck.checked { background: var(--primary-700); border-color: var(--primary-700); color: white; }
+  .atree-row .acheck.partial { background: var(--primary-700); border-color: var(--primary-700); }
+  .atree-row .acheck.partial::after { content: ''; width: 8px; height: 1.5px; background: white; border-radius: 1px; }
+  .atree-row .t-ic { width: 15px; height: 15px; flex-shrink: 0; display: inline-flex; align-items: center; }
+  .atree-row .t-ic.folder { color: var(--gray-400); }
+  .atree-row .t-ic.leaf { color: var(--primary-500); }
+  .atree-row .t-title { font-size: 12.5px; color: var(--gray-800); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .atree-row.parent .t-title { font-weight: 600; color: var(--gray-700); }
+  .atree-row .grip { width: 13px; color: var(--gray-300); opacity: 0; flex-shrink: 0; }
+  .atree-row.leaf:hover .grip { opacity: 1; }
+  .owner-tag { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px 1px 4px; border-radius: 999px; font-size: 10px; flex-shrink: 0; }
+  .owner-tag .av { width: 16px; height: 16px; font-size: 8px; }
+  .owner-tag.other { background: var(--gray-100); color: var(--gray-600); }
+  .owner-tag.current { background: var(--success-50); color: var(--success-700); }
+
+  /* Selected list (left col) */
+  .sel-head-card { padding: 12px 14px; background: var(--primary-100); border-radius: var(--r-md); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .sel-head-card .av { width: 34px; height: 34px; font-size: 12px; }
+  .sel-head-card .info .lbl { font-size: 11px; color: var(--primary-700); }
+  .sel-head-card .info .nm { font-size: 14px; font-weight: 700; color: var(--primary-900); }
+  .sel-progress { padding: 0 2px 10px; }
+  .sel-progress .row { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--gray-600); margin-bottom: 5px; }
+  .sel-progress .row strong { color: var(--gray-900); font-weight: 600; }
+  .pbar { height: 6px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+  .pbar > div { height: 100%; border-radius: 999px; background: var(--primary-700); transition: width .3s; }
+  .sel-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--gray-50); border: 1px solid var(--gray-100); border-radius: var(--r-md); margin-bottom: 6px; }
+  .sel-item .t-ic { color: var(--primary-500); flex-shrink: 0; }
+  .sel-item .info { flex: 1; min-width: 0; }
+  .sel-item .info .nm { font-size: 12px; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sel-item .info .code { font-size: 10px; color: var(--gray-400); }
+  .sel-item .rm { color: var(--gray-400); padding: 3px; border-radius: 4px; background: transparent; border: 0; }
+  .sel-item .rm:hover { background: var(--error-50); color: var(--error-700); }
+  .sel-item.moved { border-color: var(--warning-300, #F4B17C); background: var(--warning-50); }
+  .sel-empty { text-align: center; padding: 40px 16px; color: var(--gray-400); }
+  .sel-empty svg { margin-bottom: 8px; }
+  .sel-empty p { font-size: 12px; margin: 0; line-height: 1.7; }
+  .col-foot { padding: 12px 14px; border-top: 1px solid var(--gray-100); flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+
+  .alert { display: flex; gap: 9px; padding: 10px 12px; border-radius: var(--r-md); border: 1px solid; font-size: 11.5px; line-height: 1.55; }
+  .alert svg { flex-shrink: 0; margin-top: 1px; }
+  .alert.warn { background: var(--warning-50); border-color: rgba(217,119,6,0.25); color: var(--warning-700); }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-900); color: white; padding: 12px 18px; border-radius: var(--r-md); box-shadow: var(--shadow-xl); display: flex; align-items: center; gap: 10px; font-size: 13px; z-index: 200; opacity: 0; pointer-events: none; transition: all .25s; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ic { width: 24px; height: 24px; border-radius: 999px; background: var(--success-500); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* ───── Modal ───── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(24, 24, 27, 0.45); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal { background: white; border-radius: var(--r-xl); box-shadow: var(--shadow-xl); width: 100%; max-width: 500px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; transform: translateY(8px) scale(0.99); transition: transform .15s; }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-head { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+  .modal-head .lh { display: flex; align-items: center; gap: 10px; }
+  .modal-head .ic { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--primary-100); color: var(--primary-700); display: inline-flex; align-items: center; justify-content: center; }
+  .modal-head h3 { font-size: 15px; font-weight: 600; margin: 0; }
+  .modal-head .sub { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
+  .modal-body { padding: 18px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+  .modal-foot { padding: 14px 20px; border-top: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--gray-50); }
+  .mform-label { font-size: 12px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; display: block; }
+
+  .method-seg { display: flex; background: var(--gray-100); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+  .method-seg button { flex: 1; height: 32px; border: 0; background: transparent; border-radius: 6px; font-size: 12px; color: var(--gray-600); font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+  .method-seg button.on { background: white; color: var(--gray-900); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+  .search-results { border: 1px solid var(--gray-200); border-radius: var(--r-md); max-height: 200px; overflow-y: auto; }
+  .sr-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--gray-100); cursor: pointer; }
+  .sr-item:last-child { border-bottom: 0; }
+  .sr-item:hover { background: var(--gray-50); }
+  .sr-item.selected { background: var(--primary-100); }
+  .sr-item .av { width: 30px; height: 30px; font-size: 11px; }
+  .sr-item .info { flex: 1; min-width: 0; }
+  .sr-item .info .nm { font-size: 12.5px; font-weight: 500; color: var(--gray-900); }
+  .sr-item .info .ph { font-size: 11px; color: var(--gray-500); }
+
+  .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .role-opt { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--gray-200); border-radius: var(--r-md); cursor: pointer; transition: all .12s; }
+  .role-opt:hover { border-color: var(--gray-300); }
+  .role-opt.on { border-color: var(--primary-500); background: var(--primary-100); }
+  .role-opt .rd { width: 16px; height: 16px; border: 1.5px solid var(--gray-300); border-radius: 999px; flex-shrink: 0; transition: all .12s; }
+  .role-opt.on .rd { border-color: var(--primary-700); border-width: 5px; }
+  .role-opt .rl { font-size: 12.5px; font-weight: 500; color: var(--gray-800); }
+  .role-opt .rl small { display: block; font-size: 10px; color: var(--gray-500); font-weight: 400; }
+  .role-hint { display: none; }
+  .role-hint.show { display: flex; }
+
+  [data-tab="members"] #panel-assign { display: none; }
+  [data-tab="assign"] #panel-members { display: none; }
+  [data-tab="assign"] .scroll-area { overflow: hidden; }
+  [data-tab="assign"] .content { height: 100%; display: flex; flex-direction: column; }
+
+  [data-method="search"] #m-search { display: block; }
+  [data-method="search"] #m-phone, [data-method="search"] #m-email { display: none; }
+  [data-method="phone"] #m-phone { display: block; }
+  [data-method="phone"] #m-search, [data-method="phone"] #m-email { display: none; }
+  [data-method="email"] #m-email { display: block; }
+  [data-method="email"] #m-search, [data-method="email"] #m-phone { display: none; }
+
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 5px 9px; font-size: 11px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 50; }
+</style>
+</head>
+<body data-tab="members">
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7l5 5v13"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></div>
+      <div class="name"><strong>پروژه‌یار</strong><small>پنل مدیریت پیشرفت</small></div>
+    </div>
+    <div class="sb-org">
+      <div class="org-mark">ا.آ</div>
+      <div class="org-meta"><strong>شرکت آبادگران ایران</strong><small>۱۲ پروژه فعال</small></div>
+      <i data-lucide="chevrons-up-down" style="width:14px;height:14px;color:var(--gray-400)"></i>
+    </div>
+    <div class="sb-section">منو اصلی</div>
+    <nav class="sb-nav">
+      <a class="sb-link" href="#"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i><span>داشبورد</span></a>
+      <a class="sb-link active" href="Projects.html"><i data-lucide="folder-kanban" style="width:16px;height:16px"></i><span>پروژه‌ها</span><span class="count">۱۲</span></a>
+      <a class="sb-link" href="#"><i data-lucide="git-branch" style="width:16px;height:16px"></i><span>ساختار WBS / CBS</span></a>
+      <a class="sb-link" href="#"><i data-lucide="clipboard-check" style="width:16px;height:16px"></i><span>گزارش‌های فیلد</span><span class="count">۲۴</span></a>
+      <a class="sb-link" href="#"><i data-lucide="users" style="width:16px;height:16px"></i><span>کاربران و نقش‌ها</span></a>
+      <a class="sb-link" href="#"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i><span>گزارش‌های مدیریتی</span></a>
+      <div class="sb-section">سیستم</div>
+      <a class="sb-link" href="#"><i data-lucide="settings" style="width:16px;height:16px"></i><span>تنظیمات</span></a>
+      <a class="sb-link" href="#"><i data-lucide="life-buoy" style="width:16px;height:16px"></i><span>راهنما و پشتیبانی</span></a>
+    </nav>
+    <div class="sb-user">
+      <div class="avatar">م.ا</div>
+      <div class="user-meta"><strong>مهندس احمدی</strong><small>برنامه‌ریز پروژه</small></div>
+      <button class="more"><i data-lucide="more-vertical" style="width:14px;height:14px"></i></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <nav class="crumb-strip">
+        <a href="#" style="display:inline-flex;align-items:center;gap:4px"><i data-lucide="home" style="width:12px;height:12px"></i>خانه</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Projects.html">پروژه‌ها</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <a href="Project.html">مجتمع مسکونی نگین شهر</a>
+        <i data-lucide="chevron-left" style="width:12px;height:12px"></i>
+        <span class="leaf">اعضا</span>
+      </nav>
+      <button class="ic-btn"><i data-lucide="search" style="width:15px;height:15px"></i></button>
+      <button class="ic-btn"><i data-lucide="bell" style="width:15px;height:15px"></i><span class="ping"></span></button>
+      <div style="width:1px;height:20px;background:var(--gray-200);margin:0 2px"></div>
+      <button class="ic-btn" style="width:auto;padding:0 6px;gap:6px;font-size:12px;color:var(--gray-800)"><div class="avatar">م.ا</div><i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--gray-500)"></i></button>
+    </header>
+
+    <section class="proj-mini">
+      <div class="left">
+        <div class="thumb"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>
+        <div>
+          <h1>مجتمع مسکونی نگین شهر</h1>
+          <div class="meta-line">
+            <span>کد: <span class="mono">PRJ-1404-021</span></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>مدیر: <strong>مهندس رضایی</strong></span>
+            <span style="color:var(--gray-300)">·</span>
+            <span>اعضا: <strong style="color:var(--gray-900)">۱۲</strong> نفر</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="badge" style="background:var(--success-50);color:var(--success-700)"><span class="dot" style="background:var(--success-500)"></span>فعال</span>
+        <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i>خروجی اعضا</button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="edit-3" style="width:13px;height:13px"></i>ویرایش پروژه</button>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab" onclick="location.href='Project.html'"><i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>نمای کلی</button>
+      <button class="tab" onclick="location.href='WBS.html'"><i data-lucide="git-branch" style="width:13px;height:13px"></i>WBS</button>
+      <button class="tab" onclick="location.href='CBS.html'"><i data-lucide="banknote" style="width:13px;height:13px"></i>CBS</button>
+      <button class="tab" onclick="location.href='Links.html'"><i data-lucide="link" style="width:13px;height:13px"></i>اتصالات</button>
+      <button class="tab has-warn"><i data-lucide="clipboard-check" style="width:13px;height:13px"></i>گزارش‌ها<span class="num">۸</span></button>
+      <button class="tab active"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا<span class="num">۱۲</span></button>
+      <button class="tab"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i>نمودارها</button>
+      <button class="tab"><i data-lucide="settings" style="width:13px;height:13px"></i>تنظیمات</button>
+    </nav>
+
+    <!-- Sub-tabs -->
+    <div class="subtabs">
+      <div class="pill-tabs" id="subtab-bar">
+        <button class="pill-tab on" data-sub="members"><i data-lucide="users" style="width:13px;height:13px"></i>اعضا</button>
+        <button class="pill-tab" data-sub="assign"><i data-lucide="list-checks" style="width:13px;height:13px"></i>تخصیص فعالیت‌ها</button>
+      </div>
+      <span style="font-size:11.5px;color:var(--gray-500)">مدیریت دسترسی‌ها و تخصیص بخش‌های WBS به سرپرستان</span>
+    </div>
+
+    <div class="scroll-area">
+      <div class="content">
+
+        <!-- ═══════ PANEL: Members ═══════ -->
+        <div id="panel-members">
+          <div class="page-head">
+            <div>
+              <h2>اعضای پروژه</h2>
+              <div class="sub">۱۲ نفر در این پروژه عضو هستند — مدیر، ناظران و سرپرستان کارگاه</div>
+            </div>
+            <button class="btn btn-primary" onclick="openMemberModal()"><i data-lucide="user-plus" style="width:15px;height:15px"></i>افزودن عضو جدید</button>
+          </div>
+
+          <div class="stat-strip">
+            <div class="stat">
+              <div class="label"><span class="ic" style="background:var(--primary-100);color:var(--primary-700)"><i data-lucide="users" style="width:13px;height:13px"></i></span>کل اعضا</div>
+              <div class="value">۱۲</div>
+              <div class="foot">در پروژه فعال</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="ic" style="background:var(--accent-100);color:var(--accent-700)"><i data-lucide="shield" style="width:13px;height:13px"></i></span>مدیر پروژه</div>
+              <div class="value">۱</div>
+              <div class="foot">مهندس رضایی</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="ic" style="background:var(--info-50);color:var(--info-700)"><i data-lucide="eye" style="width:13px;height:13px"></i></span>ناظران</div>
+              <div class="value">۲</div>
+              <div class="foot">بازبینی گزارش‌ها</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="ic" style="background:var(--success-50);color:var(--success-700)"><i data-lucide="hard-hat" style="width:13px;height:13px"></i></span>سرپرستان</div>
+              <div class="value">۸</div>
+              <div class="foot">سرپرست کارگاه</div>
+            </div>
+            <div class="stat">
+              <div class="label"><span class="ic" style="background:var(--gray-100);color:var(--gray-600)"><i data-lucide="activity" style="width:13px;height:13px"></i></span>فعال ۷ روز اخیر</div>
+              <div class="value">۹</div>
+              <div class="foot">از ۱۲ عضو</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="lh">
+                <h3>فهرست اعضا</h3>
+                <span class="badge" style="background:var(--gray-100);color:var(--gray-600)">۱۲ نفر</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="search-wrap">
+                  <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+                  <input class="field" type="text" placeholder="جستجوی عضو…" />
+                </div>
+                <select class="field select"><option>نقش: همه</option><option>مدیر پروژه</option><option>ناظر</option><option>سرپرست</option><option>برنامه‌ریز</option></select>
+              </div>
+            </div>
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>عضو</th>
+                  <th>شماره موبایل</th>
+                  <th>نقش در پروژه</th>
+                  <th>فعالیت‌های اختصاصی</th>
+                  <th>وضعیت</th>
+                  <th>آخرین فعالیت</th>
+                  <th style="width:48px"></th>
+                </tr>
+              </thead>
+              <tbody id="members-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ═══════ PANEL: Assignment ═══════ -->
+        <div id="panel-assign">
+          <div class="page-head" style="margin-bottom:12px">
+            <div>
+              <h2>تخصیص فعالیت‌ها</h2>
+              <div class="sub">یک سرپرست را انتخاب کنید، سپس فعالیت‌های برگ WBS را به او تخصیص دهید — با چک‌باکس یا کشیدن و رها کردن</div>
+            </div>
+          </div>
+
+          <div class="assign-layout">
+            <!-- RIGHT: supervisors -->
+            <aside class="assign-col">
+              <div class="col-head">
+                <h4><i data-lucide="hard-hat" style="width:15px;height:15px"></i>سرپرستان کارگاه</h4>
+                <div class="sub">برای تخصیص، یک نفر را انتخاب کنید</div>
+              </div>
+              <div class="col-body" id="sup-list"></div>
+            </aside>
+
+            <!-- MIDDLE: WBS tree -->
+            <section class="assign-col">
+              <div class="col-head">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                  <h4><i data-lucide="git-branch" style="width:15px;height:15px"></i>فعالیت‌های WBS</h4>
+                  <span style="font-size:11px;color:var(--gray-500)">کلیک روی والد = انتخاب همه فرزندان</span>
+                </div>
+                <div class="search-wrap" style="margin-top:8px">
+                  <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+                  <input class="field" type="text" placeholder="جستجوی فعالیت…" style="width:100%;padding-right:32px" />
+                </div>
+              </div>
+              <div class="col-body" id="assign-tree"></div>
+            </section>
+
+            <!-- LEFT: selected -->
+            <aside class="assign-col">
+              <div class="col-head">
+                <h4><i data-lucide="check-square" style="width:15px;height:15px"></i>انتخاب‌شده</h4>
+                <div class="sub" id="sel-sub">برای تخصیص به سرپرست انتخاب‌شده</div>
+              </div>
+              <div class="col-body" id="sel-list"></div>
+              <div class="col-foot" id="sel-foot" style="display:none">
+                <div class="alert warn" id="move-alert" style="display:none">
+                  <i data-lucide="alert-triangle" style="width:14px;height:14px"></i>
+                  <div id="move-alert-text"></div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="btn btn-ghost" style="flex:1" onclick="clearSelection()">انصراف</button>
+                  <button class="btn btn-primary" style="flex:2" onclick="commitAssign()"><i data-lucide="check" style="width:14px;height:14px"></i>انتساب <span id="commit-count"></span></button>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ───── Add member modal ───── -->
+<div class="modal-overlay" id="member-modal" data-method="search">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="lh">
+        <div class="ic"><i data-lucide="user-plus" style="width:17px;height:17px"></i></div>
+        <div><h3>افزودن عضو جدید</h3><div class="sub">کاربر را انتخاب یا دعوت کنید</div></div>
+      </div>
+      <button class="ic-btn" onclick="closeMemberModal()"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <span class="mform-label">روش افزودن</span>
+        <div class="method-seg" id="method-seg">
+          <button class="on" data-method="search"><i data-lucide="search" style="width:13px;height:13px"></i>کاربران سیستم</button>
+          <button data-method="phone"><i data-lucide="smartphone" style="width:13px;height:13px"></i>شماره موبایل</button>
+          <button data-method="email"><i data-lucide="mail" style="width:13px;height:13px"></i>ایمیل</button>
+        </div>
+      </div>
+
+      <div id="m-search">
+        <div class="search-wrap" style="margin-bottom:8px">
+          <i class="ico" data-lucide="search" style="width:13px;height:13px"></i>
+          <input class="field" id="user-search" type="text" placeholder="نام یا شماره کاربر را تایپ کنید…" oninput="filterUsers(this.value)" style="width:100%;padding-right:32px" />
+        </div>
+        <div class="search-results" id="user-results"></div>
+      </div>
+      <div id="m-phone">
+        <span class="mform-label">شماره موبایل</span>
+        <input class="field" type="text" placeholder="۰۹۱۲۳۴۵۶۷۸۹" style="width:100%" dir="ltr" />
+        <p style="font-size:11px;color:var(--gray-500);margin:8px 0 0;line-height:1.6"><i data-lucide="info" style="width:11px;height:11px;display:inline;vertical-align:-1px"></i> پیامک دعوت همراه با لینک نصب اپلیکیشن ارسال می‌شود.</p>
+      </div>
+      <div id="m-email">
+        <span class="mform-label">ایمیل سازمانی</span>
+        <input class="field" type="text" placeholder="name@company.ir" style="width:100%" dir="ltr" />
+        <p style="font-size:11px;color:var(--gray-500);margin:8px 0 0;line-height:1.6"><i data-lucide="info" style="width:11px;height:11px;display:inline;vertical-align:-1px"></i> دعوت‌نامه به ایمیل ارسال می‌شود (حالت سازمانی).</p>
+      </div>
+
+      <div>
+        <span class="mform-label">نقش در این پروژه</span>
+        <div class="role-grid" id="role-grid">
+          <label class="role-opt" data-role="manager"><span class="rd"></span><span class="rl">مدیر پروژه<small>دسترسی کامل</small></span></label>
+          <label class="role-opt" data-role="supervisor-monitor"><span class="rd"></span><span class="rl">ناظر<small>تأیید گزارش‌ها</small></span></label>
+          <label class="role-opt on" data-role="supervisor"><span class="rd"></span><span class="rl">سرپرست<small>ثبت گزارش فیلد</small></span></label>
+          <label class="role-opt" data-role="planner"><span class="rd"></span><span class="rl">برنامه‌ریز<small>ویرایش WBS/CBS</small></span></label>
+        </div>
+        <div class="alert warn role-hint show" id="role-hint" style="margin-top:10px">
+          <i data-lucide="lightbulb" style="width:14px;height:14px"></i>
+          <div>بعد از افزودن، می‌توانید از زبانهٔ «تخصیص فعالیت‌ها» بخش‌های مشخصی از WBS را به این سرپرست تخصیص دهید.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeMemberModal()">انصراف</button>
+      <button class="btn btn-primary" id="member-add-btn" disabled><i data-lucide="user-plus" style="width:14px;height:14px"></i>افزودن به پروژه</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="ic"><i data-lucide="check" style="width:14px;height:14px"></i></span><span id="toast-text">انجام شد</span></div>
+
+<script>
+  const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  // role meta
+  const roles = {
+    manager:  { label: 'مدیر پروژه', bg: 'var(--accent-100)', fg: 'var(--accent-700)' },
+    monitor:  { label: 'ناظر',       bg: 'var(--info-50)',    fg: 'var(--info-700)' },
+    supervisor:{ label: 'سرپرست',    bg: 'var(--success-50)', fg: 'var(--success-700)' },
+    planner:  { label: 'برنامه‌ریز', bg: 'var(--primary-100)',fg: 'var(--primary-700)' },
+  };
+  function avColor(seed) {
+    const palette = [
+      ['#E5EBF3','#1A3354'],['#FCEAD9','#B45813'],['#ECFDF3','#15803D'],
+      ['#EFF6FF','#1D4ED8'],['#F3EEFE','#6D28D9'],['#FFF8EB','#B45309'],['#F4F4F5','#3F3F46'],['#ECFEFF','#0E7490'],
+    ];
+    return palette[seed % palette.length];
+  }
+
+  // ───── Members data ─────
+  const members = [
+    { id: 1,  name: 'مهندس رضایی',  initials: 'م.ر', phone: '۰۹۱۲۳۴۵۶۷۸۹', role: 'manager',    assigned: null,                  status: 'active', last: '۲ ساعت پیش' },
+    { id: 2,  name: 'مهندس حسینی',  initials: 'م.ح', phone: '۰۹۱۲۴۵۶۷۸۹۰', role: 'monitor',    assigned: 'بازبینی همهٔ گزارش‌ها', status: 'active', last: '۳ ساعت پیش' },
+    { id: 3,  name: 'مهندس کاظمی',  initials: 'م.ک', phone: '۰۹۱۲۵۶۷۸۹۰۱', role: 'monitor',    assigned: null,                  status: 'inactive', last: 'دیروز' },
+    { id: 4,  name: 'علی محمدی',    initials: 'ع.م', phone: '۰۹۱۳۱۱۱۱۱۱۱', role: 'supervisor', assigned: 'عملیات خاکی', assignCount: 3, status: 'active', last: '۳۰ دقیقه پیش' },
+    { id: 5,  name: 'حسن کریمی',    initials: 'ح.ک', phone: '۰۹۱۳۲۲۲۲۲۲۲', role: 'supervisor', assigned: 'فونداسیون',   assignCount: 4, status: 'active', last: '۱ ساعت پیش' },
+    { id: 6,  name: 'محمد رضایی',   initials: 'م.ر', phone: '۰۹۱۳۳۳۳۳۳۳۳', role: 'supervisor', assigned: 'نازک‌کاری',   assignCount: 8, status: 'active', last: '۴ ساعت پیش' },
+    { id: 7,  name: 'رضا اکبری',    initials: 'ر.ا', phone: '۰۹۱۳۴۴۴۴۴۴۴', role: 'supervisor', assigned: 'تأسیسات برق', assignCount: 5, status: 'active', last: '۲ ساعت پیش' },
+    { id: 8,  name: 'مهدی نوری',    initials: 'م.ن', phone: '۰۹۱۳۵۵۵۵۵۵۵', role: 'supervisor', assigned: 'تأسیسات مکانیکی', assignCount: 6, status: 'active', last: '۵ ساعت پیش' },
+    { id: 9,  name: 'سعید قاسمی',   initials: 'س.ق', phone: '۰۹۱۳۶۶۶۶۶۶۶', role: 'supervisor', assigned: 'سازه طبقات', assignCount: 3, status: 'active', last: 'دیروز' },
+    { id: 10, name: 'امیر صادقی',   initials: 'ا.ص', phone: '۰۹۱۳۷۷۷۷۷۷۷', role: 'supervisor', assigned: 'سقف', assignCount: 2, status: 'active', last: '۶ ساعت پیش' },
+    { id: 11, name: 'بهرام جمالی',  initials: 'ب.ج', phone: '۰۹۱۳۸۸۸۸۸۸۸', role: 'supervisor', assigned: null, assignCount: 0, status: 'inactive', last: '۳ روز پیش' },
+    { id: 12, name: 'مهندس احمدی',  initials: 'م.ا', phone: '۰۹۱۲۱۲۳۴۵۶۷', role: 'planner',    assigned: 'دسترسی کامل WBS/CBS', status: 'active', last: 'هم‌اکنون' },
+  ];
+
+  function renderMembers() {
+    document.getElementById('members-body').innerHTML = members.map((m, i) => {
+      const r = roles[m.role];
+      const [bg, fg] = avColor(m.id);
+      const assignCell = m.role === 'supervisor'
+        ? (m.assignCount > 0
+            ? `<a class="assign-link" onclick="goAssign(${m.id})">${m.assigned} <span class="badge" style="background:var(--gray-100);color:var(--gray-600);height:18px;padding:0 6px">${fa(m.assignCount)}</span></a>`
+            : `<a class="assign-link none" onclick="goAssign(${m.id})"><i data-lucide="plus-circle" style="width:13px;height:13px"></i>تخصیص نداده</a>`)
+        : (m.assigned ? `<span style="color:var(--gray-600)">${m.assigned}</span>` : `<span style="color:var(--gray-400)">—</span>`);
+      return `
+        <tr>
+          <td>
+            <div class="member-cell">
+              <span class="av" style="background:${bg};color:${fg}">${m.initials}</span>
+              <div><div class="nm">${m.name}</div><div class="em">${m.role === 'manager' ? 'مدیر' : m.role === 'monitor' ? 'ناظر' : m.role === 'planner' ? 'برنامه‌ریز' : 'سرپرست کارگاه'}</div></div>
+            </div>
+          </td>
+          <td><span class="mono" style="font-size:12px;color:var(--gray-700)">${m.phone}</span></td>
+          <td><span class="badge" style="background:${r.bg};color:${r.fg}">${r.label}</span></td>
+          <td>${assignCell}</td>
+          <td>
+            <span class="status-pill" style="color:${m.status === 'active' ? 'var(--success-700)' : 'var(--gray-500)'}">
+              <span class="d" style="background:${m.status === 'active' ? 'var(--success-500)' : 'var(--gray-400)'}"></span>${m.status === 'active' ? 'فعال' : 'غیرفعال'}
+            </span>
+          </td>
+          <td><span style="font-size:12px;color:var(--gray-600)">${m.last}</span></td>
+          <td>
+            <button class="ic-row-btn" onclick="toggleRowMenu(event, ${m.id})"><i data-lucide="more-vertical" style="width:15px;height:15px"></i></button>
+            <div class="row-menu" id="rowmenu-${m.id}">
+              <button><i data-lucide="user" style="width:14px;height:14px"></i>مشاهدهٔ پروفایل</button>
+              <button><i data-lucide="shield" style="width:14px;height:14px"></i>تغییر نقش</button>
+              <button onclick="goAssign(${m.id})"><i data-lucide="list-checks" style="width:14px;height:14px"></i>تخصیص فعالیت‌ها</button>
+              <button><i data-lucide="clipboard-check" style="width:14px;height:14px"></i>گزارش‌های ثبت‌شده</button>
+              <div class="sep"></div>
+              <button><i data-lucide="user-x" style="width:14px;height:14px"></i>غیرفعال‌سازی</button>
+              <button class="danger"><i data-lucide="trash-2" style="width:14px;height:14px"></i>حذف از پروژه</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  let openMenu = null;
+  window.toggleRowMenu = (e, id) => {
+    e.stopPropagation();
+    const menu = document.getElementById('rowmenu-' + id);
+    if (openMenu && openMenu !== menu) openMenu.classList.remove('open');
+    menu.classList.toggle('open');
+    openMenu = menu.classList.contains('open') ? menu : null;
+  };
+  document.addEventListener('click', () => { if (openMenu) { openMenu.classList.remove('open'); openMenu = null; } });
+
+  // ───── Sub-tab switching ─────
+  document.querySelectorAll('#subtab-bar .pill-tab').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#subtab-bar .pill-tab').forEach(x => x.classList.toggle('on', x === b));
+      document.body.dataset.tab = b.dataset.sub;
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+  window.goAssign = (id) => {
+    document.body.dataset.tab = 'assign';
+    document.querySelectorAll('#subtab-bar .pill-tab').forEach(x => x.classList.toggle('on', x.dataset.sub === 'assign'));
+    const m = members.find(x => x.id === id);
+    if (m && m.role === 'supervisor') selectSupervisor(id);
+    if (window.lucide) lucide.createIcons();
+  };
+
+  // ───── Assignment ─────
+  const supervisors = members.filter(m => m.role === 'supervisor');
+  let selectedSup = supervisors[0].id;
+  // existing assignments: leafCode -> supervisorId
+  const assignments = {
+    '1.1.1': 4, '1.1.2': 4, '1.1.3': 4,
+    '1.2.1.1': 5, '1.2.1.2': 5, '1.2.1.3': 5, '1.2.2.1': 9,
+    '1.2.3.1': 10, '1.2.3.2': 10,
+    '1.4.1.1': 6, '1.4.1.2': 6,
+    '1.3.1.1': 7, '1.3.1.2': 7,
+  };
+  // pending selection (leafCodes user is checking now)
+  let pendingSel = new Set();
+
+  const wbsTree = [
+    { code: '1.1', title: 'عملیات خاکی', children: [
+      { code: '1.1.1', title: 'خاکبرداری', leaf: true },
+      { code: '1.1.2', title: 'خاکریزی', leaf: true },
+      { code: '1.1.3', title: 'تسطیح', leaf: true },
+    ]},
+    { code: '1.2', title: 'سازه', children: [
+      { code: '1.2.1', title: 'فونداسیون', children: [
+        { code: '1.2.1.1', title: 'آرماتوربندی فونداسیون', leaf: true },
+        { code: '1.2.1.2', title: 'قالب‌بندی فونداسیون', leaf: true },
+        { code: '1.2.1.3', title: 'بتن‌ریزی فونداسیون', leaf: true },
+      ]},
+      { code: '1.2.2', title: 'سازه طبقات', children: [
+        { code: '1.2.2.1', title: 'آرماتوربندی ستون‌ها', leaf: true },
+        { code: '1.2.2.2', title: 'قالب‌بندی ستون‌ها', leaf: true },
+        { code: '1.2.2.3', title: 'بتن‌ریزی ستون‌ها', leaf: true },
+      ]},
+      { code: '1.2.3', title: 'سقف', children: [
+        { code: '1.2.3.1', title: 'قالب‌بندی سقف طبقهٔ دوم', leaf: true },
+        { code: '1.2.3.2', title: 'آرماتوربندی سقف', leaf: true },
+      ]},
+    ]},
+    { code: '1.3', title: 'تأسیسات', children: [
+      { code: '1.3.1', title: 'برقی', children: [
+        { code: '1.3.1.1', title: 'لوله‌گذاری برق', leaf: true },
+        { code: '1.3.1.2', title: 'کابل‌کشی برق', leaf: true },
+      ]},
+      { code: '1.3.2', title: 'مکانیکی', children: [
+        { code: '1.3.2.1', title: 'لوله‌کشی آب', leaf: true },
+        { code: '1.3.2.2', title: 'لوله‌کشی فاضلاب', leaf: true },
+      ]},
+    ]},
+    { code: '1.4', title: 'نازک‌کاری', children: [
+      { code: '1.4.1', title: 'گچ و رنگ', children: [
+        { code: '1.4.1.1', title: 'گچ‌کاری دیوارها', leaf: true },
+        { code: '1.4.1.2', title: 'رنگ‌آمیزی', leaf: true },
+      ]},
+    ]},
+  ];
+  const expanded = {};
+  wbsTree.forEach(t => { expanded[t.code] = true; (t.children||[]).forEach(c => { if (c.children) expanded[c.code] = true; }); });
+
+  const allLeaves = [];
+  (function collect(nodes){ nodes.forEach(n => { if (n.leaf) allLeaves.push(n.code); else if (n.children) collect(n.children); }); })(wbsTree);
+
+  function supById(id) { return members.find(m => m.id === id); }
+  function countFor(id) { return Object.values(assignments).filter(v => v === id).length; }
+
+  function renderSupList() {
+    document.getElementById('sup-list').innerHTML = supervisors.map(s => {
+      const [bg, fg] = avColor(s.id);
+      const cnt = countFor(s.id);
+      const sel = s.id === selectedSup;
+      return `
+        <div class="sup-card ${sel ? 'selected' : ''}" data-sup="${s.id}" ondragover="event.preventDefault();this.classList.add('drop-target')" ondragleave="this.classList.remove('drop-target')" ondrop="dropOnSup(event, ${s.id})">
+          <span class="av" style="background:${bg};color:${fg}">${s.initials}</span>
+          <div class="info">
+            <div class="nm">${s.name}</div>
+            <div class="meta"><i data-lucide="clock" style="width:11px;height:11px"></i>${s.last}</div>
+          </div>
+          <div class="cnt">${fa(cnt)}<small>فعالیت</small></div>
+        </div>`;
+    }).join('');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function renderAssignTree() {
+    const root = document.getElementById('assign-tree');
+    function walk(nodes, depth) {
+      let html = '';
+      for (const n of nodes) {
+        const indent = depth * 16;
+        if (n.leaf) {
+          const owner = assignments[n.code];
+          const checked = pendingSel.has(n.code);
+          const isCurrentOwner = owner === selectedSup;
+          let ownerTag = '';
+          if (owner && !checked) {
+            const o = supById(owner);
+            const [bg, fg] = avColor(owner);
+            const cls = isCurrentOwner ? 'current' : 'other';
+            ownerTag = `<span class="owner-tag ${cls}" data-tip="سرپرست فعلی: ${o.name}"><span class="av" style="background:${bg};color:${fg}">${o.initials}</span>${o.name.split(' ')[0]}</span>`;
+          }
+          html += `
+            <div class="atree-row leaf" data-leaf="${n.code}" draggable="true"
+                 ondragstart="dragStart(event,'${n.code}')" ondragend="this.classList.remove('dragging')"
+                 style="padding-right:${indent + 4}px">
+              <i data-lucide="grip-vertical" class="grip" style="width:13px;height:13px"></i>
+              <span class="acheck ${checked ? 'checked' : ''}">${checked ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>' : ''}</span>
+              <span class="t-ic leaf"><i data-lucide="file-text" style="width:14px;height:14px"></i></span>
+              <span class="t-title">${n.title}</span>
+              ${ownerTag}
+            </div>`;
+        } else {
+          const isOpen = expanded[n.code];
+          // parent partial/checked state
+          const leaves = []; (function gl(x){ x.forEach(c => c.leaf ? leaves.push(c.code) : gl(c.children||[])); })(n.children||[]);
+          const checkedCount = leaves.filter(l => pendingSel.has(l)).length;
+          const pcls = checkedCount === 0 ? '' : checkedCount === leaves.length ? 'checked' : 'partial';
+          html += `
+            <div class="atree-row parent" style="padding-right:${indent}px">
+              <button class="twisty" onclick="toggleExpand('${n.code}')"><i data-lucide="${isOpen ? 'chevron-down' : 'chevron-left'}" style="width:13px;height:13px"></i></button>
+              <span class="acheck ${pcls}" onclick="toggleParent('${n.code}')">${pcls === 'checked' ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>' : ''}</span>
+              <span class="t-ic folder"><i data-lucide="${isOpen ? 'folder-open' : 'folder'}" style="width:15px;height:15px"></i></span>
+              <span class="t-title">${n.title}</span>
+            </div>`;
+          if (isOpen && n.children) html += walk(n.children, depth + 1);
+        }
+      }
+      return html;
+    }
+    root.innerHTML = walk(wbsTree, 0);
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function leafTitle(code) {
+    let found = null;
+    (function w(nodes){ nodes.forEach(n => { if (n.code === code) found = n; else if (n.children) w(n.children); }); })(wbsTree);
+    return found ? found.title : code;
+  }
+
+  function renderSelected() {
+    const sup = supById(selectedSup);
+    const list = document.getElementById('sel-list');
+    const foot = document.getElementById('sel-foot');
+    const [bg, fg] = avColor(selectedSup);
+    document.getElementById('sel-sub').textContent = `برای ${sup.name}`;
+
+    const items = [...pendingSel];
+    const movedCount = items.filter(c => assignments[c] && assignments[c] !== selectedSup).length;
+
+    let html = `
+      <div class="sel-head-card">
+        <span class="av" style="background:${bg};color:${fg}">${sup.initials}</span>
+        <div class="info"><div class="lbl">انتخاب‌شده برای</div><div class="nm">${sup.name}</div></div>
+      </div>`;
+
+    const totalAfter = countFor(selectedSup) + items.filter(c => assignments[c] !== selectedSup).length;
+    const pct = Math.round(totalAfter / allLeaves.length * 100);
+    html += `
+      <div class="sel-progress">
+        <div class="row"><span>سهم از کل فعالیت‌ها</span><strong>${fa(totalAfter)} از ${fa(allLeaves.length)} (${fa(pct)}٪)</strong></div>
+        <div class="pbar"><div style="width:${pct}%"></div></div>
+      </div>`;
+
+    if (items.length === 0) {
+      html += `
+        <div class="sel-empty">
+          <i data-lucide="mouse-pointer-square-dashed" style="width:32px;height:32px"></i>
+          <p>فعالیتی انتخاب نشده است.<br>از ستون وسط، چک‌باکس فعالیت‌ها را بزنید<br>یا آن‌ها را روی کارت سرپرست بکشید.</p>
+        </div>`;
+      foot.style.display = 'none';
+    } else {
+      html += items.map(code => {
+        const moved = assignments[code] && assignments[code] !== selectedSup;
+        const movedFrom = moved ? supById(assignments[code]) : null;
+        return `
+          <div class="sel-item ${moved ? 'moved' : ''}">
+            <span class="t-ic"><i data-lucide="file-text" style="width:14px;height:14px"></i></span>
+            <div class="info">
+              <div class="nm">${leafTitle(code)}</div>
+              <div class="code mono">${fa(code)}${moved ? ` · انتقال از ${movedFrom.name.split(' ')[0]}` : ''}</div>
+            </div>
+            <button class="rm" onclick="togglePending('${code}')"><i data-lucide="x" style="width:13px;height:13px"></i></button>
+          </div>`;
+      }).join('');
+      foot.style.display = 'flex';
+      document.getElementById('commit-count').textContent = `(${fa(items.length)})`;
+      const moveAlert = document.getElementById('move-alert');
+      if (movedCount > 0) {
+        moveAlert.style.display = 'flex';
+        document.getElementById('move-alert-text').innerHTML = `${fa(movedCount)} فعالیت قبلاً به سرپرست دیگری تخصیص داده شده بود. با انتساب، به <strong>${sup.name}</strong> منتقل می‌شود.`;
+      } else {
+        moveAlert.style.display = 'none';
+      }
+    }
+    list.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function selectSupervisor(id) {
+    selectedSup = id;
+    pendingSel.clear();
+    renderSupList(); renderAssignTree(); renderSelected();
+  }
+  document.getElementById('sup-list').addEventListener('click', e => {
+    const c = e.target.closest('[data-sup]');
+    if (c) selectSupervisor(+c.dataset.sup);
+  });
+
+  window.toggleExpand = (code) => { expanded[code] = !expanded[code]; renderAssignTree(); };
+  window.togglePending = (code) => {
+    if (pendingSel.has(code)) pendingSel.delete(code); else pendingSel.add(code);
+    renderAssignTree(); renderSelected();
+  };
+  window.toggleParent = (code) => {
+    let node = null;
+    (function w(nodes){ nodes.forEach(n => { if (n.code === code) node = n; else if (n.children) w(n.children); }); })(wbsTree);
+    const leaves = []; (function gl(x){ x.forEach(c => c.leaf ? leaves.push(c.code) : gl(c.children||[])); })(node.children||[]);
+    const allChecked = leaves.every(l => pendingSel.has(l));
+    leaves.forEach(l => allChecked ? pendingSel.delete(l) : pendingSel.add(l));
+    renderAssignTree(); renderSelected();
+  };
+  document.getElementById('assign-tree').addEventListener('click', e => {
+    const row = e.target.closest('.atree-row.leaf');
+    if (row && !e.target.closest('.grip')) togglePending(row.dataset.leaf);
+  });
+
+  window.clearSelection = () => { pendingSel.clear(); renderAssignTree(); renderSelected(); };
+  window.commitAssign = () => {
+    const items = [...pendingSel];
+    items.forEach(c => assignments[c] = selectedSup);
+    pendingSel.clear();
+    renderSupList(); renderAssignTree(); renderSelected();
+    showToast(`${fa(items.length)} فعالیت به ${supById(selectedSup).name} تخصیص یافت`);
+  };
+
+  // drag and drop
+  let dragLeaf = null;
+  window.dragStart = (e, code) => { dragLeaf = code; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; };
+  window.dropOnSup = (e, supId) => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drop-target');
+    if (!dragLeaf) return;
+    const prev = assignments[dragLeaf];
+    assignments[dragLeaf] = supId;
+    if (selectedSup !== supId) selectSupervisor(supId);
+    else { renderSupList(); renderAssignTree(); renderSelected(); }
+    const moved = prev && prev !== supId ? ` (انتقال از ${supById(prev).name.split(' ')[0]})` : '';
+    showToast(`«${leafTitle(dragLeaf)}» به ${supById(supId).name} تخصیص یافت${moved}`);
+    dragLeaf = null;
+  };
+
+  function showToast(text) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = text;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ───── Member modal ─────
+  const systemUsers = [
+    { name: 'فرهاد مرادی', phone: '۰۹۱۲۹۹۸۸۷۷۶', initials: 'ف.م' },
+    { name: 'سارا کریمی', phone: '۰۹۳۵۱۲۳۴۵۶۷', initials: 'س.ک' },
+    { name: 'نیما حسن‌زاده', phone: '۰۹۱۹۸۷۶۵۴۳۲', initials: 'ن.ح' },
+    { name: 'پریسا اسدی', phone: '۰۹۱۲۳۳۳۲۲۱۱', initials: 'پ.ا' },
+    { name: 'کاوه رحیمی', phone: '۰۹۱۰۱۱۱۲۲۳۳', initials: 'ک.ر' },
+  ];
+  let modalUser = null, modalRole = 'supervisor';
+  window.openMemberModal = () => {
+    modalUser = null; modalRole = 'supervisor';
+    document.getElementById('member-modal').classList.add('open');
+    document.getElementById('member-modal').dataset.method = 'search';
+    document.querySelectorAll('#method-seg button').forEach(x => x.classList.toggle('on', x.dataset.method === 'search'));
+    document.getElementById('user-search').value = '';
+    document.getElementById('member-add-btn').disabled = true;
+    filterUsers('');
+    if (window.lucide) lucide.createIcons();
+  };
+  window.closeMemberModal = () => document.getElementById('member-modal').classList.remove('open');
+  document.getElementById('member-modal').addEventListener('click', e => { if (e.target.id === 'member-modal') closeMemberModal(); });
+
+  document.querySelectorAll('#method-seg button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#method-seg button').forEach(x => x.classList.toggle('on', x === b));
+      document.getElementById('member-modal').dataset.method = b.dataset.method;
+      document.getElementById('member-add-btn').disabled = (b.dataset.method === 'search' && !modalUser);
+    });
+  });
+  window.filterUsers = (q) => {
+    const root = document.getElementById('user-results');
+    const matches = systemUsers.filter(u => !q.trim() || u.name.includes(q) || u.phone.includes(q));
+    root.innerHTML = matches.length ? matches.map((u, i) => {
+      const [bg, fg] = avColor(i + 3);
+      return `<div class="sr-item" data-user="${i}"><span class="av" style="background:${bg};color:${fg}">${u.initials}</span><div class="info"><div class="nm">${u.name}</div><div class="ph mono">${u.phone}</div></div><i data-lucide="${modalUser === i ? 'check-circle-2' : 'plus-circle'}" style="width:16px;height:16px;color:${modalUser === i ? 'var(--success-500)' : 'var(--gray-400)'}"></i></div>`;
+    }).join('') : `<div style="padding:18px;text-align:center;color:var(--gray-400);font-size:12px">کاربری یافت نشد</div>`;
+    if (window.lucide) lucide.createIcons();
+  };
+  document.getElementById('user-results').addEventListener('click', e => {
+    const it = e.target.closest('[data-user]');
+    if (it) {
+      modalUser = +it.dataset.user;
+      document.querySelectorAll('#user-results .sr-item').forEach(x => x.classList.toggle('selected', x === it));
+      document.getElementById('member-add-btn').disabled = false;
+      filterUsers(document.getElementById('user-search').value);
+    }
+  });
+  document.querySelectorAll('#role-grid .role-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#role-grid .role-opt').forEach(x => x.classList.toggle('on', x === opt));
+      modalRole = opt.dataset.role;
+      document.getElementById('role-hint').classList.toggle('show', modalRole === 'supervisor');
+    });
+  });
+  document.getElementById('member-add-btn').addEventListener('click', () => {
+    closeMemberModal();
+    showToast('عضو جدید به پروژه افزوده شد');
+  });
+
+  // init
+  renderMembers();
+  renderSupList();
+  renderAssignTree();
+  renderSelected();
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

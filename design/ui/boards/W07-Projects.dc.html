@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>پروژه‌ها — جدول</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/projeyar/tokens.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="pj app" dir="rtl" lang="fa">
+  <aside class="sb-slot"><dc-import name="Sidebar" active="projects" hint-size="224px,860px"></dc-import></aside>
+  <main class="main">
+    <dc-import name="Topbar" title="پروژه‌ها" ic="folder-kanban" search="{{yes}}" hint-size="100%,52px"></dc-import>
+    <div class="content">
+      <nav class="bc" aria-label="مسیر"><a class="row g4" href="W05-Dashboard.dc.html"><dc-import name="Icon" i="home" sz="12" hint-size="12px,12px"></dc-import>خانه</a><span class="tx5" style="display: inline-flex"><dc-import name="Icon" i="chevron-left" sz="12" hint-size="12px,12px"></dc-import></span><span class="tx8 fw5">پروژه‌ها</span></nav>
+      <div class="page-head" style="margin-top: 8px">
+        <div><h1 class="h-display">پروژه‌ها</h1><p class="sub" style="font-size: 13px">پایش پروژه‌های فعال، متوقف، پیش‌نویس و تمام‌شدهٔ شرکت آبادگران ایران</p></div>
+        <div class="row g8">
+          <a class="btn btn-o" href="W34-ImportUpload.dc.html"><dc-import name="Icon" i="upload" sz="14" hint-size="14px,14px"></dc-import>ورود از MSP</a>
+          <button class="btn btn-o" type="button"><dc-import name="Icon" i="file-spreadsheet" sz="14" hint-size="14px,14px"></dc-import>خروجی Excel</button>
+          <a class="btn btn-p" href="W37-NewProjectStep1.dc.html"><dc-import name="Icon" i="plus" sz="15" hint-size="15px,15px"></dc-import>پروژهٔ جدید</a>
+        </div>
+      </div>
+      <div class="strip c4" style="margin-bottom: 16px">
+        <div><span class="row g6 t-sm tx5"><span class="tx-pri" style="display: inline-flex"><dc-import name="Icon" i="folder" sz="13" hint-size="13px,13px"></dc-import></span>مجموع پروژه‌ها</span><span class="stat-v">۱۲</span><span class="t-sm tx5">۸ فعال · ۲ متوقف · ۱ پیش‌نویس · ۱ تمام‌شده</span></div>
+        <div><span class="row g6 t-sm tx5"><span class="tx-ok" style="display: inline-flex"><dc-import name="Icon" i="trending-up" sz="13" hint-size="13px,13px"></dc-import></span>میانگین پیشرفت</span><span class="row g8"><span class="stat-v">۵۲٪</span><span class="delta ok"><dc-import name="Icon" i="arrow-up" sz="11" hint-size="11px,11px"></dc-import>۳٪</span></span><span class="t-sm tx5">نسبت به ماه گذشته</span></div>
+        <div><span class="row g6 t-sm tx5"><span class="tx-acc" style="display: inline-flex"><dc-import name="Icon" i="banknote" sz="13" hint-size="13px,13px"></dc-import></span>بودجهٔ کل</span><span class="row g6 ai-e"><span class="stat-v">۱۹٬۰۵۰</span><span class="t-12 tx5" style="padding-bottom: 3px">میلیارد ریال</span></span><span class="t-sm tx5">مصرف‌شده: ۹٬۸۲۴ میلیارد (۵۲٪)</span></div>
+        <div><span class="row g6 t-sm tx5"><span class="tx-err" style="display: inline-flex"><dc-import name="Icon" i="alert-triangle" sz="13" hint-size="13px,13px"></dc-import></span>پروژه‌های در خطر</span><span class="row g8"><span class="stat-v tx-err">۲</span><span class="delta err"><dc-import name="Icon" i="arrow-up" sz="11" hint-size="11px,11px"></dc-import>۱</span></span><span class="t-sm tx5">انحراف بیش از ۱۵٪ از برنامه</span></div>
+      </div>
+      <div class="card row wrap g8" style="padding: 10px 12px; margin-bottom: 14px; overflow: visible">
+        <label class="fld sm" style="width: 240px"><dc-import name="Icon" i="search" sz="14" hint-size="14px,14px"></dc-import><input type="search" placeholder="جستجوی نام یا کد پروژه…" aria-label="جستجوی پروژه"></label>
+        <button class="fld sm sel" type="button" style="width: 140px">وضعیت: همه<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm sel" type="button" style="width: 150px">کارفرما: همه<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm sel" type="button" style="width: 160px">مدیر پروژه: همه<dc-import name="Icon" i="chevron-down" sz="13" hint-size="13px,13px"></dc-import></button>
+        <button class="fld sm" type="button" style="width: auto"><dc-import name="Icon" i="calendar" sz="13" hint-size="13px,13px"></dc-import><span class="t-12">۱۴۰۴/۰۱/۰۱ — ۱۴۰۴/۱۲/۲۹</span></button>
+        <span class="bdg pri" style="height: 28px; padding-inline-end: 4px">نوع: ساختمانی، راه و پل<button class="ibtn sm" type="button" aria-label="حذف فیلتر نوع" style="width: 20px; height: 20px; color: #2C4A73"><dc-import name="Icon" i="x" sz="12" hint-size="12px,12px"></dc-import></button></span>
+        <button class="btn btn-g btn-sm tx-pri" type="button"><dc-import name="Icon" i="x" sz="13" hint-size="13px,13px"></dc-import>پاک کردن فیلترها</button>
+        <div class="seg ms-auto" aria-label="نمای فهرست"><span class="on" aria-current="page"><dc-import name="Icon" i="list" sz="13" hint-size="13px,13px"></dc-import>جدول</span><a href="W08-ProjectsCards.dc.html"><dc-import name="Icon" i="layout-grid" sz="13" hint-size="13px,13px"></dc-import>کارت</a></div>
+      </div>
+      <section class="card">
+        <div class="row g10 solid-pri" style="padding: 8px 14px">
+          <span class="row g8 t-13 fw6"><dc-import name="Icon" i="check-square" sz="15" hint-size="15px,15px"></dc-import>۱ پروژه انتخاب شد</span>
+          <button class="btn btn-gw btn-sm" type="button"><dc-import name="Icon" i="file-spreadsheet" sz="13" hint-size="13px,13px"></dc-import>خروجی Excel</button>
+          <button class="btn btn-gw btn-sm" type="button"><dc-import name="Icon" i="file-code-2" sz="13" hint-size="13px,13px"></dc-import>خروجی MSP</button>
+          <button class="btn btn-gw btn-sm" type="button"><dc-import name="Icon" i="archive" sz="13" hint-size="13px,13px"></dc-import>آرشیو</button>
+          <button class="btn btn-gw btn-sm ms-auto" type="button">لغو انتخاب</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl" style="min-width: 1180px">
+            <thead><tr>
+              <th style="width: 36px"><input type="checkbox" aria-label="انتخاب همه" style="accent-color: #1A3354; margin: 0"></th>
+              <th><span class="row g4">نام پروژه<dc-import name="Icon" i="arrow-up-down" sz="11" hint-size="11px,11px"></dc-import></span></th>
+              <th>کارفرما</th><th>مدیر پروژه</th><th>پیشرفت برنامه‌ای</th>
+              <th style="color: #18181B"><span class="row g4">پیشرفت واقعی<dc-import name="Icon" i="arrow-down" sz="11" hint-size="11px,11px"></dc-import></span></th>
+              <th>انحراف</th><th>بودجه</th><th>پایان برنامه‌ای</th><th>وضعیت</th><th style="width: 40px"></th>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{rows}}" as="p" hint-placeholder-count="8">
+                <tr class="{{p.sel}}">
+                  <td><input type="checkbox" checked="{{p.checked}}" aria-label="انتخاب {{p.n}}" style="accent-color: #1A3354; margin: 0"></td>
+                  <td><a class="row g10" href="W10-ProjectOverview.dc.html" style="min-width: 220px"><span class="thumb" style="background: {{p.tint}}"><dc-import name="Icon" i="{{p.ic}}" sz="16" hint-size="16px,16px"></dc-import></span><span class="col"><span class="fw6 tx9">{{p.n}}</span><span class="mono t-xs tx5">{{p.code}}</span></span></a></td>
+                  <td class="tx8">{{p.c}}</td>
+                  <td><span class="row g8 nowrap"><span class="av {{p.av}}">{{p.pi}}</span>{{p.pm}}</span></td>
+                  <td style="min-width: 130px"><div class="col g4"><span class="row between t-12 fw6">{{p.plf}}٪<span class="t-xs tx5 fw5">برنامه‌ای</span></span><span class="pbar thin"><i style="width: {{p.pl}}%; background: #A1A1AA"></i></span></div></td>
+                  <td style="min-width: 130px"><div class="col g4"><span class="row between t-12 fw6">{{p.acf}}٪<span class="t-xs tx5 fw5">واقعی</span></span><span class="pbar thin"><i style="width: {{p.ac}}%; background: {{p.col}}"></i></span></div></td>
+                  <td><span class="bdg {{p.dt}}">{{p.dl}}</span></td>
+                  <td><div class="col"><span class="fw6 tx9 nowrap">{{p.b}} میلیارد ریال</span><span class="t-xs tx5">{{p.uf}}٪ مصرف‌شده</span></div></td>
+                  <td class="t-12 tx7 nowrap">{{p.end}}</td>
+                  <td><span class="bdg {{p.st}}"><span class="dot"></span>{{p.stl}}</span></td>
+                  <td><a class="ibtn sm" href="W45-ContextMenus.dc.html" aria-label="اقدامات {{p.n}}"><dc-import name="Icon" i="more-vertical" sz="15" hint-size="15px,15px"></dc-import></a></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-f">
+          <span class="t-13 tx6">نمایش <strong class="tx9">۱ تا ۸</strong> از <strong class="tx9">۱۲</strong> پروژه</span>
+          <div class="row g12">
+            <span class="row g6 t-12 tx6">تعداد در هر صفحه<button class="fld sm sel" type="button" style="width: 64px; height: 28px">۸<dc-import name="Icon" i="chevron-down" sz="12" hint-size="12px,12px"></dc-import></button></span>
+            <nav class="row g2" aria-label="صفحه‌بندی">
+              <button class="ibtn sm" type="button" disabled aria-label="صفحهٔ قبل" style="color: #D4D4D8"><dc-import name="Icon" i="chevron-right" sz="14" hint-size="14px,14px"></dc-import></button>
+              <button class="ibtn sm solid-pri" type="button" aria-current="page" style="font-size: 12px; font-weight: 600">۱</button>
+              <button class="ibtn sm" type="button" style="font-size: 12px">۲</button>
+              <button class="ibtn sm" type="button" aria-label="صفحهٔ بعد"><dc-import name="Icon" i="chevron-left" sz="14" hint-size="14px,14px"></dc-import></button>
+            </nav>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    const S = { active: ['ok', 'فعال'], risk: ['err', 'در خطر'], done: ['pri', 'تمام‌شده'], draft: ['neu', 'پیش‌نویس'], paused: ['wrn', 'متوقف'] };
+    const raw = [
+      ['PRJ-1404-021', 'مجتمع مسکونی نگین شهر', 'شهرداری تهران', '#1A3354', 'building-2', 'مهندس رضایی', 'م.ر', 'a2', 70, 65, '۸۵۰', 58, '۱۴۰۴/۰۸/۱۵', 'active', true],
+      ['PRJ-1402-008', 'پل شهید سلیمانی', 'وزارت راه و شهرسازی', '#15803D', 'milestone', 'مهندس کریمی', 'س.ک', 'a1', 50, 42, '۲٬۴۰۰', 45, '۱۴۰۵/۰۳/۲۰', 'active'],
+      ['PRJ-1401-012', 'تونل البرز', 'شرکت ساخت و توسعه', '#3F3F46', 'mountain', 'مهندس هاشمی', 'ع.ه', 'a3', 25, 30, '۸٬۶۰۰', 32, '۱۴۰۷/۱۱/۰۱', 'active'],
+      ['PRJ-1403-002', 'بیمارستان امام رضا', 'علوم پزشکی مشهد', '#B45813', 'cross', 'مهندس نوری', 'م.ن', 'a4', 90, 88, '۳٬۲۰۰', 82, '۱۴۰۴/۰۴/۲۹', 'active'],
+      ['PRJ-1404-017', 'نیروگاه خورشیدی یزد', 'ساتبا', '#D97706', 'sun', 'مهندس جمالی', 'ر.ج', 'a6', 35, 15, '۱٬۵۰۰', 20, '۱۴۰۴/۱۰/۱۰', 'risk'],
+      ['PRJ-1402-001', 'پارکینگ طبقاتی فردوسی', 'شهرداری مشهد', '#15803D', 'car', 'مهندس صادقی', 'م.ص', 'a8', 100, 100, '۴۸۰', 98, '۱۴۰۳/۱۲/۰۱', 'done'],
+      ['PRJ-1404-024', 'بازسازی بازار سنتی', 'سازمان میراث فرهنگی', '#52525B', 'landmark', 'مهندس مرادی', 'ف.م', 'a7', 0, 0, '۲۲۰', 0, '۱۴۰۵/۰۸/۲۰', 'draft'],
+      ['PRJ-1403-015', 'مجتمع تجاری زیتون', 'گروه سرمایه‌گذاری ایرانیان', '#1D4ED8', 'store', 'مهندس احمدی', 'م.ا', 'a5', 58, 55, '۱٬۸۰۰', 52, '۱۴۰۴/۱۱/۰۵', 'paused']
+    ];
+    const rows = raw.map(r => {
+      const d = r[9] - r[8], st = r[13];
+      let dt = 'pri', dl = '−' + fa(-d) + '٪', col = '#2C4A73';
+      if (st === 'done') { dt = 'ok'; dl = 'به‌موقع'; col = '#2C4A73'; }
+      else if (st === 'draft') { dt = 'neu'; dl = '—'; col = '#D4D4D8'; }
+      else if (d > 0) { dt = 'ok'; dl = '+' + fa(d) + '٪ جلو'; col = '#16A34A'; }
+      else if (d <= -15) { dt = 'err'; dl = '−' + fa(-d) + '٪ بحرانی'; col = '#DC2626'; }
+      else if (d < -5) { dt = 'wrn'; col = '#D97706'; }
+      else if (d === 0) { dl = '۰٪'; }
+      return { code: r[0], n: r[1], c: r[2], tint: r[3], ic: r[4], pm: r[5], pi: r[6], av: r[7], pl: r[8], ac: r[9], plf: fa(r[8]), acf: fa(r[9]), b: r[10], uf: fa(r[11]), end: r[12], st: S[st][0], stl: S[st][1], dt, dl, col, checked: !!r[14], sel: r[14] ? 'sel' : '' };
+    });
+    return { yes: true, rows };
+  }
+}
+</script>
+</body>
+</html>
