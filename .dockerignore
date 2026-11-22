@@ -6,7 +6,6 @@
 **/coverage
 **/.env*
 **/var
-**/storage
 mobile
 design
 designs
