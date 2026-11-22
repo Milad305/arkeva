@@ -1,0 +1,14 @@
+
+.git
+.github
+**/node_modules
+**/dist
+**/coverage
+**/.env*
+**/var
+**/storage
+mobile
+design
+designs
+docs
+*.log
