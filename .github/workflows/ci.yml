@@ -98,6 +98,7 @@ jobs:
               await import(\"@node-rs/argon2\");
               await import(\"sharp\");
               await import(\"puppeteer-core\");
+              await import(\"@projeyar/shared\");
               console.log(\"All runtime dependencies loaded successfully\");
             "
           '

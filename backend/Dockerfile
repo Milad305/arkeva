@@ -29,6 +29,12 @@ RUN pnpm --filter @projeyar/shared run build \
 # Create isolated production dependencies
 RUN pnpm --filter @projeyar/backend --prod deploy --legacy /prod/backend
 
+# Replace workspace symlink with a self-contained shared package
+RUN rm -f /prod/backend/node_modules/@projeyar/shared \
+    && mkdir -p /prod/backend/node_modules/@projeyar/shared \
+    && cp packages/shared/package.json /prod/backend/node_modules/@projeyar/shared/ \
+    && cp -a packages/shared/dist/. /prod/backend/node_modules/@projeyar/shared/dist/
+
 # Ensure compiled backend output is included
 RUN mkdir -p /prod/backend/dist \
     && cp -a backend/dist/. /prod/backend/dist/
