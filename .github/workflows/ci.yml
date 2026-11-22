@@ -101,6 +101,46 @@ jobs:
               console.log(\"All runtime dependencies loaded successfully\");
             "
           '
+  docker-frontend:
+    name: Build and verify frontend image
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build frontend image
+        run: |
+          docker build \
+            --file frontend/Dockerfile \
+            --tag arkeva-frontend:ci \
+            --build-arg VITE_API_BASE_URL=/v1 \
+            --build-arg VITE_NODE_ENV=production \
+            .
+
+      - name: Verify frontend image
+        run: |
+          docker run -d \
+            --name arkeva-frontend-test \
+            -p 8080:80 \
+            arkeva-frontend:ci
+
+          trap 'docker rm -f arkeva-frontend-test >/dev/null 2>&1 || true' EXIT
+
+          for i in $(seq 1 15); do
+            if curl -fsS http://localhost:8080/ -o /tmp/frontend-index.html; then
+              break
+            fi
+            sleep 2
+          done
+
+          test -s /tmp/frontend-index.html
+          grep -q '<div id="root"></div>' /tmp/frontend-index.html
+
+          echo "Frontend container is serving index.html successfully"
+
   publish-backend:
     name: Publish backend image to GHCR
     runs-on: ubuntu-latest
