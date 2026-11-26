@@ -1,0 +1,26 @@
+# زمینهٔ ساخت image‌ها ریشهٔ مخزن است (deploy/*.Dockerfile)؛ فقط آنچه ساخت لازم دارد فرستاده شود.
+**/node_modules
+**/dist
+**/dist-ssr
+**/coverage
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+!**/.env.example
+**/ruvector.db
+**/.claude
+.git
+.github
+mobile
+design
+designs
+docs
+backend/var
+backend/test
+backend/.snapshot-*.json
+frontend/src.old
+Ashan.zip
+*_decoded.json
+conversations_decoded.json
+*.md
+!deploy/**

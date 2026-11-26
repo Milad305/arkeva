@@ -78,7 +78,7 @@ export class StepUpChallenges {
       return { code, mobile: user.mobile };
     });
 
-    await this.sms.send({ to: issued.mobile, text: this.otp.smsText(issued.code) });
+    await this.sms.send({ to: issued.mobile, text: this.otp.smsText(issued.code), otpCode: issued.code });
     return {
       maskedMobile: maskMobile(issued.mobile),
       expiresInSec: this.config.auth.otpTtlSec,

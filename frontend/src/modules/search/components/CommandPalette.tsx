@@ -14,6 +14,7 @@ import { useFocusTrap, useScrollLock } from '@/shared/hooks/useFocusTrap';
 import { useHasPermission } from '@/shared/hooks/useHasAccess';
 import { useKeyboardShortcut } from '@/shared/hooks/useKeyboardShortcut';
 import { toFaDigits } from '@/shared/utils/num';
+import { appPath } from '@/shared/utils/appUrl';
 import { useSearchQuery } from '../api/searchApi';
 import { pushRecent, readRecent } from '../services/recentSearches';
 import type { RecentEntryDto, SearchKind, SearchResultDto } from '../types';
@@ -133,7 +134,7 @@ export function CommandPalette() {
   const open = (result: SearchResultDto | RecentEntryDto, newTab = false) => {
     if ('kind' in result) pushRecent(result);
     if (newTab) {
-      window.open(result.to, '_blank', 'noopener');
+      window.open(appPath(result.to), '_blank', 'noopener');
       return;
     }
     close();

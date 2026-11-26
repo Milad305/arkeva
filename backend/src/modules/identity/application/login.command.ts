@@ -150,7 +150,7 @@ export class LoginCommand {
         }
         throw new UnauthorizedError('INVALID_CREDENTIALS', { remainingAttempts: result.remaining });
       case 'otp':
-        await this.sms.send({ to: result.mobile, text: this.otp.smsText(result.code) });
+        await this.sms.send({ to: result.mobile, text: this.otp.smsText(result.code), otpCode: result.code });
         return {
           outcome: 'otp_required',
           otpToken: result.otpToken,

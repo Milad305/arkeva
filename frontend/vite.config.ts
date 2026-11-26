@@ -4,6 +4,9 @@ import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
+  // زیرمسیر استقرار (مثلاً /panel/ روی IP؛ deploy/web.Dockerfile). فقط متغیر محیطی هنگام build، نه فایل .env؛
+  // پیش‌فرض ریشه. مسیریاب و پیوندها از BASE_URL می‌خوانند (src/shared/utils/appUrl.ts).
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   resolve: {
     alias: {

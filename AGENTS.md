@@ -1,166 +1,163 @@
-# پروژه‌یار — دستورالعمل پروژه
+# پروژه‌یار — قانون اساسی و راهنمای جامع پروژه (Antigravity)
 
-> محصول **پروژه‌یار**: سامانه مدیریت پروژه‌های عمرانی ایرانی، مکمل Microsoft Project (نه جایگزین). مخاطب: پیمانکاران اصلی پروژه‌های عمرانی بزرگ ایران.
-
-این فایل توسط ZCode در هر جلسه به‌طور خودکار بارگذاری می‌شود. قواعد عام در همین فایل، و قواعد تخصصی هر لایه در فایل‌های مرجع.
+> این فایل به‌طور خودکار در هر نشست Antigravity بارگذاری می‌شود و هم‌تراز با `CLAUDE.md` و مجموعه سند مرجع `design/` است.
+> **زبان گفت‌وگو با کاربر: فارسی طبیعی و حرفه‌ای.** نام‌های کد، مسیر فایل‌ها، شناسه‌های فنی و پیام‌های commit به انگلیسی نوشته می‌شوند.
+> **مخاطب (کاربر):** توسعه‌دهندهٔ محصول است و پیش‌زمینهٔ تخصصی کنترل پروژهٔ عمرانی ندارد؛ هرجا مفهوم دامنه‌ای مطرح می‌شود، آن را روشن و از پایه توضیح بده.
 
 ---
 
-## ۱. معماری کلی — Monorepo
+## ۱. پروژه‌یار چیست و ساختار واقعی Monorepo
 
-```
+**پروژه‌یار** پلتفرم مکمل Microsoft Project برای پیمانکاران اصلی پروژه‌های عمرانی ایران است: ساختار WBS و CBS، ثبت آفلاین گزارش روزانهٔ کارگاه توسط سرپرست در اپ اندروید، گردش‌کار تأیید آیتم‌به‌آیتم (یک یا دومرحله‌ای)، محاسبهٔ متمرکز پیشرفت فیزیکی/ریالی و ارزش کسب‌شده (EVM)، موتور هشدار، اعلان و گزارش‌های مدیریتی.
+- **زمان‌بندی را MSP می‌سازد**؛ پروژه‌یار هرگز زمان‌بندی یا مسیر بحرانی (CPM) محاسبه نمی‌کند (`D05`).
+
+```text
 Ashan/
-├── AGENTS.md                      # همین فایل — قواعد عام + مسیریابی
-├── docs/
-│   └── rules/
-│       ├── backend-nestjs.md      # قواعد بک‌اند (بخش نکن)
-│       ├── frontend-react.md      # قواعد فرانت (بخش نکن)
-│   └── architecture/              # اسناد تصمیمات معماری (آینده)
-├── designs/                       # مرجع بصری — HTMLهای طراحی قطعی
-│   ├── Design System.html         # پالت رنگ، فونت، کامپوننت‌ها
-│   ├── Login.html, Dashboard.html, Projects.html, Project.html
-│   ├── WBS.html, CBS.html, Links.html, Members.html
-│   ├── FieldReports v2.html, Charts.html, Settings.html, Modals.html
-│   └── ContextMenus.html
-├── backend/                       # NestJS + MikroORM + PostgreSQL (اصلاح 1405/08/21؛ مرجع: docs/backend/)
-└── frontend/                      # React + RTK Query + HeroUI + Tailwind
+├── AGENTS.md                  # همین فایل — قواعد سراسری Antigravity
+├── CLAUDE.md                  # مرجع هم‌تراز Claude Code (نگه‌داری‌شده)
+├── .agents/skills/            # مهارت‌های اختصاصی پروژه‌یار برای Antigravity (بارگذاری برحسب نیاز)
+├── design/                    # منبع اول حقیقت دامنه و معیارهای پذیرش (غالب بر همهٔ اسناد دیگر)
+│   ├── HANDOFF.md             # زمینه و وضعیت کلی طراحی
+│   ├── 00-overview.md         # مفاهیم پایه + «مثال مرجع» طلایی
+│   ├── 01-foundation-decisions.md  # تصمیم‌های قفل‌شده D01–D12 و قراردادهای C01–C05
+│   ├── 02-domain-model.md     # مدل موجودیت‌ها
+│   ├── 03-interaction-matrices.md  # ماتریس مالکیت نوشتن، وابستگی‌ها و رویدادها (ماتریس ج)
+│   ├── 04-alert-engine.md     # قواعد موتور هشدار (AL-*)
+│   ├── 05-roadmap.md          # ترتیب مراحل و شکاف‌های بوم (G1–G21)
+│   ├── code-mapping.md        # جدول تطبیق پیاده‌سازی، تصمیم‌های حین ساخت و کارهای باقی‌مانده (§۷.۲)
+│   ├── features/*.md          # ۱۹ فایل مشخصات کامل ویژگی‌ها (F01 تا F20)
+│   └── ui/                    # مرجع بصری واقعی: tokens.css، kit.css، canvas.json، boards/*.dc.html
+├── backend/                   # NestJS 12 + MikroORM 7 + PostgreSQL 17 (RLS) + pg-boss 12 (ESM, SWC)
+│   └── AGENTS.md              # چک‌لیست اختصاصی بک‌اند (بارگذاری خودکار هنگام کار در backend/)
+├── frontend/                  # React 18 + Vite 6 + RTK Query + tokens.css/kit.css (متصل کامل به سرور، بدون ماک)
+│   └── AGENTS.md              # چک‌لیست اختصاصی فرانت (بارگذاری خودکار هنگام کار در frontend/)
+├── mobile/                    # Flutter اندروید (projeyar_field، minSdk 26، Clean Architecture + BLoC + SQLCipher)
+│   ├── AGENTS.md              # چک‌لیست اختصاصی اپ کارگاه (بارگذاری خودکار هنگام کار در mobile/)
+│   └── HANDOFF.md             # وضعیت برش‌های M01–M14 و قرارداد دقیق API اپ
+├── packages/shared/           # @projeyar/shared: کاتالوگ دسترسی‌ها، نقش‌ها، enumها، کدهای خطا، شناسه‌های seed
+├── landing/                   # صفحهٔ فرود ایستا
+├── deploy/                    # استقرار Docker + nginx + GitHub Actions (مرجع: deploy/README.md)
+└── docs/
+    ├── backend/               # مرجع معماری و قواعد ساخت بک‌اند (README + فایل‌های 01 تا 12)
+    ├── rules/                 # چک‌لیست‌های لایه‌ها: backend-nestjs.md (v2)، frontend-react.md (v2)، flutter-clean-bloc.md
+    └── manual-test-guide.md   # داستان آزمون سرتاسری S01–S29 + فهرست ایرادهای احتمالی (§۸)
 ```
 
----
-
-## ۲. مسیریابی قواعد — کدام rule را دنبال کن
-
-**قبل از هر کاری، rule مرتبط با مسیر فایلی که با آن کار می‌کنی را کامل بخوان:**
-
-- کار روی هر چیزی زیر `backend/` (entity، service، controller، migration، DTO، و غیره) → **`docs/backend/README.md`** و فایل مرتبط در همان پوشه را کامل بخوان؛ `docs/rules/backend-nestjs.md` چک‌لیست کوتاه همان است. (اصلاح 1405/08/21)
-- کار روی هر چیزی زیر `frontend/` (کامپوننت، صفحه، hook، api، store، و غیره) → **`docs/rules/frontend-react.md`** را کامل بخوان و رعایت کن.
-- کار روی هر دو لایه (مثلاً اضافه‌کردن یک فیچر کامل) → هر دو فایل را بخوان.
-- کار روی فایل‌های `designs/` یا اسناد → نیازی به rule فنی نیست، ولی قواعد عام این فایل را رعایت کن.
-
-اگر شک داشتی کدام rule اعمال می‌شود، هر دو را بخوان — هیچ ضرری ندارد.
+> **ممنوع (آرشیو تاریخی — هرگز مرجع قرار نده):**
+> - پوشهٔ `designs/` در ریشه (۱۵ فایل HTML قدیمی پیش از بوم جدید) ← جایگزین: `design/ui/`
+> - پوشهٔ `frontend/src.old/` (کد پیش از بازنویسی فرانت)
+> - فایل‌های `nestJsRule.md` و `reactRule.md` در ریشه و `docs/rules/archive/*`
 
 ---
 
-## ۳. قواعد عام (برای هر دو لایه)
+## ۲. ترتیب مطالعه و مسیریابی قواعد
 
-### زبان و جهت
-- **زبان محصول ۱۰۰٪ فارسی و RTL است.** تمام متن‌های placeholder، label، پیام موفقیت/خطا، tooltip به فارسی حرفه‌ای و طبیعی نوشته شوند.
-- **فونت پیش‌فرض**: `Vazirmatn` (از Google Fonts).
-- **تاریخ‌ها شمسی** در UI نمایش داده می‌شوند (`۱۴۰۴/۰۳/۰۱`). ولی **در دیتابیس به‌صورت Gregorian DATE ذخیره** می‌شوند — تبدیل فقط در لایه اپلیکیشن (به‌تفصیل در `docs/backend/05-database.md` ۳).
-- **شماره‌های فارسی** در UI نمایش داده می‌شوند، ولی داده ذخیره‌شده و منطق محاسباتی با اعداد انگلیسی است.
-- **واحد پول**: ریال. نمایش با suffix «میلیارد ﷼» در UI برای مبالغ بزرگ (۸۵۰ میلیارد ﷼)، ولی ذخیره به‌صورت عدد کامل ریال.
+سلسله‌مراتب غلبه در صورت تعارض: **`design/` و `AGENTS.md`/`CLAUDE.md` ◄ `docs/backend/` و `docs/rules/` ◄ کد موجود**.
 
-### کیفیت کد
-- **ممنوع `any`** در هر دو لایه. از `unknown` + narrowing یا interface مناسب استفاده کن.
-- **بدون `console.log`** در کد نهایی. فقط `console.error` در catch blocks مجاز است.
-- **حجم فایل**: حد نرم ۳۰۰ خط، حد سخت ۶۰۰ خط. اگر نزدیک شدی، بشکن.
-- **early returns / guard clauses** — از nesting عمیق پرهیز کن.
-
-### مرجع بصری
-- **طراحی‌های قطعی** در `designs/*.html` هستند. این‌ها مرجع حقیقی UI/داده‌اند. وقتی فیچری می‌سازی، فایل طراحی مربوطه را باز کن و فیلدها/چیدمان/حالت‌ها را دقیقاً پیاده کن.
-- وقتی کدنویسی می‌کنی، طرح موجود را وفادارانه پیاده کن — به طرح وفادار بمان. بهبود بصری فقط با تأیید صریح.
-- اگر فایل HTML از یک حالت پویا (modal باز، dropdown) عکس دارد، آن حالت هم باید پیاده شود.
-
-### ⚠️ قاعده حیاتی: بازنویسی وفادارانه صفحات طراحی‌شده
-وقتی صفحه‌ای می‌سازی که فایل HTML مرجع دارد (`designs/*.html`):
-1. **ابتدا کل فایل HTML را بخوان** و هر مقدار CSS (HEX دقیق، ارتفاع، padding، radius، shadow) را استخراج کن.
-2. **هر صفحه استایل مخصوص خودش را دارد.** کامپوننت‌های عمومی (`AppButton`, `FormInput`, ...) اغلب با مقادیر طرح فرق دارند (مثلاً فیلد 42px در Login ولی 38px در کامپوننت عمومی). ارزیابی کن: اگر صفحه استایل مخصوص دارد، آن را با استایل inline/Tailwind مخصوص خودش بساز، نه با کامپوننت عمومی.
-3. **هر عنصر در HTML مرجع باید در خروجی باشد** — عناصر کوچک (eyebrow، divider، pulse dot، accent dot روی لوگو، footer links) نباید جا بیفتند.
-4. **مقادیر دقیق، نه تقریبی** — اگر HTML می‌گوید `#0E1E38` و `height: 42px`، دقیقاً همان را استفاده کن.
-5. **چک‌لیست قبل از پایان**: کل HTML خوانده شد؟ همه state‌ها پیاده شد؟ همه عناصر تزئینی هست؟ مقایسه line-by-line انجام شد؟
-
-> جزئیات کامل و مثال‌ها در `docs/rules/frontend-react.md` بخش ۱۱.
-
-### قاعده حیاتی: ساختار آماده اتصال به بک‌اند (Backend-ready)
-هر صفحه را طوری بساز که بدون بازنویسی به API واقعی وصل شود:
-1. **تایپ هم‌خوان با DTO** — برای هر موجودیت، `interface` در `modules/[name]/types/` تعریف کن که ساختار DTO بک‌اند را منعکس کند. ممنوع تایپ inline در کامپوننت.
-2. **mock data جدا** — داده نمونه در `modules/[name]/mocks/`، نه inline در کامپوننت. وقتی API آماده شد، فقط منبع عوض شود.
-3. **endpoint در RTK Query** از روز اول — ساختار `useGetXxxQuery`/`useXxxMutation` در `modules/[name]/api/` وجود داشته باشد (حتی اگر فعلاً mock).
-4. **منطق کسب‌وکار جدا** — محاسبات (پیشرفت، انحراف، اعتبارسنجی، تبدیل تاریخ) در `services/` یا `@/shared/utils`، نه در کامپوننت.
-5. **لینک‌ها واقعی** — `<Link to="...">` یا `navigate()`، نه `href="#"`.
-
-### قاعده حیاتی: تکمیل بخش‌های ناقص طرح
-فایل‌های `designs/*.html` طرح کامل نیستند — بعضی دکمه‌ها/منوها/حالت‌ها فقط در سند طراحی توصیف شده‌اند.
-- دکمه‌ها/آیکن‌هایی با هدف نامشخص (`href="#"`، onclick خالی) را شناسایی کن و **به همان سبک Design System** پیاده کن.
-- اگر منوی سه‌نقطه، modal ویرایش، یا پنلی در طراحی هست ولی محتوایش نیست، خودت بساز — مطابق `Modals.html` و Design System.
-- **ممنوع** بهانه «در HTML نبود». سند طراحی (مکالمات) مرجع دوم است.
-
-### قاعده: Layout‌های مشترک
-- **AppShell** (Sidebar + Topbar) برای همه صفحات داخل اپ — از `@/shared/components/layout`، دوباره نساز.
-- اگر صفحات متعدد layout مشترک دارند (مثلاً header پروژه با breadcrumb + tabs)، آن را در `modules/[name]/layout/` استخراج کن. **ممنوع** کپی layout بین صفحات.
-
-### قاعده: دسترسی (RBAC) — فیک اما فعال
-- هر route خصوصی با `<ProtectedRoute>` wrap شود.
-- routeهای محدود به نقش با `<ProtectedRoute permissions={['wbs.edit']}>`.
-- دکمه‌های مخرب با `<Guard permissions={[...]}>`، ستون‌های جدول/تب/منو بر اساس دسترسی.
-- فعلاً `useHasAccess` همیشه `true` برمی‌گرداند (فیک) — ولی **ساختار از روز اول** تا وقتی API آماده شد فقط منطق عوض شود.
+1. **برای هر کار دامنه‌ای یا ویژگی:** فایل ویژگی در `design/features/<feature>.md` + بخش «ارتباط» ویژگی‌های همسایه + `design/03-interaction-matrices.md` + وضعیت فعلی در `design/code-mapping.md` را بخوان.
+2. **کار زیر `backend/`:** `backend/AGENTS.md` به‌طور خودکار بارگذاری می‌شود؛ همیشه `docs/backend/README.md` (به‌ویژه بخش ۶: جدایی‌های پیاده‌سازی) و فایل تخصصی مرتبط (`01` تا `12`) را رعایت کن.
+3. **کار زیر `frontend/`:** `frontend/AGENTS.md` و `docs/rules/frontend-react.md` (نسخهٔ ۲) مرجع‌اند.
+4. **کار زیر `mobile/`:** `mobile/AGENTS.md`، `docs/rules/flutter-clean-bloc.md` و `mobile/HANDOFF.md` مرجع‌اند.
+5. **کار زیر `deploy/`:** `deploy/README.md` و `docs/backend/10-operations.md` را بخوان.
 
 ---
 
-## ۴. خلاصه تصمیمات معماری (۱۲ تصمیم بنیادی)
+## ۳. یازده قاعدهٔ غیرقابل‌مذاکره (قفل‌شده)
 
-> **اصلاح 1405/08/21:** این جدول پیش از اسناد `design/` نوشته شده بود. ردیف‌های خط‌خورده با تصمیم‌های تأییدشدهٔ `design/` (که طبق `CLAUDE.md` غالب‌اند) تعارض داشتند و جایگزینشان کنارشان آمده. مرجع بک‌اند: `docs/backend/`؛ فهرست کامل تفاوت‌ها: `docs/backend/README.md` ۵.
-
-~~این‌ها قفل‌شده‌اند. هر کد باید با آن‌ها سازگار باشد. جزئیات کامل در `docs/rules/backend-nestjs.md`.~~
-
-| # | تصمیم | انتخاب نهایی |
-|---|---|---|
-| ۱ | ذخیره‌سازی درخت WBS/CBS | ~~Adjacency list + ltree (`parent_id` + `materialized_path`). `path` از زنجیره `id` ساخته می‌شود، نه از `code`~~ فهرست مجاورت + CTE بازگشتی؛ ltree فقط با اندازه‌گیری (`docs/backend/05` ۷) |
-| ۲ | مدل گزارش فیلد | ~~دو سطح: `field_report` (وضعیت+گردشکار) + `field_report_item` (وضعیت per-item). در دومرحله‌ای، مدیر تأیید نهایی کل گزارش~~ گزارش فقط ظرف است و وضعیتش از آیتم‌ها مشتق می‌شود؛ هر آیتم ماشین حالت خودش را دارد و مرحلهٔ دوم روی آیتم است (D08) |
-| ۳ | وزن‌ها | ~~فقط وزن نسبی در والد ذخیره؛ سهم پروژه با ltree محاسبه. وزن‌های خالی → توزیع خودکار بر اساس مدت + `weight_source` + هشدار در UI~~ وزن نسبی در والد با `numeric(7,4)`؛ مولدها و قواعد D04؛ سهم پروژه را ماژول محاسبات ذخیره می‌کند (D07) |
-| ۴ | CBS | کاتالوگ سراسری در سازمان + درخت CBS پروژه‌ای |
-| ۵ | Multi-tenancy | Schema مشترک + ستون `organization_id`. نقش org-level (owner/admin/member) + نقش project-level (کاستوم) |
-| ۶ | تاریخ‌ها | Gregorian DATE در DB، تبدیل شمسی در اپ |
-| ۷ | پیشرفت | ~~`actual_progress` ذخیره روی leaf؛ `planned_progress` محاسبه؛ والدها محاسبه؛ `progress_snapshot` برای S-Curve~~ همهٔ مقادیر مشتق (برنامه‌ای، واقعی، والدها، EVM) را ماژول محاسبات از روی واقعیت‌ها حساب و **ذخیره** می‌کند؛ صفحه فقط می‌خواند (D07)؛ snapshot روزانه (D06) |
-| ۸ | تنظیمات | `project_settings` ۱:۱ + جداول جدا (notification/holiday/integration/backup). ارث‌بری از سازمان با snapshot |
-| ۹ | شناسه‌ها | ~~**bigint IDENTITY** برای جداول داخلی (نه UUID). UUID فقط برای sync موبایل در آینده بررسی شود~~ **UUID** برای همه (C01)؛ گزارش، آیتم و عکس در گوشی شناسه می‌گیرند (D10) |
-| ۱۰ | حذف نرم | ~~فقط orgs/projects/users. WBS/CBS: حذف واقعی + اعتبارسنجی ارجاعی، یا `archived_at`~~ جدول نگه‌داری `docs/backend/05` ۱۱: حذف پروژه با مهلت ۱۴ روزه (F02 ۸.۴)، کاربر `disabled`، واقعیت‌ها هرگز، ساختار در نسخهٔ کاری حذف نرم (`wbs.md` ۵.۶) |
-| ۱۱ | گزارش سراسری/پروژه‌ای | یک موجودیت با `project_id`، دو کوئری |
-| ۱۲ | Audit/activity | ~~`activity_log` سراسری + `alerts` جدا~~ `domain_event` (outbox هم‌تراکنش، منبع «فعالیت‌های اخیر») + `audit_log` فقط‌درج + `alert` جدا (D07، D09، F20 ۳، ۶، ۱۰) |
+1. **هیچ تصمیم دامنه‌ای را بی‌صدا نگیر:** اگر سند پاسخ ندارد یا دو بخش در تعارض‌اند، کار آن بخش را متوقف کن، پرسش را مطرح کن و پیش از کدنویسی تأیید بگیر. اگر فرض یا تصمیم تازه‌ای لازم شد با برچسب `[پیشنهاد: OD-xx]` یا `[فرض]` ثبت و از کاربر تأیید بگیر. `[پیش‌فرض فنی]` را می‌توانی تغییر دهی، مشروط به ثبت دلیل در مستندات مربوطه (`docs/backend/README.md` ۶ یا `design/code-mapping.md`).
+2. **وقتی سند و کد موجود نمی‌خوانند:** هیچ‌کدام (سند یا کد) را بی‌صدا عوض نکن. مغایرت را با این قالب به کاربر گزارش کن و تصمیم بگیر:
+   `ویژگی / بخش سند / چه نوشته / در کد چه هست / گزینه‌ها / پیشنهاد`
+   پس از تصمیم کاربر، فایل ویژگی و در صورت نیاز `01`/`02`/`03` و `code-mapping.md` را هم‌گام کن.
+3. **جلوگیری از دوباره‌کاری:** بخش بزرگی از سامانه کامل است (۲۰ برش بک‌اند، اتصال کامل ۱۹۲ endpoint فرانت، ۱۴ برش اپ کارگاه). پیش از ساخت هر موجودیت، جدول یا endpoint، کد موجود و `design/code-mapping.md` را بگرد؛ موجودیت تکراری نساز.
+4. **هر موجودیت دقیقاً یک نویسنده دارد (`design/03` بخش ۲):** فقط ماژول مالک حق نوشتن روی جدول‌های خودش را دارد؛ سایر ماژول‌ها فقط سرویس عمومی (یا درگاه/Port صادرشده از `index.ts`) ماژول مالک را صدا می‌زنند.
+5. **هیچ محاسبهٔ کسب‌وکاری بیرون از ماژول محاسبات نیست (`D07`):** کنترلرها، React و Flutter هیچ فرمول پیشرفت، انحراف یا EVM حساب نمی‌کنند؛ همه در `backend/src/modules/computation` محاسبه و ذخیره می‌شوند و صفحات فقط می‌خوانند (اپ موبایل فقط پیش‌نمایش لحظه‌ای نشان می‌دهد و عدد سرور داور نهایی است).
+6. **خط اجرای رویدادمحور:** `رویداد ← محاسبه ← هشدار ← اعلان`. انتشار رویداد دامنه (`outbox`) و ثبت ممیزی (`audit`) باید **در همان تراکنش تغییر اصلی** انجام شوند (بدون `EventEmitter` درون‌فرایندی).
+7. **حفاظت از جدول‌های «جاری» برنامه (`D05`):** جدول‌های `WbsItem`، `CbsItem` و `WbsCbsLink` فقط از طریق اعمال نسخهٔ برنامه (`PlanVersion` در ماژول `planning`) تغییر می‌کنند. تنها استثنا تخصیص سرپرست است.
+8. **تغییرناپذیری واقعیت‌ها (Immutable Facts):** آیتم گزارش تأییدشده، ردیف هزینهٔ قطعی (`CostEntry` با تریگر DB)، رکورد `Review`، `AuditLog` و `DomainEvent` هرگز ویرایش یا حذف نمی‌شوند؛ اصلاح = درج رکورد جدید.
+9. **کنترل دسترسی یکپارچه (`D11`):** هر endpoint دقیقاً یک کد دسترسی از `@projeyar/shared` (منطبق با `design/features/access-control.md` ۵.۴) دارد، دامنهٔ داده (`scope`) را در خود پرس‌وجو اعمال می‌کند، و مبالغ ریالی بدون مجوز `cbs.view_amounts` با `@Amounts(...)` در پاسخ `null` می‌شوند. کد دسترسی تازه ابتدا باید در سند ثبت شود.
+10. **چندمستأجری سراسری (`D12`):** ستون `org_id` در همهٔ جداول مستأجر + فیلتر خودکار لایهٔ مخزن MikroORM + سیاست PostgreSQL RLS (`app_current_org()`) با نقش غیرامتیازی `NOBYPASSRLS`. شیء متعلق به سازمان دیگر باید `404` برگرداند (نه `403`).
+11. **مثال مرجع طلایی (`AC-PC-01` و `AC-EV-01`):** اعداد مثال مرجع باید همواره دقیق بازتولید شوند و هیچ تغییری نباید آن‌ها را بشکند:
+    `BAC = 1000` · `PV = 550` · `EV = 490` · `AC = 520` · پیشرفت فیزیکی واقعی `49.2%` · برنامه‌ای `55%` · `CPI = 0.9423` · `SPI = 0.8909` · `EAC = 1,061.2245`.
 
 ---
 
-## ۵. قواعد کسب‌وکار کلیدی (Business Rules)
+## ۴. قراردادهای فنی سراسری (`C01`–`C05`)
 
-### ۵.۱ قاعده توسعه کاتالوگ دسترسی‌ها (بسیار مهم)
-هر فیچر جدید که به پنل اضافه می‌شود، اگر ماهیتی دارد که قابل محدودسازی به نقش است، **باید** با یک کلید دسترسی به کاتالوگ اضافه شود (قالب `<module>.<action>`، مثل `cbs.view`, `reports.approve`). هیچ فیچری نباید بدون در نظر گرفتن RBAC پیاده شود. ~~فایل مرجع: `permissions.catalog.ts` در backend.~~ **اصلاح 1405/08/21:** فهرست کدها همان `design/features/access-control.md` ۵.۴ است و در کد در `packages/shared/permissions.ts` می‌نشیند؛ کد تازه اول در سند.
-
-### ۵.۲ گزارش فیلد: یک گزارش = چند آیتم پیشرفت
-یک گزارش روزانه شامل چند task است (۲ تا ۵ در یک روز). هر آیتم به یک WBS leaf وصل می‌شود. taskهایی که در گزارش نیامده‌اند «بدون تغییر» محسوب می‌شوند (نه ۰٪).
-
-### ۵.۳ تخصیص انعطاف‌پذیر
-سرپرست می‌تواند به ترکیب آزادی از summary و task تخصیص داده شود. انتخاب آبشاری (cascade) با حالت indeterminate. فقط task قابل گزارش‌گیری است؛ درصد summary از فرزندان محاسبه می‌شود.
-
-### ۵.۴ اعتبارسنجی وزن‌ها
-مجموع وزن فرزندان هر والد باید ۱۰۰ باشد. اگر نباشد، badge هشدار. وزن‌های خالی/خودکار در UI با رنگ متمایز نشان داده شوند.
-
-### ۵.۵ تأیید چندمرحله‌ای
-گردشکار: سرپرست ثبت (۱) → ناظر تأیید آیتم‌به‌آیتم (۲) → در حالت دومرحله‌ای، مدیر تأیید نهایی کل (۳). گزارش تا همه آیتم‌ها تعیین‌تکلیف نشوند به مرحله بعد نمی‌رود. ولیدیشن هنگام ذخیره تنظیمات.
-
-### ۵.۶ ایمن‌سازی داده‌ای
-WBS/CBS node با گزارش/اتصال/فرزند → حذف مسدود. archive به‌جای حذف (`archived_at`).
+| موضوع | قرارداد قطعی |
+|---|---|
+| شناسه (`C01`, `D10`) | همه‌جا **UUID** (سمت سرور UUID v7؛ گزارش، آیتم و عکس آفلاین در گوشی UUID v4 می‌گیرند). کدهای WBS و CBS صرفاً نمایشی‌اند. |
+| پول (`C02`) | `bigint` **ریال** (در JS/TS به‌صورت `string`؛ هرگز `number` شناور برای پول به کار نرود). گرد کردن نیمه به بالا فقط در لحظهٔ ساخت مبلغ نهایی. |
+| تاریخ و زمان (`C03`) | تاریخ کاری: `date` میلادی (`YYYY-MM-DD`)؛ لحظه: `timestamptz` UTC؛ مرز روز با منطقهٔ زمانی `Asia/Tehran`. نمایش پیش‌فرض در UI شمسی است (مگر ترجیح شخصی کاربر در W32). |
+| درصد و وزن (`C04`) | `numeric(7,4)` (در JS رشته یا `Decimal`)؛ محاسبه با دقت کامل، گرد کردن فقط در لایهٔ نمایش. |
+| کدهای خوانا (`C05`) | `PRJ-<سال>-<NNN>`، `FR-<سال>-<NNNN>`، `RSK-<NNN>` (فقط نمایشی). |
+| قالب خطا | `{ code, message (فارسی، بی‌سرزنش + یک راه ادامه), details?, traceId, retryable }` |
+| قرارداد API | پیشوند `/v1`، پاسخ موفق `{ success: true, data }`، صفحه‌بندی cursor (`{ items, meta: { nextCursor, hasMore } }`)، پشتیبانی `Idempotency-Key` و قفل خوش‌بینانه با `If-Match`. |
+| کیفیت کد | ممنوعیت مطلق `any` و `console.log`؛ سقف حجم فایل: ۳۰۰ خط نرم، ۶۰۰ خط سخت (در فلاتر ۵۰۰ خط سخت). هرگز مقادیر محرمانهٔ فایل‌های `.env*` را نخوان و در خروجی چاپ نکن. |
 
 ---
 
-## ۶. قاعده وفاداری به تصمیمات
+## ۵. استانداردهای رابط کاربری (وب و اپ کارگاه)
 
-اگر در هر فایل rule یا کد قدیمی الگویی دیدی که با تصمیمات بخش ۴ در تعارض است (مثلاً UUID به‌جای bigint، یا enum ثابت نقش به‌جای نقش کاستوم)، **تصمیمات این فایل برنده است**. کد باید با آن‌ها هم‌خوان باشد.
+- **فارسی و راست‌به‌چپ (RTL):** تمام برچسب‌ها، راهنماها و خطاها به فارسی طبیعی. **استفاده از ایموجی در UI ممنوع است.**
+- **ارقام و کدها:** ارقام نمایشی همیشه از مسیر `toFaDigits` / `faNum` عبور می‌کنند (با احترام به ترجیح کاربر در W32)؛ کدهای فنی (WBS، CBS، `PRJ-...`، `FR-...`، `traceId`) با فونت مونواسپیس `JetBrains Mono` و جهت `ltr`؛ متن عمومی با `Vazirmatn`.
+- **جهت نمودارها:** نمودارهای سری زمانی (مثل منحنی S) **چپ‌به‌راست (LTR)**؛ نمودار گانت و heatmap **راست‌به‌چپ (RTL)**. فرمول‌های ریاضی در دیالوگ توضیح («این عدد از کجا آمد؟») با `dir="ltr"` و کیلومتراژهای لاتین درون متن فارسی با `<bdi>` ایزوله شوند.
+- **سیستم طراحی:** توکن‌ها و کلاس‌های `design/ui/tokens.css` و `design/ui/kit.css` مرجع واحدند (کپی دقیق در `frontend/src/shared/styles/`). رنگ اقدام اصلی فقط `primary-700`؛ دکمهٔ تأیید `success-700`.
 
 ---
 
-## ۷. زبان پاسخ به کاربر
+## ۶. حدود دامنه (ممنوع در نسخهٔ اول)
 
-وقتی با کاربر گفتگو می‌کنی، پاسخ به فارسی طبیعی و حرفه‌ای باشد. کد، نام فنی، و نام متغیر به انگلیسی.
+- محاسبهٔ زمان‌بندی، CPM، مسیر بحرانی یا جابه‌جایی خودکار تاریخ‌ها (`D05`)
+- صورت‌وضعیت به کارفرما، متره و تعدیل (`D01`)
+- چندارزی و ارز خارجی (`OD-14`)
+- تفکیک تخصص نیروی کار و برنامه‌ریزی نیرو (`OD-05`)
+- نوشتن فایل باینری `.mpp` (ورود و خروج همگام‌سازی فقط با قالب XML/MSPDI است — `F15`)
+- اتصال زنده به ERP و نرم‌افزارهای حسابداری (`F19` — فقط زیرساخت و کارت‌های نمایشی W30)
+- ثبت یا تغییر مستقیم هزینه از خارج API دفتر هزینه (`D02`)
 
-## graphify
+---
 
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+## ۷. گردش‌کار Antigravity و مهارت‌های اختصاصی مخزن
 
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+مهارت‌های عملیاتی پروژه در پوشهٔ `.agents/skills/` تعریف شده‌اند و هنگام نیاز باید `SKILL.md` آن‌ها خوانده شود:
+- **`projeyar-feature-workflow`**: چرخهٔ گام‌به‌گام پیاده‌سازی ویژگی، مدیریت تعارض سند/کد، الزام تست خودکار به ازای هر معیار پذیرش (`AC-xx-nn` در نام تست) و به‌روزرسانی `openapi.json` و `design/code-mapping.md`.
+- **`projeyar-dev-verify`**: راه‌اندازی سرورهای توسعه (`projeyar-api` روی `3000` و `projeyar-web` روی `5173` یا پیش‌نمایش `/panel/` روی `5500`) و آزمون زنده در مرورگر با subagent بومی `browser` (ورود با مقادیر پیش‌فرض فرم + کد تایید `123456` رقم‌به‌رقم، و جدول کامل کاربران نمونهٔ seed برای آزمون نقش‌ها).
+- **`projeyar-mobile-ops`**: توسعه و تست اپ کارگاه (`mobile/`)، مدیریت محدودیت شبکهٔ محلی روی Google Maven (`dl.google.com` ۴۰۴ می‌دهد؛ پین شدن AGP روی `8.9.1` و بسنده کردن به `flutter analyze` + `flutter test` بدون تلاش بی‌نتیجه برای دانلود آرتیفکت جدید در `flutter build apk`)، و جزئیات صف آفلاین/همگام‌سازی.
+- **`projeyar-deploy`**: روال استقرار روی سرور دمو و پروداکشن (`deploy/`)، ساخت imageها در GitHub Actions، قواعد زیرمسیر `/panel/` (`VITE_BASE_PATH`، `ROUTER_BASENAME`، `appLink`) و ابزار رمزگشایی پشتیبان.
 
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+---
+
+## ۸. فرمان‌های پرکاربرد (مدیر بسته در کل مخزن فقط `pnpm` است)
+
+### بک‌اند (`backend/`)
+```bash
+pnpm --filter @projeyar/backend run build             # ساخت @projeyar/shared + کامپایل SWC
+pnpm --filter @projeyar/backend run db:bootstrap      # یک‌بار: ساخت نقش‌های projeyar_owner / projeyar_app
+pnpm --filter @projeyar/backend run db:migrate        # اجرای migrationها با نقش مالک
+pnpm --filter @projeyar/backend run db:seed           # دادهٔ نمونهٔ توسعه
+pnpm --filter @projeyar/backend run start             # اجرا از روی dist (نیازمند build پس از تغییر کد) — پورت 3000
+pnpm --filter @projeyar/backend run start:dev         # اجرای watch
+pnpm --filter @projeyar/backend run typecheck
+pnpm --filter @projeyar/backend run lint
+pnpm --filter @projeyar/backend run test              # تست‌های واحد (Vitest)
+pnpm --filter @projeyar/backend run test:integration  # تست‌های یکپارچگی و قرارداد روی PostgreSQL محلی
+pnpm --filter @projeyar/backend run openapi:emit      # بازتولید backend/openapi.json
+```
+
+### فرانت‌اند (`frontend/`)
+```bash
+pnpm --dir frontend run dev:dev     # سرور توسعه روی http://localhost:5173 (پراکسی /v1 به 3000)
+pnpm --dir frontend run build       # tsc -b && vite build
+pnpm --dir frontend run typecheck
+pnpm --dir frontend run lint
+pnpm --dir frontend run test        # Vitest
+```
+
+### اپ کارگاه (`mobile/`)
+```bash
+cd mobile
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter analyze
+flutter test
+```

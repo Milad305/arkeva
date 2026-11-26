@@ -2325,6 +2325,12 @@ D04، wbs.md ۹ و ۱۵ و AC-WBS-11 در 1405/08/15 با این تصمیم‌ه
 `outbox_processor_test` (صف دست‌نخورده)، `app_version_interceptor_test`، `sync_test` (آینهٔ اعلان و یادآوری، `DailyReminder.earliest`، مهلت M03)،
 `migration_test` (۱ ← ۲).
 
+### ۷.۱.۵۲ پیاده‌سازی درگاه پیامک واقعی `sms.ir` برای OTP (AC-PL-13؛ 1405/09/05)
+
+- **پیکربندی (`backend/src/config/config.ts`):** متغیر `SMS_PROVIDER` مقدار `sms.ir` (و نام‌های معادل `smsir`، `sms-ir`، `sms_ir`) را می‌پذیرد و با آن `OTP_SMS_KEY` و `OTP_TEMPLATE_ID` الزامی می‌شوند؛ `OTP_TEMPLATE_PARAM` در صورت خالی بودن پیش‌فرض `'Code'` می‌گیرد. در `NODE_ENV=production` مقدار `console` مسدود است تا کد OTP هرگز در لاگ نوشته نشود، و `OTP_DEV_CODE` فقط با `SMS_PROVIDER=console` در توسعه مجاز است.
+- **پیاده‌سازی (`backend/src/platform/messaging/sms-ir.sender.ts`، `sms-ir.codes.ts`):** کلاس `SmsIrSender` کدهای یک‌بارمصرف ۶ رقمی وب (ورود دومرحله‌ای، ارسال مجدد، بازیابی رمز / فعال‌سازی دعوت‌شده، تأیید دوبارهٔ step-up) و ۵ رقمی اپ کارگاه (ورود و کد دعوت OD-20) را از طریق فیلد صریح `otpCode` در `SmsMessage` به `https://api.sms.ir/v1/send/verify` می‌فرستد. شمارهٔ گیرنده در لاگ ماسک می‌شود و کد/کلید هرگز لاگ نمی‌شوند. پیامک‌های متنی غیراُتی‌پی (بدون خط ارسال انبوه) با هشدار در لاگ رد می‌شوند تا جریان قفل حساب یا اعلان درون‌برنامه‌ای مختل نشود. خطای شبکه یا رد درگاه به `SmsSendError` (`503 DEPENDENCY_UNAVAILABLE` با تشخیص `retryable` بر اساس خطاهای گیرنده) تبدیل می‌شود.
+- **تست‌ها:** `sms-ir.sender.test.ts` (شامل `AC-PL-13`) و `config.test.ts`.
+
 ### ۷.۲ باقی‌مانده
 
 > **ترتیب ساخت بک‌اند تا اتصال کامل فرانت:** `docs/backend/12-implementation-plan.md` (۲۰ برش؛ 1405/08/22).

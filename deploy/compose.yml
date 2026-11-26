@@ -1,0 +1,109 @@
+# استقرار تک‌سرور آرکِوا (deploy/README.md). اجرا روی سرور، از پوشهٔ مخزن:
+#   docker compose -f deploy/compose.yml up -d                 ← postgres و backend
+#   docker compose -f deploy/compose.yml run --rm migrate      ← migration با نقش مالک
+#   docker compose -f deploy/compose.yml run --rm bootstrap    ← یک‌بار: نقش‌ها و پایگاه داده با کاربر مدیر
+#   docker compose -f deploy/compose.yml run --rm seed         ← فقط دمو: دادهٔ نمونه
+#
+# سرور ۱ گیگابایتی است: api و worker یک فرایند‌اند (APP_ROLE=all) و حافظهٔ هر سرویس سقف دارد.
+# رازها بیرون از مخزن‌اند: ${ARKEVA_HOME}/admin (کاربر مدیر پستگرس) و ${ARKEVA_HOME}/backend/backend.env.
+
+name: arkeva
+
+x-backend: &backend
+  image: ${REGISTRY:-ghcr.io/milad305}/arkeva-backend:${TAG:-main}
+  env_file:
+    - ${ARKEVA_HOME:-/opt/arkeva}/backend/backend.env
+  environment:
+    TZ: UTC
+  read_only: true
+  tmpfs:
+    - /tmp
+  volumes:
+    - ${ARKEVA_HOME:-/opt/arkeva}/backend/storage:/data/storage
+  networks: [db]
+  depends_on:
+    postgres:
+      condition: service_healthy
+  logging:
+    driver: json-file
+    options: { max-size: 10m, max-file: '5' }
+
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    env_file:
+      - ${ARKEVA_HOME:-/opt/arkeva}/admin/postgres.env
+    # تنظیم برای حافظهٔ کم؛ فقط شبکهٔ داخلی، بی پورت منتشرشده
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - effective_cache_size=192MB
+      - -c
+      - work_mem=4MB
+      - -c
+      - maintenance_work_mem=32MB
+      - -c
+      - max_connections=40
+      - -c
+      - timezone=UTC
+    shm_size: 128mb
+    mem_limit: 256m
+    volumes:
+      - ${ARKEVA_HOME:-/opt/arkeva}/postgres/data:/var/lib/postgresql/data
+    networks: [db]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '3' }
+
+  backend:
+    <<: *backend
+    command: ['dist/main.js', 'all']
+    restart: unless-stopped
+    environment:
+      TZ: UTC
+      NODE_OPTIONS: --max-old-space-size=320
+    mem_limit: 512m
+    # فقط روی loopback؛ nginx میزبان جلوی آن است
+    ports:
+      - '127.0.0.1:3000:3000'
+    networks: [db, egress]
+
+  migrate:
+    <<: *backend
+    command: ['dist/main.js', 'migrate']
+    profiles: [tools]
+    restart: 'no'
+    healthcheck: { disable: true }
+
+  seed:
+    <<: *backend
+    command: ['dist/scripts/seed.js']
+    profiles: [tools]
+    restart: 'no'
+    healthcheck: { disable: true }
+
+  bootstrap:
+    <<: *backend
+    # DB_ADMIN_URL فقط به همین فرمان یک‌باره داده می‌شود، نه به backend
+    env_file:
+      - ${ARKEVA_HOME:-/opt/arkeva}/backend/backend.env
+      - ${ARKEVA_HOME:-/opt/arkeva}/admin/db-admin.env
+    command: ['dist/scripts/db-bootstrap.js']
+    profiles: [tools]
+    restart: 'no'
+    healthcheck: { disable: true }
+
+networks:
+  # پستگرس به اینترنت راه ندارد و از بیرون دیده نمی‌شود
+  db:
+    internal: true
+  # فقط backend: انتشار پورت روی loopback (و بعدها ارائه‌دهندهٔ پیامک)
+  egress: {}

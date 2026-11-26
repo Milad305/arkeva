@@ -127,7 +127,7 @@ export class ResendOtpCommand {
       return { code, mobile: user.mobile };
     });
 
-    await this.sms.send({ to: sent.mobile, text: this.otp.smsText(sent.code) });
+    await this.sms.send({ to: sent.mobile, text: this.otp.smsText(sent.code), otpCode: sent.code });
     return { resendAfterSec: this.config.auth.otpResendSec };
   }
 }

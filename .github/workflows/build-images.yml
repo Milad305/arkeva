@@ -1,0 +1,61 @@
+# ساخت image‌های استقرار (deploy/README.md): سرور ۱ گیگابایتی چیزی نمی‌سازد و فقط از ghcr.io می‌کشد.
+#   ghcr.io/<owner>/arkeva-backend:<sha|main>  — بک‌اند NestJS
+#   ghcr.io/<owner>/arkeva-web:<sha|main>      — فایل‌های ایستای پنل (زیر /panel/) و لندینگ
+name: build-images
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['mobile/**', 'design/**', 'designs/**', 'docs/**', '**/*.md']
+  workflow_dispatch:
+    inputs:
+      panel_base_path:
+        description: 'زیرمسیر پنل (روی IP: /panel/ — پس از دامنه: /)'
+        default: '/panel/'
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: build-images-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: arkeva-backend
+            dockerfile: deploy/backend.Dockerfile
+          - name: arkeva-web
+            dockerfile: deploy/web.Dockerfile
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Image name
+        id: meta
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.name }}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            PANEL_BASE_PATH=${{ inputs.panel_base_path || '/panel/' }}
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ github.sha }}
+            ${{ steps.meta.outputs.image }}:main
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}

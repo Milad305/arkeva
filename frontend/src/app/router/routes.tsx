@@ -7,6 +7,7 @@ import { AppShell, Content } from '@/shared/components/layout/AppShell';
 import { InlineLoading } from '@/shared/components/feedback/Skeleton';
 import { ProtectedRoute } from './ProtectedRoute';
 import { NotFoundPage } from '@/modules/system/pages/NotFoundPage';
+import { ROUTER_BASENAME } from '@/shared/utils/appUrl';
 
 // همهٔ صفحه‌ها lazy هستند تا هر ماژول chunk خودش را داشته باشد.
 const LoginPage = lazy(() => import('@/modules/auth/pages/LoginPage'));
@@ -230,4 +231,4 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFoundPage /> },
     ],
   },
-]);
+], { basename: ROUTER_BASENAME });

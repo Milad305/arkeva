@@ -22,6 +22,7 @@ import { useHasPermission } from '@/shared/hooks/useHasAccess';
 import { formatRelativeTime, formatTime } from '@/shared/utils/date';
 import { toFaDigits } from '@/shared/utils/num';
 import { cn } from '@/shared/utils/cn';
+import { appLink } from '@/shared/utils/appUrl';
 import type { EntityId } from '@/shared/types/api';
 import { useApproveCleanMutation, useGetFieldReportQuery, useGetInboxQuery } from '../api/fieldReportsApi';
 import { useItemDecisions } from '../hooks/useItemDecisions';
@@ -460,7 +461,7 @@ function ReportHeader({ report, pendingCount }: { report: FieldReportDto; pendin
   // همهٔ عکس‌های گزارش پشت‌سرهم؛ در کارت هر آیتم فقط عکس‌های همان آیتم دیده می‌شود
   const photos = useMemo(() => toPhotos(report.items.flatMap((item) => item.photos)), [report.items]);
 
-  const reportLink = `${window.location.origin}/projects/${report.projectId}/reports?report=${report.id}`;
+  const reportLink = appLink(`/projects/${report.projectId}/reports?report=${report.id}`);
   const copyLink = () => {
     void navigator.clipboard?.writeText(reportLink);
     toast.success('پیوند گزارش کپی شد.');

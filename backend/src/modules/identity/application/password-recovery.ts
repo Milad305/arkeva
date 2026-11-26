@@ -100,7 +100,7 @@ export class PasswordRecovery {
     });
     if (!issued) return fake;
 
-    await this.sms.send({ to: issued.mobile, text: `کد بازیابی رمز پروژه‌یار: ${issued.code}\nاین کد را به کسی ندهید.` });
+    await this.sms.send({ to: issued.mobile, text: `کد بازیابی رمز پروژه‌یار: ${issued.code}\nاین کد را به کسی ندهید.`, otpCode: issued.code });
     return { resetToken: issued.token, maskedMobile: maskMobile(issued.mobile) };
   }
 
@@ -122,7 +122,7 @@ export class PasswordRecovery {
       challenge.attempts = 0;
       return { code, mobile: user.mobile };
     });
-    await this.sms.send({ to: sent.mobile, text: `کد بازیابی رمز پروژه‌یار: ${sent.code}\nاین کد را به کسی ندهید.` });
+    await this.sms.send({ to: sent.mobile, text: `کد بازیابی رمز پروژه‌یار: ${sent.code}\nاین کد را به کسی ندهید.`, otpCode: sent.code });
     return { resendAfterSec: this.config.auth.otpResendSec };
   }
 

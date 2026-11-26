@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bool, ConfigErrors, decimal, type Env, int, oneOf, optional, required } from './env-readers.js';
 
 // پیکربندی نوع‌دار از متغیرهای محیطی (docs/backend/04 ۹، 10 ۲).
 //
@@ -20,6 +21,18 @@ export interface JwtKey {
   readonly kid: string;
   readonly secret: string;
 }
+
+export type SmsConfig =
+  | { readonly provider: 'console' }
+  | {
+      readonly provider: 'sms.ir';
+      readonly otpSmsKey: string;
+      readonly otpTemplateId: number;
+      readonly otpTemplateParam: string;
+    };
+
+const SMS_IR_ALIASES: ReadonlySet<string> = new Set(['sms.ir', 'smsir', 'sms-ir', 'sms_ir']);
+const DEFAULT_OTP_TEMPLATE_PARAM = 'Code';
 
 /** کلید رمزنگاری پشتیبان (F20 ۱۲): ۳۲ بایت؛ نخستین کلید فعال است و بقیه فقط برای خواندن نسخه‌های قدیمی. */
 export interface BackupKey {
@@ -61,7 +74,7 @@ export abstract class AppConfig {
     /** درخواست کد ورود اپ برای هر شماره در ساعت (07 ۲.۲). */
     readonly appOtpPerHour: number;
   };
-  abstract readonly sms: { readonly provider: 'console' };
+  abstract readonly sms: SmsConfig;
   /** اپ کارگاه (F08 ۵.۳): حداقل نسخهٔ پذیرفتنی؛ null ← بی بررسی. */
   abstract readonly fieldApp: { readonly minVersion: string | null };
   /** صف pg-boss (docs/backend/08 ۳). */
@@ -96,75 +109,6 @@ export abstract class AppConfig {
     /** عمر لینک امضاشده (F20 ۷: ۵ دقیقه). */
     readonly linkTtlSec: number;
   };
-}
-
-type Env = Readonly<Record<string, string | undefined>>;
-
-class ConfigErrors {
-  private readonly errors: string[] = [];
-
-  add(message: string): void {
-    this.errors.push(message);
-  }
-
-  throwIfAny(): void {
-    if (this.errors.length > 0) {
-      throw new Error(`پیکربندی نادرست است:\n- ${this.errors.join('\n- ')}`);
-    }
-  }
-}
-
-function required(env: Env, key: string, errors: ConfigErrors): string {
-  const value = env[key]?.trim();
-  if (!value) {
-    errors.add(`${key} تنظیم نشده است`);
-    return '';
-  }
-  return value;
-}
-
-function optional(env: Env, key: string): string | null {
-  const value = env[key]?.trim();
-  return value ? value : null;
-}
-
-function int(env: Env, key: string, fallback: number, errors: ConfigErrors, min = 0): number {
-  const raw = env[key]?.trim();
-  if (!raw) return fallback;
-  const value = Number(raw);
-  if (!Number.isInteger(value) || value < min) {
-    errors.add(`${key} باید عدد صحیح بزرگ‌تر یا مساوی ${min} باشد`);
-    return fallback;
-  }
-  return value;
-}
-
-function decimal(env: Env, key: string, fallback: number, errors: ConfigErrors, min: number): number {
-  const raw = env[key]?.trim();
-  if (!raw) return fallback;
-  const value = Number(raw);
-  if (!Number.isFinite(value) || value < min) {
-    errors.add(`${key} باید عدد بزرگ‌تر یا مساوی ${min} باشد`);
-    return fallback;
-  }
-  return value;
-}
-
-function bool(env: Env, key: string, fallback: boolean, errors: ConfigErrors): boolean {
-  const raw = env[key]?.trim().toLowerCase();
-  if (!raw) return fallback;
-  if (raw === 'true') return true;
-  if (raw === 'false') return false;
-  errors.add(`${key} باید true یا false باشد`);
-  return fallback;
-}
-
-function oneOf<T extends string>(env: Env, key: string, allowed: readonly T[], fallback: T, errors: ConfigErrors): T {
-  const raw = env[key]?.trim();
-  if (!raw) return fallback;
-  if ((allowed as readonly string[]).includes(raw)) return raw as T;
-  errors.add(`${key} باید یکی از ${allowed.join('، ')} باشد`);
-  return fallback;
 }
 
 function jwtKeys(env: Env, errors: ConfigErrors): JwtKey[] {
@@ -222,10 +166,10 @@ export function loadConfig(env: Env): AppConfig {
   const errors = new ConfigErrors();
   const nodeEnv = oneOf(env, 'NODE_ENV', NODE_ENVS, 'development', errors);
   const production = nodeEnv === 'production';
-  const smsProvider = oneOf(env, 'SMS_PROVIDER', ['console'] as const, 'console', errors);
+  const sms = smsConfig(env, production, errors);
   const otpDevCode = optional(env, 'OTP_DEV_CODE');
 
-  if (otpDevCode !== null && (production || smsProvider !== 'console')) {
+  if (otpDevCode !== null && (production || sms.provider !== 'console')) {
     errors.add('OTP_DEV_CODE فقط در توسعه و با SMS_PROVIDER=console مجاز است');
   }
   if (otpDevCode !== null && !/^\d{6}$/.test(otpDevCode)) {
@@ -268,7 +212,7 @@ export function loadConfig(env: Env): AppConfig {
       appRefreshTtlDays: int(env, 'APP_REFRESH_TTL_DAYS', 30, errors, 1),
       appOtpPerHour: int(env, 'APP_OTP_PER_HOUR', 3, errors, 1),
     },
-    sms: { provider: smsProvider },
+    sms,
     fieldApp: { minVersion: appVersion(env, 'APP_MIN_VERSION', errors) },
     jobs: {
       pollIntervalSec: decimal(env, 'JOB_POLL_INTERVAL_SEC', 2, errors, 0.5),
@@ -285,6 +229,28 @@ export function loadConfig(env: Env): AppConfig {
 
   errors.throwIfAny();
   return config;
+}
+
+function smsConfig(env: Env, production: boolean, errors: ConfigErrors): SmsConfig {
+  const raw = optional(env, 'SMS_PROVIDER')?.toLowerCase();
+  if (!raw || raw === 'console') {
+    if (production) errors.add('در production باید SMS_PROVIDER واقعی (مثل sms.ir) تعیین شود');
+    return { provider: 'console' };
+  }
+  if (SMS_IR_ALIASES.has(raw)) {
+    const otpSmsKey = required(env, 'OTP_SMS_KEY', errors);
+    const templateRaw = required(env, 'OTP_TEMPLATE_ID', errors);
+    const otpTemplateId = templateRaw ? int(env, 'OTP_TEMPLATE_ID', 0, errors, 1) : 0;
+    const paramRaw = optional(env, 'OTP_TEMPLATE_PARAM')?.replace(/^#+|#+$/g, '').trim();
+    return {
+      provider: 'sms.ir',
+      otpSmsKey,
+      otpTemplateId,
+      otpTemplateParam: paramRaw || DEFAULT_OTP_TEMPLATE_PARAM,
+    };
+  }
+  errors.add('SMS_PROVIDER باید یکی از console، sms.ir باشد');
+  return { provider: 'console' };
 }
 
 function storageConfig(env: Env, production: boolean, errors: ConfigErrors): AppConfig['storage'] {

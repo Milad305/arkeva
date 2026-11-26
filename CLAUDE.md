@@ -109,6 +109,12 @@ pnpm --filter @projeyar/backend run openapi:emit     # backend/openapi.json (ت�
 pnpm --filter @projeyar/backend run backup:decrypt -- <نسخه.pyb> <خروجی.zip> <orgId>   # فقط پشتیبانی
 ```
 
+### استقرار (`deploy/`)
+سرور دمو روی IP با image‌های ساخته‌شده در GitHub Actions (`.github/workflows/build-images.yml`)؛ راهنمای کامل `deploy/README.md`.
+```bash
+bash /opt/arkeva/repo/deploy/deploy.sh [sha]   # روی سرور: pull، migrate، backend، فایل‌های پنل و لندینگ
+```
+
 ### اپ (`mobile/`)
 قواعد: `docs/rules/flutter-clean-bloc.md` (Clean Architecture + BLoC). وضعیت و برش‌های مانده: `mobile/HANDOFF.md`.
 ```bash

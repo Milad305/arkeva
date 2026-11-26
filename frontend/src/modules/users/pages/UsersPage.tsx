@@ -28,6 +28,7 @@ import { Switch } from '@/shared/components/ui/SelectionControls';
 import { TextInput } from '@/shared/components/ui/TextInput';
 import { useHasPermission } from '@/shared/hooks/useHasAccess';
 import { useSelection } from '@/shared/hooks/useSelection';
+import { appLink } from '@/shared/utils/appUrl';
 import { getApiErrorMessage } from '@/shared/utils/apiError';
 import { formatRelativeTime } from '@/shared/utils/date';
 import { toFaDigits } from '@/shared/utils/num';
@@ -127,7 +128,7 @@ export default function UsersPage() {
   }
 
   const copyInviteLink = (row: OrgUserRowDto) => {
-    const link = `${window.location.origin}/invite/${row.invitation!.id}`;
+    const link = appLink(`/invite/${row.invitation!.id}`);
     void navigator.clipboard?.writeText(link).then(
       () => toast.success('پیوند دعوت کپی شد.'),
       () => toast.error('کپی نشد؛ پیوند را از پیامک دعوت بردارید.'),

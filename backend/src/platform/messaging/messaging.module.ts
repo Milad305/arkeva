@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { AppConfig } from '../../config/config.js';
 import { ConsoleEmailSender, ConsolePushSender, EmailSender, PushSender } from './channel-senders.js';
+import { SmsIrSender } from './sms-ir.sender.js';
 import { ConsoleSmsSender, SmsSender } from './sms-sender.js';
 
 @Global()
@@ -13,6 +14,12 @@ import { ConsoleSmsSender, SmsSender } from './sms-sender.js';
         switch (config.sms.provider) {
           case 'console':
             return new ConsoleSmsSender();
+          case 'sms.ir':
+            return new SmsIrSender({
+              apiKey: config.sms.otpSmsKey,
+              otpTemplateId: config.sms.otpTemplateId,
+              otpTemplateParam: config.sms.otpTemplateParam,
+            });
         }
       },
     },

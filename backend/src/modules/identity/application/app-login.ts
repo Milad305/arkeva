@@ -101,7 +101,7 @@ export class AppLogin {
     });
     if (!issued) return decoy;
     // پس از commit (04 ۶)؛ ارقام لاتین برای خواندن خودکار پیامک
-    await this.sms.send({ to: issued.mobile, text: `کد ورود اپ پروژه‌یار: ${issued.code}\nاین کد را به کسی ندهید.` });
+    await this.sms.send({ to: issued.mobile, text: `کد ورود اپ پروژه‌یار: ${issued.code}\nاین کد را به کسی ندهید.`, otpCode: issued.code });
     return { ...decoy, otpToken: issued.token };
   }
 
@@ -141,8 +141,7 @@ export class AppLogin {
       return { token: `${user.orgId}.${id}.${secret}`, code: otp, mobile: user.mobile };
     });
     if (!issued) throw new UnauthorizedError('INVITE_CODE_INVALID');
-    await this.sms.send({ to: issued.mobile, text: `کد ورود اپ پروژه‌یار: ${issued.code}
-این کد را به کسی ندهید.` });
+    await this.sms.send({ to: issued.mobile, text: `کد ورود اپ پروژه‌یار: ${issued.code}\nاین کد را به کسی ندهید.`, otpCode: issued.code });
     return { otpToken: issued.token, maskedMobile: maskMobile(issued.mobile), resendAfterSec: this.config.auth.otpResendSec, codeLength: APP_CODE_LENGTH };
   }
 

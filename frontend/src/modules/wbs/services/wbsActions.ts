@@ -2,6 +2,7 @@ import { ROUTES, WBS_DEEP_LINKS } from '@/config/routes';
 import type { MenuEntry } from '@/shared/components/ui/Menu';
 import { toast } from '@/shared/components/feedback/toastStore';
 import { toFaDigits } from '@/shared/utils/num';
+import { appLink } from '@/shared/utils/appUrl';
 import type { EntityId } from '@/shared/types/api';
 import type { WbsPermissions } from '../hooks/useWbsPermissions';
 import type { WbsItemDto } from '../types';
@@ -23,7 +24,7 @@ export interface WbsActionContext {
 }
 
 export function copyItemLink(projectId: EntityId, itemId: EntityId): void {
-  const url = `${window.location.origin}${ROUTES.wbsItem(projectId, itemId)}`;
+  const url = appLink(ROUTES.wbsItem(projectId, itemId));
   const done = () => toast.success('پیوند آیتم کپی شد.');
   if (navigator.clipboard?.writeText) {
     navigator.clipboard

@@ -4,6 +4,13 @@ packages:
   - backend
   - packages/*
 
+# @hookform/resolvers وابستگی zod را اعلام نمی‌کند؛ بی این، نوع‌هایش zod 4ِ hoist‌شده از puppeteer-core بک‌اند را
+# می‌بیند و typecheck و build فرانت می‌شکند. با peer، همان zod 3 فرانت به آن پیوند می‌خورد.
+packageExtensions:
+  '@hookform/resolvers@3':
+    peerDependencies:
+      zod: '*'
+
 allowBuilds:
   esbuild: false
   '@swc/core': false
