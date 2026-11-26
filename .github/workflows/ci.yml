@@ -1,0 +1,280 @@
+
+name: Arkeva CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.20.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared package
+        run: pnpm --filter @projeyar/shared run build
+
+      - name: Typecheck backend
+        run: pnpm --filter @projeyar/backend run typecheck
+
+      - name: Build backend
+        run: pnpm --filter @projeyar/backend run build
+
+      - name: Verify backend output
+        run: test -f backend/dist/main.js
+
+      - name: Build frontend
+        env:
+          VITE_API_BASE_URL: /v1
+          VITE_NODE_ENV: production
+        run: pnpm --filter prozheh-yar-frontend run build
+
+      - name: Verify frontend output
+        run: test -f frontend/dist/index.html
+  docker-backend:
+    name: Build and verify backend image
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build backend image
+        run: |
+          docker build \
+            --file backend/Dockerfile \
+            --tag arkeva-backend:ci \
+            .
+
+      - name: Verify runtime dependencies
+        run: |
+          docker run --rm --entrypoint sh arkeva-backend:ci -c '
+            set -eu
+
+            echo "Checking compiled application..."
+            test -f /app/dist/main.js
+
+            echo "Checking Chromium..."
+            /usr/bin/chromium --version
+
+            echo "Checking Node.js..."
+            node --version
+
+            echo "Checking production dependencies..."
+            node --input-type=module -e "
+              await import(\"@node-rs/argon2\");
+              await import(\"sharp\");
+              await import(\"puppeteer-core\");
+              await import(\"@projeyar/shared\");
+              console.log(\"All runtime dependencies loaded successfully\");
+            "
+          '
+  docker-frontend:
+    name: Build and verify frontend image
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build frontend image
+        run: |
+          docker build \
+            --file frontend/Dockerfile \
+            --tag arkeva-frontend:ci \
+            --build-arg VITE_API_BASE_URL=/v1 \
+            --build-arg VITE_NODE_ENV=production \
+            .
+
+      - name: Verify frontend image
+        run: |
+          docker run -d \
+            --name arkeva-frontend-test \
+            -p 8080:80 \
+            arkeva-frontend:ci
+
+          trap 'docker rm -f arkeva-frontend-test >/dev/null 2>&1 || true' EXIT
+
+          for i in $(seq 1 15); do
+            if curl -fsS http://localhost:8080/ -o /tmp/frontend-index.html; then
+              break
+            fi
+            sleep 2
+          done
+
+          test -s /tmp/frontend-index.html
+          grep -q '<div id="root"></div>' /tmp/frontend-index.html
+
+          echo "Frontend container is serving index.html successfully"
+  
+  docker-landing:
+    name: Build and verify landing image
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build landing image
+        run: |
+          docker build \
+            --file landing/Dockerfile \
+            --tag arkeva-landing:ci \
+            .
+
+      - name: Verify landing image
+        run: |
+          docker run -d \
+            --name arkeva-landing-test \
+            -p 8081:80 \
+            arkeva-landing:ci
+
+          trap 'docker rm -f arkeva-landing-test >/dev/null 2>&1 || true' EXIT
+
+          for i in $(seq 1 15); do
+            if curl -fsS http://localhost:8081/ -o /tmp/landing-index.html; then
+              break
+            fi
+            sleep 2
+          done
+
+          test -s /tmp/landing-index.html
+          grep -q 'پروژه‌یار' /tmp/landing-index.html
+          curl -fsS http://localhost:8081/assets/landing.css -o /dev/null
+          curl -fsS http://localhost:8081/assets/landing.js -o /dev/null
+
+          echo "Landing container and assets verified successfully"
+
+  publish-backend:
+    name: Publish backend image to GHCR
+    runs-on: ubuntu-latest
+    needs: docker-backend
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set image name
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/arkeva-backend" >> "$GITHUB_ENV"
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+  publish-frontend:
+    name: Publish frontend image to GHCR
+    runs-on: ubuntu-latest
+    needs: docker-frontend
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: frontend/Dockerfile
+          push: true
+          build-args: |
+            VITE_API_BASE_URL=/v1
+            VITE_NODE_ENV=production
+          tags: |
+            ghcr.io/milad305/arkeva-frontend:latest
+            ghcr.io/milad305/arkeva-frontend:${{ github.sha }}
+  
+ 
+  publish-landing:
+    name: Publish landing image to GHCR
+    runs-on: ubuntu-latest
+    needs: docker-landing
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push landing image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: landing/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/milad305/arkeva-landing:latest
+            ghcr.io/milad305/arkeva-landing:${{ github.sha }}
