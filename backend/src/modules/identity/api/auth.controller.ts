@@ -8,6 +8,7 @@ import { ApiEnvelopedOk, ApiStandardResponses, FreeformResponse } from '../../..
 import { ClientHeaderGuard } from '../../../platform/security/client-header.guard.js';
 import { Authenticated, Public } from '../../../platform/security/decorators.js';
 import { IdentitySessions } from '../application/identity-sessions.js';
+import { OrganizationRegistration } from '../application/org-registration.js';
 import { PasswordRecovery } from '../application/password-recovery.js';
 import { StepUpChallenges } from '../application/step-up.js';
 import type { RequestMeta } from '../application/session-issuer.js';
@@ -17,6 +18,11 @@ import {
   ResendOtpRequest,
   ResendOtpResponse,
   SessionResponse,
+  SignupCompleteRequest,
+  SignupRequestCodeRequest,
+  SignupRequestCodeResponse,
+  SignupTokenRequest,
+  SignupVerifyCodeRequest,
   StepUpRequest,
   StepUpResponse,
   VerifyOtpRequest,
@@ -43,6 +49,7 @@ export class AuthController {
     private readonly context: AppContext,
     private readonly stepUp: StepUpChallenges,
     private readonly recovery: PasswordRecovery,
+    private readonly registration: OrganizationRegistration,
   ) {}
 
   @Post('login')
@@ -195,6 +202,58 @@ export class AuthController {
   @ApiStandardResponses({ rateLimited: true })
   requestStepUp(@Body() body: StepUpRequest): Promise<StepUpResponse> {
     return this.stepUp.request(body);
+  }
+
+  @Post('register/request-code')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Throttle(AUTH_LIMIT)
+  @ApiOperation({ summary: 'ثبت‌نام سازمان جدید: ارسال کد تأیید موبایل', operationId: 'requestSignupCode' })
+  @ApiEnvelopedOk(SignupRequestCodeResponse)
+  @ApiStandardResponses({ authenticated: false, rateLimited: true, conflict: true })
+  requestSignupCode(@Body() body: SignupRequestCodeRequest): Promise<SignupRequestCodeResponse> {
+    return this.registration.requestCode(body);
+  }
+
+  @Post('register/verify-code')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Throttle(AUTH_LIMIT)
+  @ApiOperation({ summary: 'ثبت‌نام سازمان جدید: بررسی کد بدون مصرف', operationId: 'verifySignupCode' })
+  @ApiEnvelopedOk(FreeformResponse)
+  @ApiStandardResponses({ authenticated: false, rateLimited: true })
+  verifySignupCode(@Body() body: SignupVerifyCodeRequest) {
+    return this.registration.verifyCode(body);
+  }
+
+  @Post('register/resend')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Throttle(AUTH_LIMIT)
+  @ApiOperation({ summary: 'ثبت‌نام سازمان جدید: ارسال دوبارهٔ کد', operationId: 'resendSignupCode' })
+  @ApiEnvelopedOk(ResendOtpResponse)
+  @ApiStandardResponses({ authenticated: false, rateLimited: true })
+  resendSignupCode(@Body() body: SignupTokenRequest): Promise<ResendOtpResponse> {
+    return this.registration.resend(body);
+  }
+
+  @Post('register/complete')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Throttle(AUTH_LIMIT)
+  @ApiOperation({ summary: 'ثبت‌نام سازمان جدید: ساخت سازمان، مدیر ارشد و ورود', operationId: 'completeSignup' })
+  @ApiEnvelopedOk(SessionResponse)
+  @ApiStandardResponses({ authenticated: false, rateLimited: true, conflict: true })
+  async completeSignup(
+    @Body() body: SignupCompleteRequest,
+    @Ip() ip: string | undefined,
+    @Headers('user-agent') userAgent: string | undefined,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<SessionResponse> {
+    const result = await this.registration.complete(body, meta(ip, userAgent));
+    this.cookie.write(response, result.refreshToken);
+    this.cookie.writeDevice(response, result.deviceToken);
+    return result.session;
   }
 
   @Get('me')

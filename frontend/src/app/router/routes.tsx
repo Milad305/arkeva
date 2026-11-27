@@ -11,6 +11,7 @@ import { ROUTER_BASENAME } from '@/shared/utils/appUrl';
 
 // همهٔ صفحه‌ها lazy هستند تا هر ماژول chunk خودش را داشته باشد.
 const LoginPage = lazy(() => import('@/modules/auth/pages/LoginPage'));
+const RegisterPage = lazy(() => import('@/modules/auth/pages/RegisterPage'));
 const OtpPage = lazy(() => import('@/modules/auth/pages/OtpPage'));
 const ResetPasswordPage = lazy(() => import('@/modules/auth/pages/ResetPasswordPage'));
 const ProjectsPage = lazy(() => import('@/modules/projects/pages/ProjectsPage'));
@@ -78,6 +79,7 @@ function AuthRoute({ element }: { element: ReactNode }) {
 
 export const router = createBrowserRouter([
   { path: ROUTES.login, element: <AuthRoute element={<LoginPage />} /> },
+  { path: ROUTES.register, element: <AuthRoute element={<RegisterPage />} /> },
   { path: ROUTES.otp, element: <AuthRoute element={<OtpPage />} /> },
   { path: ROUTES.resetPassword, element: <AuthRoute element={<ResetPasswordPage />} /> },
 

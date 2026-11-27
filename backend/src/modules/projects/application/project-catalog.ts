@@ -1,13 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
+import { newId } from '../../../platform/database/ids.js';
 import { type ProjectBasics, ProjectCatalog } from '../../identity/index.js';
 import { Project, ProjectType } from '../domain/project.entity.js';
 
-/** پیاده‌سازی ProjectCatalog برای identity (W26، دعوت): پروژه‌های دیدنی سازمان. */
+const DEFAULT_PROJECT_TYPES: readonly [key: string, name: string][] = [
+  ['residential', 'ساختمانی'],
+  ['road_bridge', 'راه و پل'],
+  ['tunnel', 'تونل'],
+  ['healthcare', 'درمانی'],
+  ['energy', 'انرژی'],
+  ['parking', 'پارکینگ'],
+  ['heritage', 'مرمت و میراث'],
+  ['commercial', 'تجاری'],
+];
+
+/** پیاده‌سازی ProjectCatalog برای identity (W26، دعوت، ثبت‌نام سازمان): پروژه‌های دیدنی سازمان. */
 @Injectable()
 export class ProjectBasicsCatalog extends ProjectCatalog {
   constructor(private readonly em: EntityManager) {
     super();
+  }
+
+  async seedOrgDefaults(tx: EntityManager, orgId: string, now: Date): Promise<void> {
+    for (const [sortOrder, [key, name]] of DEFAULT_PROJECT_TYPES.entries()) {
+      tx.create(ProjectType, { id: newId(), orgId, key, name, sortOrder, createdAt: now });
+    }
+    await tx.flush();
   }
 
   async list(): Promise<ProjectBasics[]> {

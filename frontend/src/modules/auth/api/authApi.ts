@@ -8,6 +8,9 @@ import type {
   LoginResult,
   ResetPasswordRequest,
   SessionDto,
+  SignupCompleteRequest,
+  SignupRequestCodeRequest,
+  SignupRequestCodeResponse,
   StepUpRequest,
   StepUpResponse,
   VerifyOtpRequest,
@@ -76,6 +79,39 @@ export const authApi = baseApi.injectEndpoints({
       })),
       invalidatesTags: ['Auth'],
     }),
+
+    requestSignupCode: build.mutation<SignupRequestCodeResponse, SignupRequestCodeRequest>({
+      queryFn: serverQuery((body) => ({
+        url: ENDPOINTS.AUTH_REGISTER_REQUEST_CODE,
+        method: 'POST',
+        body,
+      })),
+    }),
+
+    verifySignupCode: build.mutation<{ ok: true }, { signupToken: string; code: string }>({
+      queryFn: serverQuery((body) => ({
+        url: ENDPOINTS.AUTH_REGISTER_VERIFY_CODE,
+        method: 'POST',
+        body,
+      })),
+    }),
+
+    resendSignupCode: build.mutation<{ resendAfterSec: number }, { signupToken: string }>({
+      queryFn: serverQuery((body) => ({
+        url: ENDPOINTS.AUTH_REGISTER_RESEND,
+        method: 'POST',
+        body,
+      })),
+    }),
+
+    completeSignup: build.mutation<SessionDto, SignupCompleteRequest>({
+      queryFn: serverQuery((body) => ({
+        url: ENDPOINTS.AUTH_REGISTER_COMPLETE,
+        method: 'POST',
+        body,
+      })),
+      invalidatesTags: ['Auth'],
+    }),
   }),
 });
 
@@ -110,6 +146,18 @@ registerApiBehavior({
     loadingMessage: 'در حال ذخیرهٔ رمز تازه…',
     showErrorToast: false,
   },
+  requestSignupCode: {
+    showGlobalLoading: true,
+    loadingMessage: 'در حال ارسال کد تأیید…',
+    showErrorToast: false,
+  },
+  verifySignupCode: { showErrorToast: false },
+  resendSignupCode: { showSuccessToast: true, successMessage: 'کد تازه پیامک شد.' },
+  completeSignup: {
+    showGlobalLoading: true,
+    loadingMessage: 'در حال ساخت سازمان و ورود…',
+    showErrorToast: false,
+  },
 });
 
 export const {
@@ -120,6 +168,10 @@ export const {
   useResetPasswordMutation,
   useVerifyResetCodeMutation,
   useResendResetCodeMutation,
+  useRequestSignupCodeMutation,
+  useVerifySignupCodeMutation,
+  useResendSignupCodeMutation,
+  useCompleteSignupMutation,
   useRequestStepUpMutation,
   useRefreshSessionMutation,
   useLogoutMutation,

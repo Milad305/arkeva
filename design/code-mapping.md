@@ -2331,6 +2331,12 @@ D04، wbs.md ۹ و ۱۵ و AC-WBS-11 در 1405/08/15 با این تصمیم‌ه
 - **پیاده‌سازی (`backend/src/platform/messaging/sms-ir.sender.ts`، `sms-ir.codes.ts`):** کلاس `SmsIrSender` کدهای یک‌بارمصرف ۶ رقمی وب (ورود دومرحله‌ای، ارسال مجدد، بازیابی رمز / فعال‌سازی دعوت‌شده، تأیید دوبارهٔ step-up) و ۵ رقمی اپ کارگاه (ورود و کد دعوت OD-20) را از طریق فیلد صریح `otpCode` در `SmsMessage` به `https://api.sms.ir/v1/send/verify` می‌فرستد. شمارهٔ گیرنده در لاگ ماسک می‌شود و کد/کلید هرگز لاگ نمی‌شوند. پیامک‌های متنی غیراُتی‌پی (بدون خط ارسال انبوه) با هشدار در لاگ رد می‌شوند تا جریان قفل حساب یا اعلان درون‌برنامه‌ای مختل نشود. خطای شبکه یا رد درگاه به `SmsSendError` (`503 DEPENDENCY_UNAVAILABLE` با تشخیص `retryable` بر اساس خطاهای گیرنده) تبدیل می‌شود.
 - **تست‌ها:** `sms-ir.sender.test.ts` (شامل `AC-PL-13`) و `config.test.ts`.
 
+### ۷.۱.۵۳ ثبت‌نام خودکار سازمان جدید (Self-Signup؛ تصمیم کاربر 1405/09/06، گزینهٔ ۲)
+
+- **بک‌اند:** `Migration20261210000000_org_signup` (جدول `signup_challenge` و مجوز `INSERT` روی `organization` تحت RLS `id = app_current_org()`)، موجودیت `SignupChallenge` و سرویس `OrganizationRegistration` با ۴ مسیر عمومی زیر `/v1/auth/register/{request-code,verify-code,resend,complete}` + بازتولید `openapi.json`. هم‌زمان با ساخت سازمان، ۸ نوع پروژهٔ استاندارد از درگاه `ProjectCatalog.seedOrgDefaults` ساخته می‌شود، کاربر سازنده با `isOrgAdmin = true` فعال می‌گردد، ممیزی `organization.registered` ثبت و نشست + کوکی دستگاه مورد اعتماد صادر می‌شود.
+- **فرانت‌اند:** مسیر `/register` (`RegisterPage.tsx` سه‌مرحله‌ای با کیت بوم و `AuthShell`)، پیوند از `LoginPage.tsx` و محدود شدن مقادیر پیش‌فرض دمو در `LoginPage.tsx` به `import.meta.env.DEV`.
+- **تست:** `auth.int.test.ts` (سناریوی کامل ثبت‌نام سه‌مرحله‌ای، بررسی انواع پروژه تحت RLS، منع شمارهٔ تکراری و ورود بعدی).
+
 ### ۷.۲ باقی‌مانده
 
 > **ترتیب ساخت بک‌اند تا اتصال کامل فرانت:** `docs/backend/12-implementation-plan.md` (۲۰ برش؛ 1405/08/22).

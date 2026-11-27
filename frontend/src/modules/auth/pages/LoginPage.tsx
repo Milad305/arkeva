@@ -37,8 +37,8 @@ export default function LoginPage() {
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      identifier: '09123454321',
-      password: 'Projeyar1404',
+      identifier: import.meta.env.DEV ? '09123454321' : '',
+      password: import.meta.env.DEV ? 'Projeyar1404' : '',
       rememberIdentifier: true,
     },
     mode: 'onBlur',
@@ -171,6 +171,13 @@ export default function LoginPage() {
         >
           ورود با شناسهٔ سازمانی (SSO)
         </AppButton>
+
+        <Box className="row between wrap g8" style={{ alignItems: 'center' }}>
+          <span className="t-13 tx6">هنوز در پروژه‌یار سازمان ندارید؟</span>
+          <Link className="link fw6" to={ROUTES.register} style={{ fontSize: 13 }}>
+            ثبت‌نام سازمان جدید
+          </Link>
+        </Box>
       </form>
     </AuthShell>
   );

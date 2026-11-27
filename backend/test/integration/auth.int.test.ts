@@ -319,3 +319,77 @@ describe('F01 — خروج', () => {
     expect(errorOf(response.body).code).toBe('CLIENT_HEADER_REQUIRED');
   });
 });
+
+describe('F01 — ثبت‌نام خودکار سازمان جدید (Self-Signup)', () => {
+  it('سه‌مرحله‌ای: ارسال کد ← بررسی کد ← ساخت سازمان، مدیر سازمان، ۸ نوع پروژهٔ استاندارد و نشست فعال', async () => {
+    const agent = test.http('10.8.0.1');
+    const mobile = '09128880001';
+
+    const requested = await agent.post('/v1/auth/register/request-code').send({ mobile }).expect(200);
+    const step1 = (requested.body as { data: { signupToken: string; maskedMobile: string; resendAfterSec: number } }).data;
+    expect(step1.maskedMobile).toBe('0912 *** 0001');
+
+    const code = test.sms.lastCode(mobile);
+    const wrong = code === '000000' ? '111111' : '000000';
+    const badCode = await agent.post('/v1/auth/register/verify-code').send({ signupToken: step1.signupToken, code: wrong }).expect(422);
+    expect(errorOf(badCode.body).code).toBe('OTP_INVALID');
+
+    await agent.post('/v1/auth/register/verify-code').send({ signupToken: step1.signupToken, code }).expect(200);
+
+    const completed = await agent
+      .post('/v1/auth/register/complete')
+      .send({
+        signupToken: step1.signupToken,
+        code,
+        organizationName: 'شرکت مهندسی سازه‌گستر البرز',
+        fullName: 'مهندس کاوه راد',
+        email: 'kaveh@sazehgostar.ir',
+        password: TEST_PASSWORD,
+      })
+      .expect(200);
+
+    const session = (
+      completed.body as {
+        success: boolean;
+        data: {
+          accessToken: string;
+          user: { id: string; fullName: string; isOrgAdmin: boolean };
+          organization: { id: string; name: string; activeProjectCount: number };
+        };
+      }
+    ).data;
+    expect(session.user).toMatchObject({ fullName: 'مهندس کاوه راد', isOrgAdmin: true });
+    expect(session.organization).toMatchObject({ name: 'شرکت مهندسی سازه‌گستر البرز', activeProjectCount: 0 });
+    expect(refreshCookieOf(completed)?.startsWith(`${session.organization.id}.`)).toBe(true);
+
+    // انواع پروژهٔ استاندارد برای سازمان تازه آماده است
+    const types = await test.owner.query<{ count: string }>('select count(*)::text as count from project_type where org_id = $1', [
+      session.organization.id,
+    ]);
+    expect(types.rows[0]?.count).toBe('8');
+
+    // فهرست پروژه‌های سازمان تازه خالی است و دسترسی مدیر سازمان کامل است
+    const projects = await agent.get('/v1/projects').set('Authorization', `Bearer ${session.accessToken}`).expect(200);
+    expect((projects.body as { data: unknown[] }).data).toEqual([]);
+
+    // توکن ثبت‌نام مصرف‌شده دوباره پذیرفته نمی‌شود و شمارهٔ ثبت‌شده مجدداً اجازهٔ ثبت‌نام نمی‌گیرد
+    const replay = await agent
+      .post('/v1/auth/register/complete')
+      .send({
+        signupToken: step1.signupToken,
+        code,
+        organizationName: 'سازمان تکراری',
+        fullName: 'تکرار',
+        password: TEST_PASSWORD,
+      })
+      .expect(422);
+    expect(errorOf(replay.body).code).toBe('SIGNUP_TOKEN_INVALID');
+
+    const duplicate = await test.http('10.8.0.2').post('/v1/auth/register/request-code').send({ mobile }).expect(409);
+    expect(errorOf(duplicate.body).code).toBe('SIGNUP_MOBILE_TAKEN');
+
+    // ورود بعدی با همان شماره و رمز عبور جدید کار می‌کند
+    const nextLogin = await login(test.http('10.8.0.3'), mobile, TEST_PASSWORD).expect(200);
+    expect((nextLogin.body as { data: { outcome: string } }).data.outcome).toBe('otp_required');
+  });
+});

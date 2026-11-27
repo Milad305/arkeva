@@ -222,6 +222,8 @@
               "PASSWORD_INCORRECT",
               "PASSWORD_EXPIRED",
               "RESET_TOKEN_INVALID",
+              "SIGNUP_MOBILE_TAKEN",
+              "SIGNUP_TOKEN_INVALID",
               "INVITATION_EXPIRED",
               "WEB_ACCESS_APP_ONLY",
               "TWO_FACTOR_REQUIRED_BY_ORG",
@@ -3436,6 +3438,100 @@
         },
         "type": "object"
       },
+      "SignupCompleteRequest": {
+        "properties": {
+          "code": {
+            "pattern": "^\\d{6}$",
+            "type": "string"
+          },
+          "email": {
+            "nullable": true,
+            "type": "string"
+          },
+          "fullName": {
+            "example": "علی رضایی",
+            "type": "string"
+          },
+          "organizationName": {
+            "example": "شرکت مهندسی آرمان سازه",
+            "type": "string"
+          },
+          "password": {
+            "format": "password",
+            "type": "string"
+          },
+          "signupToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signupToken",
+          "code",
+          "organizationName",
+          "fullName",
+          "password"
+        ],
+        "type": "object"
+      },
+      "SignupRequestCodeRequest": {
+        "properties": {
+          "mobile": {
+            "example": "09121234567",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mobile"
+        ],
+        "type": "object"
+      },
+      "SignupRequestCodeResponse": {
+        "properties": {
+          "maskedMobile": {
+            "example": "0912 *** 4321",
+            "type": "string"
+          },
+          "resendAfterSec": {
+            "type": "number"
+          },
+          "signupToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signupToken",
+          "maskedMobile",
+          "resendAfterSec"
+        ],
+        "type": "object"
+      },
+      "SignupTokenRequest": {
+        "properties": {
+          "signupToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signupToken"
+        ],
+        "type": "object"
+      },
+      "SignupVerifyCodeRequest": {
+        "properties": {
+          "code": {
+            "pattern": "^\\d{6}$",
+            "type": "string"
+          },
+          "signupToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signupToken",
+          "code"
+        ],
+        "type": "object"
+      },
       "StatusDto": {
         "properties": {
           "actualCost": {
@@ -5803,6 +5899,338 @@
           }
         },
         "summary": "تازه‌سازی نشست از کوکی",
+        "tags": [
+          "ورود و نشست"
+        ],
+        "x-access": "public"
+      }
+    },
+    "/v1/auth/register/complete": {
+      "post": {
+        "operationId": "completeSignup",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupCompleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SessionResponse"
+                    },
+                    "success": {
+                      "enum": [
+                        true
+                      ],
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "ورودی نادرست (details.fields)"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "تعارض نسخه یا حالت"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "نرخ درخواست"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "خطای سرور با کد پیگیری"
+          }
+        },
+        "summary": "ثبت‌نام سازمان جدید: ساخت سازمان، مدیر ارشد و ورود",
+        "tags": [
+          "ورود و نشست"
+        ],
+        "x-access": "public"
+      }
+    },
+    "/v1/auth/register/request-code": {
+      "post": {
+        "operationId": "requestSignupCode",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequestCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/SignupRequestCodeResponse"
+                    },
+                    "success": {
+                      "enum": [
+                        true
+                      ],
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "ورودی نادرست (details.fields)"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "تعارض نسخه یا حالت"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "نرخ درخواست"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "خطای سرور با کد پیگیری"
+          }
+        },
+        "summary": "ثبت‌نام سازمان جدید: ارسال کد تأیید موبایل",
+        "tags": [
+          "ورود و نشست"
+        ],
+        "x-access": "public"
+      }
+    },
+    "/v1/auth/register/resend": {
+      "post": {
+        "operationId": "resendSignupCode",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ResendOtpResponse"
+                    },
+                    "success": {
+                      "enum": [
+                        true
+                      ],
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "ورودی نادرست (details.fields)"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "نرخ درخواست"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "خطای سرور با کد پیگیری"
+          }
+        },
+        "summary": "ثبت‌نام سازمان جدید: ارسال دوبارهٔ کد",
+        "tags": [
+          "ورود و نشست"
+        ],
+        "x-access": "public"
+      }
+    },
+    "/v1/auth/register/verify-code": {
+      "post": {
+        "operationId": "verifySignupCode",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupVerifyCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/FreeformResponse"
+                    },
+                    "success": {
+                      "enum": [
+                        true
+                      ],
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "ورودی نادرست (details.fields)"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "نرخ درخواست"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "خطای سرور با کد پیگیری"
+          }
+        },
+        "summary": "ثبت‌نام سازمان جدید: بررسی کد بدون مصرف",
         "tags": [
           "ورود و نشست"
         ],

@@ -176,6 +176,25 @@ export interface ResetPasswordRequest {
   revokeOtherSessions: boolean;
 }
 
+export interface SignupRequestCodeRequest {
+  mobile: string;
+}
+
+export interface SignupRequestCodeResponse {
+  signupToken: string;
+  maskedMobile: string;
+  resendAfterSec: number;
+}
+
+export interface SignupCompleteRequest {
+  signupToken: string;
+  code: string;
+  organizationName: string;
+  fullName: string;
+  email?: string | null;
+  password: string;
+}
+
 /** خطاهای شناخته‌شدهٔ ورود؛ پیام‌ها نمی‌گویند کدام بخش اشتباه است (۵.۱). */
 export type LoginErrorCode =
   | 'invalid_credentials'

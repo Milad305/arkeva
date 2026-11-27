@@ -9,6 +9,7 @@ import { UsersController } from './api/users.controller.js';
 import { Account } from './application/account.js';
 import { Credentials } from './application/credentials.js';
 import { Invitations } from './application/invitations.js';
+import { OrganizationRegistration } from './application/org-registration.js';
 import { OrgUsers } from './application/org-users.js';
 import { PasswordRecovery } from './application/password-recovery.js';
 import { Roles } from './application/roles.js';
@@ -51,6 +52,7 @@ import { PasswordHasher } from './infrastructure/password-hasher.js';
     TrustedDevices,
     Credentials,
     PasswordRecovery,
+    OrganizationRegistration,
     OrgUsers,
     Invitations,
     UserAdmin,

@@ -128,6 +128,40 @@ export const resetPasswordSchema = z
 
 export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 
+/** ثبت‌نام خودکار سازمان جدید — مرحلهٔ ۱ (شماره موبایل) و مرحلهٔ ۳ (مشخصات سازمان و مدیر). */
+export const signupMobileSchema = z.object({
+  mobile: mobileSchema,
+});
+
+export type SignupMobileForm = z.infer<typeof signupMobileSchema>;
+
+export const signupCompleteSchema = z
+  .object({
+    organizationName: z
+      .string()
+      .trim()
+      .min(2, 'نام شرکت یا سازمان باید دست‌کم ۲ نویسه باشد.')
+      .max(120, 'نام سازمان حداکثر ۱۲۰ نویسه است.'),
+    fullName: z
+      .string()
+      .trim()
+      .min(3, 'نام و نام خانوادگی را کامل بنویسید.')
+      .max(80, 'نام و نام خانوادگی حداکثر ۸۰ نویسه است.'),
+    email: z
+      .string()
+      .trim()
+      .max(120, 'نشانی ایمیل حداکثر ۱۲۰ نویسه است.')
+      .refine((value) => value === '' || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value), 'نشانی ایمیل معتبر نیست.'),
+    password: passwordSchema,
+    repeatPassword: z.string(),
+  })
+  .refine((data) => data.password === data.repeatPassword, {
+    path: ['repeatPassword'],
+    message: 'دو رمز یکسان نیستند.',
+  });
+
+export type SignupCompleteForm = z.infer<typeof signupCompleteSchema>;
+
 /** قفل موقت پس از ۵ ورود ناموفق، به مدت ۱۵ دقیقه. */
 export const LOCKOUT = {
   maxAttempts: 5,

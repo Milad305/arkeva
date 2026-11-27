@@ -152,4 +152,4 @@ crontab -e
    پنل روی `panel.arkeva.ir` همچنان `/v1/` را هم‌مبدأ سرو می‌کند. `api.arkeva.ir` برای اپ موبایل است.
 3. یک پیکربندی nginx جدا برای هر دامنه، سپس `sudo apt install certbot python3-certbot-nginx` و `sudo certbot --nginx`.
 4. در `backend.env`: `COOKIE_SECURE=true` و `PUBLIC_BASE_URL=https://panel.arkeva.ir`.
-5. برای `NODE_ENV=production` باید `SMS_PROVIDER=sms.ir` (با `OTP_SMS_KEY` و `OTP_TEMPLATE_ID`) تنظیم شود و دو کار باز در کد هنوز تأیید طراحی می‌خواهند: **راه ساخت نخستین سازمان و مدیر** (seed در production اجرا نمی‌شود) و **ارائه‌دهندهٔ ایمیل واقعی / خط پیامک متنی غیراُتی‌پی**.
+5. در `NODE_ENV=production` باید `SMS_PROVIDER=sms.ir` (همراه `OTP_SMS_KEY` و `OTP_TEMPLATE_ID`) تنظیم شود. اولین سازمان و مدیر ارشد به‌صورت خودخدمت از مسیر `/register` با تأیید پیامکی ساخته می‌شوند (چون `seed` در production اجرا نمی‌شود). تنها کار باز زیرساختی در صورت نیاز، ارائه‌دهندهٔ واقعی ایمیل است.

@@ -12,9 +12,10 @@ export interface ProjectBasics {
   readonly status: ProjectStatus;
 }
 
-/** پیاده‌سازی: projects. پروژه‌های دیدنی سازمان (بی در انتظار حذف). */
+/** پیاده‌سازی: projects. پروژه‌های دیدنی سازمان (بی در انتظار حذف) و مقداردهی اولیهٔ انواع پروژه هنگام ثبت‌نام سازمان تازه. */
 export abstract class ProjectCatalog {
   abstract list(): Promise<ProjectBasics[]>;
+  abstract seedOrgDefaults(tx: EntityManager, orgId: string, now: Date): Promise<void>;
 }
 
 export interface Membership {

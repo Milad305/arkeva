@@ -123,3 +123,59 @@ export class StepUpResponse {
   @ApiProperty() readonly expiresInSec!: number;
   @ApiProperty() readonly resendAfterSec!: number;
 }
+
+// ─── ثبت‌نام خودکار سازمان جدید (Self-Signup) ───
+
+export class SignupRequestCodeRequest {
+  @ApiProperty({ example: '09121234567' })
+  @IsString({ message: 'شمارهٔ موبایل را بنویسید.' })
+  @IsNotEmpty({ message: 'شمارهٔ موبایل را بنویسید.' })
+  @MaxLength(20)
+  readonly mobile!: string;
+}
+
+export class SignupRequestCodeResponse {
+  @ApiProperty() readonly signupToken!: string;
+  @ApiProperty({ example: '0912 *** 4321' }) readonly maskedMobile!: string;
+  @ApiProperty() readonly resendAfterSec!: number;
+}
+
+export class SignupTokenRequest {
+  @ApiProperty()
+  @IsString({ message: 'ثبت‌نام را از نو شروع کنید.' })
+  @IsNotEmpty({ message: 'ثبت‌نام را از نو شروع کنید.' })
+  @MaxLength(300)
+  readonly signupToken!: string;
+}
+
+export class SignupVerifyCodeRequest extends SignupTokenRequest {
+  @ApiProperty({ pattern: '^\\d{6}$' })
+  @Matches(/^\d{6}$/, { message: 'کد ۶ رقمی پیامک را کامل بنویسید.' })
+  readonly code!: string;
+}
+
+export class SignupCompleteRequest extends SignupVerifyCodeRequest {
+  @ApiProperty({ example: 'شرکت مهندسی آرمان سازه' })
+  @IsString({ message: 'نام شرکت یا سازمان را بنویسید.' })
+  @IsNotEmpty({ message: 'نام شرکت یا سازمان را بنویسید.' })
+  @MaxLength(120, { message: 'نام سازمان حداکثر ۱۲۰ نویسه است.' })
+  readonly organizationName!: string;
+
+  @ApiProperty({ example: 'علی رضایی' })
+  @IsString({ message: 'نام و نام خانوادگی را بنویسید.' })
+  @IsNotEmpty({ message: 'نام و نام خانوادگی را بنویسید.' })
+  @MaxLength(80, { message: 'نام و نام خانوادگی حداکثر ۸۰ نویسه است.' })
+  readonly fullName!: string;
+
+  @ApiPropertyOptional({ type: String, nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  readonly email?: string | null;
+
+  @ApiProperty({ format: 'password' })
+  @IsString({ message: 'رمز عبور را بنویسید.' })
+  @IsNotEmpty({ message: 'رمز عبور را بنویسید.' })
+  @MaxLength(200)
+  readonly password!: string;
+}

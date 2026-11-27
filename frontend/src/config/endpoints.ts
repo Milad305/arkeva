@@ -15,6 +15,10 @@ export const ENDPOINTS = {
   AUTH_RESET_VERIFY_CODE: '/auth/password/verify-code', // W04 مرحلهٔ ۲ — کد مصرف نمی‌شود
   AUTH_RESET_RESEND: '/auth/password/resend',
   AUTH_RESET_PASSWORD: '/auth/password/reset',
+  AUTH_REGISTER_REQUEST_CODE: '/auth/register/request-code',
+  AUTH_REGISTER_VERIFY_CODE: '/auth/register/verify-code',
+  AUTH_REGISTER_RESEND: '/auth/register/resend',
+  AUTH_REGISTER_COMPLETE: '/auth/register/complete',
   AUTH_STEP_UP: '/auth/step-up', // کد تأیید دوباره برای عمل حساس (F02 ۸.۴، روشن کردن ۲FA)
 
   // Organizations

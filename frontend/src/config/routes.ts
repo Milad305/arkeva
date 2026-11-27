@@ -8,6 +8,7 @@ import type { EntityId } from '@/shared/types/api';
 export const ROUTES = {
   // ── ورود و دسترسی ──
   login: '/login', // W01 / W02
+  register: '/register', // ثبت‌نام سازمان جدید
   otp: '/login/otp', // W03
   resetPassword: '/login/reset', // W04
 

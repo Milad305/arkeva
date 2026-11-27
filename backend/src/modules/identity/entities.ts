@@ -4,6 +4,7 @@ import { LoginAttempt } from './domain/login-attempt.entity.js';
 import { OtpChallenge } from './domain/otp-challenge.entity.js';
 import { Organization } from './domain/organization.entity.js';
 import { OrgRoleCustom, OrgRoleGrant, Role, RolePermission } from './domain/role.entity.js';
+import { SignupChallenge } from './domain/signup-challenge.entity.js';
 import { StepUpChallenge } from './domain/step-up-challenge.entity.js';
 import { User } from './domain/user.entity.js';
 import { DeviceToken } from './domain/device-token.entity.js';
@@ -17,6 +18,7 @@ export const IDENTITY_ENTITIES = [
   TrustedDevice,
   AuthSession,
   OtpChallenge,
+  SignupChallenge,
   StepUpChallenge,
   LoginAttempt,
   Role,
@@ -26,7 +28,7 @@ export const IDENTITY_ENTITIES = [
   DeviceToken,
 ];
 
-/** Entityهای دارای org_id که فیلتر tenant می‌گیرند (Organization و Role فقط RLS دارند؛ 05 ۴.۵). */
+/** Entityهای دارای org_id که فیلتر tenant می‌گیرند (Organization، Role و SignupChallenge ستون org_id ندارند؛ 05 ۴.۵). */
 export const IDENTITY_TENANT_ENTITIES = [
   User,
   Invitation,

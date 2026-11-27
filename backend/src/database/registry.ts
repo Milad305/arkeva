@@ -45,6 +45,7 @@ import { Migration20261206000000_reports } from './migrations/Migration202612060
 import { Migration20261207000000_report_schedules } from './migrations/Migration20261207000000_report_schedules.js';
 import { Migration20261208000000_backups } from './migrations/Migration20261208000000_backups.js';
 import { Migration20261209000000_invite_code } from './migrations/Migration20261209000000_invite_code.js';
+import { Migration20261210000000_org_signup } from './migrations/Migration20261210000000_org_signup.js';
 
 // ریشهٔ ترکیب پایگاه داده: Entityها، Entityهای مستأجر و migrationها از همهٔ ماژول‌ها.
 // migration تازه فقط اینجا ثبت می‌شود (کشف خودکار پوشه در ESM و dist نه؛ 05 ۶).
@@ -119,5 +120,6 @@ export const DATABASE: DatabaseOptions = {
     { name: 'Migration20261207000000_report_schedules', class: Migration20261207000000_report_schedules },
     { name: 'Migration20261208000000_backups', class: Migration20261208000000_backups },
     { name: 'Migration20261209000000_invite_code', class: Migration20261209000000_invite_code },
+    { name: 'Migration20261210000000_org_signup', class: Migration20261210000000_org_signup },
   ],
 };
