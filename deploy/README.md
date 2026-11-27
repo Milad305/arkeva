@@ -151,5 +151,6 @@ crontab -e
 2. ساخت پنل در ریشه: در Actions، `build-images` را دستی با `panel_base_path=/` اجرا کنید.
    پنل روی `panel.arkeva.ir` همچنان `/v1/` را هم‌مبدأ سرو می‌کند. `api.arkeva.ir` برای اپ موبایل است.
 3. یک پیکربندی nginx جدا برای هر دامنه، سپس `sudo apt install certbot python3-certbot-nginx` و `sudo certbot --nginx`.
-4. در `backend.env`: `COOKIE_SECURE=true` و `PUBLIC_BASE_URL=https://panel.arkeva.ir`.
-5. در `NODE_ENV=production` باید `SMS_PROVIDER=sms.ir` (همراه `OTP_SMS_KEY` و `OTP_TEMPLATE_ID`) تنظیم شود. اولین سازمان و مدیر ارشد به‌صورت خودخدمت از مسیر `/register` با تأیید پیامکی ساخته می‌شوند (چون `seed` در production اجرا نمی‌شود). تنها کار باز زیرساختی در صورت نیاز، ارائه‌دهندهٔ واقعی ایمیل است.
+4. در `backend.env`: `COOKIE_SECURE=true`، `PUBLIC_BASE_URL=https://panel.arkeva.ir` و در صورت تمایل به خروجی تک‌خطی و خوانا در `docker logs`، مقدار `LOG_PRETTY=true` را قرار دهید.
+5. اگر دامنه پشت پروکسی Cloudflare است، فایل `deploy/nginx/cloudflare-realip.conf` را به `/etc/nginx/conf.d/cloudflare-realip.conf` کپی و nginx را reload کنید تا IP واقعی کاربر (`CF-Connecting-IP`) در لاگ‌ها و محدودیت نرخ درخواست لحاظ شود.
+6. در `NODE_ENV=production` باید `SMS_PROVIDER=sms.ir` (همراه `OTP_SMS_KEY` و `OTP_TEMPLATE_ID`) تنظیم شود. اولین سازمان و مدیر ارشد به‌صورت خودخدمت از مسیر `/register` با تأیید پیامکی ساخته می‌شوند (چون `seed` در production اجرا نمی‌شود). تنها کار باز زیرساختی در صورت نیاز، ارائه‌دهندهٔ واقعی ایمیل است.

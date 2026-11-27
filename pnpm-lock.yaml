@@ -99,6 +99,9 @@ importers:
       pino-http:
         specifier: 11.0.0
         version: 11.0.0
+      pino-pretty:
+        specifier: 13.2.0
+        version: 13.2.0
       puppeteer-core:
         specifier: 25.16.0
         version: 25.16.0(yauzl@3.4.0)
@@ -151,9 +154,6 @@ importers:
       globals:
         specifier: 17.14.0
         version: 17.14.0
-      pino-pretty:
-        specifier: 13.2.0
-        version: 13.2.0
       supertest:
         specifier: 7.3.2
         version: 7.3.2(supports-color@7.2.0)

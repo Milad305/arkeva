@@ -19,16 +19,20 @@ export default defineConfig({
     resolve: { conditions: ['projeyar-source', ...defaultServerConditions] },
   },
   server: {
-    port: 5173,
-    proxy: {
-      // بک‌اند NestJS (docs/backend/06 ۲). هم‌مبدأ تا کوکی تازه‌سازی HttpOnly و SameSite=Strict کار کند.
-      '/v1': { target: 'http://localhost:3000', changeOrigin: false },
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
+  host: '127.0.0.1',
+  port: 5173,
+  proxy: {
+    // NestJS Backend
+    '/v1': {
+      target: 'http://127.0.0.1:3000',
+      changeOrigin: false,
+    },
+    '/api': {
+      target: 'http://127.0.0.1:3000',
+      changeOrigin: true,
     },
   },
+},
   build: {
     // هر ماژول lazy-load می‌شود؛ vendorهای بزرگ جدا می‌مانند تا chunk اولیه سبک باشد
     rollupOptions: {

@@ -37,13 +37,13 @@ describe('پیکربندی', () => {
     expect(() => loadConfig({ ...BASE, APP_MIN_VERSION: 'v1' })).toThrow(/APP_MIN_VERSION/);
   });
 
-  it('AC-PL-13 — پیکربندی درگاه sms.ir، پیش‌فرض پارامتر قالب و منع console در production', () => {
+  it('AC-PL-13 — پیکربندی درگاه sms.ir، الزامی بودن همهٔ متغیرهای قالب و منع console در production', () => {
     const smsIr = loadConfig({
       ...BASE,
       SMS_PROVIDER: 'sms.ir',
       OTP_SMS_KEY: 'live-api-key',
       OTP_TEMPLATE_ID: '123456',
-      OTP_TEMPLATE_PARAM: '',
+      OTP_TEMPLATE_PARAM: 'Code',
     });
     expect(smsIr.sms).toEqual({
       provider: 'sms.ir',
@@ -66,13 +66,37 @@ describe('پیکربندی', () => {
       otpTemplateParam: 'VERIFICATION_CODE',
     });
 
-    expect(() => loadConfig({ ...BASE, SMS_PROVIDER: 'sms.ir' })).toThrow(/OTP_SMS_KEY[\s\S]*OTP_TEMPLATE_ID/);
+    expect(() => loadConfig({ ...BASE, SMS_PROVIDER: 'sms.ir' })).toThrow(
+      /OTP_SMS_KEY[\s\S]*OTP_TEMPLATE_ID[\s\S]*OTP_TEMPLATE_PARAM/,
+    );
     expect(() =>
-      loadConfig({ ...BASE, SMS_PROVIDER: 'sms.ir', OTP_SMS_KEY: 'k', OTP_TEMPLATE_ID: 'abc' }),
+      loadConfig({
+        ...BASE,
+        SMS_PROVIDER: 'sms.ir',
+        OTP_SMS_KEY: 'k',
+        OTP_TEMPLATE_ID: '100',
+        OTP_TEMPLATE_PARAM: '',
+      }),
+    ).toThrow(/OTP_TEMPLATE_PARAM/);
+    expect(() =>
+      loadConfig({
+        ...BASE,
+        SMS_PROVIDER: 'sms.ir',
+        OTP_SMS_KEY: 'k',
+        OTP_TEMPLATE_ID: 'abc',
+        OTP_TEMPLATE_PARAM: 'Code',
+      }),
     ).toThrow(/OTP_TEMPLATE_ID/);
-    expect(() =>
-      loadConfig({ ...BASE, SMS_PROVIDER: 'sms.ir', OTP_SMS_KEY: 'k', OTP_TEMPLATE_ID: '100', OTP_DEV_CODE: '123456' }),
-    ).toThrow(/OTP_DEV_CODE/);
+    // در توسعه با sms.ir بودنِ OTP_DEV_CODE در فایل env خطا نمی‌دهد و نادیده گرفته می‌شود تا کد تصادفی واقعی ارسال شود
+    const devWithSmsIr = loadConfig({
+      ...BASE,
+      SMS_PROVIDER: 'sms.ir',
+      OTP_SMS_KEY: 'k',
+      OTP_TEMPLATE_ID: '100',
+      OTP_TEMPLATE_PARAM: 'Code',
+      OTP_DEV_CODE: '123456',
+    });
+    expect(devWithSmsIr.auth.otpDevCode).toBeNull();
     expect(() =>
       loadConfig({
         ...BASE,

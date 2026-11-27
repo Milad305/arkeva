@@ -26,28 +26,17 @@ import { PlanningModule } from './modules/planning/index.js';
 import { WbsModule } from './modules/wbs/index.js';
 import { ProjectsModule } from './modules/projects/index.js';
 import { TeamModule } from './modules/team/index.js';
-import { ContextModule, type TracedRequest } from './platform/context/context.module.js';
+import { AppContext } from './platform/context/app-context.js';
+import { ContextModule } from './platform/context/context.module.js';
 import { DatabaseModule } from './platform/database/database.module.js';
 import { HealthController } from './platform/health/health.controller.js';
 import { EnvelopeInterceptor } from './platform/http/envelope.js';
 import { AllExceptionsFilter } from './platform/http/exception.filter.js';
+import { buildLoggerOptions } from './platform/http/logger.options.js';
 import { createValidationPipe } from './platform/http/validation.js';
 import { PlatformEventsModule } from './platform/events.module.js';
 import { MessagingModule } from './platform/messaging/messaging.module.js';
 import { SecurityModule } from './platform/security/security.module.js';
-
-// ماسک لاگ (docs/backend/10 ۵): هیچ رمز، توکن، کد یا کوکی در لاگ.
-const REDACT = [
-  'req.headers.authorization',
-  'req.headers.cookie',
-  'res.headers["set-cookie"]',
-  '*.password',
-  '*.otpToken',
-  '*.code',
-  '*.token',
-  '*.refreshToken',
-  '*.accessToken',
-];
 
 @Global()
 @Module({})
@@ -66,15 +55,9 @@ export class AppModule {
       imports: [
         ConfigModule.with(config),
         ContextModule,
-        LoggerModule.forRoot({
-          pinoHttp: {
-            level: config.log.level,
-            transport: config.log.pretty ? { target: 'pino-pretty', options: { singleLine: true } } : undefined,
-            genReqId: (request) => (request as TracedRequest).traceId ?? 'ERR-0000-00',
-            customProps: (request) => ({ traceId: (request as TracedRequest).traceId }),
-            redact: { paths: REDACT, censor: '[پنهان]' },
-            autoLogging: { ignore: (request) => request.url === '/health' || request.url === '/ready' },
-          },
+        LoggerModule.forRootAsync({
+          inject: [AppConfig, AppContext],
+          useFactory: buildLoggerOptions,
         }),
         ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 600 }]),
         DatabaseModule.forRoot(DATABASE),

@@ -4,6 +4,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import type { Permission } from '@projeyar/shared';
 import type { Request } from 'express';
 import { AppContext } from '../context/app-context.js';
+import type { TracedRequest } from '../context/context.module.js';
 import { applyTenant } from '../database/tenant.js';
 import { ForbiddenError, NotFoundError, UnauthorizedError } from '../http/errors.js';
 import { AccessResolver, projectsWith } from './access.js';
@@ -36,11 +37,13 @@ export class AuthGuard implements CanActivate {
   async canActivate(execution: ExecutionContext): Promise<boolean> {
     if (kindOf(this.reflector, execution) === 'public') return true;
 
-    const token = bearer(execution.switchToHttp().getRequest<Request>());
+    const request = execution.switchToHttp().getRequest<TracedRequest>();
+    const token = bearer(request);
     if (!token) throw new UnauthorizedError('AUTH_REQUIRED');
 
     const actor = await this.tokens.verify(token);
     this.context.setActor(actor);
+    request.logActor = { orgId: actor.orgId, userId: actor.userId };
     // هر پرس‌وجوی این درخواست از اینجا به بعد به همین سازمان محدود است (05 ۴)
     applyTenant(this.em, actor.orgId);
     return true;

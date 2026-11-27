@@ -3,6 +3,7 @@ import { ConnectionException, DeadlockException, LockWaitTimeoutException, Optim
 import type { ApiErrorBody, ErrorCode } from '@projeyar/shared';
 import type { Response } from 'express';
 import { AppContext } from '../context/app-context.js';
+import type { TracedRequest } from '../context/context.module.js';
 import { DomainError } from './errors.js';
 import { messageFor } from './messages.fa.js';
 
@@ -47,6 +48,11 @@ export function mapError(error: unknown): Mapped | null {
   return null;
 }
 
+function toError(exception: unknown): Error {
+  if (exception instanceof Error) return exception;
+  return new Error(typeof exception === 'string' ? exception : 'unknown exception');
+}
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger('Errors');
@@ -54,22 +60,37 @@ export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly context: AppContext) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
-    const response = host.switchToHttp().getResponse<Response>();
+    const http = host.switchToHttp();
+    const request = http.getRequest<TracedRequest | undefined>();
+    const response = http.getResponse<Response>();
     const traceId = this.context.traceId;
     const mapped = mapError(exception);
-
-    if (!mapped) {
-      this.logger.error({ traceId, err: exception }, 'unhandled error');
-    }
 
     const { status, code, details, retryable } = mapped ?? {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       code: 'INTERNAL' as const,
       retryable: true,
     };
+    const message = messageFor(code, details);
+
+    if (request) {
+      request.logError = {
+        errorCode: code,
+        errorMessage: message,
+        ...(details ? { errorDetails: { ...details } } : {}),
+      };
+    }
+
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      (response as Response & { err?: Error }).err = toError(exception);
+      if (!request?.log) {
+        this.logger.error({ traceId, errorCode: code, err: exception }, 'unhandled error');
+      }
+    }
+
     const body: ApiErrorBody = {
       code,
-      message: messageFor(code, details),
+      message,
       ...(details ? { details: { ...details } } : {}),
       traceId,
       retryable,

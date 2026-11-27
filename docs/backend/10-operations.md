@@ -55,10 +55,10 @@ pnpm --filter backend run start:dev                ← APP_ROLE=all، SWC watch
 
 ## ۵. لاگ
 
-- JSON با pino؛ هر خط: `time`، `level`، `msg`، `traceId`، `orgId`، `projectId`، `userId`، `role` (`api`/`worker`)، و برای HTTP `method`، `route` (الگو، نه مسیر با شناسه)، `status`، `durationMs`.
-- **ماسک** (`redact` در pino): `req.headers.authorization`، `req.headers.cookie`، `*.password`، `*.token`، `*.refreshToken`، `*.otp`، `*.code`، `*.secret`، `*.mobile` (جز چهار رقم آخر)، `*.amount`.
-- بدنهٔ درخواست و پاسخ لاگ نمی‌شود.
-- لاگ کار صف: نام صف، `jobId`، تلاش، مدت، نتیجه.
+- ساختاری با pino (`src/platform/http/logger.options.ts`)؛ زمان ISO-8601، بدون چاپ هدرهای حجیم HTTP/CSP؛ هر خط شامل `time`، `level`، `msg`، `traceId`، `orgId`، `projectId`، `userId`، `role` (`api`/`worker`/`all`)، و برای HTTP فیلدهای مسطح `method`، `route` (الگو)، `url` (بدون query)، `status`، `durationMs`، `ip`. در خطاهای ۴xx (`WARN`) و ۵xx (`ERROR`) فیلدهای `errorCode`، `errorMessage` و `errorDetails` نیز ثبت می‌شوند. با `LOG_PRETTY=true` خروجی تک‌خطی خوانا (`pino-pretty`) تولید می‌شود.
+- **ماسک** (`redact` در pino): `req.headers.authorization`، `req.headers.cookie`، `res.headers["set-cookie"]`، `*.password`، `*.token`، `*.refreshToken`، `*.accessToken`، `*.otp`، `*.otpCode`، `*.otpToken`، `body/query/input/payload/data.code` (تا `err.code` پایگاه داده و شبکه پنهان نشود)، `*.secret`، `*.amount`.
+- بدنهٔ درخواست و پاسخ لاگ نمی‌شود. مسیرهای `/health` و `/ready` در حالت سالم (`2xx`) بی‌صدا هستند و فقط هنگام خطا ثبت می‌شوند.
+- لاگ کار صف: نام صف، `jobId`، تلاش (`attempt`)، مدت (`durationMs`)، نتیجه (`ok`/`retry`/`dead_letter`).
 
 ## ۶. سلامت و معیار
 

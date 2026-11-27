@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { Logger } from 'nestjs-pino';
 import { createApp } from './bootstrap/app.js';
 import { runMigrations } from './bootstrap/migrate.js';
 import { APP_ROLES, type AppConfig, type AppRole, loadDotEnv, loadProcessConfig } from './config/config.js';
@@ -21,8 +22,16 @@ if (role === 'migrate') {
 } else if (role === 'api' || role === 'all') {
   const app = await createApp(config);
   await app.listen(config.port);
+  app.get(Logger).log(
+    { env: config.env, port: config.port, smsProvider: config.sms.provider, storageDriver: config.storage.driver },
+    `backend listening on port ${config.port} (role=${role})`,
+  );
 } else if (role === 'worker') {
   // همان اپ بی‌گوش‌دادن HTTP: کارگرهای صف و زمان‌بند (08؛ Jobs نقش را از پیکربندی می‌خواند)
   const app = await createApp(config);
   await app.init();
+  app.get(Logger).log(
+    { env: config.env, smsProvider: config.sms.provider, storageDriver: config.storage.driver },
+    'backend worker started',
+  );
 }

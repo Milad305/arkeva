@@ -28,7 +28,8 @@
 :where(.pj) button{cursor:pointer;background:transparent;border:0;padding:0}
 :where(.pj) h1,:where(.pj) h2,:where(.pj) h3,:where(.pj) h4,:where(.pj) p,:where(.pj) ul,:where(.pj) ol,:where(.pj) figure{margin:0}
 :where(.pj) ul,:where(.pj) ol{padding:0;list-style:none}
-.pj :focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.pj :focus-visible{outline:none}
+.pj :where(:not(input,textarea)):focus-visible{box-shadow:var(--focus-ring)}
 .mono{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
 .num{font-variant-numeric:tabular-nums}
 

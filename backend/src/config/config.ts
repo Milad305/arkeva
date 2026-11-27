@@ -32,7 +32,6 @@ export type SmsConfig =
     };
 
 const SMS_IR_ALIASES: ReadonlySet<string> = new Set(['sms.ir', 'smsir', 'sms-ir', 'sms_ir']);
-const DEFAULT_OTP_TEMPLATE_PARAM = 'Code';
 
 /** کلید رمزنگاری پشتیبان (F20 ۱۲): ۳۲ بایت؛ نخستین کلید فعال است و بقیه فقط برای خواندن نسخه‌های قدیمی. */
 export interface BackupKey {
@@ -167,14 +166,16 @@ export function loadConfig(env: Env): AppConfig {
   const nodeEnv = oneOf(env, 'NODE_ENV', NODE_ENVS, 'development', errors);
   const production = nodeEnv === 'production';
   const sms = smsConfig(env, production, errors);
-  const otpDevCode = optional(env, 'OTP_DEV_CODE');
+  const rawOtpDevCode = optional(env, 'OTP_DEV_CODE');
 
-  if (otpDevCode !== null && (production || sms.provider !== 'console')) {
-    errors.add('OTP_DEV_CODE فقط در توسعه و با SMS_PROVIDER=console مجاز است');
+  if (rawOtpDevCode !== null && production) {
+    errors.add('OTP_DEV_CODE در production مجاز نیست');
   }
-  if (otpDevCode !== null && !/^\d{6}$/.test(otpDevCode)) {
+  if (rawOtpDevCode !== null && !/^\d{6}$/.test(rawOtpDevCode)) {
     errors.add('OTP_DEV_CODE باید شش رقم لاتین باشد');
   }
+  // در توسعه اگر ارائه‌دهندهٔ واقعی (مثل sms.ir) انتخاب شود، کد ثابت نادیده گرفته می‌شود تا کد تصادفی واقعی پیامک شود.
+  const otpDevCode = sms.provider === 'console' ? rawOtpDevCode : null;
   const cookieSecure = bool(env, 'COOKIE_SECURE', true, errors);
   if (production && !cookieSecure) errors.add('در production باید COOKIE_SECURE=true باشد');
 
@@ -241,12 +242,14 @@ function smsConfig(env: Env, production: boolean, errors: ConfigErrors): SmsConf
     const otpSmsKey = required(env, 'OTP_SMS_KEY', errors);
     const templateRaw = required(env, 'OTP_TEMPLATE_ID', errors);
     const otpTemplateId = templateRaw ? int(env, 'OTP_TEMPLATE_ID', 0, errors, 1) : 0;
-    const paramRaw = optional(env, 'OTP_TEMPLATE_PARAM')?.replace(/^#+|#+$/g, '').trim();
+    const paramRaw = required(env, 'OTP_TEMPLATE_PARAM', errors);
+    const otpTemplateParam = paramRaw.replace(/^#+|#+$/g, '').trim();
+    if (paramRaw && !otpTemplateParam) errors.add('OTP_TEMPLATE_PARAM معتبر نیست');
     return {
       provider: 'sms.ir',
       otpSmsKey,
       otpTemplateId,
-      otpTemplateParam: paramRaw || DEFAULT_OTP_TEMPLATE_PARAM,
+      otpTemplateParam,
     };
   }
   errors.add('SMS_PROVIDER باید یکی از console، sms.ir باشد');

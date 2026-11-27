@@ -183,18 +183,29 @@ export class Jobs implements OnApplicationBootstrap, BeforeApplicationShutdown {
 
   private async execute(queue: QueueDef, job: Job<JobData>, handler: Handler<JobData>): Promise<void> {
     const traceId = job.data.traceId ?? newTraceId();
+    const attempt = job.retryCount + 1;
+    const startedAt = performance.now();
     await this.cls.run(async () => {
       this.context.setJobScope({ orgId: job.data.orgId, traceId });
       await RequestContext.create(this.orm.em, async () => {
         if (job.data.orgId) applyTenant(this.orm.em, job.data.orgId);
         try {
           await handler({ id: job.id, data: job.data, retryCount: job.retryCount });
+          const durationMs = Math.round(performance.now() - startedAt);
+          if (!queue.name.startsWith('tick.')) {
+            const slowOrRetried = durationMs >= 2000 || attempt > 1;
+            this.logger[slowOrRetried ? 'log' : 'debug'](
+              { queue: queue.name, jobId: job.id, attempt, durationMs, result: 'ok' },
+              `job completed ${queue.name} (${durationMs}ms)`,
+            );
+          }
         } catch (error) {
+          const durationMs = Math.round(performance.now() - startedAt);
           const final = job.retryCount >= queue.retryLimit;
           // آخرین تلاش: کار به dead.letter می‌رود و /ready شمارش را نشان می‌دهد (F20 ۳.۱)
           this.logger[final ? 'error' : 'warn'](
-            { err: error, traceId, queue: queue.name, jobId: job.id, attempt: job.retryCount + 1 },
-            final ? 'job failed permanently; moved to dead letter' : 'job failed; will retry',
+            { err: error, queue: queue.name, jobId: job.id, attempt, durationMs, result: final ? 'dead_letter' : 'retry' },
+            final ? `job failed permanently ${queue.name}; moved to dead letter` : `job failed ${queue.name}; will retry`,
           );
           if (final && queue.name !== DEAD_LETTER_QUEUE) await this.announceDead({ queue: queue.name, jobId: job.id, orgId: job.data.orgId ?? null, error });
           throw error;

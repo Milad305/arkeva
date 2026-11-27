@@ -9,6 +9,7 @@ import type { ResolvedAccess } from '../security/access.js';
 
 export interface AppContextStore extends ClsStore {
   traceId?: string;
+  isHttp?: boolean;
   userId?: string;
   orgId?: string;
   sessionId?: string;
@@ -51,6 +52,10 @@ export class AppContext {
     return (this.cls.isActive() && this.cls.get('traceId')) || 'ERR-0000-00';
   }
 
+  get isHttp(): boolean {
+    return Boolean(this.cls.isActive() && this.cls.get('isHttp'));
+  }
+
   get orgId(): string | undefined {
     return this.cls.isActive() ? this.cls.get('orgId') : undefined;
   }
@@ -89,6 +94,7 @@ export class AppContext {
 
   /** زمینهٔ کار صف یا تیک (08 ۳): سازمان و کد پیگیری از payload کار، بی‌کاربر. */
   setJobScope(scope: { orgId: string | null; traceId: string }): void {
+    this.cls.set('isHttp', false);
     this.cls.set('traceId', scope.traceId);
     if (scope.orgId) this.cls.set('orgId', scope.orgId);
   }
