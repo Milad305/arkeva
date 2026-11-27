@@ -29,7 +29,7 @@ const FALLBACK_USER: ShellUser = {
 const FALLBACK_ORGANIZATION: ShellOrganization = {
   name: 'شرکت آبادگران ایران',
   initials: 'ا.آ',
-  activeProjectCount: 12,
+  activeProjectCount: 0,
 };
 
 export function useShellIdentity(): { user: ShellUser; organization: ShellOrganization } {

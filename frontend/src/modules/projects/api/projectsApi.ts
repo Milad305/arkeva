@@ -28,6 +28,7 @@ const invalidateProject = (_result: unknown, _error: unknown, arg: EntityId | { 
     { type: 'Project' as const, id },
     { type: 'Project' as const, id: LIST_ID },
     { type: 'Dashboard' as const, id: 'portfolio' },
+    { type: 'Dashboard' as const, id: 'org' },
     { type: 'Chart' as const, id },
   ];
 };

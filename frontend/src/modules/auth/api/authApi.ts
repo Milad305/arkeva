@@ -23,6 +23,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     login: build.mutation<LoginResult, LoginRequest>({
       queryFn: serverQuery((body) => ({ url: ENDPOINTS.AUTH_LOGIN, method: 'POST', body })),
+      invalidatesTags: (result) => (result?.outcome === 'success' ? ['Auth'] : []),
     }),
 
     verifyOtp: build.mutation<SessionDto, VerifyOtpRequest>({

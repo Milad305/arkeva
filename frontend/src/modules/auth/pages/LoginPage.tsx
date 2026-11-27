@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/config/routes';
+import { useAppDispatch } from '@/app/store/hooks';
+import { setCredentials } from '@/app/store/authSlice';
+import { toCredentials } from '@/app/store/sessionCredentials';
 import { AuthShell } from '@/shared/components/layout/AuthShell';
 import { AppButton } from '@/shared/components/ui/AppButton';
 import { FormField } from '@/shared/components/ui/FormField';
@@ -26,7 +29,9 @@ import { useLoginMutation } from '../api/authApi';
  * را می‌گوید و بعد از ۵ تلاش، حساب ۱۵ دقیقه قفل می‌شود.
  */
 export default function LoginPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [login, { error, isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -74,6 +79,17 @@ export default function LoginPage() {
           resendAfterSec: result.resendAfterSec,
         },
       });
+      return;
+    }
+
+    if (result.outcome === 'success') {
+      dispatch(setCredentials(toCredentials(result.session)));
+      const from = (location.state as { from?: string } | null)?.from;
+      const target =
+        from && from !== ROUTES.login && from !== '/'
+          ? from
+          : (result.session.user.preferences.startPage ?? ROUTES.dashboard);
+      navigate(target, { replace: true });
     }
   }
 
@@ -155,22 +171,6 @@ export default function LoginPage() {
         </AppButton>
 
         {isLocked && <LockoutNotice />}
-
-        <div className="row g12 t-12 tx5">
-          <span className="hr grow" />
-          یا
-          <span className="hr grow" />
-        </div>
-
-        <AppButton
-          variant="outline"
-          size="lg"
-          block
-          icon="lock-keyhole"
-          style={{ fontWeight: 500 }}
-        >
-          ورود با شناسهٔ سازمانی (SSO)
-        </AppButton>
 
         <Box className="row between wrap g8" style={{ alignItems: 'center' }}>
           <span className="t-13 tx6">هنوز در پروژه‌یار سازمان ندارید؟</span>

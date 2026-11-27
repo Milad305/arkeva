@@ -26,6 +26,19 @@ body {
   margin-inline: auto;
 }
 
+/* ثابت ماندن نوار کناری هنگام اسکرول محتوا در نمای دسکتاپ
+   (از ۷۸۵px به بالا که `.sb-slot` و `.main` کنار هم می‌نشینند و wrap نمی‌شوند). */
+@media (min-width: 785px) {
+  .pj.app > .sb-slot {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+}
+
 /* اسپینر — در بوم داخل <helmet> صفحهٔ W46 تعریف شده بود */
 @keyframes pjspin {
   to {

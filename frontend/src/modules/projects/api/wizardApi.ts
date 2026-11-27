@@ -96,6 +96,7 @@ export const wizardApi = baseApi.injectEndpoints({
           : [
               { type: 'Project', id: LIST_ID },
               { type: 'Dashboard', id: 'portfolio' },
+              { type: 'Dashboard', id: 'org' },
               { type: 'Project', id: 'wizard-options' },
             ],
     }),

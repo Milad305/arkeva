@@ -1,11 +1,13 @@
 import { useSyncExternalStore } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { useGetDashboardQuery } from '@/modules/dashboard/api/dashboardApi';
 import { CommandPalette } from '@/modules/search/components/CommandPalette';
 import { useGoToShortcuts } from '@/modules/search/hooks/useGoToShortcuts';
 import { ErrorBoundary } from '@/shared/components/feedback/ErrorBoundary';
+import { useHasAccess } from '@/shared/hooks/useHasAccess';
 import { displayPrefsVersion, subscribeDisplayPrefs } from '@/shared/utils/displayPrefs';
-import { Sidebar } from './Sidebar';
+import { Sidebar, type SidebarCounts } from './Sidebar';
 import { useShellIdentity } from './useShellIdentity';
 
 /**
@@ -18,14 +20,27 @@ import { useShellIdentity } from './useShellIdentity';
  */
 export function AppShell() {
   const { user, organization } = useShellIdentity();
+  const canViewDashboard = useHasAccess(['dashboard.view']);
+  const { data: dashboard } = useGetDashboardQuery(undefined, { skip: !canViewDashboard });
   useGoToShortcuts();
   // تغییر ترجیح نمایش (W32) قالب همهٔ عددها و تاریخ‌ها را عوض می‌کند: صفحه از نو ساخته می‌شود
   const prefsVersion = useSyncExternalStore(subscribeDisplayPrefs, displayPrefsVersion);
 
+  const sidebarOrganization =
+    dashboard?.kpis.activeCount !== undefined
+      ? { ...organization, activeProjectCount: dashboard.kpis.activeCount }
+      : organization;
+
+  const sidebarCounts: SidebarCounts = {
+    projects: dashboard?.kpis.totalCount,
+    reports: dashboard?.pendingApprovals?.total,
+    risks: dashboard?.risks?.totalOpen,
+  };
+
   return (
     <div className="pj app" dir="rtl" lang="fa">
       <aside className="sb-slot" key={`sb-${prefsVersion}`}>
-        <Sidebar organization={organization} user={user} />
+        <Sidebar organization={sidebarOrganization} user={user} counts={sidebarCounts} />
       </aside>
 
       <main className="main">

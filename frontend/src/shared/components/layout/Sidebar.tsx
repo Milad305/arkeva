@@ -1,4 +1,4 @@
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useMatch } from 'react-router-dom';
 
 import { ROUTES } from '@/config/routes';
 import type { Permission } from '@/config/permissions';
@@ -8,12 +8,18 @@ import { useHasAccess } from '@/shared/hooks/useHasAccess';
 import { Icon, type IconName } from '@/shared/components/ui/Icon';
 import { BrandMark } from './BrandMark';
 
+export interface SidebarCounts {
+  projects?: number;
+  reports?: number;
+  risks?: number;
+}
+
 interface NavEntry {
   to: string;
   label: string;
   icon: IconName;
-  /** شمارندهٔ کنار آیتم. */
-  count?: number;
+  /** کلید شمارندهٔ زندهٔ کنار آیتم. */
+  countKey?: keyof SidebarCounts;
   /** کلاس tone شمارنده — `w` برای کهربایی. */
   countTone?: 'w';
   permissions?: Permission[];
@@ -21,17 +27,17 @@ interface NavEntry {
 
 const MAIN_NAV: NavEntry[] = [
   { to: ROUTES.dashboard, label: 'داشبورد', icon: 'layout-dashboard' },
-  { to: ROUTES.projects, label: 'پروژه‌ها', icon: 'folder-kanban', count: 12 },
+  { to: ROUTES.projects, label: 'پروژه‌ها', icon: 'folder-kanban', countKey: 'projects' },
   { to: ROUTES.templates, label: 'ساختار WBS / CBS', icon: 'git-branch', permissions: ['wbs.view'] },
   {
     to: ROUTES.reports,
     label: 'گزارش‌های فیلد',
     icon: 'clipboard-check',
-    count: 24,
+    countKey: 'reports',
     countTone: 'w',
     permissions: ['report.view'],
   },
-  { to: ROUTES.risks, label: 'ریسک‌ها', icon: 'shield-alert', count: 9 },
+  { to: ROUTES.risks, label: 'ریسک‌ها', icon: 'shield-alert', countKey: 'risks', permissions: ['risk.view'] },
   { to: ROUTES.users, label: 'کاربران و نقش‌ها', icon: 'users', permissions: ['users.invite'] },
   {
     to: ROUTES.managementReports,
@@ -41,14 +47,10 @@ const MAIN_NAV: NavEntry[] = [
   },
 ];
 
-const SYSTEM_NAV: NavEntry[] = [
-  { to: ROUTES.templates, label: 'تنظیمات', icon: 'settings', permissions: ['project.settings.edit'] },
-  { to: ROUTES.help, label: 'راهنما و پشتیبانی', icon: 'life-buoy' },
-];
-
 export interface SidebarProps {
   organization: { name: string; initials: string; activeProjectCount: number };
   user: { fullName: string; initials: string; jobTitle: string; avatarTone: string };
+  counts?: SidebarCounts;
   onSwitchOrganization?: () => void;
 }
 
@@ -58,7 +60,23 @@ export interface SidebarProps {
  * عرض ثابتی روی خودش ندارد؛ عرض از `.sb-slot` در پوستهٔ اپ می‌آید
  * (`flex: 1 1 224px`) تا در عرض کم بتواند wrap شود.
  */
-export function Sidebar({ organization, user, onSwitchOrganization }: SidebarProps) {
+export function Sidebar({ organization, user, counts, onSwitchOrganization }: SidebarProps) {
+  const projectMatch = useMatch('/projects/:projectId/*');
+  const activeProjectId =
+    projectMatch?.params.projectId && projectMatch.params.projectId !== 'new'
+      ? projectMatch.params.projectId
+      : null;
+  const canEditProjectSettings = useHasAccess(['project.settings.edit']);
+
+  const systemNav: NavEntry[] = [
+    {
+      to: activeProjectId && canEditProjectSettings ? ROUTES.projectSettings(activeProjectId) : ROUTES.account,
+      label: 'تنظیمات',
+      icon: 'settings',
+    },
+    { to: ROUTES.help, label: 'راهنما و پشتیبانی', icon: 'life-buoy' },
+  ];
+
   return (
     <div className="sb" style={{ width: '100%', minHeight: '100%' }}>
       <div className="sb-brand">
@@ -83,10 +101,10 @@ export function Sidebar({ organization, user, onSwitchOrganization }: SidebarPro
       </button>
 
       <div className="sb-sec">منوی اصلی</div>
-      <NavSection entries={MAIN_NAV} label="منوی اصلی" />
+      <NavSection entries={MAIN_NAV} counts={counts} label="منوی اصلی" />
 
       <div className="sb-sec">سیستم</div>
-      <NavSection entries={SYSTEM_NAV} label="سیستم" />
+      <NavSection entries={systemNav} counts={counts} label="سیستم" />
 
       <Link className="sb-user" to={ROUTES.account}>
         <span className={cn('av m', user.avatarTone)}>{user.initials}</span>
@@ -102,26 +120,36 @@ export function Sidebar({ organization, user, onSwitchOrganization }: SidebarPro
   );
 }
 
-function NavSection({ entries, label }: { entries: NavEntry[]; label: string }) {
+function NavSection({
+  entries,
+  counts,
+  label,
+}: {
+  entries: NavEntry[];
+  counts?: SidebarCounts;
+  label: string;
+}) {
   return (
     <nav className="sb-nav" aria-label={label}>
       {entries.map((entry) => (
-        <NavEntryLink key={`${entry.to}-${entry.label}`} entry={entry} />
+        <NavEntryLink key={`${entry.to}-${entry.label}`} entry={entry} counts={counts} />
       ))}
     </nav>
   );
 }
 
-function NavEntryLink({ entry }: { entry: NavEntry }) {
+function NavEntryLink({ entry, counts }: { entry: NavEntry; counts?: SidebarCounts }) {
   const allowed = useHasAccess(entry.permissions ?? []);
   if (!allowed) return null;
+
+  const count = entry.countKey ? counts?.[entry.countKey] : undefined;
 
   return (
     <NavLink to={entry.to} className={({ isActive }) => cn('nav-a', isActive && 'on')}>
       <Icon name={entry.icon} size={16} />
       <span className="trunc">{entry.label}</span>
-      {entry.count !== undefined && (
-        <span className={cn('cnt', entry.countTone)}>{toFaDigits(entry.count)}</span>
+      {count !== undefined && count > 0 && (
+        <span className={cn('cnt', entry.countTone)}>{toFaDigits(count)}</span>
       )}
     </NavLink>
   );
